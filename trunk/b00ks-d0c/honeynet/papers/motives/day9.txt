@@ -1,0 +1,597 @@
+:Sp07 :wtf?
+:D1ck :dont know
+:Sp07 :G *kaos@211.46.* 960874933 Banned *kaos@211.46.*[60] until Tue Jun 13 06:38:24 2000 [960871104]: too many bots
+:Sp07 :G *kaos@195.231.251.* 960874857 Banned *kaos@195.231.251.*[1] until Tue Jun 13 06:37:08 2000 [960871028]: too many bots
+:Sp07 :thats fucking gay
+:D1ck :yure #7thsphere  freidns
+:D1ck :gling them?
+:ath0_
+:Sp07 :nope
+:Sp07 :it was me
+:Sp07 :
+:Sp07 :jk
+:D1ck :thanks gay
+:D1ck :
+:D1ck ::(
+:Sp07 :#eggdrops people isnt oping me =(
+:Sp07 :yo
+:D1ck :i`m making accounts on local isp 
+:D1ck :for freinds
+:D1ck ::(
+:D1ck :?
+:Sp07 :can you help me dos something?
+:Sp07 :192.168.13.233
+:D1ck :nope
+:D1ck :11 
+:D1ck :and i`m going to bed
+:D1ck :soryr
+:D1ck :sorry
+:D1ck ::)
+:D1ck ::)
+:J4n3 :errrrrrrr
+:D1ck :oye
+:J4n3 :where r all bawts ?
+:D1ck :i have the whole billing system
+:D1ck :glined
+:D1ck :i have the whole billing system of example
+:D1ck :oye
+:D1ck :heh
+:J4n3 :lol
+:J4n3 :glined how ?
+:J4n3 :they didn't have the same ip 
+:J4n3 :billing system of example ??
+:J4n3 :how ? 
+:D1ck :too many bots
+:D1ck :yep
+:D1ck :example ki file
+:D1ck :oye J4n3 
+:D1ck :only elite freinds should get
+:D1ck :like j0e
+:D1ck :and rsnake
+:D1ck :coz then they all give it ot
+:D1ck ::P
+:J4n3 :yeah 
+:D1ck :and we can use it more
+:J4n3 :hmm like ?
+:D1ck ::P
+:J4n3 :lol rnsake
+:J4n3 :Rsnkae
+:D1ck :?
+:D1ck :?
+:D1ck :[root@K1dd13 billing]# ls
+:D1ck :add_hours.sh       monitor.sh~           usage_reporter.sh~
+:D1ck :add_hours.sh~      nms_monitor.sh~       user_bought_hours.sh
+:D1ck :add_user_hours.sh  sum.sh                user_usage_report.sh
+:D1ck :balance_hours.sh   temp.sh~              user_usage_report.sh.old.1
+:D1ck :check_user.sh      time_to_minutes.sh    user_usage_report.sh~
+:D1ck :create_users.sh    update_all_users.sh   user_used_hours.sh
+:D1ck :data               update_user_usage.sh  user_used_hours.sh~
+:D1ck :enabled.sh         usage_reporter.sh
+:D1ck :[root@K1dd13 bin]# ls
+:D1ck :a  delete_users.sh               m   r          set_bin_passwd_shell.sh
+:D1ck :c  get_first_line_and_delete.sh  ma  radius.sh  sync.sh
+:J4n3 :hehe
+:D1ck :[root@K1dd13 monitor_bin]# ls
+:J4n3 :kewl kewl
+:D1ck :monitor.sh  monitor.sh~  start_atrc_nms.sh  start_atrc_nms.sh~
+:J4n3 :oye where is passwd file ?
+:D1ck :[root@K1dd13 passwd_bin]# ls
+:D1ck :text_password_to_des.pl
+:D1ck :[root@K1dd13 passwd_bin]#
+:J4n3 :abay Account add kar na vip phir
+
+Hey why dont you add the VIP account?
+
+:D1ck :hehehe i did
+:J4n3 :oh ye phelay ka copy karliya tha /
+
+oh this has been copied from previous (stuff)
+
+:D1ck :it got deleted
+:J4n3 :oh :(
+:D1ck ::P
+:J4n3 :acha iska passwd file kaha hai ?
+
+Ok where is its passwd file?
+
+:D1ck :oye crack kar
+:D1ck :oye crack kar
+
+Yo crack it
+Yo crack it
+
+:J4n3 :lekin unshadow karna hoga na phir crack hoga
+
+But we will have to unshadow it before cracking it
+
+:D1ck :why do u want it?
+:D1ck :i gave u shadow
+:D1ck :with passwords
+:J4n3 :oh 
+:J4n3 :wait
+:D1ck :;p
+:J4n3 :oye only 126 passes on it ?
+:D1ck :nope
+:D1ck :5438 shadow
+:D1ck :5438
+:J4n3 :errr then why it showing 128 :/
+:D1ck :hehe dunno
+:D1ck ::P
+:J4n3 :nahin nahi sahi hai
+
+no no it is correct
+
+:J4n3 :may be its a error
+:D1ck :oh
+:J4n3 :coz speed is very slow of cracking
+:D1ck :oh
+:J4n3 :agar 126 hothay tho is waqth thak complete hojatha hehe
+
+if there were only 126, it would have completed by this time
+
+:J4n3 :its still on 0 %
+:D1ck :what?
+:D1ck :oh
+:J4n3 :D1ck ka bacha 
+:J4n3 :daal daal kacha
+
+[note: this guy is teasing D1ck - by some colloquial rhyme]
+
+:D1ck :heh
+:D1ck ::/
+:D1ck :koi isp bata
+
+give me some ISPs
+
+:D1ck :jis ko hax0r karo
+
+that we can hax0r
+
+:D1ck :?
+:D1ck :J4n3 
+:D1ck :a prson elite like u
+:D1ck :shouldnt hang in #karachi
+:D1ck ::P
+:D1ck :simple, straight karachi and #dleusion is full of lamers
+:D1ck :heh
+:D1ck :J4n3 
+:D1ck ::P
+:D1ck : /kick J4n3 
+:J4n3 :loool
+:D1ck :seriously ayar
+:D1ck :yaar
+
+yaar = pal
+
+:D1ck :+
+:D1ck :it's h1gh
+:D1ck :who sed so much about u
+:D1ck :./fuck backstabbers
+:D1ck :simple.
+:J4n3 :hahah abay i'm the admin there plus rob hai koi tho elitee hona chaiyee in lamerz main
+
+hahah... hey i am the admin there plus theres someone called "rob" who's wanting to become elite in lamerz main
+
+:J4n3 :plus meri bachiyaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaannnnnNNNN
+:J4n3 :plus meri bachiyaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaannnnnNNNN
+:J4n3 :plus meri bachiyaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaannnnnNNNN
+:J4n3 :plus meri bachiyaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaannnnnNNNN
+
+plus my kiddiesssssssssssssss
+plus my kiddiesssssssssssssss
+plus my kiddiesssssssssssssss
+
+:D1ck ::P
+:D1ck :k
+:D1ck ::)
+:D1ck :oye today is 13th july?
+:D1ck :oye today is 13th junbe
+:D1ck :?
+:J4n3 :no
+:J4n3 :12
+:D1ck :oh
+:D1ck :gline 12th ko hatay ga
+
+gline will be removed on 12th
+
+:J4n3 :june
+:J4n3 :hmm
+:J4n3 :it meanz aaj raatjh ya kal
+
+it means either tonight or tomorrow
+
+:J4n3 :coz 
+:J4n3 :states main abi 11 haI
+
+because in the states (US) it is still 11
+
+:D1ck :shit
+:D1ck :ACTION is away: (Auto-Away after 15 mins) [BX-MsgLog On]
+:zeeshan_S
+:zeeshan_S
+:D1ck :k-rad- say KEWL
+:k-rad- :KEWL
+:D1ck :le say KEWL
+:le :KEWL
+:D1ck :hey J4n3 
+NICK pencil
+USER werd . . :DoS
+
+NOTICE AUTH :*** Looking up your hostname
+NOTICE AUTH :*** Checking Ident
+NOTICE AUTH :*** No ident response
+NOTICE AUTH :*** Found your hostname
+:graz.at.Eu.UnderNet.org 465 pencil : use another server.
+ERROR :Closing Link: pencil by graz.at.Eu.UnderNet.org (K-lined)
+NICK pencil
+USER werd . . :DoS
+:D1ck :i tried a login trojan
+:Sp07 :yah
+:D1ck : /bin/login
+:D1ck :when n i change it
+:D1ck :the admin cant acess the box?
+:D1ck :i was thinking this the other day
+:Sp07 :of course they can
+:D1ck :they admin cant access the box?
+:D1ck :no
+:Sp07 :what does the trojan do?
+:D1ck :i tried it
+:Sp07 :yes they can
+:Sp07 :depends on what the trojan does
+:D1ck :in my own box
+:Sp07 :like I use the bj trojan
+:D1ck :i cp -f login.trojan /bin/login
+:Sp07 :the admin will still be able to login
+:D1ck :no
+:D1ck :oh
+:D1ck :send me bj.c
+:D1ck :send me bj.c
+:D1ck :send me bj.c
+:D1ck :send me bj.c
+:D1ck :send me bj.c
+:D1ck :#@$
+:Sp07 :I dont got it
+:Sp07 :hehe
+:Sp07 :hold on let me check for it somewhere
+:D1ck :#@$
+:D1ck :ok
+:Sp07 :I do have it
+:Sp07 :hehe
+:D1ck :PLEASE GET ME
+:D1ck ::)
+:Sp07 :you know how to use it right?
+:D1ck :welp
+:D1ck :may login trojans dont work
+:D1ck :i tried like 7-8
+:D1ck :and that sucks
+:D1ck :ofcourse
+:D1ck :TERM=pass
+:D1ck :telnet owned.com
+:D1ck :bash#
+:D1ck :uname -a;id
+:D1ck :root root root
+:D1ck :heh
+:Sp07 :make you change the pass for each box you own
+:Sp07 :make sure you change the pass for each box you own
+:Sp07 :accept
+:Sp07_ :accept it
+:Sp07_ :hurry I got to eat breakfast soon
+:D1ck :k
+:D1ck ::P
+:Sp07_ :umm
+:Sp07 :#define SHELL "/bin/sh"
+:Sp07 :#define SHELL_CALLME "login"
+:Sp07 :#define LOGIN "/usr/bin/xcat"
+:Sp07 :#define LOGIN_CALLME "login"
+:Sp07 :#define ENV_NAME "TERM"
+:Sp07 :#define ENV_VALUE "rh6ps0"
+:Sp07 :#define ENV_FIX "vt100"   
+:Sp07 :#define LOGIN "/usr/bin/xcat"
+:Sp07 :#define LOGIN "/usr/bin/xcat"
+:Sp07 :for that
+:Sp07 :you have to move the old login there
+:Sp07 :cp /bin/login /usr/bin/xcat
+:Sp07 :#define ENV_VALUE "rh6ps0"
+:Sp07 :and thats the password right there
+:D1ck :oh
+:Sp07 :change it for each box you own
+:D1ck :why?
+:D1ck :why?
+:Sp07 :cause someone can hack one of your boxes
+:Sp07 :and get the password
+:Sp07 :got to go eat
+:Sp07 :brb
+:D1ck :i have 100+
+:D1ck :i change for each box?
+:D1ck :nohup_ say hehe
+:Sp07 :fix my dick ho
+:D1ck :nohup  say heh
+:nohup :heh
+:D1ck :nohup userlist
+:Sp07 :nohup act suck Sp07 dick
+:Sp07 :do that
+:Sp07 :do that
+:Sp07 :do that
+:D1ck :nohup Sp07=/dev/null
+:D1ck :[nohup(dcc)] [23:39] (D1ck) linking Sp07 to /dev/null
+:D1ck :.add D1ck * D1ck 100 1 4
+NOTICE D1ck :Handle D1ck is already in use
+:D1ck :.save
+NOTICE D1ck :Lists saved to file emech233.users
+NOTICE D1ck :Levels were written to ./mech.levels
+:D1ck :nohup_
+:D1ck :nohup_ say hehe
+:D1ck :nohup___ say hehe
+:Sp07 :ADD DISEASE * DISEASE 10000000000
+:Sp07 :mwuahhaha
+:D1ck :hahaha
+:D1ck :i own u
+:desire
+:D1ck :nohup____ say heh
+:nohup_
+:nohup__
+:D1ck :nohup____ say hehee
+:D1ck :HPUX  say hi
+:D1ck :Sp07 
+:D1ck :what date is it in the us?
+:D1ck :12?
+:D1ck :
+:D1ck :13?
+:Sp07 :I dont know
+:Sp07 :hehe
+:D1ck :coz my glined will be off 
+:Sp07 :let me go check
+:D1ck :13
+:D1ck ::(
+:D1ck :no
+:D1ck :seriously
+:D1ck :?
+:Sp07 :12
+:D1ck :shit
+:D1ck :fuck
+:D1ck :FUCK GRID
+:D1ck :dosing
+:D1ck ::(
+:Sp07 :uh hu hu hu hu huh
+:Sp07 :shutup beavis
+:D1ck :man
+:D1ck :i want to own 45329543294093249-3954395495-9340593-95r34-95-2349959234-593-49534-95-4395-349542-93
+:D1ck ::P
+:D1ck :Sp07 
+:D1ck :ACTION fingers Sp07 
+:D1ck :ACTION fingers Sp07's pussy
+:D1ck :u are a girl Sp07 ?
+:D1ck :right?
+:Sp07 :NIO
+:Sp07 :NO
+:Sp07 :when I say suck my dick
+:Sp07 :what do you think I mean?
+:Sp07 :hehe
+:D1ck :HEH
+:D1ck :ehhe
+:D1ck :hehe
+:D1ck :i lost ns2.example.net
+:D1ck ::(
+:D1ck :coz of diz
+:D1ck :well
+:D1ck :he tried 32094-249-23 bad logins
+:Sp07 :=(
+:Sp07 :dont you run sniffers?
+:Sp07 :oh yea
+:Sp07 :its that 1
+:D1ck :i rooted it btw
+:D1ck :the BIG PALACE HUB
+:D1ck :FOR MORE TEN 32409182390408 CLIENTS
+
+[note: well I wonder who these guys are - that whole country must be in an outage
+ because they dont have very many pipes going in and out of there]
+
+:D1ck :IT WAS A 15 MB PIPE
+:D1ck :well
+:Sp07 :A PIPE
+:D1ck :2000000 MB
+:Sp07 :2 gigabytes?
+:Sp07 :or wait
+:Sp07 :i cant count
+:Sp07 :hehe
+:D1ck :but man
+:Sp07 :too blurry
+:D1ck :it was fast
+:Sp07 :uh huh
+:Sp07 :he owned you?
+:D1ck :no
+:D1ck :h4r33 and own me
+:D1ck :hehe
+:D1ck :diz == script kids
+:D1ck :diz == script kid
+:D1ck :he cant even code
+:D1ck :or read shell codes
+:D1ck :if i send him a trojan
+:Sp07 :hahaha
+:Sp07 :he will use it?
+:D1ck :shell code directed to 127.0.0.1
+:D1ck :he will use it
+:D1ck :hahaha
+:Sp07 :just like you used my bj.c
+:Sp07 :and now I owned you
+:Sp07 :hahahha
+:Sp07 :j/k
+:Sp07 : =)
+:Sp07 :?
+:Sp07 :what happened?
+:D1ck__
+:D1ck :what was my quit?
+:D1ck :what was my quit?
+:Sp07 :didnt you see it?
+:Sp07 :hahaha
+:Sp07 :you came in
+:Sp07 :[09:52] *** D1ck__ (~dynamic@orff.example.net) has joined 
+:Sp07 :[09:52] *** inetd-s sets mode: +o D1ck__
+:Sp07 :[09:52] <Sp07> ?
+:Sp07 :[09:52] *** D1ck has quit IRC (Read error to D1ck[orff.example.net]: Connection reset by peer)
+:D1ck :what was my quit?
+:D1ck :what was my quit?
+:D1ck :oh
+:D1ck : SignOff D1ck: #botsex,#lecole,#Linuxsex,&partyline (Read error to
+:D1ck :          D1ck[orff.example.net]: Connection reset by peer)
+:Sp07 :hahahahahaha
+:Sp07 :=D
+:D1ck ::)
+:D1ck :did u hack me
+:D1ck :and killall -9 BitchX?
+:D1ck ::(
+:D1ck :Sp07 HACKE DME
+:D1ck :ME
+:D1ck :i am scanning 216.55
+:Sp07 :?
+:Sp07 :did you see what I said before you quit?
+:D1ck
+:D1ck :nope
+:D1ck :what did u sya?
+:Sp07 :[09:50] <Sp07> just like you used my bj.c
+:Sp07 :[09:50] <Sp07> and now I owned you
+:Sp07 :[09:50] <Sp07> hahahha
+:Sp07 :[09:50] <Sp07> j/k
+:Sp07 :[09:50] <Sp07>  =)
+:D1ck :oh
+:D1ck :yep
+:Sp07 :[09:54] <Sp07> [09:50] <Sp07> just like you used my bj.c
+:Sp07 :[09:54] <Sp07> [09:50] <Sp07> and now I owned you
+:Sp07 :[09:54] <Sp07> [09:50] <Sp07> hahahha
+:Sp07 :[09:54] <Sp07> [09:50] <Sp07> j/k
+:Sp07 :[09:54] <Sp07> [09:50] <Sp07>  =)
+:D1ck :hehehe
+:D1ck :IRIX say heh
+:IRIX :heh
+:Sp07 :did yo hack irix?
+:D1ck :no
+:D1ck :its a bot
+:D1ck :from redhat
+:Sp07 :hehehe
+:D1ck :=P
+:D1ck :dude
+:D1ck :if u give me lodgic
+:D1ck :of finding IRIX
+:D1ck :i`ll make my own scanner
+:D1ck :but
+:D1ck :i need some sort of a hint
+:D1ck :i never used IRIX before, except for once
+:Sp07 :if I give you what?
+:D1ck :hint
+:Sp07 :hint?
+:D1ck :heh
+:D1ck :never mind
+:D1ck :let me check my jp.log
+
+[note: jp.log seems to be a list of hosts from Japan, xx.log where xx is a TLD]
+
+:D1ck :heh
+:D1ck :in couple of weeks
+:Sp07 :ok
+:D1ck :unet will gline
+:D1ck :*
+:D1ck :and
+:D1ck :*
+:D1ck :ll
+:D1ck :lol
+:Sp07 :heh
+:D1ck :=P
+:D1ck :i`ll make a script ./script roots.txt
+:D1ck :it will check bj on all boxes
+:D1ck :if true
+:D1ck :then it will keep if not it will grep -v
+:D1ck :it will be easier
+:D1ck :hehe
+:Sp07 :umm
+:Sp07 :whats the point if you dont know the bj password?
+:Sp07 :hehe
+:D1ck :i know
+:D1ck :its my bj
+:D1ck ::P
+:Sp07 :oh
+:D1ck :<syntax3> like i`d sugest,a admin should always find .kr* .jp.log, coz hackers uslly scan that, and it's quite possible that if u find such log u are vuln.
+:D1ck :THATS LAME
+:D1ck :i just got that from my quotes.txt
+:D1ck :Sp07 
+:D1ck :u have CERT KEY
+:D1ck :?
+:Sp07 :cert key ?
+:Sp07 :for what?
+:Sp07 :anyways no
+:Sp07 :eheh
+:Sp07 :I dont have anything 
+:Sp07 :only thing I have is my pride
+:D1ck :lol
+:D1ck :m4d 3l337 tr0j4n by d1ck
+:Sp07 :change your bj password
+:Sp07 :for each shell
+:D1ck :why?
+:Sp07 :cause if 1 of your shells get hacked
+:D1ck :its easy to sniff
+:D1ck :?
+:Sp07 :people can find out the bj password
+:Sp07 :no
+:Sp07 :people can hack your shell and find out your password
+:D1ck :how?
+:D1ck :TERM
+:D1ck :TERM????
+:D1ck :HOW
+:D1ck :?
+:Sp07 :uhh
+:Sp07 :just view /bin/login
+:Sp07 :let me on your shell
+:Sp07 :and I will find out your password
+:Sp07 :hehe
+:D1ck :hehe
+:D1ck :oh
+:D1ck :the codder sux
+:D1ck :he should have crypted it
+:D1ck :so no hex editors could read it
+:Sp07 :type 
+:Sp07 :more /bin/login
+:Sp07 :and look throught it
+:Sp07 :and you will se your password
+:Sp07 :like TERM=
+:Sp07 :password
+:Sp07 :or something
+:D1ck :oh
+:D1ck :kewl
+:D1ck :******** /bin/login: Not a text file ********
+:Sp07 :?
+:D1ck :with more u cant view binaries
+:D1ck ::P
+:Sp07 :yes you can
+:D1ck :no
+:Sp07 :# more /bin/login
+:Sp07 :ELF     (4]4 (44sstt</usr/lib/ld.so.15
+:Sp07 :@(6 %4<&*/;,?9:1-'378#"5>2
+:Sp07 :)0$.=<\h       (       
+:Sp07 :, $,4   ($PH:t^LP
+:Sp07 :V\]hbiq(w  }
+:Sp07 :--More--(5%)  
+:Sp07 :hehe
+:D1ck :heh
+:Sp07 :its in there
+:Sp07 :in all that junk
+:D1ck :i cant
+:Sp07 :on that shell you cant
+:Sp07 :cause its gay
+:Sp07 :hehe
+:D1ck :cat 
+:D1ck :?
+:Sp07 :yeah
+:D1ck :hehe
+:D1ck :k
+:Sp07 :you can use cat
+:Sp07 :cat /bin/login | more
+:Sp07 :do that
+:Sp07 :heeh
+:D1ck :k
+:D1ck :whats TERMTYPE for ansi?
+:D1ck :i forgot
+:D1ck :vt100
+:D1ck :is normal
+:D1ck :ani
+:D1ck :??
+:Sp07 :?
+:Sp07 :vt100

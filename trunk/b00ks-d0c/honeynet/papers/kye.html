@@ -1,0 +1,316 @@
+<html>
+<head>
+<title>The Honeynet Project: Whitepapers</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link href="honeynet_style.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+<!--
+body {
+	background-image: url(../images/honeynet_final_bg.jpg);
+	background-repeat: no-repeat;
+	background-position: 0px 0px;
+	background-color: #FFCC67;
+}
+-->
+</style>
+</head>
+<body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+
+<table width="85%" border="0" cellpadding="0" cellspacing="0" bordercolor="#CCFF00">
+<tr>
+<td width="160"><a name="top"></a><img src="../images/spacer.gif" alt="spacer" width="200" height="100"></td>
+<td width="80%" align="right" valign="top"><img src="/images/masthead_tagline_email.gif" alt="TO LEARN THE TOOLS, TACTICS, AND MOTIVES OF THE " width="296" height="87" border="0" usemap="#Map">
+<map name="Map">
+  <area shape="rect" coords="135,58,296,86" href="mailto:project@honeynet.org" alt="email the Honeynet Project"></map>
+</td>
+</tr>
+<tr valign="top">
+<td><table width="129" border=0 cellpadding=0 cellspacing=0>
+<tr>
+<td width="129"> <a href="/index.html"><img src="../images/nav_00_home.gif" alt="Home" name="home" width=129 height=28 border="0" id="home"></a></td>
+</tr>
+
+<tr>
+
+<tr>
+<td width="129"> <a href="/misc/project.html"><img src="../images/nav_01_about.gif" alt="About the Project" name="about" width=129 height=28 border="0" id="about"></a></td>
+</tr>
+
+<tr>
+<td> <a href="/alliance/index.html"><img src="../images/nav_02_res_alliance.gif" alt="Research Alliance" name="alliance" width=129 height=30 border="0" id="alliance"></a></td>
+</tr>
+
+
+<tr>
+<td> <a href="/misc/chall.html"><img src="../images/nav_04_challenges.gif" alt="Challenges" name="challenges" width=129 height=30 border="0" id="challenges"></a></td>
+</tr>
+
+<tr>
+<td> <a href="/speaking/index.html"><img src="../images/nav_05_presentations.gif" alt="Presentations" name="pres" width=129 height=31 border="0" id="pres"></a></td>
+</tr>
+
+<tr>
+<td> <a href="/papers/index.html"><img src="../images/nav_06_whitepapers.gif" alt="Whitepapers" name="white" width=129 height=30 border="0" id="white"></a></td>
+</tr>
+
+<tr>
+<td> <a href="/tools/index.html"><img src="../images/nav_07_tools.gif" alt="Tools" name="tools" width=129 height=30 border="0" id="tools"></a></td>
+</tr>
+
+<tr>
+<td> <a href="/book/index.html"><img src="../images/nav_08_our_book.gif" alt="Our Book" name="book" width=129 height=29 border="0" id="book"></a></td>
+</tr>
+
+<tr>
+<td> <a href="/funds/index.html"><img src="../images/nav_09_funding.gif" alt="Funding/Donations" name="fund" width=129 height=31 border="0" id="fund"></a></td>
+</tr>
+
+<tr>
+<td> <a href="/misc/mirror.html"><img src="../images/nav_10_mirrors.gif" alt="Mirrors" name="morrors" width=129 height=28 border="0" id="morrors"></a></td>
+</tr>
+
+</table>
+<br>
+
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td><img src="../images/spacer.gif" alt="spacer" width="19" height="5"></td>
+<td></td>
+</tr>
+
+<tr>
+<td></td>
+<td>
+<form method=GET action="http://www.google.com/search">
+<input type="text" name="q" maxlength="255" value="">
+<input type="hidden" name="domains" value="honeynet.org">
+<input type="hidden" name="sitesearch" value="honeynet.org">
+<input type="submit" name="btnG" value="Search">
+</form>
+</td>
+</tr>
+</table>
+
+
+</td>
+<td><table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr valign="top">
+<td><img src="../images/spacer.gif" alt="spacer" width="5" height="50"></td>
+<td width="100%" valign="middle" class="introText">&nbsp;</td>
+</tr>
+</table>
+
+<table width="100%" border="0" cellpadding="0" cellspacing="0" bordercolor="#33FF99">
+<tr>
+<td bgcolor="#FFE6B3"><img src="../images/page_titles_kye_whitepapers.jpg" alt="Whitpapers" width="400" height="36"></td>
+</tr>
+<tr>
+<td bgcolor="#090804"><img src="../images/spacer.gif" alt="spacer" width="1" height="3"></td>
+</tr>
+<tr>
+<td valign="top" class="tableBg"><table width="100%" border="0" cellpadding="10" cellspacing="0">
+<tr>
+<td valign="top" bgcolor="#333333"><p class="intro">
+The Know Your Enemy (KYE) series of papers is dedicated to sharing our lessons learned.  The focus is 
+capturing the activities of cyber threats, analyzing the captured data, and 
+publishing the information in the form of our whitepapers.  The goal is for this information to
+improve the security of the Internet. Each paper topic must be first approved by our internal Review 
+Board, then all drafts go through a five week review process.  
+You can <a href="../misc/files/papers.tar.gz">download the papers</a> and read them offline,  
+or read <a href="trans/">translated papers here</a>.  All KYE papers are under the Creative
+Commons License. 
+<i>NOTE: The Honeynet Project makes no warranties about the concepts or content
+discussed in these papers.</i>
+
+<center>
+<a rel="license" href="http://creativecommons.org/licenses/by-nc/1.0/"><img alt="Creative Commons License" border="0" src="http://creativecommons.org/images/public/somerights.gif"/></a>
+</center>
+
+</td>
+</tr>
+
+<tr>
+<td valign="top" bgcolor="F2EADD"><p>
+<p>
+<a href="phishing/"><span class="bold">Know Your Enemy: Phishing</a> 
+- 17 May, 2005</span><br>
+<i>
+This paper documents how attackers build and use their  infrastructure
+for Phishing based attacks.  This highly technical and indepth paper
+is based on data captured and analyzed from the UK and German Honeynet
+Project.
+</i>
+
+<p>
+<img src="../images/rule.gif" alt="rule" width="100%" height="5">
+<a href="cdrom/index.html"><span class="bold">Know Your Enemy: Honeywall CDROM</a> 
+- 17 May, 2004</span><br>
+<i>
+This paper introduces you to the concepts of the Honeywall CDROM, a bootable
+Honeynet gateway.  Anyone wanting to deploy a honeynet
+should seriously consider this solutions, as it standardizes deployments
+and combines all of our tools,  including data control, data capture, and
+data analysis.</i>
+
+
+<p>
+<img src="../images/rule.gif" alt="rule" width="100%" height="5">
+<a href="bots/"><span class="bold">Know Your Enemy: Tracking Botnets</a> 
+- 14 March, 2005</span><br>
+<i>
+This paper documents what Botnets are, who is using them, how, and why.
+It also introduces the tools 'mwcollect' and 'drone' which can be used for
+collecting malware and tracking Botnet activity.
+</i>
+
+<p>
+<img src="../images/rule.gif" alt="rule" width="100%" height="5">
+<a href="trends/life-linux.pdf"><span class="bold">Know Your Enemy: Trends</a> 
+- 21 December, 2004</span><br>
+<i>
+This paper documents how over the past several years, the life expectancy has
+dramatically increased for unpatched or vulnerable Linux systems.  The purpose
+of this paper is to make you ask "Why is no one hacking Linux anymore?".
+</i>
+
+
+
+<p>
+<img src="../images/rule.gif" alt="rule" width="100%" height="5">
+<a href="edu/"><span class="bold">Know Your Enemy: Honeynets in Universities</a> 
+- 26 April, 2004</span><br>
+<i>
+This paper covers how academic institutions can deploy honeynets in their 
+networks. We cover the lessons learned from GA Tech deploying a honeynet on 
+their internal .edu network, how they got permission, and the successes they 
+had. The purpose of this paper is to make it easier for any university or 
+college to deploy a honeynet, for either research or operational activity.
+</i> 
+
+<p>
+<img src="../images/rule.gif" alt="rule" width="100%" height="5">
+<a href="sebek.pdf"><span class="bold">Know Your Enemy: Sebek</a> 
+- 17 November, 2003</span><br>
+<i>A detailed look into one of the Project's primary tools for
+an attacker's activity on a honeypot, even encrypted
+activity, such as SSH, burneye, and IPSec.  This paper covers what Sebek 
+is, its value, how it works, strengths and weaknesses, and how to analyze 
+data recovered by Sebek.
+</i> 
+
+<p>
+<img src="../images/rule.gif" alt="rule" width="100%" height="5">
+<a href="profiles/cc-fraud.pdf"><span class="bold">Profiles - Automated Credit Card Fraud</a> 
+- 10 July, 2003</span><br>
+<i>A look at just how easy, automated, and wide spread credit
+card fraud and identity theft has become, even amongst unskilled
+individuals. </i> 
+
+<p>
+<img src="../images/rule.gif" alt="rule" width="100%" height="5">
+<a href="gen2/index.html"><span class="bold">Know Your Enemy: GenII Honeynets</a> - 10 May, 2005</span><br>
+<i>This papers describes step-by-step how to build, deploy, and test a 2nd
+generation (GenII) Honeynet using the latest technologies. GenII Honeynets are
+considered easier to deploy, harder to detect, and safer to maintain then the
+original GenI technologies. </i></p>
+
+<p>
+<img src="../images/rule.gif" alt="rule" width="100%" height="5">
+<a href="honeynet/index.html"> <span class="bold">Know Your Enemy: Honeynets</a> - 10 May, 2005</span><br>
+<i>This paper is an overview of the concepts, values, risks, and issues of Honeynets.  This paper
+does not discuss the technical details of Honeynet technologies.</i></p>
+
+<p>
+<img src="../images/rule.gif" alt="rule" width="100%" height="5">
+<a href="virtual/index.html"><span class="bold">Know Your Enemy: Defining Virtual Honeynets</a> - 27 January, 2003</span><br>
+<i>This paper defines what a Virtual Honeynet is, its advantages and disadvantages,
+and the different way they can be deployed. </i>
+
+<p>
+<img src="../images/rule.gif" alt="rule" width="100%" height="5">
+<a href="uml/index.html"><span class="bold">Know Your Enemy: Learning with User-Mode Linux</a> - 20 December, 2002</span><br>
+<i>This paper explains step by step how to build a GenI virtual Honeynet using
+OpenSource software. Deploy a complete Honeynet using nothing more than an old
+486 computer and free software! </i>
+NOTE: This paper is no longer actively maintained.
+
+<p>
+<img src="../images/rule.gif" alt="rule" width="100%" height="5">
+<a href="finger/"><span class="bold">Know Your Enemy: Passive Fingerprinting</a> - 04 March, 2002</span><br>
+<i>This paper details how to passively learn about the enemy, without them
+knowing about it. Specifically, how to determine the operating system of a remote
+host using passive sniffer traces only.</i>
+NOTE: This paper is no longer actively maintained.
+
+<p>
+<img src="../images/rule.gif" alt="rule" width="100%" height="5">
+<a href="motives/index.html"><span class="bold">Know Your Enemy: Motives</a> - 27 June, 2000</span><br>
+<i>This paper studies the motives and psychology of a group of simple attackers, 
+all in their own words.</i>
+NOTE: This paper is no longer actively maintained.
+
+<p><img src="../images/rule.gif" alt="rule" width="100%" height="5">
+<a href="stats/"> <span class="bold">Know Your Enemy: Statistics</a> - 23 July, 2001</span><br>
+<i>This paper analyzes eleven months of data collected by the Honeynet Project.
+Based on this data, we demonstrate just how active the blackhat community is.
+We also demonstrate that it may be possible to predict future
+attacks. </i> 
+NOTE: This paper is no longer maintained and is considered out of date.
+
+<p>
+<img src="../images/rule.gif" alt="rule" width="100%" height="5">
+<a href="forensics/index.html"><span class="bold">Know Your Enemy: A Forensics Analysis</a> - 23 May, 2000</span><br>
+<i>This paper studies step by step a successful attack of a system. However,
+instead of focusing on the tools and tactics
+used, we&nbsp; focus on our analysis techniques and how we pieced the information
+together. The purpose is to give you the&nbsp; skills necessary to analyze and
+learn on your own the threats your organization faces. 
+NOTE: This paper is no longer actively maintained.
+
+<p>
+<img src="../images/rule.gif" alt="rule" width="100%" height="5">
+<a href="worm/index.html"><span class="bold">Know Your Enemy: Worms at War</a> - 7 November, 2000</span><br>
+<i>See how worms probe for and compromise vulnerable Microsoft Windows systems.
+Based on the first Microsoft honeypot compromised
+in the Honeynet Project.</i>
+NOTE: This paper is no longer actively maintained. 
+
+<p>
+<img src="../images/rule.gif" alt="rule" width="100%" height="5">
+<a href="enemy3/index.html"><span class="bold">Know Your Enemy: III</a> - 27 March, 2000</span><br>
+<i>What happens after the script kiddie gains root. Specifically, how they
+cover their tracks while they monitor your system.&nbsp; The paper goes through 
+step by step on a system that was compromised, with system logs and keystrokes 
+to verify each step.</i>
+NOTE: This paper is no longer maintained and is considered out of date.
+
+<p>
+<img src="../images/rule.gif" alt="rule" width="100%" height="5">
+<a href="enemy2/index.html"><span class="bold">Know Your Enemy: II</a> - 18 June, 2001</span><br>
+<i>How to determine what the enemy is doing by analyzing your system log files. 
+Includes examples based on two commonly used scanning tools, sscan and nmap.</i>
+NOTE: This paper is no longer maintained and is considered out of date.
+
+<p>
+<img src="../images/rule.gif" alt="rule" width="100%" height="5">
+<a href="enemy/index.html"> <span class="bold">Know Your Enemy</a> - 21 July, 2000</span><br>
+<i> The tools and methodology of the most common black-hat threat on the Internet,
+the Script Kiddie.&nbsp; By understanding how they attack and what they are looking
+for, you can better protect your
+systems and network</i>.
+
+<p>
+</td>
+</tr>
+</table>
+<p><br>
+<a href="#top"><img src="../images/back.gif" alt="Back to Top" width="82" height="20" border="0"></a></p>
+<p>&nbsp;</p>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</body>
+</html>

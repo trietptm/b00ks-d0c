@@ -1,0 +1,114 @@
+host #iptables -L -n
+Chain INPUT (policy DROP)
+target     prot opt source               destination         
+ACCEPT     all  --  0.0.0.0/0            0.0.0.0/0          state RELATED,ESTABLISHED 
+ACCEPT     all  --  0.0.0.0/0            0.0.0.0/0          state RELATED,ESTABLISHED 
+ACCEPT     all  --  0.0.0.0/0            0.0.0.0/0          
+
+Chain FORWARD (policy DROP)
+target     prot opt source               destination         
+LOG        tcp  --  0.0.0.0/0            0.0.0.0/0          state NEW LOG flags 0 level 4 prefix `INBOUND TCP: ' 
+ACCEPT     tcp  --  0.0.0.0/0            0.0.0.0/0          state NEW 
+LOG        udp  --  0.0.0.0/0            0.0.0.0/0          state NEW LOG flags 0 level 4 prefix `INBOUND UDP: ' 
+ACCEPT     udp  --  0.0.0.0/0            0.0.0.0/0          state NEW 
+LOG        icmp --  0.0.0.0/0            0.0.0.0/0          state NEW LOG flags 0 level 4 prefix `INBOUND ICMP: ' 
+ACCEPT     icmp --  0.0.0.0/0            0.0.0.0/0          state NEW 
+LOG        all  --  0.0.0.0/0            0.0.0.0/0          state NEW LOG flags 0 level 4 prefix `INBOUND OTHER: ' 
+ACCEPT     all  --  0.0.0.0/0            0.0.0.0/0          state NEW 
+ACCEPT     all  --  0.0.0.0/0            0.0.0.0/0          
+LOG        udp  --  10.10.10.0/24        255.255.255.255    udp spt:68 dpt:67 LOG flags 0 level 4 prefix `DHCP OUT REQUEST: ' 
+ACCEPT     udp  --  10.10.10.0/24        255.255.255.255    udp spt:68 dpt:67 
+LOG        all  -- !10.10.10.0/24        0.0.0.0/0          LOG flags 0 level 4 prefix `SPOOFED SOURCE: ' 
+DROP       all  -- !10.10.10.0/24        0.0.0.0/0          
+LOG        all  --  0.0.0.0/0            10.10.10.255       LOG flags 0 level 4 prefix `Legal Broadcast: ' 
+ACCEPT     all  --  0.0.0.0/0            10.10.10.255       
+LOG        all  --  0.0.0.0/0            255.255.255.255    LOG flags 0 level 4 prefix `Legal Broadcast: ' 
+ACCEPT     all  --  0.0.0.0/0            255.255.255.255    
+tcpHandler  tcp  --  10.10.10.201         0.0.0.0/0          state NEW limit: avg 9/hour burst 9 
+LOG        tcp  --  10.10.10.201         0.0.0.0/0          state NEW limit: avg 1/hour burst 1 LOG flags 0 level 4 prefix `Drop TCP after 9 connections ' 
+DROP       tcp  --  10.10.10.201         0.0.0.0/0          state NEW 
+udpHandler  udp  --  10.10.10.201         0.0.0.0/0          state NEW limit: avg 20/hour burst 20 
+LOG        udp  --  10.10.10.201         0.0.0.0/0          state NEW limit: avg 1/hour burst 1 LOG flags 0 level 4 prefix `Drop udp after 20 attempts ' 
+DROP       udp  --  10.10.10.201         0.0.0.0/0          state NEW 
+icmpHandler  icmp --  10.10.10.201         0.0.0.0/0          state NEW limit: avg 50/hour burst 50 
+LOG        icmp --  10.10.10.201         0.0.0.0/0          state NEW limit: avg 1/hour burst 1 LOG flags 0 level 4 prefix `Drop icmp after 50 attempts ' 
+DROP       icmp --  10.10.10.201         0.0.0.0/0          state NEW 
+otherHandler  all  --  10.10.10.201         0.0.0.0/0          state NEW limit: avg 10/hour burst 10 
+LOG        all  --  10.10.10.201         0.0.0.0/0          state NEW limit: avg 1/hour burst 1 LOG flags 0 level 4 prefix `Drop other after 10 attempts ' 
+tcpHandler  tcp  --  10.10.10.202         0.0.0.0/0          state NEW limit: avg 9/hour burst 9 
+LOG        tcp  --  10.10.10.202         0.0.0.0/0          state NEW limit: avg 1/hour burst 1 LOG flags 0 level 4 prefix `Drop TCP after 9 connections ' 
+DROP       tcp  --  10.10.10.202         0.0.0.0/0          state NEW 
+udpHandler  udp  --  10.10.10.202         0.0.0.0/0          state NEW limit: avg 20/hour burst 20 
+LOG        udp  --  10.10.10.202         0.0.0.0/0          state NEW limit: avg 1/hour burst 1 LOG flags 0 level 4 prefix `Drop udp after 20 attempts ' 
+DROP       udp  --  10.10.10.202         0.0.0.0/0          state NEW 
+icmpHandler  icmp --  10.10.10.202         0.0.0.0/0          state NEW limit: avg 50/hour burst 50 
+LOG        icmp --  10.10.10.202         0.0.0.0/0          state NEW limit: avg 1/hour burst 1 LOG flags 0 level 4 prefix `Drop icmp after 50 attempts ' 
+DROP       icmp --  10.10.10.202         0.0.0.0/0          state NEW 
+otherHandler  all  --  10.10.10.202         0.0.0.0/0          state NEW limit: avg 10/hour burst 10 
+LOG        all  --  10.10.10.202         0.0.0.0/0          state NEW limit: avg 1/hour burst 1 LOG flags 0 level 4 prefix `Drop other after 10 attempts ' 
+tcpHandler  tcp  --  10.10.10.203         0.0.0.0/0          state NEW limit: avg 9/hour burst 9 
+LOG        tcp  --  10.10.10.203         0.0.0.0/0          state NEW limit: avg 1/hour burst 1 LOG flags 0 level 4 prefix `Drop TCP after 9 connections ' 
+DROP       tcp  --  10.10.10.203         0.0.0.0/0          state NEW 
+udpHandler  udp  --  10.10.10.203         0.0.0.0/0          state NEW limit: avg 20/hour burst 20 
+LOG        udp  --  10.10.10.203         0.0.0.0/0          state NEW limit: avg 1/hour burst 1 LOG flags 0 level 4 prefix `Drop udp after 20 attempts ' 
+DROP       udp  --  10.10.10.203         0.0.0.0/0          state NEW 
+icmpHandler  icmp --  10.10.10.203         0.0.0.0/0          state NEW limit: avg 50/hour burst 50 
+LOG        icmp --  10.10.10.203         0.0.0.0/0          state NEW limit: avg 1/hour burst 1 LOG flags 0 level 4 prefix `Drop icmp after 50 attempts ' 
+DROP       icmp --  10.10.10.203         0.0.0.0/0          state NEW 
+otherHandler  all  --  10.10.10.203         0.0.0.0/0          state NEW limit: avg 10/hour burst 10 
+LOG        all  --  10.10.10.203         0.0.0.0/0          state NEW limit: avg 1/hour burst 1 LOG flags 0 level 4 prefix `Drop other after 10 attempts ' 
+tcpHandler  tcp  --  10.10.10.204         0.0.0.0/0          state NEW limit: avg 9/hour burst 9 
+LOG        tcp  --  10.10.10.204         0.0.0.0/0          state NEW limit: avg 1/hour burst 1 LOG flags 0 level 4 prefix `Drop TCP after 9 connections ' 
+DROP       tcp  --  10.10.10.204         0.0.0.0/0          state NEW 
+udpHandler  udp  --  10.10.10.204         0.0.0.0/0          state NEW limit: avg 20/hour burst 20 
+LOG        udp  --  10.10.10.204         0.0.0.0/0          state NEW limit: avg 1/hour burst 1 LOG flags 0 level 4 prefix `Drop udp after 20 attempts ' 
+DROP       udp  --  10.10.10.204         0.0.0.0/0          state NEW 
+icmpHandler  icmp --  10.10.10.204         0.0.0.0/0          state NEW limit: avg 50/hour burst 50 
+LOG        icmp --  10.10.10.204         0.0.0.0/0          state NEW limit: avg 1/hour burst 1 LOG flags 0 level 4 prefix `Drop icmp after 50 attempts ' 
+DROP       icmp --  10.10.10.204         0.0.0.0/0          state NEW 
+otherHandler  all  --  10.10.10.204         0.0.0.0/0          state NEW limit: avg 10/hour burst 10 
+LOG        all  --  10.10.10.204         0.0.0.0/0          state NEW limit: avg 1/hour burst 1 LOG flags 0 level 4 prefix `Drop other after 10 attempts ' 
+tcpHandler  tcp  --  10.10.10.205         0.0.0.0/0          state NEW limit: avg 9/hour burst 9 
+LOG        tcp  --  10.10.10.205         0.0.0.0/0          state NEW limit: avg 1/hour burst 1 LOG flags 0 level 4 prefix `Drop TCP after 9 connections ' 
+DROP       tcp  --  10.10.10.205         0.0.0.0/0          state NEW 
+udpHandler  udp  --  10.10.10.205         0.0.0.0/0          state NEW limit: avg 20/hour burst 20 
+LOG        udp  --  10.10.10.205         0.0.0.0/0          state NEW limit: avg 1/hour burst 1 LOG flags 0 level 4 prefix `Drop udp after 20 attempts ' 
+DROP       udp  --  10.10.10.205         0.0.0.0/0          state NEW 
+icmpHandler  icmp --  10.10.10.205         0.0.0.0/0          state NEW limit: avg 50/hour burst 50 
+LOG        icmp --  10.10.10.205         0.0.0.0/0          state NEW limit: avg 1/hour burst 1 LOG flags 0 level 4 prefix `Drop icmp after 50 attempts ' 
+DROP       icmp --  10.10.10.205         0.0.0.0/0          state NEW 
+otherHandler  all  --  10.10.10.205         0.0.0.0/0          state NEW limit: avg 10/hour burst 10 
+LOG        all  --  10.10.10.205         0.0.0.0/0          state NEW limit: avg 1/hour burst 1 LOG flags 0 level 4 prefix `Drop other after 10 attempts ' 
+tcpHandler  tcp  --  10.10.10.206         0.0.0.0/0          state NEW limit: avg 9/hour burst 9 
+LOG        tcp  --  10.10.10.206         0.0.0.0/0          state NEW limit: avg 1/hour burst 1 LOG flags 0 level 4 prefix `Drop TCP after 9 connections ' 
+DROP       tcp  --  10.10.10.206         0.0.0.0/0          state NEW 
+udpHandler  udp  --  10.10.10.206         0.0.0.0/0          state NEW limit: avg 20/hour burst 20 
+LOG        udp  --  10.10.10.206         0.0.0.0/0          state NEW limit: avg 1/hour burst 1 LOG flags 0 level 4 prefix `Drop udp after 20 attempts ' 
+DROP       udp  --  10.10.10.206         0.0.0.0/0          state NEW 
+icmpHandler  icmp --  10.10.10.206         0.0.0.0/0          state NEW limit: avg 50/hour burst 50 
+LOG        icmp --  10.10.10.206         0.0.0.0/0          state NEW limit: avg 1/hour burst 1 LOG flags 0 level 4 prefix `Drop icmp after 50 attempts ' 
+DROP       icmp --  10.10.10.206         0.0.0.0/0          state NEW 
+otherHandler  all  --  10.10.10.206         0.0.0.0/0          state NEW limit: avg 10/hour burst 10 
+LOG        all  --  10.10.10.206         0.0.0.0/0          state NEW limit: avg 1/hour burst 1 LOG flags 0 level 4 prefix `Drop other after 10 attempts ' 
+ACCEPT     all  --  0.0.0.0/0            0.0.0.0/0          state RELATED,ESTABLISHED 
+
+Chain OUTPUT (policy ACCEPT)
+target     prot opt source               destination         
+
+Chain icmpHandler (6 references)
+target     prot opt source               destination         
+LOG        all  --  0.0.0.0/0            0.0.0.0/0          LOG flags 0 level 4 prefix `OUTBOUND CONN ICMP: ' 
+ACCEPT     all  --  0.0.0.0/0            0.0.0.0/0          
+
+Chain otherHandler (6 references)
+target     prot opt source               destination         
+LOG        all  --  0.0.0.0/0            0.0.0.0/0          LOG flags 0 level 4 prefix `OUTBOUND CONN OTHER: ' 
+ACCEPT     all  --  0.0.0.0/0            0.0.0.0/0          
+
+Chain tcpHandler (6 references)
+target     prot opt source               destination         
+LOG        all  --  0.0.0.0/0            0.0.0.0/0          LOG flags 0 level 4 prefix `OUTBOUND CONN TCP: ' ACCEPT     all  --  0.0.0.0/0            0.0.0.0/0          
+
+Chain udpHandler (6 references)
+target     prot opt source               destination         
+LOG        all  --  0.0.0.0/0            0.0.0.0/0          LOG flags 0 level 4 prefix `OUTBOUND CONN UDP: ' ACCEPT     all  --  0.0.0.0/0            0.0.0.0/0     

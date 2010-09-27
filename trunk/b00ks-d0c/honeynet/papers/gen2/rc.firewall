@@ -1,0 +1,722 @@
+#!/bin/bash
+#
+# rc.firewall, ver 0.7.0
+# http://www.honeynet.org/papers/honeynet/tools/
+# Rob McMillen <rvmcmil@cablespeed.com>
+#
+# CHANGES:
+# 23 Mar 2003: Fixed a bug in the MANAGEMENT_IFACE connection. 
+#              It prevented use of this interface when restricting
+#              firewall communications.  Also added SEBEK_DST_PORT
+#              to let the user identify which port SEBEK is sending
+#              to via the use of udp, and added SEBEK_LOG so the user
+#              can decide if he wants to log (yes) or not (no).
+#              Made the following defaults:
+#					RESTRICT="yes"
+# 					MANAGER="192.168.0.0/24"
+# 12 Mar 2003: Added PATH variable.  You no longer have to tell
+#              the script where the executables live.
+# 02 Mar 2003: Removed LAN_IP_RANGE to make it work with bridge
+#              mode.  Also moved the broadcast and dhcp rules
+#              before the test for inbound traffic in order to 
+#              ensure broacast do not flood our logs and are 
+#              allowed to pass in bridge mode.
+# 27 Jan 2003: Added rules and variables (SEBEK and SEBEK_DST_IP) to
+#              compensate for sebek traffic.
+# 22 Jan 2003: Added the OUTBOUND CONN TCP label to outbound RELATED
+#              traffic.
+# 13 Jan 2003: Made some fixes to allow ESTABLISHED and RELATED traffic
+#              back into the management interface.
+# 10 Jan 2003: Added ip_queue checking if QUEUE is enabled, and modified
+#              TCP logging statement to increase number of TCPRATE possible.
+# 04 Jan 2003: Added rule to log Honeypot to Honeypot activity without 
+#              implementing connection limits for those conversations.  
+#              Added Allow all OUTPUT on loopback to enable the firewall to 
+#              talk to itself during restricted Mode.
+# 20 Dec 2002: Added some code to detect if ipchains is running.  If so, 
+#              flush the tables; remove the module; and continue as usual.
+# 19 Nov 2002: Restricted Firewall Outbound traffic see the TCP_ALLOWED_OUT 
+#              and UDP_ALLOWED_OUT variables.
+# 05 Nov 2002: Added MANAGER variable to restrict what ips have access
+#              to the management interface.
+# 01 Nov 2002: Added rules for management interface.  Added rule to 
+#              allow outbound DHCP requests in bridge mode.  Moved 
+#              variables around in an effort to better organize them
+#              into a logical order.  Changed DNS query handling.
+# 20 Oct 2002: Changed Variable names and grouped like variables
+#              together.  Removed brctl_IFACE var.
+# 
+# PURPOSE
+# To deploy Data Control requirements for a Honeynet deployment.
+# This script uses IPTables to create a gateway that counts inbound
+# and outbound connections and  blocks connections once a limit
+# has been met.  Also has the capability to work with Snort-Inline.
+# Script can work in either GenI(routing) or GenII(bridging) mode.
+# For more about Honeynets, refer to
+#
+#        http://www.honeynet.org/papers/honeynet/
+#
+# REQUIREMENTS
+# In order for the genII script to work, your kernel must 
+# be compiled with bride and bridge firewall support.
+# Red Hat kernel 2.4.18-3 has this by default, most other
+# kernels do not.  If yours does not, you will most likely
+# need to patch and recompile your kernel.  You can find the
+# patch at
+#      http://bridge.sourceforge.net/download.html
+#
+# You will also need bridge utilities to allow this script to
+# enable/configure bridging.  I used bridge-utils-0.9.3-4 during
+# the testing of this script.
+#
+#
+# INSTALLATION
+# Once you have configured the variables of this script, you 
+# simply execute this script.  It calls on IPTables and
+# does everything for you (nice, huh? :).  You must have IPTables 
+# installed on your system, and kernel version 2.4.x.
+#
+#
+# MODE is the mode the firewall will use to operate.  There are
+#    two possible values at this time: nat, bridge.  "nat" is GenI
+#    where your gateway is routing in layer3.  "bridge" is GenII
+#    where your gateway is bridging in layer2.  Of these two 
+#    options, "bridge" is the prefered, more secure MODE.
+#
+# MODE="nat" In this mode, the firewall will translate each ip
+#    in the PUBLIC_IP variable to each ip in the HPOT_IP variable.
+#    Order is important, so make sure you place the ips in the 
+#    variables as you would like them translated.  For example,
+#    PUBLIC_IP="192.168.1.1 192.168.1.2 192.168.1.3"
+#    HPOT_IP="192.168.0.1 192.168.0.2 192.168.0.3"
+#
+#    will translate as follows:
+#    192.168.1.1 => 192.168.0.1
+#    192.168.1.2 => 192.168.0.2
+#    192.168.1.3 => 192.168.0.3
+#
+#    Each variable is a space delimited list; therefore, you can have
+#    as many as you want (or as many as an interface can have aliases).
+#
+#    The following variables must match the setting for the translated
+#    network.  In the example above, they would be the settings of the
+#    192.168.0.* network
+#
+#    LAN_BCAST_ADDRESS="192.168.0.255"
+#
+# MODE="bridge" In this mode, the firewall will act as a bridge, 
+#    bridging and bridge firewalling will need to be compiled into the
+#    kernel.  Default kernel for Redhat 7.3 (2.4.18-3) has it, but its
+#    upgrade does not.  All other default kernels do not support IPtables
+#    in bridging mode.  Therefore, your bridge will allow everything in and 
+#    everything out,  completely bypassing your firewall rules.  
+#
+#    The following variables must match the settings for the bridged
+#    network.  If both sides of the bridge are on 10.0.0.*,
+#
+#    LAN_BCAST_ADDRESS="192.168.1.255"
+#
+#
+#    NOTE:  A quick check to ensure you have the LAN variables correct
+#           is to check /var/log/messages.  If you see logs stating
+#           SPOOFED SOURCE, you probably have them set wrong.  Also,
+#           make sure your Honeypot default gateway is set to the 
+#           firewall internal interface when in nat mode and the 
+#           border router or routing device when in bridge mode.
+
+
+#### If you want to see all the commands or which command is giving your
+#       problems, remove the comment below.
+#set -x
+
+
+#*************************************************************************
+# USER VARIABLE SECTION
+#*************************************************************************
+
+###############
+# COMMON VARS #
+###############
+
+# The MODE variable tells the script to #setup a bridge HoneyWall
+# or a NATing HoneyWall.
+#MODE="nat"
+MODE="bridge"
+
+# A space delimited list of honeypots IPs (public IP)
+# If you are in "bridge" mode, this is the list of your 
+# honeypot IP's that will be behind the bridge.  If you are
+# in "nat" mode, this is the list of public IPs you will
+# be using for IP address translation.  Still confused?  Its
+# the list of IPs the hackers will attack.
+PUBLIC_IP="192.168.1.101 192.168.1.102 192.168.1.103"
+
+
+### Variable for external network
+INET_IFACE="eth0"                       # Firewall Public interface
+
+### Variables for internal network
+LAN_IFACE="eth1"                       # Firewall interface on internal network
+LAN_BCAST_ADDRESS="192.168.1.255"      # IP Broadcast range for internal network
+
+### IPTables script can be used with the Snort-Inline filter
+### You can find the current release at
+###  http://www.honeynet.org/papers/honeynet/tools/
+#QUEUE="no"              # Do not use experimental QUEUE support
+QUEUE="yes"              # Use experimental QUEUE support
+
+### Set the connection outbound limits for different protocols.
+SCALE="hour"            # second, minute, hour, etc.
+TCPRATE="10"            # Number of TCP connections per $SCALE
+UDPRATE="20"            # Number of UDP connections per $SCALE
+ICMPRATE="50"           # Number of ICMP connections per $SCALE
+OTHERRATE="10"          # Number of other IP connections per $SCALE
+
+### This section allows you to compensate for the use of sebek
+#   on the honeynet.  Since sebek uses spoofed ips, sebek traffic
+#   would clutter our logs with SPOOFED SOURCE entries.  Setting
+#   it to yes, will drop all SEBEK_DST_IP ips before it has a 
+#   chance to hit the SPOOFED SOURCE ip rule.  It can also be used 
+#   as a hacker activity monitor by labeling this traffic as SEBEK
+#   in the firewall rules.
+#SEBEK="no"
+SEBEK="yes"
+
+# Allows the user to decide whether to drop the sebek packets or 
+# allow them to be sent outside of the Honeynet.
+#SEBEK_FATE="ACCEPT"
+SEBEK_FATE="DROP"
+
+SEBEK_DST_IP="192.168.1.254"
+SEBEK_DST_PORT="34557"
+
+#SEBEK_LOG="yes"
+SEBEK_LOG="no"
+
+######################
+# END OF COMMON VARS #
+######################
+
+##########################
+# VARIABLES FOR NAT MODE #
+##########################
+#  You use these variables ONLY if you are using NAT mode.   
+#  If you are in bridging mode, then these variables will
+#  not be used.
+# 
+
+ALIAS_MASK="255.255.255.0"         # Network mask to be used alias
+
+HPOT_IP="192.168.171.129"  	   # Space delimited list of Honeypot ips
+                                   # NOTE: MUST HAVE SAME NUMBER OF IPS AS 
+                                   # PUBLIC_IP VARIABLE.
+#############################
+# END OF NAT MODE VARIABLES #
+#############################
+
+
+##################################
+# SPECIAL CONSIDERATION VARIABLE #
+##################################
+
+# You may want to allow unrestricted outbound DNS access.
+# If you want to restrict the hosts that can access public dns servers,
+# set the DNS_HOST variable to the ip of the honeypots allowed to 
+# make queries.  Otherwise, leave it blank and the proper set of
+# ips will be assigned in order to allow all of your honeypots to 
+# make dns queries. 
+DNS_HOST=""
+
+# List of DNS servers your honeypot(s) are allowed to go to.
+# This is once a gain a space delimited list.
+DNS_SVRS=""
+
+######################################
+# VARIABLES FOR MANAGEMENT INTERFACE #
+######################################
+
+
+# Interface for remote management.  If set to br0, it will assign
+# MANAGE_IP to the bridge logical interface and allow its use
+# as a management interface.  If you do not want to use a 
+#  management interface, set it to "none"
+#MANAGE_IFACE="br0"                
+#MANAGE_IFACE="none"                
+MANAGE_IFACE="eth2"                
+
+MANAGE_IP="10.1.1.1"           # IP of management Interface
+MANAGE_NETMASK="255.255.255.0"     # Netmask of management Interface
+
+# Space delimited list of tcp ports allowed into the management interface
+ALLOWED_TCP_IN="22"
+
+# IP allowed to connect to the management interface
+# If set to "any", it will allow anyone to attempt to connect.
+# The notation ip/mask or a space delimited list of ips are
+# allowed.
+#MANAGER="any"  
+MANAGER="10.1.1.0/24
+
+
+####################
+# END OF MANAGE VARS
+####################
+
+##########################################################
+# VARIABLES THAT RESTRICT WHAT THE FIREWALL CAN SEND OUT #
+##########################################################
+
+# This variable will limit outbound Firewall connections
+# to ports identified in the ALLOWED_TCP_OUT and 
+# ALLOWED_UDP_OUT variables.  If set to yes, it will 
+# restrict the firewall.  If set to no, it will allow all
+# outbound connections generated by the firewall.
+# NOTE:  There must be a management interface in bridge 
+# mode in order to have a firewall interface to restrict.
+
+#RESTRICT="no"
+RESTRICT="yes"
+
+ALLOWED_UDP_OUT="53 123"
+ALLOWED_TCP_OUT="22 43 80 443"
+
+##########################
+# END RESTRICT VARIABLES #
+##########################
+
+############################################
+# LOCATION OF PROGRAMS USED BY THIS SCRIPT #
+############################################ 
+PATH="/sbin:/usr/sbin:/usr/local/sbin:/bin"
+
+####################
+# END OF PROG VARS #
+####################
+
+#*************************************************************************
+# END OF USER VARIABLE SECTION (DO NOT EDIT BEYOND THIS POINT)
+#*************************************************************************
+
+#########
+# First, confirm that IPChains is NOT running.  If
+# it is running, clear the IPChains rules, remove the kernel 
+# module, and warn the end user.
+
+lsmod | grep ipchain
+IPCHAINS=$?
+
+if [ "$IPCHAINS" = 0 ]; then
+  echo ""
+  echo "Dooh, IPChains is currently running! IPTables is required by"
+  echo "the rc.firewall script. IPChains will be unloaded to allow"
+  echo "IPTables to run.  It is recommened that you permanently"
+  echo "disable IPChains in the /etc/rc.d startup scripts and enable"
+  echo "IPTables instead."
+  ipchains -F
+  rmmod ipchains
+fi
+
+#########
+# Flush rules
+#
+iptables -F
+iptables -F -t nat
+iptables -F -t mangle
+iptables -X
+
+echo ""
+
+##########
+# Let's setup the firewall according to the Mode selected: bridge or nat
+#
+if [ $MODE = "bridge" ]
+then
+
+   echo "Starting up Bridging mode."
+
+   #########
+   # Let's clean up the bridge.  This will only work if this script
+   #   started the bridge.
+   #
+   brctl delif br0 ${INET_IFACE} 2> /dev/null
+   brctl delif br0 ${LAN_IFACE} 2> /dev/null
+   ifconfig br0 down 2> /dev/null
+   brctl delbr br0 2> /dev/null
+
+   #########
+   # Let's make sure our interfaces don't have ip information
+   #
+   ifconfig $INET_IFACE 0.0.0.0 up -arp
+   ifconfig $LAN_IFACE 0.0.0.0 up -arp
+
+
+   #########
+   # Let's start the bridge
+   #
+   brctl addbr br0
+   brctl addif br0 ${LAN_IFACE}
+   brctl addif br0 ${INET_IFACE}
+
+   # Let's make sure our bridge is not sending out
+   #   BPDUs (part of the spanning tree protocol).
+   brctl stp br0 off
+
+   if [ "$MANAGE_IFACE" = "br0" ]
+   then
+      ifconfig br0 $MANAGE_IP netmask $MANAGE_NETMASK up
+   else
+      ifconfig br0 0.0.0.0 up -arp
+   fi
+      
+elif [ $MODE = "nat" ]
+then
+
+   echo "Starting up Routing mode and enabling Network Address Translation."
+
+   i=0
+   z=1
+   tempPub=( $PUBLIC_IP ) 
+
+   for host in $HPOT_IP; do
+
+      # Bring up eth aliases
+      ifconfig $INET_IFACE:${z} ${tempPub[$i]} netmask ${ALIAS_MASK} up
+
+      # Ensure proper NATing is performed for all honeypots
+      iptables -t nat -A POSTROUTING -s ${host} -j SNAT --to-source ${tempPub[$i]}
+      iptables -t nat -A PREROUTING -d ${tempPub[$i]} -j DNAT --to-destination ${host}
+      let "i += 1"
+      let "z += 1"
+   done
+fi
+
+# Let's figure out dns
+if [ $DNS_HOST -z ]
+then
+   if [ $MODE = "bridge" ]
+   then
+      DNS_HOST=$PUBLIC_IP
+   else
+      DNS_HOST=$HPOT_IP
+   fi
+fi 
+
+
+#########
+# Load all required IPTables modules
+#
+
+### Needed to initially load modules
+/sbin/depmod -a
+
+### Add iptables target LOG.
+modprobe ipt_LOG
+
+### Add iptables QUEUE support (Experimental)
+if test $QUEUE = "yes"
+then
+   # Insert kernel mod
+   modprobe ip_queue
+
+  # check to see if it worked, if not exit with error
+  lsmod | grep ip_queue
+  IPQUEUE=$?
+
+  if [ "$IPQUEUE" = 1 ]; then
+    echo ""
+    echo "It appears you do not have the ip_queue kernel module compiled"
+    echo "for your kernel.  This module is required for Snort-Inline and"
+    echo "QUEUE capabilities.  You either have to disable QUEUE, or compile"
+    echo "the ip_queue kernel module for your kernel.  This module is part"
+    echo "of the kernel source."
+    exit
+  fi
+
+ 
+   echo "Enabling Snort-Inline capabilities, make sure Snort-Inline is"
+   echo "running in -Q mode, or all outbound traffic will be blocked"
+fi
+
+### Support for connection tracking of FTP and IRC.
+modprobe ip_conntrack_ftp
+modprobe ip_conntrack_irc
+
+### Enable ip_forward 
+echo "1" > /proc/sys/net/ipv4/ip_forward
+
+### Create protocol handling chains
+iptables -N tcpHandler
+iptables -N udpHandler
+iptables -N icmpHandler
+iptables -N otherHandler
+
+
+#    Forward Chain: 
+#    Some of these rules may look redundant, but they allow us to catch 
+#    'other' protocols.
+
+
+#    Internet -> honeypot  -  
+#    This logs all inbound new connections and we must
+#    specifically allow all inbound traffic because 
+#    the default policy for forwarding traffic 
+#    will be drop.  This will ensure if something 
+#    goes wrong with outbound connections, we 
+#    default to drop.
+#
+#    Also, in case we have something listening to the QUEUE, we
+#    will send all packets via the QUEUE.
+
+
+# Since this is a bridge, we want to allow broadcast.  By default, we allow all
+# inbound traffic (including broadcast).  We also want to allow outbound broadcast
+# (such as NetBIOS) but we do not want to count it as an outbound session.  So
+# we allow it here *before* we begin counting outbound connections
+#iptables -A FORWARD -i $LAN_IFACE -d ${LAN_BCAST_ADDRESS} -j LOG --log-prefix "Legal Broadcast: "
+iptables -A FORWARD -d ${LAN_BCAST_ADDRESS} -j ACCEPT
+#iptables -A FORWARD -i $LAN_IFACE -d 255.255.255.255 -j LOG --log-prefix "Legal Broadcast: "
+iptables -A FORWARD -d 255.255.255.255 -j ACCEPT
+
+
+### Inbound TCP
+iptables -A FORWARD -i $INET_IFACE -p tcp -m state --state NEW -j LOG --log-prefix "INBOUND TCP: " 
+iptables -A FORWARD -i $INET_IFACE -p tcp -m state --state NEW -j ACCEPT 
+   
+### Inbound UDP
+iptables -A FORWARD -i $INET_IFACE -p udp -m state --state NEW -j LOG --log-prefix "INBOUND UDP: " 
+iptables -A FORWARD -i $INET_IFACE -p udp -m state --state NEW -j ACCEPT 
+
+### Inbound ICMP
+iptables -A FORWARD -i $INET_IFACE -p icmp -m state --state NEW -j LOG --log-prefix "INBOUND ICMP: " 
+iptables -A FORWARD -i $INET_IFACE -p icmp -m state --state NEW -j ACCEPT 
+
+### Inbound anything else
+iptables -A FORWARD -i $INET_IFACE -m state --state NEW -j LOG --log-prefix "INBOUND OTHER: " 
+iptables -A FORWARD -i $INET_IFACE -m state --state NEW -j ACCEPT 
+
+# The remainder of established connections will be ACCEPTED.  The rules above 
+#   are required in order to log new inbound connections.
+iptables -A FORWARD -i $INET_IFACE -j ACCEPT 
+
+
+#  Okay, this is where the magic all happens.  All outbound traffic is counted,
+#  logged, and limited here.   Targets (called Handlers) are what actually limit
+#  the connections.  All 'Handlers' are defined at the bottom of the script.
+
+#   Egress filtering, don't want to let our compromised honeypot send spoofed packets.
+#   Stops most outbound DoS attacks.  However, we might want to allow our honeypots to 
+#   use dhcp to get an ip while in bridge mode.
+if [ $MODE = "bridge" ]
+then
+   iptables -A FORWARD -i $LAN_IFACE -p udp --sport 68 -d 255.255.255.255 --dport 67 -j LOG --log-prefix "DHCP OUT REQUEST: "
+   iptables -A FORWARD -i $LAN_IFACE -p udp --sport 68 -d 255.255.255.255 --dport 67 -j ACCEPT
+fi
+
+# This rule is for use with sebek.  If sebek is used, and we don't want
+#   the logs filled by SPOOFED SOURCE entries because sebek uses spoofed
+#   ips, we should drop all traffic in the sebek ip range.
+if [ "$SEBEK" = "yes" ]
+then
+	if [ "$SEBEK_LOG" = "yes" ]
+	then
+		iptables -A FORWARD -i $LAN_IFACE -p udp -d $SEBEK_DST_IP --dport $SEBEK_DST_PORT -j LOG --log-prefix "SEBEK"
+	fi
+	iptables -A FORWARD -i $LAN_IFACE -p udp -d $SEBEK_DST_IP --dport $SEBEK_DST_PORT -j $SEBEK_FATE 
+fi
+
+
+### DNS / NTP Perhaps one of your honeypots needs consistent
+### outbound access to provide internal service.
+for srvr in ${DNS_SVRS}; do
+    for host in ${DNS_HOST}; do
+        iptables -A FORWARD -p udp -i $LAN_IFACE -s ${host} -d ${srvr} --dport 53 -j LOG --log-prefix "Legal DNS: "
+        iptables -A FORWARD -p udp -i $LAN_IFACE -s ${host} -d ${srvr} --dport 53 -j ACCEPT 
+    done
+done
+
+if [ $MODE = "nat" ]
+then
+    LIMIT_IP=$HPOT_IP
+elif [ $MODE = "bridge" ]
+then
+    LIMIT_IP=$PUBLIC_IP
+fi
+
+### Count and limit all other outbound connections
+
+for host in ${LIMIT_IP}; do
+
+# This will ensure we don't restrict Honeypots talking to eachother, and
+#   we don't log them as outbound connections (in bridge mode, the 
+#   firewall sees all packets; therefore, we have to make sure it doesn't
+#   log packets incorrectly and give false positives).  
+#      If you do not want to see this log, comment out the logging rule.  
+#   You will still need the ACCEPT rule to ensure they honeypots can talk 
+#   to eachother freely.
+   iptables -A FORWARD -i $LAN_IFACE -o $LAN_IFACE -j LOG --log-prefix "Honeypot -> Honeypot: "
+   iptables -A FORWARD -i $LAN_IFACE -o $LAN_IFACE -j ACCEPT
+
+#  TCP
+#         This next rule is the connection limiter.  If it has not exceeded 
+#         the limit, the packet will be sent to the tcpHandler.  The 
+#         tcpHandler will log and either QUEUE or ACCEPT depending on 
+#         the Architecture selected.
+#
+#      NOTE: The purpose of the drop rule is to ensure we can catch 'other' 
+#         protocols that enter our network.  If this statement is not here
+#         we will get false log entries stating Drop other after xxx
+#         connections.
+   iptables -A FORWARD -p tcp -i $LAN_IFACE -m state --state NEW -m limit --limit ${TCPRATE}/${SCALE} --limit-burst ${TCPRATE} -s ${host} -j tcpHandler
+   iptables -A FORWARD -p tcp -i $LAN_IFACE -m state --state NEW -m limit --limit 1/${SCALE} --limit-burst 1  -s ${host} -j LOG --log-prefix "Drop TCP after ${TCPRATE} attempts" 
+   iptables -A FORWARD -p tcp -i $LAN_IFACE -m state --state NEW -s ${host} -j DROP 
+
+   # This rule is for Mike Clark in order to give him RELATED information.  For
+   #   example, this will tell him the data channel related to an ftp command
+   #   channel of a connection.
+   iptables -A FORWARD -p tcp -i $LAN_IFACE -m state --state RELATED -s ${host} -j tcpHandler
+
+#
+#  UDP - see TCP comments above.
+#
+   iptables -A FORWARD -p udp -i $LAN_IFACE -m state --state NEW -m limit --limit ${UDPRATE}/${SCALE} --limit-burst ${UDPRATE} -s ${host} -j udpHandler
+   iptables -A FORWARD -p udp -i $LAN_IFACE -m state --state NEW -m limit --limit 1/${SCALE} --limit-burst 1 -s ${host} -j LOG --log-prefix "Drop udp after ${UDPRATE} attempts" 
+   iptables -A FORWARD -p udp -i $LAN_IFACE -m state --state NEW -s ${host} -j DROP 
+
+
+#
+#  ICMP - see TCP comments above.
+#
+   iptables -A FORWARD -p icmp -i $LAN_IFACE -m state --state NEW -m limit --limit ${ICMPRATE}/${SCALE} --limit-burst ${ICMPRATE} -s ${host} -j icmpHandler
+   iptables -A FORWARD -p icmp -i $LAN_IFACE -m state --state NEW -m limit --limit 1/${SCALE} --limit-burst 1 -s ${host} -j LOG --log-prefix "Drop icmp after ${ICMPRATE} attempts"
+   iptables -A FORWARD -p icmp -i $LAN_IFACE -m state --state NEW -s ${host} -j DROP 
+
+
+#
+#  EVERYTHING ELSE - see TCP comments above.
+#
+   iptables -A FORWARD -i $LAN_IFACE -m state --state NEW -m limit --limit ${OTHERRATE}/${SCALE} --limit-burst ${OTHERRATE} -s ${host} -j otherHandler
+   iptables -A FORWARD -i $LAN_IFACE -m state --state NEW -m limit --limit 1/${SCALE} --limit-burst 1 -s ${host} -j LOG --log-prefix "Drop other after ${OTHERRATE} attempts"
+
+
+done
+
+
+# This portion of the script will ensure that established or related 
+#    connections that were allowed, continue to work.  If these lines 
+#    are not here, only the first packet of each connection that hasn't 
+#    reached the limit will be allowed in because we are dropping
+#    all outbound connections by default.
+if test $QUEUE = "yes"
+   then
+   iptables -A FORWARD -i $LAN_IFACE -m state --state RELATED,ESTABLISHED -j QUEUE 
+fi
+iptables -A FORWARD -i $LAN_IFACE -m state --state RELATED,ESTABLISHED -j ACCEPT 
+
+
+###  These define the handlers that actually limit outbound connection.
+#
+# tcpHandler - The only packets that should make it into these chains are new 
+#                connections, as long as the host has not exceeded their limit.
+#
+iptables -A tcpHandler -j LOG --log-prefix "OUTBOUND CONN TCP: "
+if test $QUEUE = "yes"
+   then
+   iptables -A tcpHandler -j QUEUE 
+fi
+iptables -A tcpHandler -j ACCEPT 
+
+
+#
+# udpHandler - see tcpHandler comments above.
+#
+iptables -A udpHandler -j LOG --log-prefix "OUTBOUND CONN UDP: "
+if test $QUEUE = "yes"
+   then
+   iptables -A udpHandler -j QUEUE 
+fi
+iptables -A udpHandler -j ACCEPT 
+
+
+#
+# icmpHandler - see tcpHandler comments above.
+#
+iptables -A icmpHandler -j LOG --log-prefix "OUTBOUND CONN ICMP: " 
+if test $QUEUE = "yes"
+   then
+   iptables -A icmpHandler -j QUEUE 
+fi
+iptables -A icmpHandler -j ACCEPT 
+
+
+#
+# otherHandler - see tcpHandler comments above.
+#
+iptables -A otherHandler -j LOG --log-prefix "OUTBOUND CONN OTHER: "
+if test $QUEUE = "yes"
+   then
+   iptables -A otherHandler -j QUEUE 
+fi
+iptables -A otherHandler -j ACCEPT 
+
+iptables -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
+
+### Lets make sure our firewall can talk to itself
+iptables -A INPUT -i lo -j ACCEPT 
+iptables -A OUTPUT -o lo -j ACCEPT
+
+
+##############################
+# MANAGEMENT INTERFACE RULES #
+##############################
+if [ $MANAGE_IFACE != "none" ]
+then
+   for ports in $ALLOWED_TCP_IN; do
+
+      if [ "$MANAGER" = "any" ]
+      then
+         #iptables -A INPUT -i $MANAGE_IFACE -p tcp --dport $ports -m state --state NEW -j LOG --log-prefix "MANAGE port:$ports=>"
+         iptables -A INPUT -i $MANAGE_IFACE -p tcp --dport $ports -m state --state NEW -j ACCEPT
+      else
+         for ips in $MANAGER; do
+            #iptables -A INPUT -i $MANAGE_IFACE -p tcp -s $ips --dport $ports -m state --state NEW -j LOG --log-prefix "MANAGE port:$ports=>"
+            iptables -A INPUT -i $MANAGE_IFACE -p tcp -s $ips --dport $ports -m state --state NEW -j ACCEPT
+         done
+      fi
+
+   done
+
+	iptables -A OUTPUT -o $MANAGE_IFACE -p tcp -m state --state RELATED,ESTABLISHED -j ACCEPT
+
+fi
+
+### Set default policies for the INPUT, FORWARD and OUTPUT chains
+# By default, drop all connections sent to firewall
+iptables -P INPUT DROP 
+
+# If we selected to restrict the firewall, lets implement it here.
+if [ $RESTRICT = "yes" ]
+then
+
+   for port in $ALLOWED_TCP_OUT; do
+      iptables -A OUTPUT -p tcp --dport $port -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT 
+   done
+
+   for port in $ALLOWED_UDP_OUT; do
+      iptables -A OUTPUT -p udp --dport $port -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT 
+   done
+
+   # By default, drop firewall outbound connection
+   iptables -P OUTPUT DROP 
+
+else
+
+   # By default, accept firewall outbound connection
+   iptables -P OUTPUT ACCEPT 
+
+fi
+
+
+# By default, if FORWARDED connections are not within limit, DROP.
+# This is a fail close policy, and more secure.
+iptables -P FORWARD DROP 
+

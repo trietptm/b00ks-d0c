@@ -1,0 +1,51 @@
++++ Are you ready for this shit ?
++++ New & improved madscanner : THE MOLE
++++ Coded by sMiF based on grabbb2.x+samba2.2.8
++++ A product of #sMiF @ UnderNet.Org team
+=============================================================
++++ From here starts the real hacking!
++++ madscanning: 208.160.4.* (total: 0) (1.6% done)
+208.160.8.* (total: 0) (2.7% done)
+208.160.11.* (total: 0) (4.3% done)
+208.160.15.* (total: 0) (5.9% done)
+208.160.19.* (total: 0) (7.1% done)
+208.160.22.* (total: 0) (8.6% done)
+208.160.26.* (total: 0) (10.2% done)
+208.160.30.* (total: 0) (11.4% done)
+208.160.33.* (total: 0) (12.9% done)
+208.160.37.* (total: 2) (14.1% done)
+208.160.40.* (total: 2) (15.7% done)
+208.160.44.* (total: 2) (16.9% done)
+208.160.47.* (total: 2) (18.4% done)
+208.160.51.* (total: 2) (20.0% done)
+208.160.54.* (total: 2) (21.2% done)
+208.160.58.* (total: 2) (22.7% done)
+208.160.62.* (total: 2) (23.9% done)
+
+...
+
+208.160.239.* (total: 2) (93.7% done)
+208.160.242.* (total: 2) (94.9% done)
+208.160.246.* (total: 2) (96.5% done)
+208.160.249.* (total: 2) (97.6% done)
+208.160.253.* (total: 2) (99.2% done)
+208.160.255.* (total: 2) (100.0% done)
++++ madscan completed in 655 seconds. (found 2 ips)
++++ Port madscanning completed. Take five !
++++ Trying to identify hosts
++++ Done! completed in 0 seconds
++++ Recognised 0 samba targets
+=============================================================
++++ Let's get it on ...
++++ Gained control over 1 servers
++++ Cleaning up started -> -> -> ->
++++ STEP 1: Killing up zombie processes
+grep: no process killed
+sort: no process killed
+cat: no process killed
+sleep: no process killed
+try: no process killed
++++ STEP 2: Erasing Unuseful Logs 
++++ THE MOLE shows you what it worked for :
+================= support channel #sMiF =====================
+

@@ -1,0 +1,416 @@
+<!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>Appendix B: Data Gathering and the Order of Volatility</title>
+</head>
+
+<body>
+
+<h1>Appendix B: Data Gathering and the Order of Volatility</h1>
+<p>
+
+<h2>B.1 Introduction</h2>
+
+<p>
+
+In 1999 we wrote that forensic computing was "gathering and analyzing data
+in a manner as free from distortion or bias as possible to reconstruct
+data or what has happened in the past on a system."  Trusting your tools
+and data once you have them is problematic enough (Chapter 5 - "Systems
+and subversion" - talks about this at length), but there is an even
+greater problem.  Due to the Heisenberg principle of data gathering and
+system analysis (see section 1.4) even with the right and trusted tools
+you cannot get all the data on a computer, so where should you start?
+This appendix gives an overview of how to gather data on a computer as
+well as the problems caused - mainly by the Order of Volatility, or OOV.
+
+<p>
+<h2>B.2 The basics of volatility</h2>
+<p>
+
+As we have demonstrated throughout the book, computers store a great
+amount of information in a significant number of locations and layers.
+Disk storage and RAM are the two most commonly thought data repositories,
+but there are a great number of places - even outside the system if it
+is connected to a network - that useful data can hide.
+
+<p>
+
+All data is volatile, however.  As time passes the veracity of the
+information goes down, and the ability to recall or validate the data also
+decreases. When looking at stored information it is extremely difficult
+to verify that it has not been subverted or changed.
+
+<p>
+
+That said, certain types of data are generally more persistent, or
+long-lasting, than others. Backup tapes, for instance, can typically be
+counted upon to remain unchanged longer than things in RAM - it is less
+volatile.  We call this hierarchy the order of volatility.  At the
+top you have some pieces of information becoming virtually impossible
+to recover within a very short time - sometimes nanoseconds (or less)
+of their inception date - such as data in CPU registers, frame buffers,
+etc. At the bottom of the order you have things that are very persistent
+and hard to change, such as stone tablets, printouts, and other ways of
+imprinting data into a semi-permanent medium. 
+
+<p>
+
+So in most cases you simply try to capture data while keeping this
+order in mind - the more rapidly changing information should almost
+always be preserved first.  Table B.1, also seen in the first chapter,
+gives a rough guide to the life expectancy of data.
+
+<p>
+
+<blockquote>
+<table border=1>
+<tr>
+<td>Registers, peripheral memory, caches, etc. </td> <td> nanoseconds </td>
+</tr>
+<tr>
+<td> Main Memory </td> <td> nanoseconds </td>
+</tr>
+<tr>
+<td> Network state </td> <td> milliseconds </td>
+</tr>
+<tr>
+<td> Running processes </td> <td> seconds </td>
+</tr>
+<tr>
+<td> Disk </td> <td> minutes </td>
+</tr>
+<tr>
+<td> Floppies, backup media, etc. </td> <td> years </td>
+</tr>
+<tr>
+<td> CD-ROMs, printouts, etc. </td> <td> tens of years </td>
+</tr>
+</table>
+Table B.1: The expected lifespan of data.
+</blockquote>
+
+<p>
+
+Information lost from one layer may still be found in a lower layer (see
+sections 1.5, "Layers and illusions" and 1.7, "Fossilization of deleted
+information" for more about this.)  But the point of OOV is the opposite:
+doing something in one layer destroys information in all layers above it.
+Simply executing a command to retrieve information destroys the contents
+of registers, MMUs, physical memory and time stamps in the file system.
+
+<p>
+
+And if the act of starting up a program to read or capture the memory of
+a system has the potential to cause a loss of existing data in memory
+as the kernel allocates memory to run the program that performs the
+examination in the first place. So what can you do?
+
+<p>
+<h2>B.3 Current state of the art</h2>
+<p>
+
+With our additional work on forensics we have decided to put
+less emphasis on
+the "in
+a manner as free from distortion or bias as possible" from our definition
+in the introduction to this appendix.  We believe that by what can be seen
+as risking digital evidence you are more likely to get additional data
+and a better chance of addressing and understanding the problem at hand.
+
+<p>
+
+This goes against traditional forensic computing wisdom, which uses very
+conservative methods - rarely more than turning off a computer and making
+a copy of a system's disk [US DOJ, 2004].  Certainly if the goal is to
+ensure that the data being collected is optimized for its admissibility
+in a court of law and you've only got one shot at capturing it, a very
+cautious methodology can be the best thing in some cases.
+
+<p>
+
+Unfortunately this misses a wealth of potentially useful information about
+the situation, such as running processes and kernels, network state, data
+in RAM, and more.  Only a limited understanding can arise from looking
+at a dead disk.  And while perhaps dynamic information is a bit more
+volatile and therefore suspect, any convictions based of a single
+set of data readings are suspect as well.  Certainly, as we've seen
+throughout the book, no single data point should be trusted anyway.
+Only by correlating data from many points can you begin to get a good
+understanding of what happened, and there is a lot of data to look at
+out there.  It would be a pity to throw it away.
+
+<p>
+
+Gathering data according to the OOV helps in general preserve rather than
+destroy, but unless computer architectures changes significantly there is
+no single best way to capture digital evidence.  For instance RAM might
+be the first thing you'd like to save, but if you're in a remote site and
+you have no local disk it could take hours to transfer it to a safe disk
+somewhere else, and by the time you're done much of the anonymous memory
+(the most ephemeral part - see chapter 8) could be long gone.
+
+<p>
+
+Certainly the current set of software tools to capture evidence is not
+terribly compelling.  Our own TCT, while at times useful, could be much
+improved upon.  Other packages, most notably SleuthKit [Carrier 2004],
+and Encase [Encase 2004] are worthy efforts but still have far to go.
+It's too bad that we have not progressed far beyond the erstwhile
+<tt>dd</tt> copying program, but automated capture and analysis is
+very difficult.
+
+<p>
+<h2>B.4 How to freeze a computer</h2>
+<p>
+
+The spirit of Darryl Zero (see section 1.1) infuses our mindset - if
+you're looking for anything in particular, you are lost.  But if you
+keep your mind and eyes open you can go far.
+
+<p>
+
+The reproducibility and provability of results is difficult when dealing
+with the capture of very complex systems that are constantly in motion.
+Starting states of computers will always be different, often with
+significant changes in operating system, kernel, and software versions
+that are too complex for anyone to fully understand.
+
+<p>
+
+So ideally you would want both raw and cooked (processed) data.
+Having the process table from a FreeBSD computer is of limited worth
+if you don't have native programs for analysis, so the output from
+<tt>ps</tt> is still important.  You you will also want to gather data
+on the system while it is still running as well as at rest, in case they
+return different results.  Volume also becomes problematic - where do you
+store all this data?  It's one thing storing a personal workstation, but
+what happens when trying to analyze a Petabyte or Exabyte class server?
+
+<p>
+
+A thorough discussion on how to gather and store digital evidence would
+perhaps warrant a book unto itself, but we shall try to give some basic
+guidelines.
+
+<p>
+
+Richard Saferstein [Saferstein, 2003] writes that when processing a crime
+scene a basic methodology should be followed, one that we espouse when
+dealing with a computer incident as well.  Here are his first steps
+to an investigation:
+
+<p>
+
+<ul>
+<li> Secure and isolate.
+<li> Record the scene.
+<li> Conduct a systematic search for evidence.
+<li> Collect and package evidence.
+<li> Maintain a chain of custody.
+</ul>
+
+<p>
+
+It doesn't take much imagination to see how all of these apply to
+computers.
+
+<p>
+<h4>Before you start</h4>
+<p>
+
+You should first consider how much time you would like to spend on
+analyzing the data, as it is a time-consuming processes to both collect
+and to process all the information.  As an only slightly tongue-in-cheek
+guide we offer table B.2 as a possible guide.
+
+<blockquote>
+
+<table border="1">
+<tr>
+<td> ACTION</td><td>EXPERTISE REQUIRED</td><td>TIME CONSUMED</td>
+</tr>
+<tr>
+<td>   Go back to work </td><td> None</td><td> Almost none</td>
+<tr>
+<td>   Minimal effort</td><td> Installing system software</td><td> 1/2 - 1 day</td>
+<tr>
+<td>   Minimum Recommended</td><td> Jr. System Administrator</td><td> 1-2 days+</td>
+<tr>
+<td>   Serious effort</td><td> Sr. SA</td><td> 2+ days - weeks</td>
+<tr>
+<td>   Fanaticism</td><td> Expert SA</td><td> days - months+</td>
+</table>
+
+<p> Table B.2: Rough estimate of the cost of an investigation. </p>
+
+</blockquote>
+
+<p>
+
+A tremendous amount of time can be consumed taking care of the problem
+at hand, but as a rule of thumb if you don't expend at least a day or
+two you're probably doing yourself and your system a disservice.  One of
+the more difficult things to judge is how much effort to put into the
+analysis.  Oftimes the more analytical sweat you emit the more clarity and
+understanding you have of the situation.  That said, some situations are
+harder and at times an intruder is more careful and skilled than others,
+and unfortunately you never know prior to the break-in what to expect.
+The truth is you'll never absolutely, positively know that you've found
+all that you can.  Experience will be your only guide here.
+
+<p>
+
+You'll next need, at least, a pad of paper, something to write with,
+and a secure, preferably off-line location to store information that
+you collect.  A second computer that could talk to the network would
+be a welcome, but not necessary, aide.  A laptop may be used to store
+results, notes, and data, but be cautious about who has access to the
+second system.
+
+<p>
+
+Even though installing or downloading programs will damage evidence it
+is sometimes a necessity in order to process a computer.  The negative
+effects of this can be mitigated by having a personal collection of
+forensic tools at the ready.  But automation should be used at all costs,
+unless it is completely unworkable.
+
+<p>
+
+If commercial packages are not an option such open source projects as
+FIRE [FIRE, 2004], PLAC [PLAC 2004], and others based on the impressive
+Knoppix Linux distribution [Knoppix, 2004] may be placed on CDs or other
+portable media and used when an emergency occurs.
+
+<p>
+<h4>Actually collecting data</h4>
+<p>
+
+We apologize for our UNIX-centric advice, but the same
+roughly holds for any operating system.  The computer(s) in question
+should be taken offline.  There are some potential problems with this,
+as the system might expect to be online, and this could destroy evidence
+by generating errors, repeatedly retrying connections, or in general
+causing the system to change.  Alternately you might try cutting it off
+at router and keep it on a LAN, but DNS and network services as well as
+other systems in area can still cause problems.
+
+<p>
+
+As you proceed along you need to keep track of everything you type or do.
+In general it's a "grab first, analyze later" situation, however.
+Note the hardware, software, system, and network configurations that
+are in place.
+
+<p>
+
+If you're serious about collecting the data, however, we might suggest
+you capture data in the following order, which mirrors the OOV:
+
+<p>
+<ul>
+<li> Device memory, if possible.  Alas, few tools exist to
+do this.
+<li> Main memory.  Using the guidelines set in chapter 8, capture
+RAM and store it offline.
+<li> Get the journal, if you're dealing with a journaling file system.
+Section 2.8 shows how this can be done for Ext3fs file systems with
+TCT's <tt>icat</tt> command.
+<li> Get all transient state that you can.  TCT's Grave-robber can
+aide you with this.
+<li> Capture information from and about the disk.  If possible get
+the entire disk; we cover this in chapter 4.  If not, TCT's Grave-robber
+can at least get the important parts.
+</ul>
+
+There you go, you now have all the data that is fit to save.  Now all
+that remains is to analyze it....
+
+<p>
+<h2>B.5 Conclusion</h2>
+<p>
+
+Forensic computing does not often yield black and white decisions
+or clear and unambiguous understandings of a situation in the past.
+Like its counterpart in the physical realm of criminal investigations
+the quality and integrity of the investigators and laboratories involved
+are the most important thing.  And the tools and methodologies used will
+significantly changing for the better over time.
+
+<p>
+
+It's a field that perhaps should be taken with more gravity than most
+of computer science.  The FBI said that "Fifty percent of the cases the
+FBI now opens involve a computer" [Williams, 2002] and the number is
+surely rising.  Programs and people involved in the gathering and
+analysis of evidence must take special care, for people's freedoms, lives,
+jobs, and more can and are seriously impacted by the results.
+
+<p>
+
+Nothing is certain, but while probabilistic forensics does have a negative
+sound to it, it's what we now have.  However, much has been written and
+achieved in the short time this field has been around, and we fervently
+hope that progress continues, because it will benefit us all.  With best
+luck to the future,<p>
+
+Dan Farmer
+<p>
+and
+<p>
+Wietse Venema
+
+<h4>Bibliography</h4>
+<p>
+
+[Carrier, 2004]  Brian Carrier, TASK (Sleuth Kit):<br>
+http://www.sleuthkit.org
+
+<p>
+
+[Coffman, 2002] K. G. Coffman and A. M. Odlyzko 'Internet
+growth: Is there a "Moore's Law" for data traffic?'  in: "Handbook of
+Massive Data Sets," J. Abello, P. M. Pardalos, and M. G. C. Resende,
+eds., Kluwer, 2002, pp. 47-93.
+
+<p>
+
+[Encase, 2004] The Encase forensic tool:<br>
+http://www.encase.com/
+
+<p>
+
+FIRE [FIRE, 2004] The Forensic and Incident Response Environment (or
+F.I.R.E.) project is hosted at:<br>
+http://fire.dmzs.com/
+
+<p>
+
+[Knoppix, 2004] Knoppix Linux distribution website:<br>
+http://www.knoppix.net
+
+<p>
+
+PLAC [PLAC 2004] The Portable Linux Auditing CD project's web site is:
+http://sourceforge.net/projects/plac
+
+<p>
+
+[Saferstein, 2003] Richard Saferstein, "Criminalistics: An Introduction
+to Forensic Science", Prentice Hall, 2003.
+
+<p>
+
+[US DOJ, 2004]  Forensic Examination of Digital Evidence: A Guide for
+Law Enforcement.  U.S. Department of Justice, Office of Justice Programs.<br>
+http://www.ojp.usdoj.gov/nij/pubs-sum/199408.htm
+
+<p>
+
+[Williams, 2002] Scott C. Williams, supervisory special agent for the
+FBI's computer analysis and response team in Kansas City, as quoted by
+David Hayes in The Kansas City Star, 4/26/2002.
+

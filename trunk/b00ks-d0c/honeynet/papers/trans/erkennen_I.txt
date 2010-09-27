@@ -1,0 +1,184 @@
+Die Tools und Methoden der "Script Kiddies"
+
+Den Feind erkennen
+
+
+Mein Kommandeur pflegte zu sagen, das man, um sich gegen den Feind zu schützen, 
+erst mal wissen muß, wer der Feind ist. Diese Militärdoktrin läßt sich genau so 
+auf die Welt der Netzwerksicherheit übertragen. Wie beim Militär geht es um 
+Ressourcen, die Du schützen willst. Um sie zu schützen, mußt Du wissen, wer die 
+Gefahr ist und wie sie angreifen werden. Dieser Artikel, der erste von dreien, 
+tut genau das: er diskutiert die Tools und Methoden, die von einer der am 
+weitesten verbreiteten Gefahren genutzt werden: dem "Script Kiddie". Der zweite 
+Teil konzentriert sich darauf, wie man diese Attacken erkennen kann, wie man 
+erkennt, welche Tools benutzt werden und nach welchen Schwachstellen sie suchen. 
+Der dritte Teil befaßt sich damit, was passiert, wenn sie erst mal root geworden 
+sind und ganz besonders darauf, wie sie ihre Spuren verwischen und was sie als 
+nächstes tun.
+
+
+Wer ist das "Script Kiddie"?
+============================
+
+Das "Script Kiddie" ist jemand, der auf den schnellen, einfachen Erfolg aus ist. 
+Sie sind nicht auf der Suche nach spezieller Information oder zielen auf eine 
+bestimmte Firma. Alles was sie wollen, ist so einfach wie möglich root zu 
+werden. Das versuchen sie, indem sie sich auf eine kleine Anzahl von 
+Schwachpunkten beschränken und dann das gesamte Internet danach absuchen. Früher 
+oder später finden sie jemanden, der verwundbar ist.
+
+Manche von ihnen sind fortgeschrittene Anwender, die ihre eigenen Tools 
+entwickeln und ausgeklügelte Hintertüren hinterlassen. Manche wissen überhaupt 
+nicht, was sie tun; das einzige was sie können, ist "go" auf der Kommandozeile 
+zu tippen. Ungeachtet ihres Wissensstandes haben sie alle die gleiche Strategie: 
+ziellos nach einer bestimmten Schwäche suchen und diese dann ausnutzen.
+
+
+Die Bedrohung
+=============
+
+Es ist diese zufällige Auswahl von Zielen, die das "Script Kiddie" so gefährlich 
+macht. Früher oder später werden Deine Maschinen und Netzwerke getestet werden, 
+man kann sich vor ihnen nicht verstecken. Ich kenne Admins, die erstaunt waren, 
+als ihre Systeme zwei Tage nach dem Hochfahren, als sie noch keiner kannte, 
+gescannt wurden. Das ist nicht weiter erstaunlich. Wahrscheinlich wurden ihre 
+Systeme von einem "Script Kiddie" gescannt, der gerade einen Netzwerkblock 
+testete.
+
+Wenn sich das auf einige individuelle Scans beschränken würde, wäre die 
+Statistik auf deiner Seite. Mit Millionen Systemen im Internet ist es 
+wahrscheinlich, das niemand dich findet. Leider ist das nicht so. Die meisten 
+verwendeten Tools sind einfach zu benutzen und weit verbreitet, jeder kann sie 
+nutzen. Eine schnell wachsende Zahl von Leuten besorgt sich diese Tools. Da das 
+Internet keine geografischen Grenzen kennt, hat sich diese Bedrohung schnell um 
+die ganze Welt verbreitet. Auf einmal steht die Statistik gegen uns: mit so 
+vielen Anwendern die diese Tools nutzen ist die Frage nicht ob, sondern wann Du 
+gescannt werden wirst.
+
+Dies ist ein hervorragendes Beispiel dafür, warum "Sicherheit durch 
+Geheimhaltung" versagen kann. Du glaubst vielleicht, das, wenn niemand dein 
+System kennt, Du sicher bist. Andere glauben, das ihre Systeme uninteressant 
+sind, warum sollte sie also jemand scannen? Nach genau diesen Systemen suchen 
+"Script Kiddies", nach den ungeschützten Systemen, die einfach auszunutzen sind, 
+dem schnellen Erfolg.
+
+
+Die Methoden
+============
+
+Die Methode des "Script Kiddies" ist einfach: durchsuche das Internet nach einer 
+bestimmten Schwachstelle und wenn du sie gefunden hast, nutze sie aus. Die 
+meisten Tools, die sie verwenden, sind automatisiert und erfordern wenig 
+Interaktion. Starte das Tool und komm ein paar Tage später wieder, um die 
+Ergebnisse abzuholen. Keine zwei Tools sind gleich, genauso wie keine zwei 
+Exploits (wie übersetzt man das am besten?) gleich sind. Wie auch immer, die 
+meisten Tools arbeiten nach dem gleichen Prinzip: zuerst wird eine IP-
+Adressdatenbank erzeugt, die man scannen kann. Dann werden diese IP-Adressen 
+nach einer bestimmten Schwachstelle gescannt.
+
+Nehmen wir einfach an, ein Anwender hätte ein Tool, mit dem er imap auf 
+Linuxsystemen ausnutzen kann 
+(http://www.enteract.com/~lspitz/imapd_exploit.txt). Als erstes würde er eine 
+IP-Adressdatenbank erzeugen, die gescannt werden können (d.h. das Zielsystem 
+läuft und ist erreichbar). Nachdem die Datenbank erzeugt ist, würde der Anwender 
+herausfinden wollen, welche dieser Systeme unter Linux laufen. Viele moderne 
+Scanner können das herausfinden, indem sie fehlerhafte Pakete verschicken und 
+die Antwort analysieren (ein Beispiel ist Fyodors nmap 
+(http://www.insecure.org/nmap)). Danach würden andere Tools benutzt, um 
+herauszufinden, auf welchen dieser Linuxsysteme imap läuft. Alles, was danach 
+noch zu tun bleibt, ist die Schwäche der verbleibenden Maschinen auszunutzen.
+
+Man könnte vermuten, daß das ganze Scannen extrem auffällig ist und ein ganze 
+Menge Aufmerksamkeit auf sich zieht. Viele Leute überwachen ihre Systeme aber 
+nicht und sind sich gar nicht bewußt, das sie gescannt worden sind. Viele 
+"Script Kiddies" suchen sich auch in aller Stille ein einzelner System, das sie 
+benutzen können. Wenn sie einmal eingedrungen sind, nutzen sie dieses System als 
+Plattform. Sie können dreist das ganze Internet absuchen, ohne Strafe fürchten 
+zu müssen. Wenn ihre Scans entdeckt werden, wird der Systemadministrator und 
+nicht sie selber zur Verantwortung gezogen.
+
+Darüberhinaus werden die Ergebnisse solcher Scans oft aufbewahrt und an andere 
+weitergegeben, um später wiederverwendet zu werden. Nehmen wir an, ein Anwender 
+hat eine Datenbank von offenen Ports an erreichbaren Linuxsystemen erzeugt. 
+Zweck dieser Datenbank ist es, die aktuelle imap-Schwäche auszunutzen. Nehmen 
+wir weiter an, in einem Monat wird eine andere Schwäche auf einem anderen Port 
+entdeckt. Anstatt die ganze Datenbank neu aufbauen zu müssen (der zeitraubenste 
+Teil), kann der Anwender einfach in die bestehende Datenbank schauen und die 
+angreifbaren Systeme kompromittieren. Alternativ dazu nutzen "Script Kiddies" 
+diese Datenbanken gemeinsam oder kaufen sie von einander. Das "Script Kiddie" 
+kann dann dein System angreifen, ohne es jemals gescannt zu haben. Nur weil 
+deine Systeme kürzlich nicht gescannt worden sind, heißt das nicht, das du 
+sicher bist.
+
+Die erfahreneren "Schlapphüte" implementieren Trojaner und Hintertüren, wenn sie 
+erst mal im System sind. Hintertüren erlauben einfachen und unbemerkten Zugang 
+zum System wann immer der Anwender es möchte. Die Trojaner machen den 
+Eindringling unauffindbar. Er taucht in keinen Logs, Systemprozessen oder 
+Dateisystemen auf. Er baut sich ein komfortables und sicheres Heim, von dem aus 
+er das ganze Internet scannen kann. Mehr Informationen finden sich in "Den Feind 
+erkennen III".
+
+Diese Attacken beschränken sich nicht auf eine bestimmte Tageszeit. Viele Admins 
+durchsuchen ihre Logs nach Scanversuchen die spät nachts stattfinden, da sie 
+glauben, das dies die Zeit sei, zu der die Bösen angreifen. "Script Kiddies" 
+greifen zu jeder Zeit an. Da sie 24 Stunden am Tag scannen, weiß man nie, wann 
+der nächste Versuch stattfindet. Darüberhinaus werden die Attacken rund um die 
+Welt gestartet. Genausowenig wie geografische Grenzen kennt das Internet 
+Zeitzonen. Bei den Bösen mag es Mitternacht sein, während es bei dir ein Uhr 
+mittags ist.
+
+Diese Methode des Scannens nach angreifbaren Systemen kann zu einer Reihe von 
+Zwecken verwendet werden. Erst kürzlich wurde von neuen DoS-Attacken berichtet, 
+besonders von DDoS-Attacken (Distributed DoS-Attacken). Diese Angriffe basieren 
+auf einem einzelnen Anwender, der hunderte, wenn nicht tausende, kompromittierte 
+Systeme rund um die Welt kontrolliert. Diese kompromittierten Systeme werden 
+dann aus der Ferne koordiniert, um eine DoS-Attacke gegen ein oder mehrere Opfer 
+zu starten. Da verschiedene Systeme benutzt werden, ist es extrem schwierig, die 
+Quelle solcher Angriffe zu erkennen oder den Angriff abzuwehren. Um die 
+Kontrolle über so viele Systeme zu erlangen, werden oft die Taktiken der "Script 
+Kiddies" angewandt. Angreifbare Systeme werden zufällig ausgewählt und dann zu 
+DDoS-Plattformen gemacht. Je mehr Systeme benutzt werden, dest kraftvoller ist 
+die DDoS-Attacke. Ein Beispiel für eine solche Attacke ist "stacheldraht". Mehr 
+über DDoS-Angriffe und wie man sich davor schützen kann steht auf Paul Fergusons 
+Seite denialinfo (http://www.denialinfo.com).
+
+
+Die Tools
+=========
+
+Die benutzten Tools sind extrem einfach zu benutzen. Die meisten dienen nur 
+einem Zweck und bieten wenige Optionen. Als erstes kommen die Tools um eine IP-
+Datenbank aufzubauen. Diese Tools arbeiten wirklich zufällig, da sie einfach das 
+Internet scannen. Zum Beispiel hat ein Tool nur eine einzige Option:A, B oder C. 
+Durch den Buchstaben, den man auswählt, legt man die Größe des zu scannenden 
+Netzwerkes fest. Danach sucht das Tool nach zufällig erzeugten IP-Adressen. Ein 
+anderes Tool nutzt einen Domänennamen (z0ne ist dafür ein hervorragendes 
+Beispiel). Die Tools bauen die IP-Datenbank auf, indem sie Zonentransfers des 
+Domänennamens und aller Unterdomänen ausführen. Anwender haben Datenbanken mit 
+mehr als 2 Millionen IP-Adressen aufgebaut, indem sie die gesamte .com oder .edu 
+Domäne gescannt haben.
+
+Einmal entdeckt, werden die Adressen dann von Tools gescannt um Schwachstellen 
+aufzudecken, wie z.B. die Version von named, das Betriebssystem oder Prozesse 
+die auf dem System laufen. Wenn die angreifbaren Systeme entdeckt sind, schlägt 
+der Böse zu. Es existieren verschiedene Tools, die alle diese Schritte 
+kombinieren und den Prozess noch weiter vereinfachen, z.B. sscan von jsbach 
+(http://ben3.ucla.edu/~jsbach) oder cracker.pl 
+(http://www.enteract.com/~lspitz/README.cracker.txt). Für ein besseres 
+Verständnis, wie diese Tools arbeiten lies "Den Feind erkennen II".
+
+
+Schlußfolgerung
+===============
+
+Die "Script Kiddies" stellen eine Bedrohung für jedes System dar. Sie zeigen 
+keine besondere Neigung und scannen alle Systeme, unabhängig vom Standort und 
+der Bedeutung. früher oder später wird dein System gescannt werden. Durch das 
+Verständnis für ihre Motive und Methoden kannst Du Dein System besser gegen 
+diese Bedrohung schützen.
+
+
+
+
+Anmerkung: Dank an Brad Powell vom Sun Security Team für seine Hilfe bei diesem 
+Artikel.

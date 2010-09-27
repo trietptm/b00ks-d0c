@@ -1,0 +1,41 @@
+guest #ifconfig -a
+dummy0    Link encap:Ethernet  HWaddr 00:00:00:00:00:00  
+          BROADCAST NOARP  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0 
+          RX bytes:0 (0.0 b)  TX bytes:0 (0.0 b)
+
+eth0      Link encap:Ethernet  HWaddr FE:FD:00:00:00:00  
+          inet addr:192.168.0.144  Bcast:192.168.0.255  Mask:255.255.255.0
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:21 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:168 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:100 
+          RX bytes:1428 (1.3 Kb)  TX bytes:21804 (21.2 Kb)
+          Interrupt:5 
+
+lo        Link encap:Local Loopback  
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          UP LOOPBACK RUNNING  MTU:16436  Metric:1
+          RX packets:6 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:6 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0 
+          RX bytes:488 (488.0 b)  TX bytes:488 (488.0 b)
+
+
+guest #netstat -nr
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags   MSS Window  irtt Iface
+192.168.0.254   0.0.0.0         255.255.255.255 UH       40 0          0 eth0
+192.168.0.0     0.0.0.0         255.255.255.0   U        40 0          0 eth0
+127.0.0.0       0.0.0.0         255.0.0.0       U        40 0          0 lo
+0.0.0.0         192.168.0.254   0.0.0.0         UG       40 0          0 eth0
+
+
+
+(EDITORS NOTE:  There are two default fingerprints in the GuestOS.  The first
+is the 'dummy0' interface.  This can be removed at compile time using the
+'disable CONFIG_DUMMY' option.  Second, every UML GustOS has the exact same
+MAC address, FE:FD:00:00:00:00.  It is recommended you change that to something
+else). 

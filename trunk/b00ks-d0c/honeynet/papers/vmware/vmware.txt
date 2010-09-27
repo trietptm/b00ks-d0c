@@ -1,0 +1,134 @@
+host #vmware-config.pl
+Making sure VMware GSX Server's services are stopped.
+
+Stopping VMware services:
+   Virtual machine monitor                                 [  OK  ]
+
+You must read and accept the End User License Agreement to continue.
+Press enter to display it. 
+
+END USER LICENSE AGREEMENT
+.
+.
+.
+Do you accept? (yes/no) yes
+
+Thank you.
+
+Trying to find a suitable vmmon module for your running kernel.
+
+None of VMware GSX Server's pre-built vmmon modules is suitable for your running
+kernel.  Do you want this script to try to build the vmmon module for your 
+system (you need to have a C compiler installed on your system)? [yes] 
+
+What is the location of the directory of C header files that match your running 
+kernel? [/lib/modules/2.4.18-19.7.x/build/include] 
+
+Extracting the sources of the vmmon module.
+
+Building the vmmon module.
+
+make: Entering directory `/tmp/vmware-config0/vmmon-only'
+make[1]: Entering directory `/tmp/vmware-config0/vmmon-only'
+make[2]: Entering directory `/tmp/vmware-config0/vmmon-only/driver-2.4.18-19.7.x'
+make[2]: Leaving directory `/tmp/vmware-config0/vmmon-only/driver-2.4.18-19.7.x'
+make[2]: Entering directory `/tmp/vmware-config0/vmmon-only/driver-2.4.18-19.7.x'
+make[2]: Leaving directory `/tmp/vmware-config0/vmmon-only/driver-2.4.18-19.7.x'
+make[1]: Leaving directory `/tmp/vmware-config0/vmmon-only'
+make: Leaving directory `/tmp/vmware-config0/vmmon-only'
+The module loads perfectly in the running kernel.
+
+Trying to find a suitable vmnet module for your running kernel.
+
+None of VMware GSX Server's pre-built vmnet modules is suitable for your running
+kernel.  Do you want this script to try to build the vmnet module for your 
+system (you need to have a C compiler installed on your system)? [yes] 
+
+Extracting the sources of the vmnet module.
+
+Building the vmnet module.
+
+make: Entering directory `/tmp/vmware-config0/vmnet-only'
+make: Leaving directory `/tmp/vmware-config0/vmnet-only'
+The module loads perfectly in the running kernel.
+
+Do you want networking for your Virtual Machines? (yes/no/help) [yes]   
+
+Configuring a bridged network for vmnet0.
+
+Configuring a NAT network for vmnet8.
+
+Do you want this script to probe for an unused private subnet? (yes/no/help) 
+[yes] no
+
+What will be the IP address of your host on the private network? 10.10.10.1
+
+What will be the netmask of your private network? 255.255.255.0
+
+Do you want to be able to use host-only networking in your Virtual Machines? 
+[no] yes
+
+Configuring a host-only network for vmnet1.
+
+Do you want this script to probe for an unused private subnet? (yes/no/help) 
+[yes] no
+
+What will be the IP address of your host on the private network? 10.10.10.1
+
+What will be the netmask of your private network? 255.255.255.0
+
+The following hostonly networks have been defined:
+
+. vmnet1 is a host-only network on subnet 10.10.10.0.
+
+Do you wish to configure another host-only network? (yes/no) [no] 
+
+Please specify a port for remote console connections to use [902] 
+
+Stopping xinetd:                                           [  OK  ]
+Starting xinetd:                                           [  OK  ]
+Configuring the VMware VmPerl Scripting API.
+
+Building the VMware VmPerl Scripting API.
+
+Installing the VMware VmPerl Scripting API.
+
+The installation of the VMware VmPerl Scripting API succeeded.
+
+Do you want to enter a serial number now? (yes/no/help) [no] yes
+
+Please enter your 20-character serial number.
+
+Type XXXXX-XXXXX-XXXXX-XXXXX or 'Enter' to cancel: 12345-abcde-12345-abcde
+
+Information:
+-----------
+Register your version of VMware GSX Server!
+Registering will provide you with:
+ . Latest information and announcements about
+   VMware, Inc. products and services
+ . Activation of support and subscription services you have purchased
+ . New VMware GSX Server release notifications and security updates
+To register your version of VMware GSX Server,
+start it, go to the Help menu and choose
+the "VMware on the Web" > "Register Now!" option.
+Alternatively, you can visit our Web site at:
+"http://www.vmware.com/info?id=5&sn=38865%2dX8G2V%2dR2HTJ%2d2TR65".
+-----------
+Press "Enter" to continue...
+
+Starting VMware services:
+   Virtual machine monitor                                 [  OK  ]
+   Virtual ethernet                                        [  OK  ]
+   Bridged networking on /dev/vmnet0                       [  OK  ]
+   Host-only networking on /dev/vmnet1 (background)        [  OK  ]
+   Host-only networking on /dev/vmnet8 (background)        [  OK  ]
+   NAT networking on /dev/vmnet8                           [  OK  ]
+
+The configuration of VMware GSX Server 2.0.1 build-2129 for Linux for this 
+running kernel completed successfully.
+
+Enjoy,
+
+--the VMware team
+

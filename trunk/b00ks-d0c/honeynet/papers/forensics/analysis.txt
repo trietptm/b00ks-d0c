@@ -1,0 +1,24 @@
+#
+# I will be posting other people's observations on
+# this page.  If you have anything you would like to
+# add, email Lance Spitzner <lance@spitzner.net>
+#
+
+Contributed by verin <knight@pctechnician.net>
+
+1. NUS = National University of Singapore. homepage is www.nus.edu.sg
+
+2. 137.132.216.35 = this looks like a home account given to students (
+unknown faculty )
+
+3. 137.132.17.202 = Looks like a labatory computer, library computer,
+Lecturer's computer, Not a server. ( could be a server. but it'd be an
+internal one and heavily firewalled. )
+
+4. [root@apollo /]# nslookup magix : Magix is an ADSL Internet Service
+Provided by Singtel ( Singapore Telecommunications Ltd.)Attacker may
+have an account on it. Homepage is www.magix.com.sg
+
+5. [root@apollo /]# nslookup irc.powersurf.com : Most likely hangs
+around on that server.. probably in channels like #singapore or
+singapore, NUS related.

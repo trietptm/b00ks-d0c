@@ -1,0 +1,5 @@
+D:\Projects\EasyHook 2.0.0.0\Examples\Debug\FileMonInject.dll
+D:\Projects\EasyHook 2.0.0.0\Examples\Debug\FileMonInject.pdb
+D:\Projects\EasyHook 2.0.0.0\Examples\FileMonInject\obj\Debug\ResolveAssemblyReference.cache
+D:\Projects\EasyHook 2.0.0.0\Examples\FileMonInject\obj\Debug\FileMonInject.dll
+D:\Projects\EasyHook 2.0.0.0\Examples\FileMonInject\obj\Debug\FileMonInject.pdb

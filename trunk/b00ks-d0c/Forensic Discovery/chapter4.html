@@ -1,0 +1,1816 @@
+<!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+
+<!-- Warning: some text is pre-formatted -->
+
+<html>
+
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+
+<title> Chapter 4: File system analysis</title>
+
+</head>
+
+<body bgcolor="#ffffff">
+
+<h1>Chapter 4: File system analysis</h1>
+
+<h2>4.1 Introduction</h2>
+
+<p> In the previous chapter we introduced basic UNIX file system
+architecture, as well as basic tools to examine information in UNIX
+file systems.  In this chapter we will show how these tools can be
+applied to post-mortem intrusion analysis. We use information from
+a real break-in, slightly edited to protect the guilty and innocent.
+</p>
+
+<p> After a brief introduction to the break-in we describe how to
+duplicate (image) a disk for analysis, and how to access a disk
+image for off-line analysis on another machine. We examine existing
+and deleted file information, and correlate the information for
+consistency. Our reconstruction includes such fine detail that we
+can even see where a file was created before it was renamed to its
+final location.  In the end we will reveal how our case study
+differs from the average intrusion.  </p>
+
+<p> The analysis described in this chapter is based on an older
+version of the Linux Ext2fs file system. Some data recovery details
+have changed in the mean time, as file system software has evolved.
+We'll keep the you informed where
+
+these differences matter as we walk through the analysis.  </p>
+
+<h2>4.2 First contact</h2>
+
+<p> On September 25, at 00:44:49 in the US/Central time zone,
+someone sent a nastygram to a RedHat 6.2 Linux machine of an
+acquaintance.  The attack was aimed at the <tt>rpc.statd</tt>
+service, which is part of the NFS (network file system) file sharing
+protocol family.  NFS was made popular in the mid 1980s by SUN
+Microsystems, and implementations exist for many UNIX and non-UNIX
+systems. The intruder gained access to the system within seconds
+and came back later that same day.  The following information was
+found in the system logfiles:  </p>
+
+<blockquote>
+
+<pre>
+Sep 25 00:44:49 dionysis rpc.statd[335]: gethostbyname error for
+    <i>[...a very long non-conforming hostname...]</i>
+Sep 25 00:45:16 dionysis inetd[473]: extra conf for service
+    telnet/tcp (skipped)
+Sep 25 00:45:28 dionysis in.telnetd[11554]: connect from 10.83.81.7
+Sep 25 01:02:02 dionysis inetd[473]: pid 11554: exit status 1
+Sep 25 17:31:47 dionysis in.telnetd[12031]: connect from 10.83.81.7
+Sep 25 17:32:08 dionysis in.telnetd[12035]: connect from 10.83.81.7
+</pre>
+
+</blockquote>
+
+<p> This was a popular break-in technique, involving a well-known
+"format string" vulnerability in the <tt>rpc.statd</tt> service
+[CVE, 2000].
+The intruder's exploit program overwrote some memory and took full
+control over the <tt>rpc.statd</tt> process.  This in turn gave
+full control over the entire system because, like many services,
+the <tt>rpc.statd</tt> process runs with super-user privileges,
+whether it needs them or not.  </p>
+
+<h2>4.3 Preparing the victim's file system for analysis </h2>
+
+<p> When doing a post-mortem analysis we make trade-offs that depend
+on what time and other resources are available.  At the one extreme,
+we're given very little time to gather information while the
+compromised machine is left running. The <tt>grave-robber</tt>
+tool in the Coroner's Toolkit is optimized towards this scenario.
+It captures volatile information about processes and network
+connections, file attributes such as access time stamps, configuration
+files, logfiles, and assorted other files. The result is stored in
+a database that is meant to be transferred to an analysis system.
+
+This approach captures volatile state of
+processes and networks, but it also has disadvantages. The accuracy
+of the information depends strongly on the integrity of the
+compromised machine. For example, if the kernel is subverted then
+process, network or file information may be incomplete or even
+misleading; and if the machine is booby trapped with a logic bomb,
+our actions may actually result in destruction of information. We
+cover basics of subversion in chapter 5.
+
+Another limitation of "live" data collection is that the procedure
+cannot be reproduced, because information changes due to system
+activity, and due to our own irreversible actions. This may raise
+questions about the integrity of the evidence collected, an issue
+that needs to be weighed against the value of the evidence itself.
+</p>
+
+<p> At the other extreme is the more traditional approach:
+halt the machine, remove the disks, and make copies of the data
+for forensic analysis. This approach can
+be 100% reproducible, but has the obvious disadvantage that it
+misses all the dynamic state information.
+
+However, if something is rapidly destroying
+information by deleting or overwriting data, then losing the dynamic
+state is preferable over losing everything.  For more
+
+discussion on the options to capture system information after an
+incident, we refer to Appendix B.  </p>
+
+<p> The approach taken in this chapter lies closer to the second
+extreme.  The owner of the compromised system provided us with
+copies of disk partitions for analysis, but provided no dynamic
+state information.  The disk partition copies were made while the
+disks were attached to the compromised machine.  The use of a
+relatively low-level copying procedure (see next section) limited
+the possibility of data corruption by the compromised machine, so
+that our results are only slightly less accurate than what they
+could have been in the ideal case.  Leaving the disks attached to
+the compromised machine has the advantage that there is no need to
+arrange for compatible controller hardware and/or driver software
+in order to access the victim's disk drives, which can be a problem
+with for example RAID (redundant array of independent or inexpensive
+disk) systems, or with non-PC hardware.  </p>
+
+<h2>4.4 Capturing the victim's file system information </h2>
+
+<p> There are several ways to duplicate file system information.
+What method is available depends on circumstances. Both
+authors remember capturing information by logging into a
+compromised machine, listing files to the terminal, and recording
+the session with a terminal emulator program.  Clearly, this is
+better than nothing, but the method has serious limitations.  In
+order of increasing accuracy, some methods to capture information
+are:  </p>
+
+<ul>
+
+<li> <p> Copying individual files.  This is the least accurate
+approach, because it captures only the content of files. No meta
+information is captured except perhaps the file size (however,
+holes in files become indistinguishable from zero-filled blocks,
+increasing the apparent file size; see section 3.7, "A first look
+under the hood - file system internals" for more about
+files that contain holes in their block allocation map).
+
+All other meta information such
+as file ownership, access times, permissions and so on is lost
+unless it is saved via some other means. For example, the
+<tt>grave-robber</tt> utility from TCT copies selected files
+(configuration files, logs, etc.) after saving their meta information
+to a so-called <tt>body</tt> file.  </p>
+
+<li> <p> Making a backup. Depending on the backup software used,
+this preserves some meta information such as ownership, information
+about hard links, and last modification time, but it does not
+capture  the last read access time. Commonly used UNIX utilities
+are <tt>tar</tt>, <tt>cpio</tt>, or <tt>dump</tt>.  The drawback
+of making a backup is that what you see is all you get. Backups do
+not capture information about deleted files.  </p>
+
+<li> <p> Copying individual disk partitions. This creates a
+bit-for-bit identical copy of each file system, including all the
+meta information, and including all the information that sits in
+unallocated space at the end of files, between files, in unallocated
+inode blocks, and so on.  This is typically done with the <tt>dd</tt>
+command. A major benefit of this approach is that it is file system
+neutral.  For example, the same technique can be used to copy UNIX
+or Windows partitions alike. The downside is that one still misses
+data that is stored between and outside partitions. The following
+command fragments read the first UNIX partition on the first disk.
+We would either direct the output to a local disk image file, or
+send it across the network as discussed in the next section.
+</p>
+
+<blockquote>
+<pre>
+linux# <b> dd if=/dev/hda1 bs=100k . . .</b>
+freebsd# <b> dd if=/dev/da0s1a bs=100k . . .</b>
+solaris# <b> dd if=/dev/dsk/c0t0d0s0 bs=100k . . .</b>
+</pre>
+</blockquote>
+
+<li> <p> Copying the entire disk. This time, the result is a
+bit-for-bit identical copy of all accessible information on the
+disk, including storage space before or after disk partitions. This
+can be necessary when suspicion exists that data could be hidden
+outside disk partitions. Again, <tt>dd</tt> is the preferred command
+for doing this. Even this method has limitations:
+it will not read disk blocks that have developed errors, and that
+the hardware has silently re-mapped to so-called spare blocks.
+Nor will this method give access to unused spare blocks, as they
+lie outside the normally accessible area of the disk. The following
+command fragments read all accessible blocks on the first disk:
+</p>
+
+<blockquote>
+<pre>
+linux# <b> dd if=/dev/hda bs=100k . . .</b>
+freebsd# <b> dd if=/dev/da0 bs=100k . . .</b>
+solaris# <b> dd if=/dev/c0t0d0s2 bs=100k . . .</b>
+</pre>
+</blockquote>
+
+</ul>
+
+<p> The accuracy of the captured information improves the less we
+depend on the integrity of the compromised system. For
+example, when individual files are captured while logged into the
+victim machine, subverted application or kernel software could
+distort the result.  Subversion is much harder when we use a
+low-level disk imaging procedure, with the disk drive connected to
+a trusted machine.  </p>
+
+<p> In this chapter we focus on the analysis of disk images that
+were produced by copying individual disk partitions. To find out
+what partitions exist on a disk, we use <tt>fdisk</tt> on Linux,
+<tt>disklabel</tt> on BSD, or <tt>prtvtoc</tt> on Solaris.  Some
+operating systems (BSD, Solaris) have a convention where the third
+partition of a disk always spans the entire disk. In that case it
+can be sufficient to copy the "whole disk" partition, but of course
+we still need to record how that whole disk was organized into
+partitions or else we may run into problems later when trying to
+make sense of the disk.  </p>
+
+<h2>4.5 Sending a disk image across the network </h2>
+
+<p> When the disks remain attached to the victim machine, the disk
+imaging procedure can be as simple as using Hobbit's Netcat
+[Hobbit, 1996] to copy the disk image across the network to a drop-off
+machine (at this time we do not recommend using GNU Netcat due to
+code maturity problems). Where possible, use a copy that is run
+directly from a trusted CD-ROM.  For examples of bootable CD-ROMs
+with ready-to-run forensic tools see [Fire, 2004], [Knoppix, 2004a],
+or [Knoppix, 2004b].
+
+<p> In this section we give two examples of creating a disk
+image file of the victim's /dev/hda1 partition.  The first example
+is the simplest, but it should be used only over a trusted network.
+
+A trusted network can be created by removing the victim machine
+from the network and by connecting it directly to the investigator's
+machine.  If a trusted network is not available, we need to use
+additional measures (see examples below) to protect forensic data
+in transit against modification or eavesdropping.  </p>
+
+<p> A warning is in order: disk imaging over a network can take a
+lot of time, because capacity of disks grows much faster than
+the bandwidth of local area networks.  In the days that 2GB disks
+were common, imaging over 10Mbit/s ethernet took less than an hour.
+Imaging a 200GB over 100Mbit/s ethernet takes ten times as long.
+Slower networks are hopeless unless data can be compressed dramatically
+(we have some suggestions at the end of this chapter, though these
+are applicable under limited conditions only).  </p>
+
+<p> Figure 4.1 shows the disk imaging procedure for a trusted network.
+To receive a disk image of the victim's /dev/hda1 file system
+on network port 1234, we run Netcat as a server on the
+receiving machine: </p>
+
+<blockquote>
+
+<pre>
+receiver$ <b>nc -l -p 1234 &gt; victim.hda1</b>
+</pre>
+
+</blockquote>
+
+<p> To send the disk image to the receiving hosts's network port
+1234, we run Netcat as a client on the sending machine:
+</p>
+
+<blockquote>
+
+<pre>
+sender# <b>dd if=/dev/hda1 bs=100k | nc -w 1 <i>receiving-host</i> 1234 </b>
+</pre>
+
+</blockquote>
+
+<p> Imaging all the partitions on one or more disks is a matter of
+repeating the above procedure for each partition, including the
+swap partition and other non-file system partitions that may be
+present.  </p>
+
+<blockquote>
+
+<img src="figure4.1.gif">
+
+<p> Figure 4.1: Sending a disk partition image over a trusted
+network.  </p>
+
+</blockquote>
+
+<p> When the network cannot be trusted, data encryption and data
+signing should be used in order to ensure privacy and integrity.
+As shown in figure 4.2, we still use Netcat to send and receive
+the disk image, but we use <tt>ssh</tt> to set up an encrypted
+tunnel between receiving machine the sending machine.  The tunnel
+endpoint on the sending machine encrypts and signs the data after
+it enters the tunnel, while the tunnel endpoint on the receiving
+machine verifies and decrypts the data before it leaves the tunnel.
+</p>
+
+<p> On the receiving host we use the same Netcat command as
+before to receive a disk image of partition /dev/hda1 on network
+port 1234: </p>
+
+<blockquote>
+
+<pre>
+receiver$ <b>nc -l -p 1234 &gt; victim.hda1</b>
+</pre>
+
+</blockquote>
+
+<p> In a different terminal window we set up the encrypted <tt>ssh</tt>
+tunnel that forwards the disk image from network port 2345 on the
+sending host, to network port 1234 on the receiving host. The
+<tt>-x</tt> option is needed for security, and prevents <tt>ssh</tt>
+from exposing the local display, keyboard and mouse to the victim
+machine. The <tt>-z</tt> option enables data compression, and should
+be used only when sending data over a non-local network.  </p>
+
+<blockquote>
+
+<pre>
+receiver$ <b>ssh sender -x -z -R 2345:localhost:1234</b>
+</pre>
+
+</blockquote>
+
+<p> To set up the tunnel we must log in from the receiving machine
+to the compromised machine.  The reverse, logging in from the
+compromised machine to the receiving machine, would expose a password
+or ssh secret key to the compromised machine.  </p>
+
+<p> On the sending machine we use Netcat to send the disk
+image to local port 2345, so that the <tt>ssh</tt> tunnel forwards
+the disk image to port 1234 on the receiving machine: </p>
+
+<blockquote>
+
+<pre>
+sender# <b>dd if=/dev/hda1 bs=100k | nc -w 1 localhost 2345 </b>
+</pre>
+
+</blockquote>
+
+<p> The same trick can be used to deliver other data to the receiving
+machine, such the output from TCT's <tt>grave-robber</tt> or from
+other commands that examine dynamic state.  </p>
+
+<blockquote>
+
+<img src="figure4.2.gif">
+
+<p> Figure 4.2: Sending a disk image through an encrypted network
+tunnel.  </p>
+
+</blockquote>
+
+<p> As a finishing touch, we can compute the MD5 hash of the image
+file, and store the result in a safe off-line location.  This allows
+us to verify later that the disk image file has not been changed.
+</p>
+
+<blockquote>
+
+<pre>receiver$ <b> md5sum victim.hda1 >victim.hda1.md5 </b>
+</pre>
+
+</blockquote>
+
+<p> The above assumes Linux; on BSD systems the command is called
+<tt>md5</tt>. </p>
+
+<table border=1 bgcolor="#c0c0c0"> <tr> <td>
+
+<p> <strong>Side bar: What if Netcat is not available?
+</strong> </p>
+
+<p> If no Netcat command or equivalent is available for the
+victim machine (either installed on disk, or as ready-to-run
+executable file on a CD-ROM), then one of the least attractive
+options is
+
+to download 200 kbytes of source files and compiling a C program
+in order to create the Netcat executable program, since that
+will do a lot of potential damage to deleted and existing information.
+For
+similar reasons, it may be undesirable to download and install a
+pre-compiled package.  Instead of using Netcat, which has
+many features that we don't need, we have found that the following
+minimal Perl program will do the job just fine:  </p>
+
+<blockquote>
+<pre>
+#!/usr/bin/perl
+
+# ncc - minimal Netcat client in Perl.
+# Usage: ncc host port.
+
+use IO::Socket;
+$SIG{PIPE} = 'IGNORE';
+$buflen = 102400;
+
+die "usage: $0 host port\n" unless ($host = shift) && ($port = shift);
+
+die "connect to $host:$port: $!\n" unless
+    $sock = new IO::Socket::INET(PeerAddr =&gt; $host,
+                                 PeerPort =&gt; $port,
+                                 proto =&gt; 'tcp');
+
+while (($count = sysread(STDIN, $buffer, $buflen)) &gt; 0) {
+    die "socket write error: $!\n"
+        unless syswrite($sock, $buffer, $count) == $count;
+}
+die "socket read error: $!\n" if $count &lt; 0;
+die "close socket: $!\n" unless close($sock);
+</pre>
+</blockquote>
+
+</td> </tr> </table>
+
+<h2>4.6 Mounting disk images on an analysis machine</h2>
+
+<p> Some care is needed when mounting a disk image from an untrusted
+machine. We recommend using the <tt>noexec</tt> mount option to
+disallow execution of untrusted programs on the disk image; this
+helps to prevent contamination of the analysis machine by unintended
+execution of malicious software.
+Another useful mount option is <tt>nodev</tt>, which disables device
+files in the imaged file system; this prevents all kinds of accidents
+when a disk image contains device file nodes. On Solaris, the
+<tt>nosuid</tt> option can be used to disable devices.  And needless
+to say, the image should be mounted read-only to avoid disturbing
+the data.  </p>
+
+<p> In order to examine the partitions of an imaged disk, we could
+copy each partition image to a disk partition of matching size,
+and then mount the file system as usual. However, this is not a
+convenient approach, because it requires partitioning a disk.  It
+is more convenient to store the data from each imaged partition as
+an ordinary file. This works fine with low-level forensic utilities
+such as <tt>ils</tt>, <tt>icat</tt>, <tt>fls</tt> or <tt>unrm</tt>.
+For
+
+those tools it makes no difference whether information is stored
+in a file or in a disk partition.  </p>
+
+<p> However, before we can access a disk partition image file as
+a real file system, we need to trick the operating system into
+believing that a regular file is a disk partition. Many operating
+systems have this ability built in.  </p>
+
+<ul>
+
+<li> <p> Linux has a loopback device that will take a regular file
+and then make it accessible as a block device, so that it can be
+mounted as a file system:  </p>
+
+<blockquote>
+
+<pre>
+# <b>mount victim.hda1 /victim -r -t ext2 -o loop,noexec,nodev</b>
+</pre>
+
+</blockquote>
+
+<p> This mounts the file <tt>victim.hda1</tt> on the directory
+<tt>/victim</tt>, making the contents of the partition accessible
+as a read-only file system. </p>
+
+<li> <p> FreeBSD has a facility called vnode pseudo disk devices,
+which can be used to access a regular file as a block device, so
+that it can be mounted as a file system:  </p>
+
+<blockquote>
+
+<pre>
+# <b>vnconfig vn0 victim.sd0a</b>
+# <b>mount -r -t ufs -o noexec,nodev /dev/vn0 /victim </b>
+</pre>
+
+</blockquote>
+
+<p> This mounts the file <tt>victim.sd0a</tt> on the directory
+<tt>/victim</tt>, making the contents of the partition accessible
+as a read-only file system. In all respects, the result is the same
+as in the Linux section above.  </p>
+
+<p>
+
+<li> <p> Solaris version 8 and later has the <tt>lofiadm</tt>
+command that can be used to mount a file system image much like
+FreeBSD and Linux:  </p>
+
+<blockquote>
+
+<pre>
+# <b>lofiadm -a victim.c0d0s0</b>
+     /dev/lofi/1
+# <b>mount -F ufs -o ro,noexec,nosuid /dev/lofi/1 /victim</b>
+</pre>
+
+</blockquote>
+
+<p> This mounts the file <tt>victim.c0d0s0</tt> on the directory
+<tt>/victim</tt>, making the contents of the partition accessible
+as a read-only file system. In all respects, the result is the same
+as in the Linux or FreeBSD sections above.  </p>
+
+</ul>
+
+<p> The above examples are for image files that contain exactly
+one disk partition. Things get more complicated with images of
+entire disks that contain multiple partitions.  To mount a partition
+from such an image file, we have to specify what part of the disk
+image file to mount. The Linux loopback mechanism supports the
+<tt>-o <i>offset</i></tt> option to specify a byte offset with the
+start of the data of interest. At the time of writing, such an
+option is not available with Solaris or FreeBSD.  A workaround is
+to use the <tt>dd skip=<i>offset</i></tt> feature order to copy a
+partition to an individual image file. </p>
+
+<p> One note of caution is in order. When we mount a disk image
+under <tt>/victim</tt> instead of its usual place in the file system
+hierarchy, all file names change.  While having to prepend the
+string <tt>/victim</tt> to every pathname is burdensome enough for
+the investigator, this is not an option for absolute pathnames that
+are embedded in the file system image itself.  For example, symbolic
+links may resolve to the wrong file or directory, and mount points
+within a file system image may no longer be overlaid by another
+file system tree.  In our experience, it is very easy to wander
+off into the wrong place.  </p>
+
+<h2>4.7 Existing file MACtimes </h2>
+
+<p> For a post-mortem analysis of the <tt>rpc.statd</tt> break-in,
+the owner of the machine provided us with a disk image of the victim
+machine, in the form of one image file per file system. The disk
+image was made a day after the intrusion, shortly after the owner
+found out about it.  Unfortunately, the Netcat command had
+to be brought
+into the machine first, which destroyed some evidence.
+
+We
+mounted the image files on a Linux analysis machine via the Linux
+loopback device as described in the previous section.  We will
+first present information from existing files, and will look at
+deleted file information later. </p>
+
+<p> We used the <tt>grave-robber</tt> utility from the Coroner's
+Toolkit to examine the file system images. In the command below,
+<tt>-c /victim</tt> specifies that a disk image was mounted under
+the <tt>/victim</tt> directory, <tt>-o LINUX2</tt> specifies the
+operating system type of the disk image, and <tt>-m -i</tt> requests
+that <tt>grave-robber</tt> collect information about existing and
+deleted files. In order to bypass file permission restrictions this
+part of the analysis had to be done with super-user permissions.
+</p>
+
+<blockquote>
+
+<pre>
+# <b>grave-robber -c /victim -o LINUX2 -m -i</b>
+</pre>
+
+</blockquote>
+
+<p> This command produced a <tt>body</tt> file with file name and
+numerical file attribute information. The <tt>grave-robber</tt> utility
+stored the file in a
+directory named after the host and the time of day.  This information
+was
+subsequently sorted with the <tt>mactime</tt> utility from the
+Coroner's Toolkit, using the full command as shown below.  The
+<tt>-p</tt> and <tt>-g</tt> options specify the disk image's user
+database files, which is needed to convert numerical file ownership
+attributes back to the correct user and group names.  We specified
+<tt>1/1/1970</tt> as the time threshold because <tt>mactime</tt>
+won't produce output unless a time threshold is specified.  </p>
+
+<blockquote>
+
+<pre>
+# <b>mactime -p /victim/etc/passwd -g /image/etc/group \
+  1/1/1970 >mactime.out </b>
+</pre>
+
+</blockquote>
+
+<p> This command produces a report with times according to the
+default time zone. If the disk image comes from a system with a
+different time zone, we need to override that information.  For example,
+the following commands cause all time conversions to be done for
+the US/Central time zone, that is, the zone where the disk image
+originated: </p>
+
+<blockquote>
+
+<pre>
+$ <b>TZ=CST6CDT; export TZ</b> <i>(/bin/sh syntax)</i>
+$ <b>setenv TZ CST6CDT</b>     <i>(/bin/csh syntax)</i>
+</pre>
+
+</blockquote>
+
+<p> The MACtime report in listing 4.1 covers the time of the incident
+as known from system logfiles (chapter 2, "Time Machines", introduces
+the mactime report format). At first sight the report may seem
+overwhelming, but this should not discourage you. As we will see
+in the next sections, the analysis becomes quite straightforward
+once we start to identify small chunks of related information.
+</p>
+
+<blockquote>
+
+<pre>
+Sep 25 00:45:15
+<i>   Size MAC Permission Owner File name</i>
+  20452 m.c -rwxr-xr-x root  /victim/bin/prick
+ 207600 .a. -rwxr-xr-x root  /victim/usr/bin/as
+  63376 .a. -rwxr-xr-x root  /victim/usr/bin/egcs
+  63376 .a. -rwxr-xr-x root  /victim/usr/bin/gcc
+  63376 .a. -rwxr-xr-x root  /victim/usr/bin/i386-redhat-linux-gcc
+   2315 .a. -rw-r--r-- root  /victim/usr/include/_G_config.h
+   1297 .a. -rw-r--r-- root  /victim/usr/include/bits/stdio_lim.h
+   4680 .a. -rw-r--r-- root  /victim/usr/include/bits/types.h
+   9512 .a. -rw-r--r-- root  /victim/usr/include/features.h
+   1021 .a. -rw-r--r-- root  /victim/usr/include/gnu/stubs.h
+  11673 .a. -rw-r--r-- root  /victim/usr/include/libio.h
+  20926 .a. -rw-r--r-- root  /victim/usr/include/stdio.h
+   4951 .a. -rw-r--r-- root  /victim/usr/include/sys/cdefs.h
+1440240 .a. -rwxr-xr-x root  /victim/usr/lib/[...]/cc1
+  45488 .a. -rwxr-xr-x root  /victim/usr/lib/[...]/collect2
+  87312 .a. -rwxr-xr-x root  /victim/usr/lib/[...]/cpp
+   5794 .a. -rw-r--r-- root  /victim/usr/lib/[...]/include/stdarg.h
+   9834 .a. -rw-r--r-- root  /victim/usr/lib/[...]/include/stddef.h
+   1926 .a. -rw-r--r-- root  /victim/usr/lib/[...]/specs
+Sep 25 00:45:16
+      0 m.c -rw-r--r-- root  /victim/etc/hosts.allow
+      0 m.c -rw-r--r-- root  /victim/etc/hosts.deny
+   3094 mac -rw-r--r-- root  /victim/etc/inetd.conf
+ 205136 .a. -rwxr-xr-x root  /victim/usr/bin/ld
+ 176464 .a. -rwxr-xr-x root  /victim/usr/bin/strip
+   3448 m.. -rwxr-xr-x root  /victim/usr/bin/xstat
+   8512 .a. -rw-r--r-- root  /victim/usr/lib/crt1.o
+   1124 .a. -rw-r--r-- root  /victim/usr/lib/crti.o
+    874 .a. -rw-r--r-- root  /victim/usr/lib/crtn.o
+   1892 .a. -rw-r--r-- root  /victim/usr/lib/[...]/crtbegin.o
+   1424 .a. -rw-r--r-- root  /victim/usr/lib/[...]/crtend.o
+ 769892 .a. -rw-r--r-- root  /victim/usr/lib/[...]/libgcc.a
+ 314936 .a. -rwxr-xr-x root  /victim/usr/lib/libbfd-2.9.5.0.22.so
+    178 .a. -rw-r--r-- root  /victim/usr/lib/libc.so
+  69994 .a. -rw-r--r-- root  /victim/usr/lib/libc_nonshared.a
+</pre>
+
+<p> Listing 4.1: MACtime report for the time of first contact.
+Times are shown relative to the time zone of the compromised machine.
+Files are indicated by their name, with <tt>/victim</tt> prepended.
+The MAC column indicates the file access method (Modify, read
+Access, or status Change).
+File names with identical time stamps are sorted alphabetically.
+In order to keep the example readable very long file names are
+shortened with <tt>[...]</tt>.  </p>
+
+</blockquote>
+
+<p> The majority of the MACtimes in the above report resulted from
+compiling a program with the <tt>gcc</tt> compiler.  This must have
+been a relatively simple program: only generic include files and
+generic object library files were accessed. Later in the analysis
+we will encounter a program that was probably built at this stage
+of the intrusion.  </p>
+
+<h2>4.8 Detailed analysis of existing files</h2>
+
+<p> For a more detailed analysis we will break up the overwhelmingly
+large MACtime report into smaller chunks of related information.
+While we explore the MACtimes, we will examine other pieces of
+information as appropriate.  </p>
+
+<p> The MACtimes revealed that intruder left behind two new files:
+<tt>/bin/prick</tt> and <tt>/usr/bin/xstat</tt>.  Comparison with
+a pristine RedHat 6.2 system revealed that neither program is part
+of the system software. The presence of
+these two files in system directories immediately raised multiple
+red flags.  </p>
+
+<blockquote>
+
+<pre>
+Sep 25 00:45:15    20452 m.c -rwxr-xr-x root  /victim/bin/prick
+Sep 25 00:45:16     3448 m.. -rwxr-xr-x root  /victim/usr/bin/xstat
+</pre>
+
+</blockquote>
+
+<p> The file <tt>/bin/prick</tt> was identified by its MD5 hash
+
+as an unmodified copy of the original RedHat 6.2 <tt>/bin/login</tt>
+program, which authenticates users when they log into the system.
+</p>
+
+<blockquote>
+
+<pre>
+$ <b>md5sum /victim/bin/prick</b>
+9b34aed9ead767d9e9b84f80d7454fc0  /victim/bin/prick
+</pre>
+
+</blockquote>
+
+<p> MD5 hashes prove their value when we have to compare an unknown
+file against a large list of known files. Instead of comparing the
+files themselves we can save a lot of time and space by comparing
+their MD5 hashes instead. Examples of databases of known file hashes
+are the Known Goods database [Known Goods, 2004], the NIST National
+Software
+Reference Library [NIST, 2004], and the Solaris fingerprint database
+[Dasan, 2001].  In this particular case we worked with our own
+database
+of MD5 hashes for all the files on a known to be good RedHat 6.2
+machine.  </p>
+
+<p> The fact that <tt>/bin/prick</tt> was a copy of the original
+<tt>/bin/login</tt> program immediately raised a question: what had
+happened with the <tt>/bin/login</tt> program itself? To our
+surprise, the file status change time revealed that the
+<tt>/bin/login</tt> file was updated later in the day at 17:34 when
+the intruder returned for another visit.  It was no longer possible
+to see what the <tt>/bin/login</tt> file looked like right after
+the initial intrusion session that happened 45 minutes after
+midnight. As we will find later, the file modification time dates
+from before the time the file was brought into the system.  </p>
+
+<blockquote>
+
+<pre>
+Aug 18 01:10:16    12207 m.. -rwxr-xr-x root  /victim/bin/login
+Sep 25 17:34:20    12207 ..c -rwxr-xr-x root  /victim/bin/login
+</pre>
+
+</blockquote>
+
+<p> The <tt>strings</tt> command reveals text messages, file names,
+and other text that is embedded in program files or in other files.
+A quick inspection with this tool revealed that the
+file <tt>/usr/bin/xstat</tt> had references to both <tt>/bin/prick</tt>
+(the copy of the unmodified <tt>/bin/login</tt> program) and to
+<tt>/bin/sh</tt> (the standard UNIX command interpreter).  As we
+have found repeatedly, files that reference both a login program
+and a command interpreter program are highly suspicious.  Invariably,
+they allow some users to bypass the system login procedure.  </p>
+
+<blockquote>
+
+<pre>
+$ <b>strings /victim/usr/bin/xstat</b>
+/lib/ld-linux.so.2
+__gmon_start__
+libc.so.6
+getenv
+execve
+perror
+system
+__deregister_frame_info
+strcmp
+exit
+_IO_stdin_used
+__libc_start_main
+__register_frame_info
+GLIBC_2.0
+PTRh
+DISPLAY
+/bin/prick
+/bin/sh
+</pre>
+</blockquote>
+
+<p> A full reverse engineering analysis would occupy too much space
+here, and we refer to chapter 6 for an
+analysis of backdoor software.  In the case of the <tt>xstat</tt>
+file, the backdoor password had to be provided with the <tt>DISPLAY</tt>
+environment variable.  This information is propagated via remote
+logins with the telnet protocol, and normally specifies the name
+of a user's X Windows display.  The relevant C code fragment is:
+</p>
+
+<blockquote>
+
+<pre>
+display = getenv("DISPLAY");
+. . .
+if (strcmp(display, "lsd") == 0)
+    system("/bin/sh");
+</pre>
+
+</blockquote>
+
+<p> In order to be useful as a login backdoor, this program would
+have to be installed as <tt>/bin/login</tt>. Only users with the
+right <tt>DISPLAY</tt> setting would have unrestricted access to
+the machine; other users would have to authenticate as usual, and
+would be none the wiser about the login backdoor's existence.
+Entering through the backdoor would be a matter of typing one simple
+command:  </p>
+
+<blockquote>
+
+<pre>
+$ <b>DISPLAY=lsd telnet victim.host</b>
+</pre>
+
+</blockquote>
+
+<p> Why then wasn't this <tt>xstat</tt> backdoor program installed
+as <tt>/bin/login</tt>? Well, it probably was installed that way
+at some earlier point in time.  The MACtime report shows that the
+<tt>/usr/bin/xstat</tt> file status change time was suspiciously
+close to the time when the intruder installed the present
+<tt>/bin/login</tt> program during the visit at 17:34:  </p>
+
+<blockquote>
+
+<pre>
+Sep 25 00:45:16     3448 m.. -rwxr-xr-x root  /victim/usr/bin/xstat
+Sep 25 17:34:17     3448 ..c -rwxr-xr-x root  /victim/usr/bin/xstat
+Sep 25 17:34:20    12207 ..c -rwxr-xr-x root  /victim/bin/login
+</pre>
+
+</blockquote>
+
+<p> The MACtime report is perfectly consistent with the following
+scenario: at 00:45:16, during the initial intrusion session, an
+intruder installed the initial <tt>/bin/login</tt> backdoor program,
+with references to <tt>/bin/prick</tt> (the original login program)
+and <tt>/bin/sh</tt> (giving full system access); at 17:34:17,
+during a second visit, an intruder renamed the <tt>/bin/login</tt>
+backdoor to <tt>/usr/bin/xstat</tt>; and at 17:34:20, only three
+seconds later, that intruder installed the new <tt>/bin/login</tt>
+backdoor program, this time with references to <tt>/usr/bin/xstat</tt>
+(the 00:45:16 login backdoor program) and <tt>/bin/sh</tt>. At this
+point, two levels of login backdoors were installed on the machine.
+As if one backdoor was not enough.  </p>
+
+<h2>4.9 Wrapping up the existing file analysis </h2>
+
+<p> Let's recapitulate what we have found up to this point, just
+by looking at existing file information. Logging shows that an
+intruder exploited a well-known <tt>rpc.statd</tt> vulnerability
+at 00:44:49.  MACtimes of existing files reveal that the intruder
+installed a login backdoor program at 00:45:16.  As the finishing
+touch of the initial intrusion, all that needed to be done was to
+enable the backdoor. What follows is based on the content of logfiles
+and of configuration files.  </p>
+
+<p> At 00:45:16 the intruder added an entry to the <tt>/etc/inetd.conf</tt>
+configuration file, in order to enable logins via the telnet service. </p>
+
+<blockquote>
+
+<pre>
+Sep 25 00:45:16     3094 mac -rw-r--r-- root  /victim/etc/inetd.conf
+</pre>
+
+</blockquote>
+
+<p>
+This network service was already enabled at the time, causing the
+<tt>inetd</tt> process to log a warning about a duplicate service:
+</p>
+
+<blockquote>
+
+<pre>
+Sep 25 00:45:16 dionysis inetd[473]: extra conf for service
+    telnet/tcp (skipped)
+</pre>
+
+</blockquote>
+
+<p> The duplicate <tt>telnet</tt> service entry was still present
+in the <tt>/etc/inetd.conf</tt> file, in the file system images
+that the system owner kindly provided to us:  </p>
+
+<blockquote>
+
+<pre>
+$ <b>grep telnet /victim/etc/inetd.conf</b>
+telnet  stream  tcp     nowait  root    /usr/sbin/tcpd  in.telnetd
+telnet  stream  tcp     nowait  root    /usr/sbin/tcpd  in.telnetd
+</pre>
+
+</blockquote>
+
+<p> Besides changing the inetd configuration file in order to enable
+<tt>telnet</tt> connections, the intruder also truncated the TCP
+Wrapper's <tt>/etc/hosts.allow</tt> and <tt>/etc/hosts.deny</tt>
+files to zero length. These files normally specify policies for
+access from the network to services on the local machine.  Presumably,
+the files were truncated to disable any policies that could interfere
+with intruder access to the telnet service. </p>
+
+<blockquote>
+
+<pre>
+Sep 25 01:45:16        0 m.c -rw-r--r-- root  /victim/etc/hosts.allow
+                       0 m.c -rw-r--r-- root  /victim/etc/hosts.deny
+</pre>
+
+</blockquote>
+
+<p> At 00:45:28 a <tt>telnet</tt> connection was made to verify
+that the backdoor was functional. The connection was terminated in
+an abnormal manner after 994 seconds<sup>1</sup>. No MACtime
+information was found that revealed what happened in this session,
+if anything happened at all.  </p>
+
+<blockquote>
+
+<p> Footnote 1: In reality, the connection was broken after 1000
+seconds.  An attempt by the author to look up the client hostname
+failed after about 5 seconds, because no proper IP address to
+hostname mapping was set up in the DNS. Because of this the connection
+was not logged until 5 seconds after it was completed. We suspect
+that the connection was broken after 1000 seconds as the result of
+a timeout, not as the result of a deliberate action.  </p>
+
+</blockquote>
+
+<blockquote>
+
+<pre>
+Sep 25 00:45:28 dionysis in.telnetd[11554]: connect from 10.83.81.7
+Sep 25 01:02:02 dionysis inetd[473]: pid 11554: exit status 1
+</pre>
+
+</blockquote>
+
+<p> This was all for the night. The intruder returned later in the
+day at 17:34, replaced the initial login backdoor program by the
+second one, and installed the <tt>floodnet</tt> distributed
+denial-of-service software. But let's not get ahead of things.
+</p>
+
+<p> Our next step is to look for clues from deleted files. These
+clues can confirm or contradict our earlier findings, or they can
+even reveal completely new information. First we have to discuss
+what happens when file information is deleted.  </p>
+
+<h2>4.10 Intermezzo: what happens when a file is deleted?</h2>
+
+<p> Deleting a file has a directly visible effect: the file name
+disappears from a directory listing. What happens under the hood
+depends on system internals. Some file systems (Microsoft's FAT16
+and FAT32 file systems) mark
+the file as deleted by hiding the file name in a special manner.
+Traditionally, FFS (the Berkeley Fast File System) breaks all the
+connections between directory entry, file attributes and file data
+blocks.  FFS descendants are commonly found on Solaris and BSD
+systems. With 2.2 Linux kernels, the Linux Ext2fs (second extended)
+file system marks the directory entry as unused, but preserves the
+connections between directory entry, file attributes and file data
+blocks.  With 2.4 Linux kernels, deleting a file has become more
+destructive, so that Ext2fs no longer preserves the connections
+between directory entries and file attributes. On the other hand,
+some of the 4.4 BSD derived systems do preserve connections between
+directory entries and file attributes.  Table 4.1 summarizes what
+information is preserved and what information is destroyed when a
+file is deleted.  </p>
+
+<p> The discussion in this section is limited to the Berkeley Fast
+File System [McKusick, 1984] and descendants including Solaris UFS,
+as well
+as to Linux Ext2fs [Card, 1994] and their descendants. In all cases we
+assume access to a local file system. Remote file systems normally
+give no access to unallocated or deleted file information.  </p>
+
+<blockquote>
+
+<table border="0">
+
+<tr> <th align="left" width="30%">File property</th> <th align="left"
+width="30%">Location</th> <th align="left">Effect of file deletion</th>
+</tr>
+
+<tr> <td colspan="3"> <hr> </td> </tr>
+
+<tr> <td>Directory entry</td> <td>Directory data blocks</td>
+<td>Marked as unallocated</td> </tr>
+
+<tr> <td colspan="2"> &nbsp; &nbsp;File name</td> <td>Preserved</td>
+</tr>
+
+<tr> <td colspan="2"> &nbsp; &nbsp;Inode number</td> <td> System
+dependent</td> </tr>
+
+<tr> <td colspan="3"> <hr> </td> </tr>
+
+<tr> <td>Directory attributes</td> <td>Directory inode block</td> <td> </td> </tr>
+
+<tr> <td colspan="2"> &nbsp; &nbsp;Last read access time</td> <td>
+Deletion time </td> </tr>
+
+<tr> <td colspan="2"> &nbsp; &nbsp;Last write access time</td> <td>
+Deletion time </td> </tr>
+
+<tr> <td colspan="2"> &nbsp; &nbsp;Last attribute change time</td>
+<td> Deletion time</td> </tr>
+
+
+<tr> <td colspan="3"> <hr> </td> </tr>
+
+<tr> <td>File attributes</td> <td>File inode block</td> <td>Marked as
+unallocated</td> </tr>
+
+<tr> <td colspan="2"> &nbsp; &nbsp;Owner</td> <td>Preserved</td>
+</tr>
+
+<tr> <td colspan="2"> &nbsp; &nbsp;Group ownership</td> <td>Preserved</td>
+</tr>
+
+<tr> <td colspan="2"> &nbsp; &nbsp;Last read access time</td> <td>
+Preserved</td> </tr>
+
+<tr> <td colspan="2"> &nbsp; &nbsp;Last write access time</td> <td>
+System dependent </td> </tr>
+
+<tr> <td colspan="2"> &nbsp; &nbsp;Last attribute change time</td>
+<td> Deletion time</td> </tr>
+
+<tr> <td colspan="2"> &nbsp; &nbsp;Deletion time (if available) </td>
+<td> Deletion time </td> </tr>
+
+<tr> <td colspan="2"> &nbsp; &nbsp;Directory reference count</td>
+<td>Zero</td> </tr>
+
+<tr> <td colspan="2"> &nbsp; &nbsp;File type</td> <td>System
+dependent </td> </tr>
+
+<tr> <td colspan="2"> &nbsp; &nbsp;Access permissions</td> <td>System
+dependent </td> </tr>
+
+<tr> <td colspan="2"> &nbsp; &nbsp;File size</td> <td>System
+dependent </td> </tr>
+
+<tr> <td colspan="2"> &nbsp; &nbsp;Data block addresses</td>
+<td>System dependent </td> </tr>
+
+<tr> <td colspan="3"> <hr> </td> </tr>
+
+<tr> <td>File contents</td> <td>File data blocks</td> <td nowrap>
+Preserved, marked as unallocated
+
+<tr> <td colspan="3"> <hr> </td> </tr>
+
+</table>
+
+<p> Table 4.1: The effect of file deletion on file names, on file
+and directory attributes, and on file contents, for typical UNIX
+file systems.  See the text for a description of the system dependent
+effects.  </p>
+
+</blockquote>
+
+<p> <strong>  Effect of file deletion on its parent directory entry </strong> </p>
+
+<p> When a file is deleted, the directory entry with the file name
+and inode number is marked as unused.  Typically, the inode number
+is set to zero, so that the file name becomes disconnected from any
+file information.  This behavior is found on Solaris systems. Some
+FreeBSD UFS and Linux Ext2fs implementations preserve the inode
+number in the directory entry.  </p>
+
+<p> Names of deleted files can still be found by reading the
+directory with the <tt>strings</tt> command.  Unfortunately, Linux
+does not allow directories to be read by user programs. To work
+around this restriction one can use the <tt>icat</tt> utility (copy
+file by inode number) from the Coroner's Toolkit. The following
+command lists file names in the root directory (inode number 2) of
+the <tt>hda1</tt> file system:  </p>
+
+<blockquote>
+<pre>
+# <b>icat /dev/hda1 2 | strings</b>
+</pre>
+</blockquote>
+
+<p> A more sophisticated tool for exploring deleted directory
+entries is the <tt>fls</tt> utility (list directory entries) from
+the Sleuth kit software [Carrier, 2004]. This utility also bypasses
+the
+file system and any restrictions that it attempts to impose.  The
+following command lists deleted directory entries in the root
+directory (inode 2) of the <tt>hda1</tt> file system:  </p>
+
+<blockquote>
+<pre>
+# <b>fls -d /dev/hda1 2</b>
+</pre>
+</blockquote>
+
+<p> As we have seen in chapter 3, <tt>fls</tt> can also recursively
+process all directories in a file system, including directories
+that are hidden under mount points.  We will be using <tt>fls</tt>
+later in this chapter. </p>
+
+<p> <strong>  Effect of file deletion on its parent directory attributes </strong> </p>
+
+<p> As a side effect of the directory entry update, the directory's
+last read, last modification, and last status change attributes
+are all set to the time of that update. Thus, even if the deleted
+file itself is no longer available, the directory's last modification
+time will still reveal past activity within that directory.  </p>
+
+<p> <strong>  Effect of file deletion on inode blocks </strong> </p>
+
+<p> On UNIX systems, a deleted file may still be active: some
+process may still have the file open for reading and/or writing,
+or some process may still be executing code from the file.  All
+further file deletion operations are postponed until the file is
+no longer active. In this state of suspended deletion, the inode
+is still allocated, but has a reference count of zero.  The
+<tt>ils</tt> utility (list file by inode number) from the Coroner's
+Toolkit has an option to find such files.  The following command
+shows all the deleted but still active files in the <tt>hda1</tt>
+file system:  </p>
+
+<blockquote>
+<pre>
+# <b>ils -o /dev/hda1</b>
+</pre>
+</blockquote>
+
+<p> Once a file is really deleted, the inode (file attribute) block
+is marked as unused in the inode allocation bitmap. Some file
+attribute information is destroyed (see table 4.1), but a lot of
+information is preserved.  In particular, Linux 2.2 Ext2fs
+implementations preserve the connections between the file inode
+block and its file data blocks. With older and later Linux
+implementations some or all data block addresses are lost.  </p>
+
+<p> <strong>  Effect of file deletion on data blocks </strong> </p>
+
+<p> Deleted file data blocks are marked as unused in the data block
+allocation bitmap, but their contents are left alone.  The Linux
+Ext2fs file system has an option to erase file data blocks upon
+file deletion, but that feature is currently unimplemented. As a
+rule, file data blocks are no longer connected with the file in
+any way, except on Linux 2.2 Ext2fs, where all data blocks remain
+connected to the inode block.  On those Linux systems, the following
+command recovers the data blocks from a file in partition <tt>hda1</tt>
+with inode number 154881:  </p>
+
+<blockquote>
+<pre>
+# <b>icat /dev/hda1 154881 > recovered.hda1.154881</b>
+</pre>
+</blockquote>
+
+<p> where the output file should be created in a file system
+different from the file system that deleted files are being recovered
+from. </p>
+
+<h2>4.11 Deleted file MACtimes</h2>
+
+<p> To resume the intrusion analysis, let's briefly summarize our
+findings. MACtime analysis of existing files reveals indications
+that someone compiled a relatively simple C program at 00:45:15,
+and that they installed a backdoored <tt>/bin/login</tt> program
+at 00:45:16.  This <tt>/bin/login</tt> program was apparently
+replaced later in the day by another one when the intruder returned
+for a second visit, and can still be found as <tt>/usr/bin/xstat</tt>.
+</p>
+
+<p> As a first step in our analysis a few pages ago we used the
+<tt>grave-robber</tt> utility to collect information from the imaged
+file system:  </p>
+
+<blockquote>
+<pre>
+# <b>grave-robber -c /victim -o LINUX2 -m -i</b>
+</pre>
+</blockquote>
+
+<p> The <tt>-i</tt> option requested that information be collected
+about inodes of deleted files. Older TCT releases require running
+an <tt>ils2mac</tt> utility to convert this into a format that
+<tt>mactime</tt> understands. Newer versions will automatically
+merge the information into the <tt>body</tt> file.  </p>
+
+<p> We then ran the <tt>mactime</tt> command to process the deleted
+file information.  What follows is the deleted file MACtime
+information that corresponds to the time of the initial intrusion
+session. Deleted files are indicated by the file system image file
+name (e.g., <tt>victim.hda8</tt>) and by their file inode number
+(e.g., 30199).  Since the victim machine used the Linux Ext2fs file
+system, a wealth of deleted file information is available for
+investigation.  </p>
+
+<blockquote>
+
+<pre>
+Sep 25 00:45:15    20452 .a. -rwxr-xr-x root  &lt;victim.hda8-30199&gt;
+                     537 ma. -rw-r--r-- root  &lt;victim.hda8-30207&gt;
+Sep 25 00:45:16        0 mac -rw------- root  &lt;victim.hda8-22111&gt;
+                       0 mac -rw------- root  &lt;victim.hda8-22112&gt;
+                       0 mac -rw-r--r-- root  &lt;victim.hda8-22113&gt;
+                   20452 ..c -rwxr-xr-x root  &lt;victim.hda8-30199&gt;
+                     537 ..c -rw-r--r-- root  &lt;victim.hda8-30207&gt;
+                   12335 mac -rwxr-xr-x root  &lt;victim.hda8-30209&gt;
+                    3448 m.. -rwxr-xr-x root  &lt;victim.hda8-30210&gt;
+</pre>
+
+</blockquote>
+
+<h2>4.12 Detailed analysis of deleted files </h2>
+
+<p> We used TCT's <tt>icat</tt> command (see section 4.10, "What
+happens when a file is deleted?")
+to recover the content of
+the deleted files.  Unfortunately, the two files with inode numbers
+30207 and 30209 were unrecoverable - the result contained all or
+mostly null bytes.  We searched the file system for other existing
+or deleted files with the same file sizes, but nothing came up that
+could be linked to the intrusion.  </p>
+
+<p> Our attempts to recover the three zero-length deleted files
+with inode numbers 22111-22113 produced the expected result:  zero
+bytes.  Examination with TCT's <tt>ils</tt> command revealed that
+these inodes not only had a zero file length field, their fields
+for data block addresses were all zero as well. Presumably, the
+files were truncated before they were deleted.  If these files ever
+contained data, then the prospects for recovery would be grim, as
+their data blocks would have to be scraped from the unused disk
+space.  </p>
+
+<p> However, we noticed that these three deleted files had very
+different inode numbers (22111-22113) than the other deleted files
+(which lie around inode number 30200). This was a clue that the
+three files were created in a different part of the file system.
+See a section 4.14, "Tracing a deleted file back to its original
+location", for insights that can be gleaned from inode numbers.
+</p>
+
+<p> File recovery with <tt>icat</tt> was more successful with the
+other two deleted files.  The deleted file with inode number 30199
+was easily identified by its MD5 checksum as a copy of the RedHat
+6.2 login program.  The complete MACtime information for this
+deleted file was:  </p>
+
+<blockquote>
+
+<pre>
+Mar 07 04:29:44    20452 m.. -rwxr-xr-x root  &lt;victim.hda8-30199&gt;
+Sep 25 00:45:15    20452 .a. -rwxr-xr-x root  &lt;victim.hda8-30199&gt;
+Sep 25 00:45:16    20452 ..c -rwxr-xr-x root  &lt;victim.hda8-30199&gt;
+</pre>
+
+</blockquote>
+
+<p> The file modification time is identical to that of the RedHat
+6.2 login program as distributed on CDROM.  The file status change
+time shows that the file was removed at 00:45:16.  We conclude that
+this was the original <tt>/bin/login</tt> file that was deleted
+when the first login backdoor was installed during the initial
+intrusion session.  This finding is confirmed by an analysis of
+file inode numbers in the next section.  </p>
+
+<p> The deleted file with inode number 30210 was a copy of
+<tt>/usr/bin/xstat</tt>, the backdoor program that featured as
+<tt>/bin/login</tt> until it was renamed during the 17:34 intruder
+visit. In fact, the deleted file 30210 and the <tt>/usr/bin/xstat</tt>
+file had more in common: they also had the same file status change
+time and the same file modification time.  </p>
+
+<blockquote>
+
+<pre>
+Sep 25 00:45:16     3448 m.. -rwxr-xr-x root  /victim/usr/bin/xstat
+Sep 25 00:45:16     3448 m.. -rwxr-xr-x root  &lt;victim.hda8-30210&gt;
+Sep 25 17:34:17     3448 ..c -rwxr-xr-x root  /victim/usr/bin/xstat
+Sep 25 17:34:17     3448 .ac -rwxr-xr-x root  &lt;victim.hda8-30210&gt;
+</pre>
+
+</blockquote>
+
+<p> Why did we find two copies of the initial login backdoor program
+with the same file modification times and with the same file status
+change times? And why was one copy deleted and the other not?
+
+The initial login backdoor program was installed as
+<tt>/bin/login</tt>.  However, when the file was renamed to
+<tt>/usr/bin/xstat</tt>, it was moved from the root file system
+(on the hda8 disk partition) to the <tt>/usr</tt> file system (on
+the hda5 partition).  The instance on the hda8 disk partition was
+removed, and a new instance was created on the hda5 partition. In
+this process, file attributes were preserved, resulting in the
+deleted file with the same attributes and content as the existing
+file.  </p>
+
+<h2>4.13 Exposing out-of-place files by their inode number </h2>
+
+<p> By now we have a pretty firm picture of what happened.  Someone
+broke in, compiled a simple program, installed a backdoored
+<tt>/bin/login</tt> program, and installed another backdoored
+<tt>/bin/login</tt> program later that day (of course, different
+persons could have been involved at different times).  We were able
+to recover the deleted original <tt>/bin/login</tt> program file,
+as well as the deleted initial <tt>/bin/login</tt> backdoor program.
+There are still a few deleted files that we could not identify.
+</p>
+
+<p> Everything we have found so far appears to be consistent.  Now
+it is time to look at smaller details, and to see if our observations
+still hold up after closer scrutiny.  How could we be so certain
+that the deleted file with inode number 30199 was the original
+RedHat 6.2 <tt>/bin/login</tt> program file, and not some copy of
+that file? The inode number, 30199, provides the clue.  </p>
+
+<p> As an operating system is installed on the disk and as files
+are created, the inode numbers are assigned by the file system.
+Normally, the base operating system, with standard system commands
+in <tt>/bin</tt> and in <tt>/usr/bin</tt> and so on, is installed
+one directory at a time.  Thus, successive entries in system
+directories tend to have successive inode numbers.  RedHat 6.2
+Linux is no exception.  </p>
+
+<p> A file listing of the <tt>/bin</tt> directory, in order of
+directory entry, revealed a neat sequence of inode numbers. In the
+listing below, the first column of each line contains the file
+inode number.  The remainder of each line is standard "ls -l"
+formatted output:  </p>
+
+<blockquote>
+
+<pre>
+$ <b>ls -fli /victim/bin</b>
+<i>...skipped...</i>
+30191 -r-xr-xr-x    1 root     60080 Mar  7  2000 ps
+30192 -rwxr-xr-x    1 root    886424 Mar  1  2000 rpm
+30193 -rwxr-xr-x    1 root     15844 Feb  7  2000 setserial
+30194 lrwxrwxrwx    1 root         3 Aug 26  2000 gtar -> tar
+30195 -rwxr-xr-x    1 root    144592 Feb  9  2000 tar
+30196 -rwxr-xr-x    1 root      2612 Mar  7  2000 arch
+30197 -rwxr-xr-x    1 root      4016 Mar  7  2000 dmesg
+30198 -rwxr-xr-x    1 root      7952 Mar  7  2000 kill
+<b>60257 -rwxr-xr-x    1 root     12207 Aug 18  2000 login</b>
+30200 -rwxr-xr-x    1 root     23600 Mar  7  2000 more
+30201 -rwxr-xr-x    1 root       362 Mar  7  2000 vimtutor
+30202 lrwxrwxrwx    1 root         2 Aug 26  2000 ex -> vi
+30203 lrwxrwxrwx    1 root         2 Aug 26  2000 rvi -> vi
+30204 lrwxrwxrwx    1 root         2 Aug 26  2000 rview -> vi
+30205 -rwxr-xr-x    1 root    346352 Mar  7  2000 vi
+30206 lrwxrwxrwx    1 root         2 Aug 26  2000 view -> vi
+<b>30208 -rwxr-xr-x    1 root     20452 Sep 25  2000 prick</b>
+</pre>
+
+</blockquote>
+
+<p> Clearly, the directory entry for <tt>/bin/login</tt> was out
+of place.  It should have inode number 30199. And that is exactly
+the inode number of the deleted login program that we found in the
+previous section.  </p>
+
+<p> The directory entry for <tt>/bin/prick</tt> (the copy of the
+original login program) also revealed that something was out of
+order, though not as dramatic as with <tt>/bin/login</tt>.  The
+inode number sequence shows a hole at inode number 30207.  This
+again is consistent with the deleted MACtime analysis in the previous
+section, which shows that a file with inode number 30207 was created
+and removed in the course of the initial intrusion session.  </p>
+
+<h2>4.14 Tracing a deleted file back to its original location </h2>
+
+<p> In the previous section we noticed a few deleted files with
+inode numbers in the 22111-22113 range, which is well outside the
+range of inode numbers of the other deleted files that were involved
+with the initial intrusion session.  Because of this difference,
+we suspect that the files were not created in the <tt>/bin</tt>
+directory, but must have been created in a very different place.
+But where? </p>
+
+<p> With some Linux Ext2fs or FreeBSD UFS file system implementations,
+there is a quick way to trace a deleted file back to its directory.
+This approach exploits a property that does not work on systems
+such as Solaris.  When the Linux Ext2fs or FreeBSD UFS file system
+removes a file, it marks the directory entry as unused, but leaves
+the deleted file name and inode number intact.  See section 4.10,
+"What happens when a file is deleted?", for more information.
+</p>
+
+<p> We used the <tt>fls</tt> utility from the Sleuth Kit to produce
+a MACtime
+report for all deleted directory entries within the hda8 file system
+image.
+In the command below, <tt>-m /victim</tt> prepends the string
+<tt>/victim</tt> to any recovered file name, <tt>victim.hda8</tt> is
+the file that contains the hda8 file system image, and <tt>2</tt>
+is the inode number of the root directory of the hda8 file system.
+</p>
+
+<blockquote>
+
+<pre>
+$ <b>fls -m /victim victim.hda8 2 &gt;&gt;<i>grave-robber-body-file</i> </b>
+</pre>
+
+</blockquote>
+
+<p> The syntax has changed in the mean time, and the command would
+now look like:  </p>
+
+<blockquote>
+
+<pre>
+$ <b>fls -f linux-ext2 -r -m /victim victim.hda8 &gt;&gt;<i>grave-robber-body-file</i> </b>
+</pre>
+
+</blockquote>
+
+<p> The output from <tt>fls</tt> is compatible with the <tt>body</tt>
+file format that is expected by the <tt>mactime</tt> command.  The
+MACtime fragment below shows all the deleted entries in the
+<tt>/tmp</tt> directory that were found by <tt>fls</tt>, including
+their deleted file names, inode numbers, and file attributes:  </p>
+
+<blockquote>
+
+<pre>
+Sep 25 00:45:16
+    0 mac -rw-r--r-- root  /victim/tmp/ccpX2iab.ld &lt;22113&gt; (deleted)
+    0 mac -rw------- root  /victim/tmp/ccWxNYYa.o  &lt;22112&gt; (deleted)
+    0 mac -rw------- root  /victim/tmp/ccXJHPza.c  &lt;22111&gt; (deleted)
+</pre>
+
+</blockquote>
+
+<p> This result confirmed that the inodes 22111-22113 once belonged
+to deleted files in the <tt>/tmp</tt> directory. The names of the
+deleted files suggest that they were temporary files produced by
+the <tt>gcc</tt> compiler <sup>2</sup>.  We already knew from the
+MACtime analysis that the files were created when the initial
+backdoor was installed.  </p>
+
+<blockquote>
+
+<p> Footnote 2: If this observation is correct, then we may have
+uncovered a minor privacy problem in the compiler software. Note
+that the deleted file named <tt>/tmp/ccpX2iab.ld</tt> appears to
+be world readable,
+whereas the other apparent compiler temporary files were not.  </p>
+
+</blockquote>
+
+<p> The Sleuth kit's <tt>ffind</tt> tool can be used to find all
+the deleted directory entries that refer to a specific inode.  With
+larger numbers of deleted inodes,
+<tt>fls</tt> is probably more convenient.  </p>
+
+<p> On systems such as Solaris that do not preserve inode numbers
+in deleted directory entries, <tt>fls</tt> will not be able to pair
+the deleted inode number with a deleted file name. But we don't
+have to give up.  It is still possible to find out the disk region
+where a file was initially created, just by looking at the inode
+number.  </p>
+
+<h2>4.15 Tracing a deleted file back by its inode number </h2>
+
+<p> Chapter 3, "File system basics", explains that many UNIX file
+systems are organized into discrete zones. As a rule,
+all the information about a small file can be found in the same
+zone:  the directory entry, the file inode block and the file data
+blocks.  This approach achieves good performance by avoiding
+unnecessary disk head movement.  </p>
+
+<p> Thus, in order to trace deleted files back to their initial
+parent directory we have to look for files or directories in the
+same file system zone as the deleted files, that is, we have to
+look for files or directories with inode numbers in the same inode
+number range as the deleted files. We sorted all the files and
+directories in the hda8 file partition image by their inode number
+and looked at the numbers in the region of interest. The <tt>-xdev</tt>
+option prevented <tt>find</tt> from wandering across file system
+mountpoints into information from different disk image files.  </p>
+
+<blockquote>
+
+<pre>
+$ <b>find /victim -xdev -print | xargs ls -id | sort -n</b>
+. . .
+22104 /victim/etc/autorpm.d/autorpm-updates.conf
+22105 /victim/etc/autorpm.d/autorpm.conf.sample
+22106 /victim/etc/autorpm.d/redhat-updates.conf
+22107 /victim/etc/autorpm.d/autorpm.conf
+<b>22108 /victim/tmp/dd</b>
+24097 /victim/dev
+24098 /victim/dev/printer
+24099 /victim/dev/null
+. . .
+</pre>
+
+</blockquote>
+
+<p> We found that the inode numbers 22111-22113 were in the same
+range as the <tt>/tmp/dd</tt> file, which was created by the owner
+of the system while preserving the file systems with <tt>dd</tt>
+and Netcat.  This suggests that the three deleted files with
+inode numbers 22111-22113 were probably created in the <tt>/tmp</tt>
+directory. This is consistent with the <tt>fls</tt> results shown
+earlier.  </p>
+
+<h2>4.16 Another lost son comes back home </h2>
+
+<p> What can be said about the origin of the <tt>/bin/login</tt>
+program that the intruder installed in the course of the second
+visit, and whose inode number 60257 was so wildly out of sequence
+with its neighboring files? Inode sequence number analysis suggests
+that the intruder's file was created in a very different file system
+zone before it was moved to the final location <tt>/bin/login</tt>.
+The following command reveals the inode numbers and file names
+around the region of interest:  </p>
+
+<blockquote>
+
+<pre>
+$ <b>find /victim -xdev -print | xargs ls -id | sort -n</b>
+. . .
+60256 /victim/etc/.tmp/.tmp
+<b>60257 /victim/bin/login</b>
+60261 /victim/etc/.tmp/.tmp/install
+60262 /victim/dev/.l
+60263 /victim/etc/.tmp/.tmp/.m.list
+60264 /victim/etc/.tmp/.tmp/install2
+. . .
+</pre>
+
+</blockquote>
+
+<p> This suggests that the present backdoor login program was
+created somewhere under <tt>/victim/etc/.tmp/.tmp</tt> and then
+moved to <tt>/bin/login</tt>.  Again, the <tt>fls</tt> utility was
+able to recover the deleted file name, as the following fragment
+from a MACtime report shows:  </p>
+
+<blockquote>
+
+<pre>
+Sep 25 17:34:20
+  12207 ..c -rwxr-xr-x root  /victim/etc/.tmp/.tmp/l &lt;60257&gt; (deleted)
+</pre>
+
+</blockquote>
+
+<p> The files and directories with such suspicious names as
+<tt>.tmp</tt> and <tt>.l</tt> were created when the intruder returned
+for a second visit at 17:34.  But instead of proceeding with an
+analysis of that episode, we have to take a step back and put the
+intrusion in its proper context.  </p>
+
+<h2>4.17 Loss of innocence </h2>
+
+<p> This intrusion was a quick and automated job. The whole break-in,
+from first contact to backdoor test, was completed in less than a
+minute. The intruder did not attempt to erase any traces. No logfiles
+were edited, no padding was added to the backdoor login program in
+order to match the file size and file checksum of the original
+login program, and no attempts were made to forge file time stamps.
+In fact, the intruder tried none of the cool tricks that we mention
+elsewhere in this book.  </p>
+
+<p> This absence of concern for detection is typical for intrusions
+that automatically set up large distributed denial-of-service
+software networks.  In order for such a network to be effective,
+an intruder needs control over dozens or even hundreds of systems.
+When you have a whole army of systems at your disposal, the loss
+of a few soldiers is not a problem. Any losses are easily compensated
+for by finding new recruits.  </p>
+
+<p> At this point we would continue the post-mortem analysis by
+looking at MACtimes from the second intruder's visit. We would find
+some of the tools that the intruder left behind, including the
+<tt>floodnet</tt> denial of service software. This would lead us
+into another round of reverse engineering, inode analysis, and so
+on. But doing so would take up too much space in this book.  And
+it would not be fair to you, the reader.  </p>
+
+<p> We have a confession to make: the machine that is described in
+this chapter was not really an innocent victim of an evil intruder.
+In reality, the machine was a honeypot that was set up solely for
+the purpose of being found and compromised (see sidebar). The owner
+of the machine kindly asked us if we were willing to do a post-mortem
+analysis and share what we could learn from the file system image
+and from a very limited subset of his network sniffer recordings.
+We took up the challenge.  What we learned from the system exceeded
+our expectations, although some of our findings had little to do
+with the assignment that was initially given to us.  </p>
+
+<table border="1" cellpadding="10" bgcolor="#f0f0f0">
+
+<tr> <td>
+
+<p> <strong>Side bar: honeypots </strong> </p>
+
+<p> A honey pot machine is a trap for intruders. In "An Evening
+with Berferd" Bill Cheswick describes how he and colleagues set up
+their jail machine, also known as roach motel [Cheswick, 1992].
+They monitored
+the intruder in an environment where he could do no harm, while at
+the same time luring him away from more precious resources.  </p>
+
+<p> In the "The Cuckoo's Egg" Cliff Stoll describes how he invented
+a complete governmental project with realistic-looking documents
+and memoranda [Stoll, 1989]. The intruder(s) spent long hours
+examining
+and downloading the information, giving Cliff plenty opportunity
+for his tracing efforts.  </p>
+
+<p> The machine that features in this chapter was part of the
+Honeynet project [Honeynet project, 2004].  While we
+examined the
+data that the owner of the system kindly made available to us, we
+could not fail to
+notice how tricky it can be to operate a honey pot.  This sidebar
+points out the real or potential pitfalls that were most obvious
+to us.  </p>
+
+<p> Disk images of a similar break-in are available for analysis.
+You can find them on-line via the Honeynet project's website
+[Honeynet project, 2001].  The lessons described in this chapter
+were applied when preparing this material. </p>
+
+<p> <strong>  Downstream liability </strong> </p>
+
+<p> It may be exciting to lure an intruder into your honey pot.
+Other people will be less amused when they find out that you are
+providing the intruder with a launch pad for attacks on their
+systems.  Unless you have the resources to watch your honey pot
+around the clock in real time, you have to severely limit its
+ability to connect to other systems.  </p>
+
+<p> <strong>  History keeps coming back </strong> </p>
+
+<p> As we discussed in elsewhere in this book, computer systems
+can be like the tar pits of old, with the bones, carcasses, and
+fossilized remains of the past in the unallocated storage areas.
+Using the low-level techniques described in chapter 3 we found
+files from operating systems that were installed previously on the
+same disk, including firewall configuration files and other items
+that could be of interest for an intruder.  </p>
+
+<p> With a network honey pot machine, erasing past history is simply
+a matter of writing zeros over the entire disk before installing
+the operating system from installation media. After that, no remote
+intruder is going to be able to see files from a previous life of
+the machine. Overwriting with zeros also has the
+
+benefit that disk image copies compress better, and that deleted
+files are easier to find.  </p>
+
+<p> <strong>  Information leaks </strong> </p>
+
+<p> A not so obvious pitfall is using the honey pot machine for
+real work.  Even a remote login from the honey pot into a sensitive
+machine can be enough to expose information to intruders.  If you
+let sensitive information into the honey pot via whatever means,
+then it may stick forever in unallocated storage space or in swap
+space until you explicitly erase it.  </p>
+
+<p> <strong>  False evidence </strong> </p>
+
+<p> It can be really tempting to use the honey pot machine for your
+own break-ins and other security exercises.  After all, the machine
+exists solely for the purpose of being broken into.  The problem
+with using a honey pot machine for target practice is that you're
+literally shooting yourself into the foot, by producing massive
+amounts of false evidence.  It quickly becomes difficult to
+distinguish between the acts from random (or not-so-random) intruders
+and the acts from your own personnel.  </p>
+
+</td> </tr> </table>
+
+<h2>4.18 Conclusion </h2>
+
+<p> The case described in this chapter follows a general pattern.
+The initial signal that something was amiss came from network
+logging.  Local logfiles provided the host-side view of what
+happened.  </p>
+
+<p> The post-mortem analysis was driven almost entirely by MACtime
+information.  While unraveling the pattern of existing file MACtimes
+we came upon a suspected login backdoor program. A simple reverse
+engineering analysis confirmed our initial suspicion. Existing file
+MACtimes also showed indications that the login backdoor program
+was replaced in a later intruder session. The analysis of deleted
+file MACtimes provided additional detail, and confirmed many details
+that we already knew from existing file MACtimes and contents.
+</p>
+
+<p> The results from inode sequence number analysis provided
+additional detail, and confirmed what we already suspected from
+existing file MACtime analysis.  On Solaris systems, only inode
+sequence number analysis would provide information about the initial
+location of a deleted file.  Inode sequence numbers provide another
+piece of forensic information that is hard but not impossible to
+forge.  </p>
+
+<p> Our approach to post-mortem analysis is straightforward. The
+bulk of the work is to painstakingly verify each finding, by
+examining all available sources of information and by comparing
+them for consistency.  The techniques demonstrated here provide a
+great deal of insight into what happened. But none of this would
+have helped us to look outside the box.  Once we had figured the
+general sequence of events of this particular intrusion we started
+to look between the cracks.  By straying from the beaten path, a
+path that we had beaten ourselves in the past, we learned new and
+unexpected things, such as how tricky it can be to operate a honeypot
+machine.  </p>
+
+<hr>
+
+<h2> References </h2>
+
+<p> [Card, 1994] Remy Card, Theodore Ts'o, Stephen Tweedie, "Design
+and Implementation of the Second Extended Filesystem".  Proceedings
+of the First Dutch Internation al Symposium on Linux, Amsterdam,
+December 8-9, 1994. <br>
+<a href="http://web.mit.edu/tytso/www/linux/ext2intro.html">
+http://web.mit.edu/tytso/www/linux/ext2intro.html</a> </p>
+
+<p> [Carrier, 2004] The Sleuth Kit by Brian Carrier, 2004.  <br>
+<a href="http://www.sleuthkit.org/"> http://www.sleuthkit.org/</a>.
+</p>
+
+<p> [Cheswick, 1992] Bill Cheswick, "An Evening with Berferd, In Which
+a Cracker is Lured, Endured, and Studied", Proceedings of the Winter
+USENIX Conference, San Francisco, January 1992.  <br> 
+<a href="http://research.lumeta.com/ches/papers/berferd.ps">
+http://research.lumeta.com/ches/papers/berferd.ps</a>.  </p>
+
+<p> [CVE, 2000] The Common Vulnerabilities and Exposures database,
+entry CVE-2000-0666. <br>
+<a href="http://cve.mitre.org/"> http://cve.mitre.org/</a> </p>
+
+<p> [Dasan, 2001] Vasanthan Dasan, Alex Noordergraaf, Lou Ordorica,
+"The Solaris" Fingerprint Database - A Security Tool for Solaris
+Operating Environment Files". Sun BluePrints" OnLine - May 2001.
+<br>
+<a href="http://www.sun.com/blueprints/0501/Fingerprint.pdf">
+http://www.sun.com/blueprints/0501/Fingerprint.pdf</a> <br>
+<a href="http://sunsolve.sun.com/pub-cgi/fileFingerprints.pl">
+http://sunsolve.sun.com/pub-cgi/fileFingerprints.pl</a> </p>
+
+<p> [Fire, 2004] The Forensic and Incident Response Environment
+bootable CD, 2004.  <br>
+<a href="http://biatchux.dmzs.com/"> http://biatchux.dmzs.com/</a>
+</p>
+
+<p> [Honeynet project, 2001] The Honeynet Project's Forensic
+Challenge, January, 2001. <br>
+<a href="http://project.honeynet.org/challenge/">
+http://project.honeynet.org/challenge/</a> </p>
+
+<p> [Honeynet project, 2004] The Honeynet Project, "Know Your
+Enemy".  Addison-Wesley, 2004.  </p>
+
+<p> [Knoppix, 2004a] KNOPPIX Linux Live CD, 2004.  <br>
+<a href="http://www.knoppix.org/"> http://www.knoppix.org/</a>
+</p>
+
+<p> [Knoppix, 2004b]KNOPPIX security tools distribution, 2004. <br>
+<a href="http://www.knoppix-std.org/"> http://www.knoppix-std.org/</a>
+</p>
+
+<p> [Known Goods, 2004] The Known Goods search engine, 2004.  <br>
+<a href="http://www.knowngoods.org/"> http://www.knowngoods.org/</a>
+</p>
+
+<p> [McKusick, 1984] Marshall K. McKusick, William N. Joy, Samuel
+J.  Leffler, and Robert S. Fabry, "A Fast File System for UNIX".
+ACM Transactions on Computer Systems 2, 3 (August 1984), 181-197.
+<br>
+<a href="http://docs.freebsd.org/44doc/smm/05.fastfs/paper.pdf">
+http://docs.freebsd.org/44doc/smm/05.fastfs/paper.pdf</a> </p>
+
+<p> [Hobbit, 1996] Netcat version 1.10 by Hobbit, 1996.
+<br>
+<a href="http://coast.cs.purdue.edu/pub/tools/unix/netutils/netcat/">
+http://coast.cs.purdue.edu/pub/tools/unix/netutils/netcat/</a> </p>
+
+<p> [NIST, 2004] The NIST National Software Reference Library,
+2004.  <br>
+<a href="http://www.nsrl.nist.gov/"> http://www.nsrl.nist.gov/</a>
+</p>
+
+<p> [Stoll, 1989] Clifford Stoll, "The Cuckoo's Egg", Doubleday,
+1989.  </p>
+
+</body>
+
+</html>
+

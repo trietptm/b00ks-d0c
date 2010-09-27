@@ -1,0 +1,108 @@
+host #linux ubd0=root_fs.rh-7.2-server.pristine.20020312 eth0=tuntap,,,192.168.0.254
+
+
+tracing thread pid = 6021
+Linux version 2.4.19-5um (jdike@uml.karaya.com) (gcc version 2.96 20000731 (Red Hat Linux 7.1 2.96-81)) #2 Mon Sep 16 15:41:15 EDT 2002
+On node 0 totalpages: 8192
+zone(0): 8192 pages.
+zone(1): 0 pages.
+zone(2): 0 pages.
+Kernel command line: ubd0=root_fs.rh-7.2-server.pristine.20020312 eth0=tuntap,,,192.168.0.254 root=/dev/ubd0
+Calibrating delay loop... 1172.18 BogoMIPS
+Memory: 30192k available
+Dentry cache hash table entries: 4096 (order: 3, 32768 bytes)
+Inode cache hash table entries: 2048 (order: 2, 16384 bytes)
+Mount-cache hash table entries: 512 (order: 0, 4096 bytes)
+Buffer-cache hash table entries: 1024 (order: 0, 4096 bytes)
+Page-cache hash table entries: 8192 (order: 3, 32768 bytes)
+Checking for host processor cmov support...Yes
+Checking for host processor xmm support...No
+Checking that ptrace can change system call numbers...OK
+Checking that host ptys support output SIGIO...Yes
+Checking that host ptys support SIGIO on close...No, enabling workaround
+POSIX conformance testing by UNIFIX
+Linux NET4.0 for Linux 2.4
+Based upon Swansea University Computer Society NET3.039
+Initializing RT netlink socket
+Starting kswapd
+VFS: Diskquotas version dquot_6.4.0 initialized
+Journalled Block Device driver loaded
+devfs: v1.12a (20020514) Richard Gooch (rgooch@atnf.csiro.au)
+devfs: boot_options: 0x1
+Installing knfsd (copyright (C) 1996 okir@monad.swb.de).
+pty: 256 Unix98 ptys configured
+RAMDISK driver initialized: 16 RAM disks of 4096K size 1024 blocksize
+loop: loaded (max 8 devices)
+Universal TUN/TAP device driver 1.5 (C)1999-2002 Maxim Krasnyansky
+SCSI subsystem driver Revision: 1.00
+NET4: Linux TCP/IP 1.0 for NET4.0
+IP Protocols: ICMP, UDP, TCP
+IP: routing cache hash table of 512 buckets, 4Kbytes
+TCP: Hash tables configured (established 2048 bind 2048)
+NET4: Unix domain sockets 1.0/SMP for Linux NET4.0.
+Netdevice 0 : TUN/TAP backend - IP = 192.168.0.254
+Initializing software serial port version 1
+mconsole (version 2) initialized on /root/.uml/7tzUco/mconsole
+Partition check:
+ ubda: unknown partition table
+UML Audio Relay
+Initializing stdio console driver
+VFS: Mounted root (ext2 filesystem) readonly.
+Mounted devfs on /dev
+INIT: version 2.78 booting
+			Welcome to Red Hat Linux
+		Press 'I' to enter interactive startup.
+Mounting proc filesystem:  [  OK  ]
+Configuring kernel parameters:  [  OK  ]
+Setting clock : Tue Oct  8 17:21:22 EDT 2002 [  OK  ]
+Activating swap partitions:  [  OK  ]
+Setting hostname redhat72.goober.org:  [  OK  ]
+Checking root filesystem
+/dev/ubd/0: clean, 38754/64768 files, 215378/259072 blocks
+[/sbin/fsck.ext2 (1) -- /] fsck.ext2 -a /dev/ubd/0 
+[  OK  ]
+Remounting root filesystem in read-write mode:  [  OK  ]
+Finding module dependencies:  depmod: cannot read ELF header from /lib/modules/2.4.19-5um/modules.dep
+depmod: cannot read ELF header from /lib/modules/2.4.19-5um/modules.generic_string
+depmod: /lib/modules/2.4.19-5um/modules.ieee1394map is not an ELF file
+depmod: /lib/modules/2.4.19-5um/modules.isapnpmap is not an ELF file
+depmod: cannot read ELF header from /lib/modules/2.4.19-5um/modules.parportmap
+depmod: /lib/modules/2.4.19-5um/modules.pcimap is not an ELF file
+depmod: cannot read ELF header from /lib/modules/2.4.19-5um/modules.pnpbiosmap
+depmod: /lib/modules/2.4.19-5um/modules.usbmap is not an ELF file
+[FAILED]
+Checking filesystems
+Checking all file systems.
+[  OK  ]
+Mounting local filesystems:  [  OK  ]
+Enabling local filesystem quotas:  [  OK  ]
+swapon: cannot stat /dev/ubd/1: No such file or directory
+                                                         Enabling swap space:  [  OK  ]
+INIT: Entering runlevel: 3
+Entering non-interactive startup
+Setting network parameters:  [  OK  ]
+Bringing up interface lo:  [  OK  ]
+Bringing up interface eth0:  [  OK  ]
+SIOCADDRT: File exists
+SIOCADDRT: File exists
+Starting system logger: [  OK  ]
+Starting kernel logger: [  OK  ]
+Starting portmapper: [  OK  ]
+Initializing random number generator:  [  OK  ]
+Mounting other filesystems:  [  OK  ]
+Starting identd: [  OK  ]
+Starting snmpd: [  OK  ]
+Starting named: [  OK  ]
+Starting sshd:  [  OK  ]
+Starting xinetd: [  OK  ]
+Starting sendmail: [  OK  ]
+Starting httpd: [  OK  ]
+Starting crond: [  OK  ]
+Starting squid:  [  OK  ]
+Starting SMB services: [  OK  ]
+Starting NMB services: [  OK  ]
+Please run makehistory and/or makedbz before starting innd.
+Running Linuxconf hooks:  [  OK  ]
+
+Unauthorized access to this system is strictly prohibited.
+redhat72 login: 

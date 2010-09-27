@@ -1,0 +1,282 @@
+<!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+
+<title>Forensic Discovery</title>
+
+</head>
+
+<body bgcolor="#ffffff">
+
+<h1>Preface</h1>
+
+<p> Today, only minutes pass between plugging into the Internet
+and being attacked by some other machine - and that's only the
+background
+noise level of non-targeted attacks.  There was a time when a
+computer
+could tick away year after year without coming under attack. For
+examples of Internet background radiation studies, see [CAIDA,
+2003], [Cymru, 2004] or [IMS, 2004]. </p>
+
+<p> With this book we summarize experiences in post-mortem intrusion
+analysis that we accumulated over a decade of time. During this
+episode the Internet grew explosively, from less than a hundred
+thousand connected hosts to more than a hundred million [ISC, 2004].
+This increase in the number of connected hosts led to an even more
+dramatic - if less surprising - increase in the frequency of 
+computer and network
+intrusions. As the network changed character and scope, so did the
+character and scope of the intrusions that we were faced with.
+We're pleased to share some of the learning opportunities with the
+reader.  </p>
+
+<p> In that same decade, however, little if anything changed in
+the way that computer systems handle information.  In fact, we
+feel that it is safe to
+claim that computer systems haven't changed fundamentally in the
+last 35 years - the entire lifetime of the Internet and of many
+operating systems that are in use today, including Linux, Windows
+and many others.  Although our observations are derived from today's
+systems, we optimistically expect that at least some of our insights
+will remain valid for another decade.  </p>
+
+<h2>What you can expect to learn from this book</h2>
+
+<p> The premise of the book is that forensic information can be
+found everywhere you look. With this guiding principle in mind we
+develop tools to collect information from obvious and
+not so obvious sources, we walk through analyses of real intrusions
+in detail, and we discuss the limitations of our approach.  </p>
+
+<p> Although we illustrate our approach with specific forensic
+tools in specific system environments, we do not provide cookbooks
+for how to use those tools, nor do we provide checklists for
+step-by-step investigation.  Instead, we provide a background on
+how information persists, how information about past
+events may be recovered, and how trustworthiness of that information
+may be affected by deliberate or accidental processes.  </p>
+
+<p> In our case studies and examples we deviate from traditional
+computer forensics and head towards the study of system dynamics.
+Volatility and persistence of file systems and memory are pervasive
+topics in our book.  And while the majority of our examples are
+from Solaris, FreeBSD and Linux systems, Microsoft's Windows shows
+up on occasion as well. Our emphasis is on the underlying principles
+that these systems have in common: we look for inherent properties
+of computer systems, rather than accidental differences or
+superficial features.  </p>
+
+<p> Our global themes are problem solving, analysis and discovery,
+with a focus on reconstruction of past events. This may help you
+to discover why events transpired, but that is generally outside
+the scope of this work.  Knowing what happened will leave you better
+prepared the next time something bad is about to happen, even when
+it is not sufficient to prevent future problems.  We should note
+up-front, however, that we do not cover the detection or
+prevention of intrusions.  We do show that traces from one
+intrusion can lead to the discovery of other intrusions, and we
+point out how forensic information may be affected by system
+protection mechanisms, and by their failures.  </p>
+
+<h2>Intended audience</h2>
+
+<p> The target audience of the book is anyone who wants to deepen
+their understanding of how computer systems work, as well as anyone
+who is likely to become involved with the technical aspects of
+computer intrusion or system analysis. These are not only system
+administrators, incident responders, other computer security
+professionals, or forensic analysts, but also anyone who is concerned
+about the impact of computer forensics on privacy.  </p>
+
+<p> While we have worked hard to make the material accessible to
+non-expert readers, we definitely do not target the novice computer
+user.  As a minimal requirement, we assume strong familiarity with
+the basic concepts of UNIX or Windows file systems, networking,
+and processes.  </p>
+
+<h2>Organization of this book</h2>
+
+<p> The book has three parts: we present foundations first, proceed
+with analysis of processes, systems and files, and end the book
+with discovery.
+We do not expect you to read everything in the order presented.
+Nevertheless, we suggest that you start with the first chapter, as
+it introduces all the major themes that return throughout the book.
+</p>
+
+<p> In Part 1, "Basic Concepts", we introduce general high-level
+concepts,
+as well as basic techniques that we rely on in later chapters. </p>
+
+<ul>
+
+<li> <p> Chapter 1, "The spirit of forensic discovery", shows how
+general properties of computer architecture can impact post-mortem
+analysis.  Many of the limitations and surprises that we encounter
+later in the book can already be anticipated by reading this chapter.
+</p>
+
+<li> <p> Chapter 2, "Time machines", introduces the concept of
+timelining, using examples of host-based and network-based information,
+including information from the domain name system.  We look at an
+intrusion that stretches out over an entire year, and show examples
+of finding time information found in non-obvious places.  </p>
+
+</ul>
+
+<p> In Part 2, "Exploring System Abstractions", we explore the
+abstractions of file systems, processes,
+and operating systems. The focus of these chapters is on analysis:
+making sense of information found on a computer system and judging
+the trustworthiness of our findings. </p>
+
+<ul>
+
+<li> <p> Chapter 3, "File system basics", introduces basic file
+system concepts, as well as forensic tools and techniques that we
+will use in subsequent chapters.  </p>
+
+<li> <p> Chapter 4, "File system analysis", unravels an intrusion
+by examining the file system of a compromised machine in detail.
+We look at both existing files and deleted information.  As in
+chapter 2, we use correlation to connect different observations,
+and to determine their consistency.  </p>
+
+<li> <p> Chapter 5, "Systems and subversion", is about the environment
+in which user processes and operating systems execute.  We look at
+subversion of observations, ranging from straightforward changes
+to system utilities to almost undetectable malicious kernel modules,
+and detection of such subversion.  </p>
+
+<li> <p> Chapter 6, "Malware analysis basics", presents techniques
+to find out the purpose of a process or of a program file that was
+left behind after an intrusion, as well as safeguards to prevent
+malware from escaping, and their limitations.  </p>
+
+</ul>
+
+<p> In Part 3, "Beyond the Abstractions", we look beyond the
+constraints of the file, process
+and operating system abstractions. The focus of this part is on
+discovery, as we study the effects of system architecture on the
+decay of information.  </p>
+
+<ul>
+
+<li> <p> Chapter 7, "Persistence of deleted file information",
+shows that large amounts of deleted file information can survive
+intact for extended periods of time. We find half-lives of the
+order of 2-4 weeks on actively used file systems.  <p>
+
+<li> <p> Chapter 8, "Beyond processes", shows examples of persistence
+of information in main memory, including decrypted content of
+encrypted files. We find large variations in persistence, and
+correlate these variations to operating system architecture
+properties.  </p>
+
+</ul>
+
+<p> The appendices present background material: Appendix A is an
+introduction to the Coroner's Toolkit and related software, and
+Appendix B presents our current insights with respect to the order
+of volatility and its ramifications when capturing forensic
+information from a computer system.  </p>
+
+<h2>Conventions used in this book </h2>
+
+<p> In the examples we use <tt>constant</tt> width font for program
+code, command names, and command input/output. User input is shown in
+<b><tt>bold</tt></b> constant width font. We use <tt>$</tt> as the
+shell command prompt for unprivileged users, and reserve <tt>#</tt>
+for super-user shells. Capitalized names, such as Argus, are used
+when we write about a system instead of individual commands.  </p>
+
+<p> Whenever we write UNIX, we implicitly refer to Solaris, FreeBSD,
+and Linux. In some examples we include the operating system name
+in the command prompt.  For example, we use <tt>solaris$</tt> to
+indicate that an example is specific to Solaris systems. </p>
+
+<p> As hinted at earlier, many examples in this book are taken from
+real-life intrusions.
+In order to protect privacy we anonymize information about systems
+that are not our own.  For example, we replace real network addresses
+by private network addresses such as 10.0.0.1 or 192.168.0.1, and
+replace hostnames or user names. Where appropriate we even replace
+the time and time zone. </p>
+
+<h2>Websites </h2>
+
+<p> The examples in this book feature several small programs that
+were written for the purpose of discovery and analysis. Often we
+were unable to include the entire code listing because the additional
+detail would only detract from the purpose of the book. The complete
+source code for these and other programs is made available online
+at:
+
+<blockquote>
+http://www.fish2.com/forensics/ <br>
+http://www.porcupine.org/forensics/
+</blockquote>
+
+<p> On the same websites you will also find bonus material, such
+as case studies that were not included in the book and pointers
+to other resources.  </p>
+
+<h2>Acknowledgments </h2>
+
+<p> We owe a great deal of gratitude to Karen Gettman, Brian
+Kernighan, and the rest of Addison-Wesley for their patience and
+support over the many years that this book has been under construction.
+</p>
+
+<p> While we take full responsibility for any mistakes, this book
+would not be what it is without our review team. In particular we
+would like to thank (in alphabetical order): Aleph1, Brad Powell, Brian
+Carrier, Douglas Schales, Elizabeth Zwicky, Eoghan Casey, Fred
+Cohen, Gary McGraw, Muffy Barkocy, Rik Farrow, and Steve Romig.
+Ben Pfaff and
+Jim Chow helped with a chapter, and Dalya Sachs provided valuable
+assistance with editing an early version of the text.  Tsutomu
+Shimumura inspired us to do things that we thought were beyond our
+skills.
+Wietse would like to thank the FIRST community for the opportunity
+to use them as a sounding board for many of the ideas that were
+developed for this book. And contrary to current practice, the
+manuscript was produced as HTML draft with the <tt>vi</tt> text
+editor plus a host of little custom scripts and standard UNIX tools
+that helped us finish the book. </p>
+
+<blockquote> Dan Farmer <br> <tt>zen@fish2.com</tt> </blockquote>
+
+<blockquote> Wietse Venema <br> <tt>wietse@porcupine.org</tt> </blockquote>
+
+<hr> 
+
+<h2> References </h2>
+
+<p> [CAIDA, 2003] The CAIDA network telescope project. <br>
+<a href="http://www.caida.org/analysis/security/telescope/">
+http://www.caida.org/analysis/security/telescope/</a> </p>
+
+<p> [Cymru, 2004] Team Cymru Darknet project. <br>
+<a href="http://www.cymru.com/Darknet/index.html">
+http://www.cymru.com/Darknet/index.html</a> </p>
+
+<p> [IMS, 2004] The University of Michigan Internet Motion Sensor
+project. <br>
+<a href="http://ims.eecs.umich.edu/"> http://ims.eecs.umich.edu/</a>
+</p>
+
+<p> [ISC, 2004] Internet Systems Consortium, ISC Domain Survey:
+Number of Internet Hosts. <br>
+<a href="http://www.isc.org/"> http://www.isc.org/</a>.  </p>
+
+</body>
+
+</html>

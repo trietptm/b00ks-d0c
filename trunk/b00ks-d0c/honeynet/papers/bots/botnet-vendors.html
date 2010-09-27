@@ -1,0 +1,438 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <meta name="description" content="Tracking Botnets with help of Honeynets" />
+    <meta name="keywords" content="hacking,security,honeypots,honeynets,Honeynet Project,botnets,bots" />
+    <title>Know your Enemy: Tracking Botnets - Vendors</title>
+    <link rel="stylesheet" type="text/css" href="botnets.css" />
+  </head>
+
+<body>
+
+<div id="header">
+	<h1>Know your Enemy:<br /> Tracking Botnets - Vendors</h1>
+<h3 id="subtitle">The advantage of honeypots </h3>
+<p id="metainfo">
+  <a href="mailto:project@honeynet.org?Subject=Know Your Enemy">Honeynet Project</a><br />
+  <a href="http://www.honeynet.org">http://www.honeynet.org</a><br />
+  Last Modified: 17 February, 2005
+</p>
+</div>
+
+
+<p>
+Anti-virus companies like Symantec are 
+interested in obtaining information about Botnets as they provide an excellent
+source on new kinds of malware. Once collected, these organizations publish information on Botnets, 
+unfortunately at times this information is not enough. We can leverage honeypots to collect
+the necessary information ourselves as we demonstrate below.  When it comes to publishing 
+information on Botnets, organizations like Symantec take two common approaches.
+
+
+<ol>
+
+	<li> If the binary of the bot is recognized, it is ignored as its already
+        known and documented.
+
+	<li> If the binary of the bot requires a new signature, they can
+	publish data about the Botnet server. </li>
+
+</ol>
+
+<p>We think that it is better to choose the second option. People who are using
+a virus scanner are not potential conscription victims, and nobody wants his
+Botnet getting published.  But we show now that the information that is published by Symantec is not
+enough to actually track Botnets - it is just a pressure for the operators. The
+following section is an irssi session connecting and watching two Botnets. <span
+	class="command">Commands</span> and <span class="comment"> comments</span>
+issued by us are color encoded.</p>
+
+<ol id="vendorlist">
+
+	<li> <a
+		href="http://securityresponse.symantec.com/avcenter/venc/data/w32.pejaybot.html#technicaldetails">http://securityresponse.symantec.com/avcenter/venc/data/w32.pejaybot.html#technicaldetails</a>
+
+<pre>
+
+!home.pj34r.us *** Looking up your hostname...
+!home.pj34r.us *** Couldn't resolve your hostname; using your IP address instead
+-!- Welcome to the pj34r IRC Network secfcs!secfcs@google.com
+<span class="comment">// we honestly decided to strip out IP-address</span>
+
+-!- Your host is home.pj34r.us, running version Unreal3.2.2
+-!- This server was created Mon Jan 10 2005 at 16:14:18 PST
+-!- home.pj34r.us Unreal3.2.2 iowghraAsORTVSxNCWqBzvdHtGp lvhopsmntikrRcaqOALQbSeKVfMGCuzNT
+-!- SAFELIST HCN MAXCHANNELS=25 CHANLIMIT=#:25 MAXLIST=b:60,e:60 NICKLEN=30 CHANNELLEN=32 TOPICLEN=307 KICKLEN=307 AWAYLEN=307 MAXTARGETS=20 WALLCHOPS
+WATCH=128 are supported by this server
+-!- SILENCE=15 MODES=12 CHANTYPES=# PREFIX=(qaohv)~&amp;@%+ CHANMODES=be,kfL,l,psmntirRcOAQKVGCuzNSMT NETWORK=pj34r CASEMAPPING=ascii EXTBAN=~,cqnr
+ELIST=MNUCT STATUSMSG=~&amp;@%+ EXCEPTS CMDS=KNOCK,MAP,DCCALLOW,USERIP are supported by this server
+-!- There are 1 users and 9360 invisible on 1 servers
+-!- 2 operator(s) online
+-!- 141 unknown connection(s)
+-!- 26 channels formed
+<span class="comment">// the bots hang around in 26 (sic!) channels</span>
+
+-!- I have 9361 clients and 0 servers
+-!- Current Local Users: 9361  Max: 9365
+-!- Current Global Users: 9361  Max: 9365
+<span class="comment">// seems like a 10.000 Botnet on the first view.</span>
+<span class="comment">// but this value is often inaccurate because attackers hardcode some values.</span>
+
+-!- MOTD File is missing
+-!- Mode change [+iw] for user secfcs
+
+<span class="command">/stats a</span>
+-!- /Stats flags:
+-!- B - banversion - Send the ban version list
+-!- b - badword - Send the badwords list
+-!- C - link - Send the link block list
+-!- d - denylinkauto - Send the deny link (auto) block list
+-!- D - denylinkall - Send the deny link (all) block list
+-!- e - exceptthrottle - Send the except trottle block list
+-!- E - exceptban - Send the except ban block list
+-!- f - spamfilter - Send the spamfilter list
+-!- F - denydcc - Send the deny dcc and allow dcc block lists
+-!- G - gline - Send the gline list
+-!-   Extended flags: [+/-mrs] [mask] [reason] [setby]
+-!-    m Return glines matching/not matching the specified mask
+-!-    r Return glines with a reason matching/not matching the specified reason
+-!-    s Return glines set by/not set by clients matching the specified name
+-!- I - allow - Send the allow block list
+-!- j - officialchans - Send the offical channels list
+-!- K - kline - Send the ban user/ban ip/except ban block list
+-!- l - linkinfo - Send link information
+-!- L - linkinfoall - Send all link information
+-!- M - command - Send list of how many times each command was used
+-!- n - banrealname - Send the ban realname block list
+-!- O - oper - Send the oper block list
+-!- S - set - Send the set block list
+-!- s - shun - Send the shun list
+-!-   Extended flags: [+/-mrs] [mask] [reason] [setby]
+-!-    m Return shuns matching/not matching the specified mask
+-!-    r Return shuns with a reason matching/not matching the specified reason
+-!-    s Return shuns set by/not set by clients matching the specified name
+-!- P - port - Send information about ports
+-!- q - bannick - Send the ban nick block list
+-!- Q - sqline - Send the global qline list
+-!- r - chanrestrict - Send the channel deny/allow block list
+-!- t - tld - Send the tld block list
+-!- T - traffic - Send traffic information
+-!- u - uptime - Send the server uptime and connection count
+-!- U - uline - Send the ulines block list
+-!- v - denyver - Send the deny version block list
+-!- V - vhost - Send the vhost block list
+-!- X - notlink - Send the list of servers that are not current linked
+-!- Y - class - Send the class block list
+-!- Z - mem - Send memory usage information
+-!- * End of /STATS report
+<span class="comment">// often attackers forget to switch this off</span>
+
+<span class="command">/stats P</span>
+!home.pj34r.us *** Listener on 72.20.25.205:9832, clients 452. is PERM
+!home.pj34r.us *** Listener on 72.20.25.205:21045, clients 3. is PERM
+!home.pj34r.us *** Listener on 72.20.25.205:8126, clients 7467. is PERM clientsonly
+!home.pj34r.us *** Listener on 72.20.25.205:7000, clients 2. is PERM
+!home.pj34r.us *** Listener on 72.20.25.205:5662, clients 0. is PERM
+!home.pj34r.us *** Listener on 72.20.25.205:5226, clients 1573. is PERM
+!home.pj34r.us *** Listener on 72.20.25.205:6971, clients 0. is PERM
+-!- P End of /STATS report
+<span class="comment">// we never saw these values getting faked, so we take them as accurate guess.</span>
+<span class="comment">// 10.000 Bots are only on a single server so far.</span>
+
+<span class="command">/stats T</span>
+-!- accepts 3876280 refused 3757278
+-!- unknown commands 46 prefixes 0
+-!- nick collisions 0 unknown closes 1196562
+-!- wrong direction 0 empty 0
+-!- numerics seen 0 mode fakes 0
+-!- auth successes 0 fails 0
+-!- local connections 0 udp packets 0
+-!- Client Server
+-!- connected 765951 0
+-!- bytes sent 3075996.135K 0.0K
+-!- bytes recv 901930.525K 0.0K
+-!- time connected 1873628117 0
+-!- incoming rate 0.00 kb/s - outgoing rate 2.00 kb/s
+
+<span class="command">/stats u</span>
+-!- Server Up 4 days, 2:54:23
+-!- Highest connection count: 9554 (9554 clients)
+-!- u End of /STATS report
+
+<span class="command">/map</span>
+11:53 -!- home.pj34r.us  (9394)  69
+11:53 -!- End of /MAP
+
+<span class="command">/links</span>
+11:53 -!- home.pj34r.us home.pj34r.us 0 DosNet Linux IRCd
+11:53 -!- * End of /LINKS list.
+
+<span class="command">/WHOIS -YES *</span>
+
+<span class="command">/list -YES *</span>
+-!- Channel Users  Name
+-!- End of /LIST
+<span class="comment">// the botnet channels are set +sp</span>
+<span class="comment">// so they are hidden from outside</span>
+
+</pre>
+
+<p>So we got the following information about this Botnet: It is a single-server
+network with about 10.000 clients on 26 channels. The server is listening on
+seven ports, but we lack any information about channels names or nickname
+structure. Thus we can not track botnets as close as we want to. The only
+possibility is to just add a randomly named client to that server. Maybe the
+operators of the botnet do not notice this strange client. And if we have a bit
+luck, they send interesting information to all clients via WALLMSG or the
+server gets linked somewhere.</p>
+
+</li>
+
+<li> <a
+	href="http://securityresponse.symantec.com/avcenter/venc/data/backdoor.sdbot.aj.html#technicaldetails">http://securityresponse.symantec.com/avcenter/venc/data/backdoor.sdbot.aj.html#technicaldetails</a>
+
+<pre>
+-!- Irssi: Looking up moskemongo.biz
+-!- Irssi: Connecting to moskemongo.biz [213.113.114.213] port 59
+-!- Irssi: Connection to moskemongo.biz established
+!MoskeMongo.BIZ *** Looking up your hostname...
+!MoskeMongo.BIZ *** Found your hostname (cached)
+!MoskeMongo.BIZ *** If you are having problems connecting due to ping timeouts, please type /quote pong EC38C51C or /raw pong EC38C51C now.
+-!- Welcome to the ucofNET IRC Network secfcs!secfcs@google.com
+-!- Your host is MoskeMongo.BIZ, running version Unreal3.2.2
+-!- This server was created Tue Dec 14 2004 at 16:19:11 CET
+-!- MoskeMongo.BIZ Unreal3.2.2 iowghraAsORTVSxNCWqBzvdHtGp lvhopsmntikrRcaqOALQbSeKVfMGCuzNT
+-!- SAFELIST HCN MAXCHANNELS=10 CHANLIMIT=#:10 MAXLIST=b:60,e:60 NICKLEN=30 CHANNELLEN=32 TOPICLEN=307 KICKLEN=307 AWAYLEN=307 MAXTARGETS=20 WALLCHOPS
+WATCH=128 are supported by this server
+-!- SILENCE=15 MODES=12 CHANTYPES=# PREFIX=(qaohv)~&amp;@%+ CHANMODES=be,kfL,l,psmntirRcOAQKVGCuzNSMT NETWORK=ucofNET CASEMAPPING=ascii EXTBAN=~,cqnr
+ELIST=MNUCT STATUSMSG=~&amp;@%+ EXCEPTS CMDS=KNOCK,MAP,DCCALLOW,USERIP are supported by this server
+-!- There are 1 users and 1266 invisible on 1 servers
+-!- 2 operator(s) online
+-!- 5 unknown connection(s)
+-!- 5 channels formed
+-!- I have 1267 clients and 0 servers
+-!- Current Local Users: 1267  Max: 2381
+-!- Current Global Users: 1267  Max: 1439
+<span class="comment">// 1.2k is a small botnet, but quite destructive if you want it to be</span>
+
+-!- MOTD File is missing
+<span class="comment">// Message Of The Day (MOTD) is disabled on many botnets to save traffic</span>
+
+-!- Mode change [+iw] for user secfcs
+
+<span class="command">/map</span>
+-!- MoskeMongo.BIZ  (1292)  1
+-!- End of /MAP
+
+<span class="command">/links</span>
+11:58 -!- MoskeMongo.BIZ MoskeMongo.BIZ 0 ucofNET main server
+-!- * End of /LINKS list.
+
+<span class="command">/list</span>
+-!- Channel Users  Name
+-!- End of /LIST
+<span class="comment">// once again channels are hidden :\</span>
+
+<span class="command">/stats a</span>
+-!- /Stats flags:
+-!- B - banversion - Send the ban version list
+-!- b - badword - Send the badwords list
+-!- C - link - Send the link block list
+-!- d - denylinkauto - Send the deny link (auto) block list
+-!- D - denylinkall - Send the deny link (all) block list
+-!- e - exceptthrottle - Send the except trottle block list
+-!- E - exceptban - Send the except ban block list
+-!- f - spamfilter - Send the spamfilter list
+-!- F - denydcc - Send the deny dcc and allow dcc block lists
+-!- G - gline - Send the gline list
+-!-   Extended flags: [+/-mrs] [mask] [reason] [setby]
+-!-    m Return glines matching/not matching the specified mask
+-!-    r Return glines with a reason matching/not matching the specified reason
+-!-    s Return glines set by/not set by clients matching the specified name
+-!- I - allow - Send the allow block list
+-!- j - officialchans - Send the offical channels list
+-!- K - kline - Send the ban user/ban ip/except ban block list
+-!- l - linkinfo - Send link information
+-!- L - linkinfoall - Send all link information
+-!- M - command - Send list of how many times each command was used
+-!- n - banrealname - Send the ban realname block list
+-!- O - oper - Send the oper block list
+-!- S - set - Send the set block list
+-!- s - shun - Send the shun list
+-!-   Extended flags: [+/-mrs] [mask] [reason] [setby]
+-!-    m Return shuns matching/not matching the specified mask
+-!-    r Return shuns with a reason matching/not matching the specified reason
+-!-    s Return shuns set by/not set by clients matching the specified name
+-!- P - port - Send information about ports
+-!- q - bannick - Send the ban nick block list
+-!- Q - sqline - Send the global qline list
+-!- r - chanrestrict - Send the channel deny/allow block list
+-!- t - tld - Send the tld block list
+-!- T - traffic - Send traffic information
+-!- u - uptime - Send the server uptime and connection count
+-!- U - uline - Send the ulines block list
+-!- v - denyver - Send the deny version block list
+-!- V - vhost - Send the vhost block list
+-!- X - notlink - Send the list of servers that are not current linked
+-!- Y - class - Send the class block list
+-!- Z - mem - Send memory usage information
+-!- * End of /STATS report
+<span class="comment">// but at least the IRCd is bad configured</span>
+
+<span class="command">/stats P</span>
+!MoskeMongo.BIZ *** Listener on *:59, clients 11. is PERM
+!MoskeMongo.BIZ *** Listener on *:443, clients 1145. is PERM
+!MoskeMongo.BIZ *** Listener on *:6667, clients 133. is PERM
+-!- P End of /STATS report
+
+<span class="command">/stats T</span>
+-!- accepts 99407 refused 68764
+-!- unknown commands 1 prefixes 0
+-!- nick collisions 0 unknown closes 10646
+-!- wrong direction 0 empty 0
+-!- numerics seen 0 mode fakes 0
+-!- auth successes 0 fails 0
+-!- local connections 1 udp packets 0
+-!- Client Server
+-!- connected 20038 0
+-!- bytes sent 84864.352K 0.0K
+-!- bytes recv 32342.833K 0.0K
+-!- time connected 64309972 0
+-!- incoming rate 0.00 kb/s - outgoing rate 1.00 kb/s
+-!- T End of /STATS report
+
+<span class="command">/stats V</span>
+-!- vhost i.hate.microsefrs.com stskeeps *@*.image.dk
+-!- V End of /STATS report
+<span class="comment">// we saw similar named vhost some time ago</span>
+<span class="comment">// seems a known network</span>
+
+<span class="command">/stats u</span>
+-!- Server Up 0 days, 18:15:19
+-!- Highest connection count: 1439 (2381 clients)
+-!- u End of /STATS report
+
+</pre>
+
+<p>Once again, we are just able to add a client idling on the server. We lack
+information about nickname structure and Botnet channels since Symantec did not
+offers these informations.</p>
+
+</li>
+
+<li> <a
+	href="http://securityresponse.symantec.com/avcenter/venc/data/backdoor.sdbot.ao.html#technicaldetails">http://securityresponse.symantec.com/avcenter/venc/data/backdoor.sdbot.ao.html#technicaldetails</a>
+<br />
+
+This time we use a telnet session to connect to the Botnet server to see some
+interesting banner.
+
+<pre>
+$ telnet axess.warezfr.ca 2784
+
+Trying 24.226.214.149...
+Connected to 214-149.sh.cgocable.ca.
+Escape character is '^]'.
+QUIT
+NICK foo
+NICK :You have not registered
+USER foo 0 0 :foo
+NICK foo
+:www.packetstormsecurity.org 001 foo :www.packetstormsecurity.org
+:www.packetstormsecurity.org 002 foo :All Ip Is Logged
+:www.packetstormsecurity.org 003 foo :This Server Was Created For Honey-Pot
+<span class="comment">// a botnet for us? hooray!</span>
+:www.packetstormsecurity.org 004 foo :Cheking Security Server
+<span class="comment">// checking spelling</span>
+:www.packetstormsecurity.org 005 foo :No Hacker Supported On This Server
+:www.packetstormsecurity.org 005 foo :No Hacker Supported On This Server
+<span class="comment">// oh no, they have disabled it...</span>
+:www.packetstormsecurity.org 251 foo :There are 10 users and 1 invisible on 1 servers
+:www.packetstormsecurity.org 252 foo 0 :operator(s) online
+:www.packetstormsecurity.org 254 foo 1 :channels formed
+:www.packetstormsecurity.org 255 foo :I have 10 clients and 1 servers
+:www.packetstormsecurity.org 265 foo :Current Local Users: 1  Max: 5
+:www.packetstormsecurity.org 266 foo :Current Global Users: 10  Max: 11
+:www.packetstormsecurity.org 375 foo :- www.packetstormsecurity.org Message of the Day -
+:www.packetstormsecurity.org 372 foo :- 25/12/2004 16:48
+:www.packetstormsecurity.org 372 foo :-
+:www.packetstormsecurity.org 372 foo :- Gouvernement Security Network
+:www.packetstormsecurity.org 372 foo :-
+:www.packetstormsecurity.org 372 foo :-
+:www.packetstormsecurity.org 372 foo :- Http://www.FBI.gov
+:www.packetstormsecurity.org 372 foo :-
+:www.packetstormsecurity.org 372 foo :- Federal Bureau of Investigation
+:www.packetstormsecurity.org 372 foo :- Attention: Content Manager, FBI Home Page 
+:www.packetstormsecurity.org 372 foo :- 935 Pennsylvania Avenue, NW, Room 7350
+:www.packetstormsecurity.org 372 foo :- Washington, DC 20535
+:www.packetstormsecurity.org 372 foo :- (202) 324-3000
+:www.packetstormsecurity.org 372 foo :- +++++++++++++++++++++++++++++++++++++++++++++
+:www.packetstormsecurity.org 372 foo :-
+:www.packetstormsecurity.org 372 foo :-
+:www.packetstormsecurity.org 372 foo :- Http://www.CIA.gov
+:www.packetstormsecurity.org 372 foo :- By postal mail:
+:www.packetstormsecurity.org 372 foo :- Central Intelligence Agency
+:www.packetstormsecurity.org 372 foo :- Office of Public Affairs
+:www.packetstormsecurity.org 372 foo :- Washington, D.C. 20505
+:www.packetstormsecurity.org 372 foo :-
+:www.packetstormsecurity.org 372 foo :- By phone:
+:www.packetstormsecurity.org 372 foo :- (703) 482-0623
+:www.packetstormsecurity.org 372 foo :- 7:00 a.m. to 5:00 p.m., US Eastern time
+:www.packetstormsecurity.org 372 foo :-
+:www.packetstormsecurity.org 372 foo :- By fax:
+:www.packetstormsecurity.org 372 foo :- (703) 482-1739
+:www.packetstormsecurity.org 372 foo :- 7:00 a.m. to 5:00 p.m., US Eastern time
+:www.packetstormsecurity.org 372 foo :- (please include a phone number where we may call you)
+:www.packetstormsecurity.org 372 foo :-
+:www.packetstormsecurity.org 372 foo :- To verify a CIA employee's employment:
+:www.packetstormsecurity.org 372 foo :- if you are a mortgage company, creditor or potential employer, please address inq
+:www.packetstormsecurity.org 372 foo :- uiries to:
+:www.packetstormsecurity.org 372 foo :-
+:www.packetstormsecurity.org 372 foo :- CIA
+:www.packetstormsecurity.org 372 foo :- Human Resource Management
+:www.packetstormsecurity.org 372 foo :- Washington, DC 20505
+:www.packetstormsecurity.org 372 foo :- ATTN: Employee Verification
+:www.packetstormsecurity.org 372 foo :-
+:www.packetstormsecurity.org 372 foo :- +++++++++++++++++++++++++++++++++++++
+:www.packetstormsecurity.org 372 foo :-
+:www.packetstormsecurity.org 372 foo :- Http://www.gouvernmentsecurity.org
+:www.packetstormsecurity.org 372 foo :-
+:www.packetstormsecurity.org 372 foo :- Network Security Jobs
+:www.packetstormsecurity.org 372 foo :-
+:www.packetstormsecurity.org 372 foo :- Welcome to the GSO Network Security Jobs Directory a free service of GSO.
+:www.packetstormsecurity.org 372 foo :- If you wish to include your information in the directory simply
+:www.packetstormsecurity.org 372 foo :- http://www.governmentsecurity.org/forum/index.php?act=Post&CODE=00&f=32
+:www.packetstormsecurity.org 372 foo :- and post the information about the position you are seeking to fill..
+:www.packetstormsecurity.org 372 foo :- You can attach a file up to 9mb in size.
+:www.packetstormsecurity.org 376 foo :End of /MOTD command.
+:foo MODE foo :+G
+QUIT
+ERROR :Closing Link: foo[ripped] (Quit: foo)
+</pre>
+
+<p> This time, we could even collect less information (but some very interesting
+one). Again, we can't use the information to sneak a bot into the Botnet.
+</p>
+
+</li>
+
+</ol>
+
+<p>These three examples show that we can not rely on 3rd party information about
+existing Botnets. We have to collect these information ourselves using own
+Honeynets. Even though two of the three examples are unstripped and bad configured IRC
+daemons, we are not able to gain enough sensitive information. Incomplete
+information like Symantec offers just inform others about existing Botnets. But
+we are not able to collect any data about the Botnet usage or the botnetters
+themselves. We thus can not learn more about the tactics and motives of the
+operators of the Botnets with information provided only by others. We have to
+track Botnets ourselves and Honeypots are a perfect solution to help us in
+gathering the necessary information.</p>
+
+<div id="footer">
+  <a href="http://www.honeynet.org"><img src="http://www.honeynet.org/images/small.gif" alt="The Honeynet Project" /></a>
+</div>
+
+</body>
+</html>
+

@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <meta name="description" content="Learning more about phishing with help of Honeynets" />
+    <meta name="keywords" content="hacking,security,honeypots,Honeynets,Honeynet
+		Project,phishing,phishing mails, fraud" />
+		<title>Know your Enemy: Phishing</title>
+    <link rel="stylesheet" type="text/css" href="../phishing.css" />
+  </head>
+
+<body>
+
+<div id="header">
+	<h1>Know your Enemy:<br />Phishing</h1>
+	<h3 id="subtitle">UK Phishing Incident Victims</h3>
+<p id="metainfo">
+  <a href="mailto:project@honeynet.org?Subject=Know Your Enemy">Honeynet Project</a><br />
+  <a href="http://www.honeynet.org">http://www.honeynet.org</a><br />
+  Last Modified: 16th May 2005
+</p>
+</div>
+
+<p> In this side note we provide an overview of the source IP addresses of potential
+victims in the UK phishing attack against a major US bank described in phishing technique one. The data below was collected with the help of
+the compromised UK honeypot and network packet captures. Over a period of about 4 days
+we observed <strong>265 </strong> inbound HTTP requests to the honeypot,
+presumably recipients of a spam phishing email who were tricked into accessing the redirected
+content by clicking on the link provided. All were potential victims of the phishing attack, but none actually submitted personal data and therefore the phishing attack was unsucessful.
+</p>
+
+<div id="table">
+<table class="inline">
+<tr><td><b>IP</b></td><td><b>ISP</b></td><td><b>Country</b></td><td><b>OS</b></td></tr>
+<tr><td>4.138.NNN.NNN</td><td>Level 3</td><td>  US  </td><td>Windows XP, 2000 SP2+ (NAT!)</td></tr>
+<tr><td>4.224.NNN.NNN</td><td>Level 3</td><td>  US  </td><td>Windows 98</td></tr>
+<tr><td>4.235.NNN.NNN</td><td>Level 3</td><td>  US  </td><td>Windows XP, 2000 SP2+ (NAT!)</td></tr>
+<tr><td>4.239.NNN.NNN</td><td>Level 3</td><td>  US  </td><td>Windows XP, 2000 SP2+</td></tr>
+<tr><td>12.202.NNN.NNN</td><td>AT&T</td><td>  US  </td><td>FreeBSD 4.7</td></tr>
+<tr><td>12.217.NNN.NNN</td><td>AT&T</td><td>  US  </td><td>Windows 2000 SP2+, XP SP1 (seldom 98 4.10.2222)</td></tr>
+<tr><td>12.218.NNN.NNN</td><td>AT&T</td><td>  US  </td><td>UNKNOWN</td></tr>
+<tr><td>24.16.NNN.NNN</td><td>Comcast Cable</td><td>  US  </td><td>Windows XP Pro SP1, 2000 SP3</td></tr>
+<tr><td>24.58.NNN.NNN</td><td>Road Runner</td><td>  US  </td><td>Windows XP Pro SP1, 2000 SP3</td></tr>
+<tr><td>24.59.NNN.NNN</td><td>Road Runner</td><td>  US  </td><td>Windows 2000 SP2+, XP SP1 (seldom 98 4.10.2222)</td></tr>
+<tr><td>24.62.NNN.NNN</td><td>Comcast Cable</td><td>  US  </td><td>Windows 2000 SP2+, XP SP1 (seldom 98 4.10.2222)</td></tr>
+<tr><td>24.90.NNN.NNN</td><td>Road Runner</td><td>  US  </td><td>Windows 2000 SP2+, XP SP1 (seldom 98 4.10.2222)</td></tr>
+<tr><td>24.93.NNN.NNN</td><td>Road Runner</td><td>  US  </td><td>Windows XP Pro SP1, 2000 SP3</td></tr>
+<tr><td>24.107.NNN.NNN</td><td>Charter Comms</td><td>  US  </td><td>Windows 2000 SP2+, XP SP1 (seldom 98 4.10.2222)</td></tr>
+<tr><td>24.129.NNN.NNN</td><td>Comcast Cable</td><td>  US  </td><td>Windows XP Pro SP1, 2000 SP3 (NAT!)</td></tr>
+<tr><td>24.140.NNN.NNN</td><td>Massillon Cable</td><td>  US  </td><td>Windows XP, 2000 SP2+</td></tr>
+<tr><td>24.154.NNN.NNN</td><td>Armstrong Cable</td><td>  US  </td><td>Windows 2000 SP2+, XP SP1 (seldom 98 4.10.2222)</td></tr>
+<tr><td>24.160.NNN.NNN</td><td>Road Runner</td><td>  US  </td><td>UNKNOWN</td></tr>
+<tr><td>24.161.NNN.NNN</td><td>Road Runner</td><td>  US  </td><td>Windows 2000 SP2+, XP SP1 (seldom 98 4.10.2222)</td></tr>
+<tr><td>24.162.NNN.NNN</td><td>Road Runner</td><td>  US  </td><td>Windows 2000 SP2+, XP SP1 (seldom 98 4.10.2222)</td></tr>
+<tr><td>24.163.NNN.NNN</td><td>Road Runner</td><td>  US  </td><td>Windows 2000 SP4, XP SP1</td></tr>
+<tr><td>24.165.NNN.NNN</td><td>Road Runner</td><td>  US  </td><td>Windows XP Pro SP1, 2000 SP3</td></tr>
+<tr><td>24.166.NNN.NNN</td><td>Road Runner</td><td>  US  </td><td>Windows 2000 SP2+, XP SP1 (seldom 98 4.10.2222)</td></tr>
+<tr><td>24.208.NNN.NNN</td><td>Road Runner</td><td>  US  </td><td>Windows 2000 SP2+, XP SP1 (seldom 98 4.10.2222)</td></tr>
+<tr><td>24.209.NNN.NNN</td><td>Road Runner</td><td>  US  </td><td>Windows XP Pro SP1, 2000 SP3 (firewall!)</td></tr>
+<tr><td>24.220.NNN.NNN</td><td>Midcontinent Comms</td><td>  US  </td><td>UNKNOWN</td></tr>
+<tr><td>24.231.NNN.NNN</td><td>Charter Comms</td><td>  US  </td><td>Windows XP SP1, 2000 SP3</td></tr>
+<tr><td>24.239.NNN.NNN</td><td>Armstrong Cable</td><td>  US  </td><td>Windows XP/2000</td></tr>
+<tr><td>24.243.NNN.NNN</td><td>Service Co LLC</td><td>  US  </td><td>Windows XP Pro SP1, 2000 SP3</td></tr>
+<tr><td>63.165.NNN.NNN</td><td>DIGITEL</td><td>Prob US</td><td>OpenBSD 3.0</td></tr>
+<tr><td>63.192.NNN.NNN</td><td>Pacific Bell</td><td>  US  </td><td>Windows 2000 SP4, XP SP1</td></tr>
+<tr><td>64.12.NNN.NNN</td><td>AOL</td><td>  US  </td><td>Linux 2.4 w/o timestamps</td></tr>
+<tr><td>64.33.NNN.NNN</td><td>West Winconsin Telecomn</td><td>  US  </td><td>Windows XP, 2000 SP2+</td></tr>
+<tr><td>64.58.NNN.NNN</td><td>Marlowe & Associates</td><td>  US  </td><td>Windows 98 (2) (NAT!)</td></tr>
+<tr><td>64.136.NNN.NNN</td><td>Juno Online</td><td>  US  </td><td>OpenBSD 3.0</td></tr>
+<tr><td>64.136.NNN.NNN</td><td>Juno Online</td><td>  US  </td><td>OpenBSD 3.0</td></tr>
+<tr><td>64.136.NNN.NNN</td><td>Juno Online</td><td>  US  </td><td>OpenBSD 3.0</td></tr>
+<tr><td>64.161.NNN.NNN</td><td>Pacific Bell Internet</td><td>  US  </td><td>Windows XP Pro SP1, 2000 SP3 (NAT!)</td></tr>
+<tr><td>64.216.NNN.NNN</td><td>SBC Internet</td><td>  US  </td><td>Windows XP Pro SP1, 2000 SP3 (NAT!)</td></tr>
+<tr><td>64.222.NNN.NNN</td><td>Verizon Internet</td><td>  US  </td><td>Windows 2000 SP4, XP SP 1</td></tr>
+<tr><td>65.78.NNN.NNN</td><td>RCN Corporation</td><td>  US  </td><td>FreeBSD 4.7</td></tr>
+<tr><td>65.166.NNN.NNN</td><td>Sprint</td><td>  US  </td><td>Windows 98</td></tr>
+<tr><td>65.204.NNN.NNN</td><td>Eagle Mountain Telecom</td><td>  US  </td><td>FreeBSD 4.8</td></tr>
+<tr><td>65.221.NNN.NNN</td><td>Buckeye Cablevision</td><td>  US  </td><td>Windows 2000 SP2+, XP SP1 (seldom 98 4.10.2222)</td></tr>
+<tr><td>65.229.NNN.NNN</td><td>UUNET</td><td>  US  </td><td>Windows XP/2000</td></tr>
+<tr><td>66.38.NNN.NNN</td><td>Brandenburg Telephone Company</td><td>  US  </td><td>Windows 2000 SP2+, XP SP1 (seldom 98 4.10.2222)</td></tr>
+<tr><td>66.41.NNN.NNN</td><td>Comcast Cable</td><td>  US  </td><td>Windows 2000 SP2+, XP SP1 (seldom 98 4.10.2222)</td></tr>
+<tr><td>66.45.NNN.NNN</td><td>WholeSecurity, Inc</td><td>  US  </td><td>Windows 2000 SP4, XP SP1</td></tr>
+<tr><td>66.61.NNN.NNN</td><td>Road Runner</td><td>  US  </td><td>Windows XP Pro SP1, 2000 SP3</td></tr>
+<tr><td>66.67.NNN.NNN</td><td>Road Runnner</td><td>  US  </td><td>Windows 2000 SP2+, XP SP1 (seldom 98 4.10.2222)</td></tr>
+<tr><td>66.68.NNN.NNN</td><td>Road Runner</td><td>  US  </td><td>Windows XP Pro SP1, 2000 SP3</td></tr>
+<tr><td>66.82.NNN.NNN</td><td>Hughes Network Systems</td><td>  US  </td><td>UNKNOWN</td></tr>
+<tr><td>66.170.NNN.NNN</td><td>T-NET, Inc</td><td>  US  </td><td>Windows XP, 2000 SP2+</td></tr>
+<tr><td>66.188.NNN.NNN</td><td>Charter Comms</td><td>  US  </td><td>Windows 2000 SP2+, XP SP1 (seldom 98 4.10.2222) (firewall!)</td></tr>
+<tr><td>67.5.NNN.NNN</td><td>Qwest</td><td>  US  </td><td>Windows XP, 2000 SP2+</td></tr>
+<tr><td>67.23.NNN.NNN</td><td>Adelphia Cable Comms</td><td>  US  </td><td>Windows XP Pro SP1, 2000 SP3</td></tr>
+<tr><td>67.38.NNN.NNN</td><td>Ameritech Electronic Commerce</td><td>  US  </td><td>Windows XP, 2000 SP2+</td></tr>
+<tr><td>67.66.NNN.NNN</td><td>SBC Internet Services</td><td>  US  </td><td>Windows XP SP1, 2000 SP3</td></tr>
+<tr><td>67.122.NNN.NNN</td><td>Pac Bell Internet</td><td>  US  </td><td>Windows 2000 SP2+, XP SP1 (seldom 98 4.10.2222)</td></tr>
+<tr><td>67.160.NNN.NNN</td><td>Comcast Cable</td><td>  US  </td><td>Windows 2000 SP2+, XP SP1 (seldom 98 4.10.2222)</td></tr>
+<tr><td>67.164.NNN.NNN</td><td>Comcast Cable</td><td>  US  </td><td>Windows XP Pro SP1, 2000 SP3 (NAT!)</td></tr>
+<tr><td>67.167.NNN.NNN</td><td>Comcast Cable</td><td>  US  </td><td>UNKNOWN</td></tr>
+<tr><td>68.10.NNN.NNN</td><td>Cox Communications Inc</td><td>  US  </td><td>Windows XP Pro SP1, 2000 SP3</td></tr>
+<tr><td>68.14.NNN.NNN</td><td>Cox Communications Inc</td><td>  US  </td><td>FreeBSD 4.7</td></tr>
+<tr><td>68.32.NNN.NNN</td><td>Comcast Cable</td><td>  US  </td><td>Windows 2000 SP2+, XP SP1 (seldom 98 4.10.2222)</td></tr>
+<tr><td>68.53.NNN.NNN</td><td>Comcast Cable</td><td>  US  </td><td>Windows XP Pro SP1, 2000 SP3</td></tr>
+<tr><td>68.88.NNN.NNN</td><td>SBC Internet Services</td><td>  US  </td><td>Windows 2000 SP4, XP SP 1</td></tr>
+<tr><td>68.89.NNN.NNN</td><td>SBC Internet Services</td><td>  US  </td><td>Windows 2000 SP2+, XP SP1 (seldom 98 4.10.2222)</td></tr>
+<tr><td>68.94.NNN.NNN</td><td>SBC Internet Services</td><td>  US  </td><td>Windows XP Pro SP1, 2000 SP3 (NAT!)</td></tr>
+<tr><td>68.103.NNN.NNN</td><td>Cox Communications Inc</td><td>  US  </td><td>Windows XP Pro SP1, 2000 SP3</td></tr>
+<tr><td>68.109.NNN.NNN</td><td>Cox Communications Inc</td><td>  US  </td><td>Windows 2000 SP4, XP SP1</td></tr>
+<tr><td>68.205.NNN.NNN</td><td>Road Runner</td><td>  US  </td><td>UNKNOWN</td></tr>
+<tr><td>68.254.NNN.NNN</td><td>SBC Internet Services</td><td>  US  </td><td>Windows 2000 SP2+, XP SP1 (seldom 98 4.10.2222)</td></tr>
+<tr><td>69.23.NNN.NNN</td><td>-</td><td>-</td><td>Windows XP Pro SP1, 2000 SP3</td></tr>
+<tr><td>69.48.NNN.NNN</td><td>Choice One Comms</td><td>  US  </td><td>Windows XP, 2000 SP2+</td></tr>
+<tr><td>69.59.NNN.NNN</td><td>Peak Inc</td><td>  US  </td><td>Windows XP/2000 via Cisco</td></tr>
+<tr><td>69.132.NNN.NNN</td><td>Road Runner</td><td>  US  </td><td>Windows 2000 SP2+, XP SP1 (seldom 98 4.10.2222)</td></tr>
+<tr><td>69.133.NNN.NNN</td><td>Road Runner</td><td>  US  </td><td>Windows XP Pro SP1, 2000 SP3</td></tr>
+<tr><td>69.134.NNN.NNN</td><td>Road Runner</td><td>  US  </td><td>UNKNOWN</td></tr>
+<tr><td>69.135.NNN.NNN</td><td>Road Runner</td><td>  US  </td><td>Windows 2000 SP4, XP SP1</td></tr>
+<tr><td>69.135.NNN.NNN</td><td>Road Runner</td><td>  US  </td><td>Windows 2000 SP2+, XP SP1 (seldom 98 4.10.2222)</td></tr>
+<tr><td>69.151.NNN.NNN</td><td>SBC Internet Services</td><td>  US  </td><td>Windows XP Pro SP1, 2000 SP3 (NAT!)</td></tr>
+<tr><td>69.162.NNN.NNN</td><td>Adelphia Cable Comms</td><td>  US  </td><td>FreeBSD 4.7</td></tr>
+<tr><td>137.229.NNN.NNN</td><td>University of Alaska</td><td>  US  </td><td>Windows XP Pro SP1, 2000 SP3</td></tr>
+<tr><td>141.154.NNN.NNN</td><td>Verizon Internet</td><td>  US  </td><td>Windows XP SP1, 2000 SP3</td></tr>
+<tr><td>148.78.NNN.NNN</td><td>Starband Comms</td><td>  US  </td><td>CacheFlow CacheOS 4.1 (up</td></tr>
+<tr><td>149.174.NNN.NNN</td><td>CompuServe</td><td>  US  </td><td>Linux 2.4 w/o timestamps</td></tr>
+<tr><td>152.163.NNN.NNN</td><td>AOL</td><td>  US  </td><td>Linux 2.4 w/o timestamps</td></tr>
+<tr><td>156.36.NNN.NNN</td><td>US Bancorp</td><td>  US  </td><td>OpenBSD 3.0</td></tr>
+<tr><td>162.83.NNN.NNN</td><td>Verizon Internet</td><td>  US  </td><td>Windows 2000 SP4, XP SP1</td></tr>
+<tr><td>166.102.NNN.NNN</td><td>WRK Internet</td><td>-</td><td>Windows XP, 2000 SP2+</td></tr>
+<tr><td>166.102.NNN.NNN</td><td>WRK Internet</td><td>-</td><td>Windows XP, 2000 SP2+</td></tr>
+<tr><td>169.207.NNN.NNN</td><td>Executive PC, Inc</td><td>  US  </td><td>Windows 98</td></tr>
+<tr><td>170.94.NNN.NNN</td><td>State of Arkansas</td><td>  US  </td><td>Windows 2000 SP4, XP SP1</td></tr>
+<tr><td>172.131.NNN.NNN</td><td>AOL</td><td>  US  </td><td>Windows 2000 SP2+, XP SP1 (seldom 98 4.10.2222)</td></tr>
+<tr><td>172.131.NNN.NNN</td><td>AOL</td><td>  US  </td><td>Windows 2000 SP2+, XP SP1 (seldom 98 4.10.2222)</td></tr>
+<tr><td>204.95.NNN.NNN</td><td>Sprint</td><td>  US  </td><td>Windows XP, 2000 SP2+</td></tr>
+<tr><td>204.210.NNN.NNN</td><td>Road Runner</td><td>  US  </td><td>Windows 2000 SP4, XP SP1</td></tr>
+<tr><td>204.210.NNN.NNN</td><td>Road Runner</td><td>  US  </td><td>Windows 2000 SP2+, XP SP1 (seldom 98 4.10.2222)</td></tr>
+<tr><td>205.162.NNN.NNN</td><td>Buckeye Cablevision</td><td>  US  </td><td>Windows 2000 SP2+, XP SP1 (seldom 98 4.10.2222)</td></tr>
+<tr><td>206.148.NNN.NNN</td><td>AGIS</td><td>  US  </td><td>Windows XP, 2000 SP2+</td></tr>
+<tr><td>206.196.NNN.NNN</td><td>US West Internet Services</td><td>  US  </td><td>Windows XP Pro SP1, 2000 SP3</td></tr>
+<tr><td>207.89.NNN.NNN</td><td>NetLink Systems LLC</td><td>  US  </td><td>Windows XP, 2000 SP2+</td></tr>
+<tr><td>207.89.NNN.NNN</td><td>NetLink Systems LLC</td><td>  US  </td><td>Linux 2.4/2.6 (up</td></tr>
+<tr><td>207.231.NNN.NNN</td><td>Surewest Internet</td><td>  US  </td><td>BSD/OS 3.1</td></tr>
+<tr><td>208.60.NNN.NNN</td><td>Local Link</td><td>  US  </td><td>Windows XP, 2000 SP2+</td></tr>
+<tr><td>208.187.NNN.NNN</td><td>Lanset Comms</td><td>  US  </td><td>Windows XP, 2000 SP2+</td></tr>
+<tr><td>208.191.NNN.NNN</td><td>SBC Internet</td><td>  US  </td><td>Windows XP Pro SP1, 2000 SP3 (NAT!)</td></tr>
+<tr><td>209.43.NNN.NNN</td><td>IQuest Internet</td><td>  US  </td><td>Windows XP, 2000 SP2+</td></tr>
+<tr><td>209.131.NNN.NNN</td><td>CenturyTel Internet Holdings Inc</td><td>  US  </td><td>Windows 98</td></tr>
+<tr><td>209.206.NNN.NNN</td><td>IQuest Internet</td><td>  US  </td><td>Windows XP, 2000 SP2+</td></tr>
+<tr><td>209.247.NNN.NNN</td><td>Bend Cable</td><td>  US  </td><td>Linux 2.4/2.6 (up</td></tr>
+<tr><td>216.93.NNN.NNN</td><td>Voyager Information Networks</td><td>  US  </td><td>Windows XP, 2000 SP2+</td></tr>
+<tr><td>216.228.NNN.NNN</td><td>Bend Cable</td><td>  US  </td><td>Cisco Content Engine</td></tr>
+<tr><td></td></tr>
+</table>
+
+<br />
+
+</div>
+
+<p>Click <a href="../index.html">here</a> to return to the main paper.</p>
+
+<div id="footer">
+  <a href="http://www.honeynet.org"><img src="http://www.honeynet.org/images/small.gif" alt="The Honeynet Project" /></a>
+</div>
+
+</body>
+</html>

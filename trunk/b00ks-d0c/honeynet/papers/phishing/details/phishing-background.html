@@ -1,0 +1,155 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>Know Your Enemy: Phishing</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link href="../phishing.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+<div id="header">
+	<h1>Know Your Enemy:<br>Phishing</h1>
+	<h3 id="subtitle">Background on Phishing Attacks</h3>
+	<p id="metainfo">
+  <a href="mailto:project@honeynet.org?Subject=Know%20Your%20Enemy">The Honeynet
+		Project &amp; Research Alliance</a><br>
+  <a href="http://www.honeynet.org/">http://www.honeynet.org</a><br>
+  Last Modified: 9th May 2005
+</p>
+</div>
+
+<p>This side note provides further detailed background on phishing attacks,
+beginning with a historic overview of <a
+	href="http://en.wikipedia.org/wiki/Phishing">phishing</a> and <a
+	href="http://en.wikipedia.org/wiki/Social_engineering_(computer_security)">social
+	engineering</a>, and concluding with quantitative data on phishing attempts
+and information on high level trends.</p>
+
+<p>During the 1990&rsquo;s, as the popularity and take up of the Internet grew,
+<a
+	href="http://en.wikipedia.org/wiki/Social_engineering_(computer_security)">social
+	engineering</a> was gradually transformed and attackers began to focus on the
+mass consumer market. Phishers moved from <a href="http://www.aol.com">AOL</a>
+to the unregulated and more anonymous Internet, with email becoming the
+preferred medium for engaging (often na&iuml;ve) end users. One reason for this
+change of focus might be that online discussion forums, IRC and instant
+messaging were increasingly portrayed by the press as dangerous places, where
+evildoers and system crackers waited to ambush unsuspecting users. Also, users
+had become aware that legitimate companies nearly exclusively use telephone,
+email and traditional postal mail as means of communication with their
+customers, rarely participating in less formal chat sessions. Users had also
+become more familiar with and confident in trusting web based authentication
+systems, e-shopping with credit cards, online banking services and the
+protection offered by technologies such as <a
+	href="http://en.wikipedia.org/wiki/Secure_Sockets_Layer">Secure Sockets Layer
+	(SSL)</a> - all fronted by a myriad of different looking user interfaces.</p>
+
+<p>Internet based email solutions continued to evolve at a rapid rate, with
+increasingly complex methods being offered to customise the look and feel of
+email messages and therefore potentially fooling unsuspecting users into
+trusting spoofed communications that might appear to be legitimate. When
+compared to established and relatively well policed closed loop systems, it
+still remains difficult for consumers to trace the exact origin of an SMTP mail
+message, and the available global user base of Internet email is many times
+larger. Even activities with a very low success rate can still be attractive to
+an attacker if the number of end users receiving the message is large enough to
+generate a number of responses, as can be witnessed by the continued growth in
+organisations willing to pay for the sending of spam and many users' own
+experiences of inboxes regularly full of unsolicited email.</p>
+
+<p>In a more sinister turn, phishers have not only changed their primary means
+of communication to email, they have also started operating in a more organised
+manner and to target their attacks against more profitable information. In
+recent years, requests for AOL accounts or single credit card numbers have
+gradually been replaced with schemes aimed at obtaining more sensitive data,
+such as personal information that could allow unlimited access to online banking
+services or that could serve as a foundation to enable identity theft. Sensitive
+information to fraudulently impersonate another person&rsquo;s identity might
+include name, date of birth, address, social security number or
+&quot;secret&quot; information such as mother's maiden name, account numbers,
+first school, pet&rsquo;s name, user names, passwords, Personal Identification
+Numbers (PINs) or even one-time passwords (which are quite common in European
+Internet banking).</p>
+
+<p>The following chart that shows the top corporate phishing targets based on
+responses in a recent survey of spam recipients (October 2004) by email security
+company <a
+	href="http://www.ciphertrust.com/resources/statistics/">CipherTrust</a>:</p>
+
+<p align="center"><img src="../images/targets.PNG" width="511" height="255"></p>
+
+<p>Phishing attacks have affected many users and have caused serious problems
+for some major banks. In extreme cases, some banks have been forced to <a
+	href="http://news.bbc.co.uk/1/hi/business/4019067.stm">shut down</a> their
+ebanking operations for period of time due to phishing attacks. The exact cost
+to the banking industry of phishing attacks is not available in the public
+domain, and there are few well documented <a
+	href="http://www.financialcryptography.com/mt/archives/000129.html">qualitative
+	examples</a> of public arrests and prosecution (such as in <a
+	href="http://www.theregister.co.uk/2005/04/04/estonian_trojan_suspect_cuffed/">Estonia</a>
+or <a
+	href="http://www.theregister.co.uk/2005/03/21/brazil_phishing_arrest/">Brazil</a>),
+but it is likely to be substantial. In most cases banks will refund the money
+lost by their customers due to phishing attacks, although they reserve the right
+not to refund such losses at their discretion. Estimates by the Association for
+Payment Clearing Services (<a href="http://www.apacs.org.uk/">APACS</a>) for the
+cost of phishing attacks against UK banks were <a
+	href="http://www.theregister.co.uk/2004/04/26/phishing_scams/">&pound;1M</a>
+for the previous 18 months to April 2004, rising to <a
+	href="http://software.silicon.com/security/0,39024655,39128476,00.htm">&pound;12M</a>
+by March 2005. Australian estimates for March 2005 were <a
+	href="http://www.paymentsnews.com/2005/03/phishing_attack.html">A$25M</a>,
+whilst Financial Insights estimates the cost to US business to be <a
+	href="http://www.financial-insights.com/FI/getdoc.jsp?containerId=FIN1492">$400M</a>
+in 2004.&nbsp;A study by Gartner estimated the cost in 2003 to be <a
+	href="http://www.gartner.com/5_about/press_releases/asset_71087_11.jsp">$1.2B</a>
+and the number of reported phishing attacks have massively increased since
+then.</p>
+
+<p>In October 2004 the Anti-Phishing Working Group reported that it had seen
+6597 new phishing emails, an increase of 36% on the previous month. 1142
+phishing web sites were reported, double the number for September and part of a
+<a href="http://news.bbc.co.uk/1/hi/technology/4037975.stm">&quot;bumper
+	month&quot;</a> during a period of huge growth in automated phishing attacks.
+Email filtering specialist <a href="http://www.messagelabs.com/">MessageLabs</a>
+<a href="http://www.messagelabs.com/intelligence/2004report/">reported</a> that
+it intercepted more than 18 million phishing messages during 2004, and the graph
+below clearly shows the growth in attempted phishing attacks by email:</p>
+
+<p align="center"><img src="../images/phishing-mails.PNG" width="500"
+height="216"></p>
+
+<p>The loss of trust, impact on consumer confidence and the associated financial
+costs of phishing attacks have become important enough for banks to set up web
+sites such as <a href="http://www.banksafeonline.org.uk/">BankSafe Online</a> to
+try and educate their customers, and most target brands now provide sections of
+their official web site with advice on identifying and avoiding online scams
+(such as Citizen Bank's &quot;<a
+	href="http://www.citizensbank.com/misc/prevention_center.asp">Online Fraud
+	Prevention Centre</a>&quot; or Citibank's "<a
+	href="http://www.citibank.com/domain/spoof/learn.htm">Learn About Spoofs</a>"
+pages ). Other organisations such as the <a
+	href="http://www.antiphishing.org">Anti Phishing Working Group</a> are also
+hoping to educate consumers as to the potential risks and teach Internet users
+how to avoid online scams such as phishing attacks. However, the main challenge
+in preventing phishing attacks is that phishing is not a pure technology problem
+- the major contributing factor is human nature, and as long as attackers can
+continue to create schemes to trick unwary users, phishing will continue to be
+successful and potentially lucrative. As Bruce Schneier writes <a
+	href="http://www.schneier.com/blog/archives/2005/03/the_failure_of.html">in a
+	recent weblog</a>, even issuing all end users with two-factor authentication
+doesn't really help to solve the problem if the phisher is successful in
+tricking the users into authenticating themselves against a fake, malicious
+system. Given the combination of human nature, the rapid rate of technological
+change and the potential for illegitimate profits to be made, it seems safe to
+assume that the problem of phishing will get worse before it gets better.</p>
+
+<p>Click <a href="../index.html">here</a> to return to the main paper.</p>
+
+<p align="center"><a href="http://www.honeynet.org/"><img src="../images/small.gif"
+	alt="The Honeynet Project" width="143" height="34" border="0"></a> </p>
+
+<p>&nbsp; </p>
+</body>
+</html>

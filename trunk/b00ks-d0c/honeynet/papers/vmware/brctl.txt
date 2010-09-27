@@ -1,0 +1,4 @@
+host #brctl show
+bridge name	bridge id		STP enabled	interfaces
+br0		8000.005056c00001	no		vmnet1
+							eth0

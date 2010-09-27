@@ -1,0 +1,324 @@
+Conosci il tuo nemico:
+
+Worms at War
+Il non tanto amico mondo del Ciberspazio
+
+Honeynet Project
+http://www.honeynet.org
+Ultima Modifica: 9 Novembre, 2000
+
+Traduzione Italiana a cura di:
+Davide Del Vecchio, Dante Alighieri
+
+Questo paper e' nato per pura curiosita'. La nostra Honeynet era martellata da scan UDP sulla porta 137
+e TCP sulla porta 139. La rete riceveva scansioni per circa 5-10 volte al giorno su queste porte, qualcosa
+stava succedendo. Lo scopo era quello di capire di cosa si trattasse. Che cosa stava succedendo su
+Internet che causasse tutta questa attivita'? Basandoci sulle porte, abbiamo supposto che gli scan
+cercavano vulnerabilita' legate a sistemi basati su Windows. Il piano era quello di configurare un honeypot
+con Win98, sedersi ed aspettare. Non dovemmo aspettare molto. Una continuazione della serie "Conosci il tuo
+nemico".
+
+
+Lo Scenario
+
+Durante il periodo di un mese (20 Settembre - 20 Ottobre) abbiamo confermato 524 scansioni di tipo NetBIOS
+verso la nostra Honeynet. Queste scansioni consistevano nel sondare tramite protocollo UDP la porta 137
+(Servizio di NetBIOS Naming), quasi sempre seguite da alcune verso la porta 139 tramite protocollo TCP.
+Questo grande numero di scansioni cercavano uno specifico servizio, qualcosa stava succedendo, decidemmo di
+capire cosa. La Honeynet non si pubblicizzava in alcun modo in Internet. Semplicemente abbiamo installato i
+sistemi sulla nostra rete e ci siamo seduti ad aspettare. Questo vuol dire che la maggior parte delle scansioni
+che noi ricevavamo era casuale ed effettuata su Internet. Queste sono le stesse che minacciano il vostro sistema.
+Proprio per il motivo che queste scansioni cercavano sistemi basati su Windows, si focalizzavano sul cercare
+principalmente dei proprietari di una normale connessione via cavo o DSL. Non parliamo di spionaggio industriale
+o web deface, stiamo quindi parlando di obiettivi semplici come utenti domestici. Eravamo curiosi di capire chi
+stava effettuando queste scansioni, qual era il loro scopo ed il motivo del numero impressionante di scansioni.
+Era un attacco coordinato, si parlava di worms? Un sacco di domande. Decidemmo quindi di aggiungere un honeypot
+con Windows98 alla nostra collezione. Effettuamo un'installazione di default di Windows98 condividendo C:. Un Honeypot
+con Windows98 potrebbe non sembrare glamour, in ogni modo parecchie informazioni possono essere ricavate dall'installazione
+di un sistema del genere.
+
+	1. Windows 98 rappresenta un grande numero di sistemi connessi ad Internet, e questo numero sta crescendo velocemente.
+	   tipicamente, questi sono i sistemi piu' vulnerabili, proprio perche' la maggior parte degli utilizzatori sono
+	   degli utenti domestici. Quello che la gente non riesce a capire e' il rischio al quale questi sistemi sono esposti,
+	   proprio perche' molti di loro hanno una connessione dedicata ad Internet.
+	2. Questa era la nostra prima azione su una honeypot basata su Microsoft. Il piano era quello di partire in maniera
+	   semplice e da li' imparare.
+
+Il 31 di Ottobre il sistema era installato, la condivisione era attiva, e connessa ad Internet. Ci sedemmo ed aspettammo,
+l'attesa non fu lunga.
+
+Il Primo Worm
+Meno di 24 ore dopo ricevemmo la nostra prima visita. Il sistema 216.191.92.10 (host-010.hsf.on.ca) scansiono' la rete in cerca
+di un sistema basato su Windows. Ha trovato i nostri, e l'ha interpellato. Per prima cosa ha carpito il nome del sistema, e
+determinato se c'erano condivisioni abilitate. Una volta determinato che la condivisione era abilitata, ha quindi cercato degli
+specifici binari sul nostro sistema. Il suo scopo era quello di determinare se un determinato worm era installato, se così non
+fosse stato, si sarebbe installato. Nel nostro caso specifico il worm non era installato. Il worm e' conosciuto come "Win32.Bymer
+ Worm". Lo scopo di questo worm era quello di trarre beneficio dai cicli della nostra CPU per aiutare un individuo a vincere il
+contest di distribuited.net. Distribuited.net e' un gruppo che usa la parte inutilizzata di CPU di computer coordinati per varie
+sfide (come il cracking del RC5-64). La gente e' premiata se riesce a vincere la sfida. Piu' computer e cicli di CPU si hanno
+sotto il proprio controllo, maggiori sono le chances di vincita. Nel nostro caso, qualcuno ci ha reso "volontari" per partecipare
+al progetto installando il worm nel nostro sistema.
+
+Un individuo (in questo caso, bymer@inec.kiev.ua), aveva creato un worm che si replicava automaticamente che cercava sistemi Windows
+vulnerabili e installava il client di distribuited.net sugli ignari sistemi. Una volta installato ed eseguito, il worm utilizza i cicli
+della tua CPU in modo da aiutare l'autore a vincere la sfida. Nel mentre il worm incomincia a cercare altri sistemi vulnerabili ne puo'
+assumere il controllo. Lo scopo e' avere accesso a piu' computer possibili e cicli di CPU. Questo processo cresce esponenzialmente rispetto
+al numero di sistemi compromessi. Diamo un'occhiata all'attacco usando un analizzatore di traffico di rete (in questo caso, abbiamo usato
+IDS sniffer snort). Per analisi piu' accurate del protocollo NetBIOS, potresti voler utilizzare un analizzatore di protocollo, come la free
+utility "Ethereal". Nelle tracce dello sniffer sotto, il sistema 172.16.1.105 e' l'indirizzo IP della honeypot.
+
+Il worm inizia per prima cosa a cercare il file dnetc.ini sul sistema. Questo e' il file di configurazione standard del client di
+distribuited.net. Questo file di configurazione comunica al server principale chi deve trarre vantaggio per i cicli della CPU. Questa e' inoltre
+la persona che molto facilmente ha creato il worm. Qui vediamo la traccia del pacchetto dove il sistema remoto (nome NetBIOS GHUNT, account
+GHUNT. dominio HSFOPROV) copia il file di configurazione sulla nostra honeypot.
+
+
+11/01-15:29:18.580895 216.191.92.10:2900 -> 172.16.1.105:139 
+TCP TTL:112 TOS:0x0 ID:50235  DF 
+*****PA* Seq: 0x12930C6   Ack: 0x66B7068   Win: 0x2185 
+00 00 00 5B FF 53 4D 42 2D 00 00 00 00 00 01 00  ...[.SMB-....... 
+00 00 00 00 00 00 00 00 00 00 00 00 00 C8 57 1C  ..............W. 
+00 00 82 D1 0F FF 00 00 00 07 00 91 00 16 00 20  ............... 
+00 DC 1C 00 3A 10 00 00 00 00 00 00 00 00 00 00  ....:........... 
+00 00 00 1A 00 5C 57 49 4E 44 4F 57 53 5C 53 59  .....\WINDOWS\SY 
+53 54 45 4D 5C 64 6E 65 74 63 2E 69 6E 69 00     STEM\dnetc.ini. 
+
+Sotto vediamo il trasferimento del file di configurazione dnetc.ini. Notate chi e' il punto di contatto per tutto questo, bymer@inec.kiev.ua.
+Questo individuo che trae vantaggio dai cicli della CPU, e' molto probabilmente l'autore del worm che ci sta attaccando.
+
+11/01-15:29:18.729337 216.191.92.10:2900 -> 172.16.1.105:139 
+TCP TTL:112 TOS:0x0 ID:50747  DF 
+*****PA* Seq: 0x1293125   Ack: 0x66B70AD   Win: 0x2140 
+00 00 01 11 FF 53 4D 42 0B 00 00 00 00 00 01 00  .....SMB........ 
+00 00 00 00 00 00 00 00 00 00 00 00 00 C8 57 1C  ..............W. 
+00 00 02 D2 05 00 00 E1 00 00 00 00 00 E1 00 E4  ................ 
+00 01 E1 00 5B 6D 69 73 63 5D 20 0D 0A 70 72 6F  ....[misc] ..pro 
+6A 65 63 74 2D 70 72 69 6F 72 69 74 79 3D 4F 47  ject-priority=OG 
+52 2C 52 43 35 2C 43 53 43 2C 44 45 53 0D 0A 0D  R,RC5,CSC,DES... 
+0A 5B 70 61 72 61 6D 65 74 65 72 73 5D 0D 0A 69  .[parameters]..i 
+64 3D 62 79 6D 65 72 40 69 6E 65 63 2E 6B 69 65  d=bymer@inec.kie 
+76 2E 75 61 0D 0A 0D 0A 5B 72 63 35 5D 0D 0A 66  v.ua....[rc5]..f 
+65 74 63 68 2D 77 6F 72 6B 75 6E 69 74 2D 74 68  etch-workunit-th 
+72 65 73 68 6F 6C 64 3D 36 34 0D 0A 72 61 6E 64  reshold=64..rand 
+6F 6D 70 72 65 66 69 78 3D 32 31 37 0D 0A 0D 0A  omprefix=217.... 
+5B 6F 67 72 5D 0D 0A 66 65 74 63 68 2D 77 6F 72  [ogr]..fetch-wor 
+6B 75 6E 69 74 2D 74 68 72 65 73 68 6F 6C 64 3D  kunit-threshold= 
+31 36 0D 0A 0D 0A 5B 74 72 69 67 67 65 72 73 5D  16....[triggers] 
+0D 0A 72 65 73 74 61 72 74 2D 6F 6E 2D 63 6F 6E  ..restart-on-con 
+66 69 67 2D 66 69 6C 65 2D 63 68 61 6E 67 65 3D  fig-file-change= 
+79 65 73 0D 0A                                   yes.. 
+
+
+Il prossimo file da trasferire e' il client attuale di distribuited.net, dnetc.exe. Questo e' un valido eseguibile, e non e' di nascita maligno.
+Confermiamo tramite signature MD5 che e' il client trovato sulla honeypot. Quindi abbiamo scaricato il client da distribuited.net e guardato
+l'hash dell'MD5 del client dnetc.exe. Gli hash erano identici (0fd1f93913af70178bff1a1953f5f7d), indicando che questo codice non era il worm.
+Questo e' il binario che usa i cicli della CPU della sfida di distribuited.net. In ogni modo, il worm vorrebbe usare questo binario senza il
+tuo permesso, o approvazione, tutto cio' per raggiungere lo scopo dell'autore.
+
+11/01-15:34:09.044822 216.191.92.10:2900 -> 172.16.1.105:139 
+TCP TTL:112 TOS:0x0 ID:33084  DF 
+*****PA* Seq: 0x129341A   Ack: 0x66B71C0   Win: 0x202D 
+00 00 00 5B FF 53 4D 42 2D 00 00 00 00 00 01 00  ...[.SMB-....... 
+00 00 00 00 00 00 00 00 00 00 00 00 00 C8 57 1C  ..............W. 
+00 00 04 26 0F FF 00 00 00 07 00 91 00 16 00 20  ...&........... 
+00 FE 1D 00 3A 10 00 00 00 00 00 00 00 00 00 00  ....:........... 
+00 00 00 1A 00 5C 57 49 4E 44 4F 57 53 5C 53 59  .....\WINDOWS\SY 
+53 54 45 4D 5C 64 6E 65 74 63 2E 65 78 65 00     STEM\dnetc.exe. 
+
+Successivamente vediamo il trasferimento del worm, msi216.exe. Questo e' un worm auto replicante che in maniera casuale cerca sistemi vulnerabili
+e si copia. Questo worm e' molto probabilmente quello che sta causando il gran numero di scansioni che stavamo ricevendo.
+
+11/01-15:37:23.083643 216.191.92.10:2900 -> 172.16.1.105:139 
+TCP TTL:112 TOS:0x0 ID:40765  DF 
+*****PA* Seq: 0x12C146A   Ack: 0x66C248B   Win: 0x20B2 
+00 00 00 5C FF 53 4D 42 2D 00 00 00 00 00 01 00  ...\.SMB-....... 
+00 00 00 00 00 00 00 00 00 00 00 00 00 C8 57 1C  ..............W. 
+00 00 02 F3 0F FF 00 00 00 07 00 91 00 16 00 20  ............... 
+00 C0 1E 00 3A 10 00 00 00 00 00 00 00 00 00 00  ....:........... 
+00 00 00 1B 00 5C 57 49 4E 44 4F 57 53 5C 53 59  .....\WINDOWS\SY 
+53 54 45 4D 5C 6D 73 69 32 31 36 2E 65 78 65 00  STEM\msi216.exe. 
+
+In ultimo, il worm per prima cosa modifica e poi l'upload di un nuovo file win.ini. Il worm esegue queste operazioni in modo tale che il sistema
+esegua il worm al primo reboot. Ricorda, puo' essere difficile eseguire da remoto un file su di un sistema Windows98, quindi questo e' il metodo
+attraverso il quale il worm si eseguiva. Effettua tutto cio' aggiungendosi al file di configurazione di avvio "c:\windows\win.ini" e gira durante
+il processo di avvio. Il nuovo win.ini e' quindi uploadato sul nostro sistema compromesso.
+
+11/01-15:38:55.352810 216.191.92.10:2900 -> 172.16.1.105:139 
+TCP TTL:112 TOS:0x0 ID:1342  DF 
+******A* Seq: 0x12C6F55   Ack: 0x66C95FC   Win: 0x1FBF 
+00 00 0B 68 FF 53 4D 42 1D 00 00 00 00 00 01 00  ...h.SMB........ 
+00 00 00 00 00 00 00 00 00 00 00 00 00 C8 57 1C  ..............W. 
+00 00 02 F9 0C 0D 00 61 19 00 00 00 00 00 00 00  .......a........ 
+00 00 00 00 00 00 00 00 00 2C 0B 3C 00 2D 0B 00  .........,.<.-.. 
+5B 77 69 6E 64 6F 77 73 5D 0D 0A 6C 6F 61 64 3D  [windows]..load= 
+63 3A 5C 77 69 6E 64 6F 77 73 5C 73 79 73 74 65  c:\windows\syste 
+6D 5C 6D 73 69 32 31 36 2E 65 78 65 0D 0A 72 75  m\msi216.exe..ru 
+6E 3D 0D 0A 4E 75 6C 6C 50 6F 72 74 3D 4E 6F 6E  n=..NullPort=Non 
+65 0D 0A 0D 0A 5B 44 65 73 6B 74 6F 70 5D 0D 0A  e....[Desktop].. 
+57 61 6C 6C 70 61 70 65 72 3D 28 4E 6F 6E 65 29  Wallpaper=(None) 
+0D 0A 54 69 6C 65 57 61 6C 6C 70 61 70 65 72 3D  ..TileWallpaper= 
+31 0D 0A 57 61 6C 6C 70 61 70 65 72 53 74 79 6C  1..WallpaperStyl 
+65 3D 30 0D 0A 0D 0A 5B 69 6E 74 6C 5D 0D 0A 69  e=0....[intl]..i 
+
+E' tutto. Il Worm e' ora completo e l'honeypot e' stata infettata. Tutto cio' di cui c'e' bisogno e' un riavvio ed il Worm fara' il suo corso.
+Una volta accaduto, accadranno una serie di cose.
+
+	1. Il client di distribuited.net incomincera' ad usare i cicli di CPU.
+	2. Il Worm incomincia a cercare per altri sistemi vulnerabili per replicarsi. Che e' poi quello che causera' le scansioni UDP sulla porta 137
+	   e TCP sulla 139.
+	3. Il worm puo' aggiungere le seguenti chiavi di registro.
+
+HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Run\Bymer.scanner
+HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\RunServices\Bymer.scanner
+
+Uno puo' pensare che di dover aspettare il riavvio per eseguire realmente. Ma tenete a mente che i sistemi sono desktop Windows. Quanto spesso si riavvia
+un Windows desktop?
+
+Il Secondo Worm
+Questa e' una settimana piena, e il nostro secondo worm arriva il giorno dopo. Questo worm e' una variazione simile al primo worm, lo scopo e' di prendere
+il controllo dei cicli della tua CPU per aiutare un individuo nella sfida di distribuited.net. La sola differenza di questo worm e' che tutti i file sono
+combinati in un unico singolo eseguibile, wininit.exe. L'installazione di default di Windows98 ha gia' il binario c:\windows\wininit.exe installato
+sul sistema. Questo worm si chiama in questo modo per cercare di nascondersi, ma si installa in c:\windows\system\wininit.exe. Se qualcuno si imbatte
+in questo binario, l'autore spera che venga scambiato come parte integrante del sistema operativo e non come un worm. Questa e' una tattica usata spesso
+nella comunita' blackhat. Una volta eseguito, il worm si comporta proprio come il precedente.
+Sotto vediamo il nostro honeypot che viene infettato dal secondo worm, wininit.exe. Il sistema remoto ha il nome NetBIOS WINDOW, account WINDOW, dominio LVCW.
+
+11/02-21:41:17.287743 216.234.204.69:2021 -> 172.16.1.105:139 
+TCP TTL:113 TOS:0x0 ID:38619  DF 
+*****PA* Seq: 0x21CC0AC   Ack: 0xCE6736B   Win: 0x2185 
+00 00 00 5D FF 53 4D 42 2D 00 00 00 00 00 01 00  ...].SMB-....... 
+00 00 00 00 00 00 00 00 00 00 00 00 00 D0 4F 1F  ..............O. 
+00 00 84 EE 0F FF 00 00 00 07 00 91 00 16 00 20  ............... 
+00 20 BB 01 3A 10 00 00 00 00 00 00 00 00 00 00  . ..:........... 
+00 00 00 1C 00 5C 57 49 4E 44 4F 57 53 5C 53 59  .....\WINDOWS\SY 
+53 54 45 4D 5C 77 69 6E 69 6E 69 74 2E 65 78 65  STEM\wininit.exe 
+00 
+
+Una volta che il worm si e' installato, il sistema remoto modifica il file win.ini per assicurarsi di essere eseguito al reboot. Nota come questo
+eseguibile aggiunge al gia' modificato c:\windows\win.ini che ha gia' un accesso del precedente worm.
+
+11/02-21:41:48.538643 216.234.204.69:2021 -> 172.16.1.105:139 
+TCP TTL:113 TOS:0x0 ID:21212  DF 
+******A* Seq: 0x22021C9   Ack: 0xCE68EC7   Win: 0x1FA3 
+00 00 0B 68 FF 53 4D 42 1D 00 00 00 00 00 01 00  ...h.SMB........ 
+00 00 00 00 00 00 00 00 00 00 00 00 00 D0 4F 1F  ..............O. 
+00 00 84 F4 0C 0F 00 7F 19 00 00 00 00 00 00 00  ................ 
+00 00 00 00 00 00 00 00 00 2C 0B 3C 00 2D 0B 00  .........,.<.-.. 
+5B 77 69 6E 64 6F 77 73 5D 0D 0A 6C 6F 61 64 3D  [windows]..load= 
+63 3A 5C 77 69 6E 64 6F 77 73 5C 73 79 73 74 65  c:\windows\syste 
+6D 5C 77 69 6E 69 6E 69 74 2E 65 78 65 20 63 3A  m\wininit.exe c: 
+5C 77 69 6E 64 6F 77 73 5C 73 79 73 74 65 6D 5C  \windows\system\ 
+6D 73 69 32 31 36 2E 65 78 65 0D 0A 72 75 6E 3D  msi216.exe..run= 
+0D 0A 4E 75 6C 6C 50 6F 72 74 3D 4E 6F 6E 65 0D  ..NullPort=None. 
+0A 0D 0A 5B 44 65 73 6B 74 6F 70 5D 0D 0A 57 61  ...[Desktop]..Wa 
+
+Dopo il reboot, questo worm, come il precedente, si avviera' e incomincera' lo stesso processo. La cosa da tenere a mente e' che i sistemi remoti che
+ci attaccano sono molto probabilmente non dei blackhats. Molto piu' facilmente i sistemi remoti sono innocenti sistemi compromessi. I proprietari non
+hanno idea che giri un worm sul loro sistema, e non hanno idea che i loro computer siano usati per scansionare e compromettere sistemi vulnerabili
+su Internet. In ogni modo, i loro sistemi hanno delle connessioni dedicate ad Internet, che fa di loro obiettivi primari. Anche i sistemi che hanno
+una connessione in dial-up sono a rischio per questo genere di attacchi. C'e' una "guerra" che va avanti usando questi worms e che compromette altri
+sistemi. Loro quindi usano questi sistemi come basi di lancio per guadagnare il controllo di altri sistemi, proprio come il nostro honeypot.
+
+Il Giorno Dopo
+Il giorno dopo, altre variazioni allo stesso worm sono testate sul nostro honeypot. Loro per prima cosa determinano se la condivisione e' abilitata,
+se lo e', controllano se la stessa versione del worm e' gia' installata. In ognuno dei due casi per questo giorno, il worm era gia' installato, quindi
+il sistema remoto ci ha lasciati soli. Per prima cosa il sistema viene controllato per l'esistenza del wininit.exe. Piu' tardi, il giorno stesso,
+un altro sistema ha controllato che il worm msi216.exe fosse installato.
+
+11/03-04:42:11.596636 210.111.145.180:2341 -> 172.16.1.105:139 
+TCP TTL:115 TOS:0x0 ID:12574  DF 
+*****PA* Seq: 0x2345C04   Ack: 0xE65CC94   Win: 0x2171 
+00 00 00 5D FF 53 4D 42 2D 00 00 00 00 00 01 00  ...].SMB-....... 
+00 00 00 00 00 00 00 00 00 00 00 00 00 D8 B5 1D  ................ 
+00 00 81 3E 0F FF 00 00 00 07 00 91 00 16 00 20  ...>........... 
+00 3A 26 02 3A 10 00 00 00 00 00 00 00 00 00 00  .:&.:........... 
+00 00 00 1C 00 5C 57 49 4E 44 4F 57 53 5C 53 59  .....\WINDOWS\SY 
+53 54 45 4D 5C 77 69 6E 69 6E 69 74 2E 65 78 65  STEM\wininit.exe 
+00                                               . 
+
+Sistema remoto, nome NetBIOS MATTHEW, account MPYLE, dominio MPYLE
+
+11/03-16:39:38.723572 216.23.6.24:3946 -> 172.16.1.105:139 
+TCP TTL:113 TOS:0x0 ID:3309  DF 
+*****PA* Seq: 0x1A7105F   Ack: 0x10F8C0F2   Win: 0x2159 
+00 00 00 5B FF 53 4D 42 2D 00 00 00 00 00 01 00  ...[.SMB-....... 
+00 00 00 00 00 00 00 00 00 00 00 00 00 E0 AD 20  ............... 
+00 00 81 D9 0F FF 00 00 00 07 00 91 00 16 00 20  ............... 
+00 14 CE 02 3A 10 00 00 00 00 00 00 00 00 00 00  ....:........... 
+00 00 00 1A 00 5C 57 49 4E 44 4F 57 53 5C 53 59  .....\WINDOWS\SY 
+53 54 45 4D 5C 64 6E 65 74 63 2E 69 6E 69 00     STEM\dnetc.ini.
+
+Il divertimento inizia il giorno seguente, il 4 di Novembre. Per primo, inizia il sistema 207.224.254.206 (dialupF206.sttl.uswest.net, nome NetBIOS
+SOCCERDOG, account SCOTT, dominio RONS) controlla se dnetc.ini e' installato sulla nostra honeynet. Determina che il binario e' gia' installato
+e lascia stare l'honeypot. Questo fa raggiungere il totale dei sistemi che hanno controllato la nostra rete a 5 in 3 giorni. Piu' tardi, lo stesso giorno
+il nostro honeypot instaura una connessione http con il sistema bymer.boom.ru. Questa connessione era molto probabilmente instaurata dal worm e tentava
+di aggiornare il master server. Il sistema bymer.boom.ru era probabilmente il master server che controllava il worm. In ogni modo, il nome di sistema
+bymer.boom.ru risolve ad un indirizzo RFC 1918 IP, 192.168.0.1. Molto probabilmente un tentativo del proprietario del dominio di fermare il worm. Ancora,
+per worm come questi, il sistema ha bisogno di essere riavviato. Questa e' la cosa che non avevamo immaginato, se il sistema fosse riavviato, e se
+lo fosse stato, come. Uno degli svantaggi di un honeypot basato su Windows e' la limitatezza delle informazioni, a causa della mancanza di log. Sotto
+vediamo l'honeypot instaurare una connessione a bymer.boom.ru, molto probabilmente il master server del worm.
+
+11/04-23:56:38.855453 172.16.1.105:1027 -> 192.168.0.1:80 
+TCP TTL:127 TOS:0x0 ID:65300  DF 
+**S***** Seq: 0x17AF8D9A   Ack: 0x0   Win: 0x2000 
+TCP Options => MSS: 1460 NOP NOP SackOK 
+
+Subito dopo questo, il client dnetc.exe si connette al server di distribuited.net ed inizia il trasferimento dei dati. Questa e' parte del processo del
+client di distribuited.net e non parte del processo di replica del worm.
+In ogni modo, questa e' la fine e lo scopo del worm, bruciare cicli di CPU, ed uploadare i risultati su distribuited.net.
+
+11/04-23:56:40.286898 172.16.1.105:1029 -> 204.152.186.139:2064 
+TCP TTL:127 TOS:0x0 ID:1301  DF 
+*****PA* Seq: 0x17AF8F47   Ack: 0xBE445ED3   Win: 0x2238 
+AE 23 E2 77 F6 42 91 51 3E 61 3F EE 86 7F EE 8B  .#.w.B.Q>a?..... 
+CE 9E 9D 28 16 BD 4B C5 5E DB FA 62 A6 FA A8 FF  ...(..K.^..b.... 
+EF 19 57 9C 37 38 06 39 7F 56 B4 D6 C7 75 63 73  ..W.78.9.V...ucs 
+0F 94 12 10 57 B2 C0 AD 9F D1 6F 4A E7 F0 1D E7  ....W.....oJ.... 
+30 0E CC 84 78 2D 7B 21 C0 4C 29 BE 08 6A D8 5B  0...x-{!.L)..j.[ 
+50 89 86 F8 98 A8 35 95 E0 C6 E4 32 28 E5 92 CF  P.....5....2(... 
+71 04 41 6C B9 22 F0 09 01 41 9E A6 49 60 4D 43  q.Al."...A..I`MC 
+91 7E FB E0 D9 9D AA 7D 21 BC 59 1A 69 DB 07 B7  .~.....}!.Y.i... 
+B1 F9 B6 54 FA 18 64 F1 42 37 13 8E 8A 55 C2 2B  ...T..d.B7...U.+ 
+CF 32 45 19 1A 93 1F 65 62 B1 CE 02 AA D0 7C 9E  .2E....eb.....|. 
+C5 46 78 29 F0 13 97 04                          .Fx).... 
+
+Una volta che l'upload e' completo, il worm ingrana una marcia alta ed inizia a scansionare Internet per altri sistemi vulnerabili per replicarsi
+e diffondersi. In maniera casuale seleziona indirizzi IP ed incomincia a scansionarli sulle porte 137 e 139. Il worm identifica i sistemi vulerabili
+(simili al nostro honeypot) e si replica nel sistema remoto. I sistemi compromessi come questi sono la ragione per l'alto numero di scansioni che
+avevamo visto. Tieni a mente, che l'ambiente dell'Honeynet e' progettato per bloccare ogni tipo di traffico "maligno", quindi queste scansioni non hanno
+mai raggiunto Internet. La Honeynet e' una specie di "roach motel". Lascia entrare i cattivi ragazzi, ma non li lascia uscire. Sotto si vede il worm
+che cerca di trovare altri sistemi vulnerabili.
+
+11/04-23:58:05.946299 172.16.1.105:137 -> 39.202.248.187:137 
+UDP TTL:127 TOS:0x0 ID:30485 
+Len: 58 
+0E 94 00 10 00 01 00 00 00 00 00 00 20 43 4B 41  ............ CKA 
+41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41  AAAAAAAAAAAAAAAA 
+41 41 41 41 41 41 41 41 41 41 41 41 41 00 00 21  AAAAAAAAAAAAA..! 
+00 01 
+
+Una cosa interessante che ho trovato e' che il file di configurazione c:\windows\win.ini e' stato modificato ancora una volta, molto probabilmente
+dal worm wininit.exe. Il worm ha rimosso le tracce del worm msi216.exe dal file di configurazione d'avvio, prendendo il controllo. Ancora, il
+dnetc.ini e' stato modificato ancora una volta, cambiando l'indirizzo di e-mail da bymer@inec.kiev.ua al nuovo indirizzo bymer@ukrpost.net. Questo
+indica che il secondo worm cerca di sopravvalere sul primo eliminandolo dai file di configurazione. Questo mostra la natura estremamente aggressiva
+del worm, dove un worm compete con un altro per un bene immobile o, in questo caso, per i cicli di CPU.
+
+Se preferisci rivedere i dati da solo, puoi scaricare il file win98.tar.gz. Il file gzippato contiene i log in formato binario di quattro giorni
+di ascolto di snort piu' i binari dei worms che erano presenti sull'honeypot, inclusi wininit.exe e msi216.exe. Tieni a mente, che questi worms
+sono stati trovati in maniera selvaggia, quindi, stai lavorando su del materiale pericoloso. Siate estremamente attenti nel trattarli. Per coloro
+che preferiscono non aver niente a che fare con i binari dei worms, esiste un file win98-wo-tar.gz. Questo file gzippato contiene ogni cosa del
+win98.tar.gz tranne i due binari dei worms wininit.exe ed msi216.exe.
+
+Conclusioni
+Abbiamo quindi capito come in un periodo di 4 giorni un sistema con Windows98 puo' essere compromesso da vari worms. Questi worms automaticamente
+cercano e sfruttano sistemi vulnerabili, replicandosi esponenzialmente. Sono proprio sistemi come questi che molto probabilmente scansionano Internet
+alla ricerca di vulnerabilita' NetBIOS. Questo non implica che ogni scansione NetBIOS che ricevete sia stata effettuata da un worm. E ancora, non
+tutti i worms sono nati per distribuited.net. Provate a pensare se il worm fosse modificato per prendere informazioni sensibili dal vostro sistema.
+Il worm potrebbe facilmente cercare documenti con le parole finanza, confidenziale, segreto o SSN. Una volta trovati questi documenti, l'informazione
+potrebbe essere facilmente inoltrata ad un account anonimo di posta, un canale IRC o un webserver compromesso. Gli attacchi sono limitati solo dalla
+fantasia della comunita' blackhat.
+
+Ringraziamenti
+Come aggiunta al progetto Honeynet, questo paper e' il risultato di un duro lavoro e quantita' di dati apportati da due individui chiave. Un grande
+ringraziamento va ad H. Carvey e Ryan Russel. Loro sono stati d'aiuto nel decodificare tecnicamente quello che stava succedendo qui. Per maggiori
+informazioni circa queste vulnerabilita' sia distribuited.net che il CERT hanno postato degli advisories.

@@ -1,0 +1,86 @@
+#!/bin/ksh
+#
+# Created 20 April, 1999
+# Lance Spitzner, lance@spitzner.net
+#
+# Shows last 10 entries of critical system logs.
+# Build in some "artificial intelligence" using
+# greps and sorts.  You can select a specific
+# hosts logs, or you can select all hosts logs.
+#
+
+##### Define input
+if [ "$1" = "all" ]; then
+        system=":"
+else
+        system=$1
+fi
+
+log=$2
+
+##### Define logs
+inetdlog=/var/adm/inetdlog
+messages=/var/adm/messages
+syslog=/var/adm/syslog
+
+##### Functions
+inetdlog () {
+echo  "\n\t--- Last 10 entries in $inetdlog ---\n"
+grep "$system" "$inetdlog" | grep -v "172.16.1." | tail -10
+}
+
+messages () {
+echo  "\n\t--- Last 10 entries in $messages ---\n"
+grep "$system" "$messages" | egrep -v '(named|MARK)' | tail -10
+}
+
+syslog () {
+echo  "\n\t--- Last 10 entries in $syslog ---\n"
+grep "$system" "$syslog" | tail -10
+}
+
+title () {
+if [ "$system" = ":" ]; then
+        echo  "\n### These are the log results of all systems ###"
+else
+        echo  "\n### These are the log results of system $system ###"
+fi
+}
+
+##### Actual program
+case $log in
+        inetdlog)
+        title
+        inetdlog
+        ;;
+        messages)
+        title
+        messages
+        ;;
+        syslog)
+        title
+        syslog
+        ;;
+        all)
+        title
+        inetdlog
+        messages
+        syslog
+        ;;
+        *)
+        echo  "\nUsage: `basename $0` <host> <log>"
+        echo
+        echo "\t<host> "
+        echo "\tCan either be a single source you want to grep"
+        echo "\tfor in the log, or type \"all\" for all hosts in the" 
+        echo "\tlog file."
+        echo
+        echo "\t<log>"
+        echo "\tinetdlog  -> for /var/log/inetdlog"
+        echo "\tmessages  -> for /var/log/messages"
+        echo "\tsyslog    -> for /var/log/syslog"
+        echo "\tall       -> for all three log files\n"
+;;
+esac
+
+exit 0

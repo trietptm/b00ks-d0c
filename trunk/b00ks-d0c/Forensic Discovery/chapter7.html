@@ -1,0 +1,736 @@
+<!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+
+<title>Chapter 7: Persistence of deleted file information</title>
+
+</head>
+
+<body bgcolor="#ffffff">
+
+<h1>Chapter 7: Persistence of deleted file information</h1>
+
+<h2>7.1 Introduction</h2>
+
+<p> Computers delete files frequently. Sometimes this happens
+on explicit request by a user. Often, information is deleted
+implicitly when an application discards some temporary file for
+its own internal use.  Examples of such implicit file deletion
+activity are text editor temporary files, files with intermediate
+results from program compilers, and files in web browser caches.
+As you use a computer system you unwittingly leave behind a trail
+of deleted information.  </p>
+
+<p> Computer systems have a mind of their own, too, leaving their
+own trail of deletion as a side effect of activity that happens in
+the background.  Examples of background deletion activity are
+temporary files in mail system queues or in printer queues. Such
+files exist for only a few seconds or minutes.  If your machine
+provides network services to other systems, information from other
+systems that you aren't even aware of may hit your disk. Logfiles
+are another example of background file creation and deletion
+activity.  </p>
+
+<p> With many computer systems, deleted file information remains
+intact on the disk, in unallocated data blocks and in unallocated
+file attribute blocks, until it is overwritten in the course of
+other activity. This can result in unexpected disclosure of
+information when a machine (or its disk) is retired and resold as
+second-hand equipment.  For a study on how much information can be
+found on second-hand disk drives after the owner thought they had
+deleted all their files, see Garfinkel and Shelat [Garfinkel, 2003].
+</p>
+
+<p> In this chapter we study how deleted file information can escape
+destruction intact for months or even years, and how deleted file
+attribute information can provide insight into past system activity.
+We examine several systems and discover how well past activity can
+be preserved in unallocated disk space.  At the end of the chapter
+we explain why deleted file information can be more persistent than
+ordinary file information.  </p>
+
+<p> Although our results are based on UNIX file systems, we expect
+that they will be applicable to any modern file system that maintains
+a low degree of file fragmentation.  </p>
+
+<h2>7.2 Examples of deleted information persistence</h2>
+
+<p> In 1996, Peter Gutmann presented a paper on the problem of data
+destruction [Gutmann, 1996], and a follow-up paper [Gutmann, 2001].
+Peter's concern is with the security of sensitive information such
+as cryptographic keys and unencrypted data. The best encryption in
+the world is no good when keys or unencrypted content can be
+recovered.  </p>
+
+<p> Destroying information turns out to be difficult.  Memory chips
+can be read even after a machine is turned off.  Data on a magnetic
+disk can be recovered even after it is overwritten multiple times.
+</p>
+
+<p> Although memory chips and magnetic disks are designed to store
+digital information, the underlying technology is analog.  With
+analog storage of digital information, the value of a bit is a
+complex combination of past stored values.  Memory chips have
+undocumented diagnostic modes that allow access to values smaller
+than a bit.  With modified electronic circuitry, signals from disk
+read heads can reveal older data as modulations on the analog
+signal.  </p>
+
+<p> Another way to examine disks is surface scanning.  Figure 7.1
+gives a spectacular example of old magnetic patterns that persist
+on the side of a disk track.  You can find other images of
+semiconductors and of magnetic patterns on the Veeco web site
+[VEECO].  </p>
+
+<p>
+
+<blockquote>
+
+<img src="figure7.1.jpg">
+
+<p> Figure 7.1: Residuals of overwritten information on the side of
+magnetic disk tracks. Reproduced with permission of VEECO. </p>
+
+</blockquote>
+
+<p> However, lots of deleted information can be recovered without
+ever doing magnetic disk surface scans, even when that information
+was deleted long ago.  We examined the disk from a machine that
+began its life as a Windows PC, that had a second life as a Solaris
+firewall, and that finally was converted into a Linux system. After
+installing operating system over operating system, the deleted
+Solaris and Windows files were still clearly present as the contents
+of unallocated disk blocks.  For example, we found intact copies
+of many deleted Solaris firewall configuration files.  They could
+be sitting on the machine for many more years without ever being
+overwritten.  </p>
+
+<h2>7.3 Measuring the persistence of deleted file contents</h2>
+
+<p> The above Windows PC example is unusual. We were able to estimate
+the age of deleted information simply because the Windows files
+were installed before Solaris, and because the Solaris files
+were installed before Linux.  Although files often contain
+clues about when information was created, the contents of a deleted
+file rarely provide obvious clues about when that file was deleted.
+</p>
+
+<p> In order to find out how long deleted file content survives,
+we ran a 20-week experiment on a few machines on our own networks.
+We followed the history of each data block from day to day, from
+the time it was deleted to the time it was overwritten.  Every
+night an automated script examined each 1 kbyte disk block, and
+recorded a hash of the disk block content as well as the disk
+block's status:  allocated, unallocated, or overhead such as inode
+(file attribute) or bitmap block.  </p>
+
+<p> Figure 7.2 shows the distribution of surviving file content versus
+time of deletion for a small server file system.  Despite significant
+fluctuation, the trend is clear.  We found about 100 Mbytes of
+content that was deleted less than a week ago, while about 10 Mbytes
+was left over from content that was deleted 20 weeks ago. At the
+time of the measurement, this machine handled about 1500 email
+messages daily (about 10 Mbytes of data), and did limited amounts
+of WWW, FTP and DNS service.  Logging by the mail system amounted
+to about 1.5 Mbytes of data each day.  The file system of 8.0 GByte
+was about 50% full, and most of the email content and logging was
+automatically deleted after a short time.  </p>
+
+<blockquote>
+
+<img src="figure7.2.gif">
+
+<p> Figure 7.2: Persistence of deleted file content versus time of
+deletion for
+a small server file system. Time 0 corresponds to the present, and
+negative times represent the past.  The data in the graph represent
+one-third of all unallocated disk blocks in the file system.  The
+machine, spike.porcupine.org, is Wietse's FreeBSD server.  </p>
+
+</blockquote>
+
+<p> With this particular machine, half the deleted file content
+was overwritten after about 35 days.  Table 7.1 summarizes the results
+for a variety of file systems. There is some variation, but
+differences less than a factor of two are not significant. The
+lesson is that deleted data can stay around for weeks or more.
+</p>
+
+<blockquote>
+
+<table border="1" cellpadding="3">
+
+<tr><th>Machine</th><th>File system</th><th>Half-life</th></tr>
+
+<tr><td>spike.porcupine.org</td><td>entire disk</td><td>35 days</td></tr>
+
+<tr><td>flying.fish.com</td><td>/</td><td>17 days</td></tr>
+
+<tr><td>flying.fish.com</td><td>/usr</td><td>19 days</td></tr>
+
+<tr><td>www.porcupine.org</td><td>entire disk</td><td>12 days</td></tr>
+
+</table>
+
+<p> Table 7.1: Deleted file content half-life for three systems:
+spike.porcupine.org (Wietse's FreeBSD server), flying.fish.com
+(Dan's Linux workstation) and www.porcupine.org (Wietse's FreeBSD
+web/ftp server).  </p>
+
+</blockquote>
+
+<p> What the graph and the table do not show is how information
+survives.  Does a deleted file slowly erode away, or does it stay
+mostly intact until it is finally destroyed? With file systems that
+suffer from fragmentation problems, we expect that a deleted file
+is destroyed gradually, one fragment at a time.  With file systems
+that avoid fragmentation we expect that a deleted file stays mostly
+intact until it is destroyed, in a relatively short time.  We return
+to this topic at the end of this chapter.  </p>
+
+<h2>7.4 Measuring the persistence of deleted file MACtimes</h2>
+
+<p> We recall from chapter 2, "Time machines", that MACtimes,
+the time attributes of files, can give great insight into
+past activity on a machine.  In this chapter we apply the same
+technique to deleted file attribute information.  </p>
+
+<p> Furthermore, we recall from chapter 3 that UNIX file systems
+store file
+attributes separately from file content, and from chapter 4 that
+some MACtime information survives when a file is deleted: </p>
+
+<ul>
+
+<li> The last modification time attribute (mtime) does not change
+(Linux) or is set to the time of deletion (BSD, Solaris).
+
+<li> The last read access time attribute (atime) does not change.
+
+<li> The last status change time attribute (ctime) is set to the
+time of deletion.
+
+<li> Some Linux file systems have a fourth time attribute (dtime)
+that records when a file was deleted, but the attribute doesn't
+add much value and therefore we will not discuss it further.
+
+</ul>
+
+<p> As we will see in the next sections, deleted file attribute
+information can survive for months or even years, just like deleted
+file content.  Sometimes the reasons for survival are rather subtle,
+and involve a combination of dumb luck and the existence
+of pockets of low activity in the file system.  Sometimes the
+reasons for survival are not subtle and involve mainly the application
+of brute force.  </p>
+
+<h2>7.5 Brute force persistence of deleted file MACtimes </h2>
+
+<p> In order to find out how robust deleted file attribute information
+can be, we set up a disposable Linux machine and downloaded version
+4 of the Linux rootkit source code, <tt>lrk4.tgz</tt>, from one of
+many malware download sites.  The rootkit software installation
+procedure installs a network password sniffer program and replaces
+a dozen system programs by modified versions.  The rootkit installation
+procedure uses stealth techniques to ensure that the modified
+program files have the same MACtimes, file sizes, and file CRC
+(cyclic redundancy checksum) values as the files being replaced.
+See section 5.10, "Subversion with rootkit software", for more
+information about rootkit software, </p>
+
+<p> We compiled the rootkit software, ran the procedure that installs
+the modified system utilities, and removed the rootkit source code,
+just like an intruder would do.  Then we did just about the worst
+possible thing imaginable. We downloaded the Coroner's Toolkit
+source code distribution, unpacked the archive in the exact same
+directory as where the "intruder" unpacked the rootkit archive,
+compiled our toolkit and then ran the software
+in order to collect "evidence". Note: in order to avoid the kind
+of data destruction as described here, the authors recommend the
+use of CD-ROM images with ready-to-run software. For an example,
+see [FIRE, 2004; KNOPPIX, 2004a; Knoppix, 2004b].  </p>
+
+<p> By using the Coroner's Toolkit in this manner we knowingly
+destroyed large amounts of information. We overwrote data blocks
+that belonged to deleted rootkit files, we overwrote file attribute
+blocks (MACtimes!) that belonged to deleted rootkit files, and we
+destroyed last file access time information for compiler-related
+files. Kids, don't do this at home!  Even after all that destruction
+the Coroner's Toolkit still found the attributes of 476 deleted
+files and directories that existed during the rootkit incident.
+</p>
+
+<p> In figure 7.3, the ctime graph at the top shows the approximate
+times that files were deleted.  Notice the large peak on the
+right-hand side of the graph; this shows when the rootkit directory
+was removed, along with the source code and the compiler output
+files.  </p>
+
+<p> The atime graph in the middle shows when deleted files were
+accessed in order to compile the rootkit source code.  The large
+atime peak on the left-hand side corresponds to rootkit files that
+were unpacked but not used. This is an artifact of many UNIX file
+systems: they set the atime of a file to the time when it is created.
+</p>
+
+<p> The mtime graph at the bottom shows the last time that file
+content was modified before it was deleted. Only 165 of the 476
+deleted file residuals had mtimes in the incident time window; the
+data points correspond to files that were produced while compiling
+the rootkit source code.  The remaining 311 deleted file residuals
+had nearly identical last file modification times in the distant
+past.  Presumably, that was the time when the rootkit source code
+was packaged for distribution on some other machine.  </p>
+
+<blockquote>
+
+<img src="figure7.3.gif">
+
+<p> Figure 7.3: Signature of Linux rootkit activity in deleted file
+MACtimes after downloading, compiling and running
+the Coroner's Toolkit software. The ctime graph shows the time a
+file was deleted; atime shows the last read operation before a file
+was deleted; and mtime shows the last time the file content was
+modified. See the text for a discussion of specific graph features.
+</p>
+
+</blockquote>
+
+<p> The signal of surviving deleted file MACtimes was so strong
+that it should be hard to miss for anyone who knows what to look
+for, even days after the event. The reason for the strong signal
+is that rootkit software suffers from bloat and feature creep just
+like other software.  Linux rootkit version 4 has a rather large
+total footprint of approximately 780 files and directories, including
+the compiler output files that are produced when the software is
+compiled.  The Coroner's Toolkit, on the other hand, has a footprint
+of "only" 300 files.  The number is not large enough to wipe out
+all the rootkit's deleted file MACtime information.  </p>
+
+<table border="1" cellpadding="10" bgcolor="#f0f0f0"> <tr> <td>
+
+<p> <strong>Side bar: Using MACtimes for malware detection</strong> </p>
+
+<p> MACtimes of deleted or existing files can reveal that someone
+may have brought specific malware into a system. Malware, like any
+software, is usually distributed in the form of archives that
+contain multiple files. The software that maintains archives
+carefully preserves the last modification time stamps of the original
+files, and carefully restores those time stamps upon extraction.
+Even after the files are deleted, the malware's last modification
+time stamps can persist in the unallocated file attribute blocks.
+</p>
+
+<p> The rootkit incident of the previous section has an especially
+revealing signature (see figure 7.4).  Of the 311 deleted file last
+modification times not in the incident time window, 296 were
+identical to within 15 seconds.  Whether or not the time in the
+time stamps is forged does not matter. A peak with hundreds of
+deleted mtimes in this particular time interval should raise
+suspicion.  </p>
+
+<p> A MACtime malware signature analysis can be done in a short
+time compared to the time one needs to examine all the blocks on
+a disk.  For example, the Coroner's Toolkit <tt>ils</tt> (list
+inodes) command can read all the 2 million file attribute blocks
+within an 8 GByte FreeBSD file system in less than half a minute,
+much less time than would be needed to examine gigabytes of data
+blocks.  </p>
+
+<blockquote>
+
+<img src="figure7.4.gif">
+
+<p> Figure 7.4: Signature of deleted rootkit source files, revealing
+the apparent time and date when the source code files were packaged
+for distribution.  </p>
+
+</blockquote>
+
+</td> </tr> </table>
+
+<h2>7.6 Long-term persistence of deleted file MACtimes </h2>
+
+<p> Brute force persistence of deleted file MACtimes, as shown in
+the previous sections, relies on massive file system activity in
+a relatively
+short time.  This produces a strong signal that stands out well
+above the noise.  The signal survives even when the event is followed
+by a significant file system activity.  </p>
+
+<p> The brute force example does not tell us how long deleted file
+information can survive. In order to explore that question we
+analyzed the deleted file MACtimes of several machines.  We were
+surprised to find deleted file MACtime information going back
+an entire year or more, typically back to the time the file system
+was created on the disk.  </p>
+
+<p> Figure 7.5 shows deleted file MACtime attributes for a FreeBSD
+server machine that spends most of its time doing routine work:
+sending and receiving email, providing network services such as
+DNS, FTP and WWW, and maintaining logfiles.  There is one exception
+to the routine. The system owner is the author of an open source
+mail server, and is the "first user" of every release.  "First use"
+involves unpacking, compiling and removing the source code. At the
+time of the measurement, releases happened roughly in monthly
+bursts.  </p>
+
+<blockquote>
+
+<img src="figure7.5.gif">
+
+<p> Figure 7.5: Time distribution of deleted file MACtime attributes
+for a small server file system.  Time 0 corresponds to the present,
+and negative times represent the past.  The machine, spike.porcupine.org,
+is Wietse's FreeBSD server.  </p>
+
+</blockquote>
+
+<p> On the right-hand side of the figure, deleted file MACtime
+information decays gradually as one goes back in time.  On this
+particular machine, 90% of the deleted file MACtime information is
+overwritten in about 60 days, as the result of routine machine
+activity. This corresponds with a half-life of about 20 days. This
+is less than the 35 day half-life found earlier for deleted file
+content, but the difference is not meaningful given the accuracy
+of the measurements.  On the left-hand side of the figure, the
+deleted file MACtime distributions are relatively sparse, but the
+patterns go back until the time that FreeBSD was installed on the
+machine.  </p>
+
+<p> The top graph, with the distribution of the ctime attribute,
+shows the approximate time since a file was deleted.  Any deleted
+file ctime attributes that survive beyond the first 100 days of
+history are likely to be the result of non-routine activity on the
+machine.  For this particular machine, the most likely candidate
+is the compiling and installing of new mail software on the machine,
+and the subsequent removal of the source code.  </p>
+
+<p> The atime graph in the middle shows the last time that a file
+was accessed before it was deleted.  The atime information goes
+back by hundreds of days just like the ctime (file deletion time)
+graph.  This is not at all what one would find with ordinary file
+MACtimes:  with ordinary files, atimes are the most volatile MACtime
+component.  With deleted information the rules are different:
+deleted file last access times are as persistent as any deleted
+file attribute, because they are no longer updated.  </p>
+
+<p> The bottom graph shows the distribution of the mtime (file
+modification) attribute.  The FreeBSD file system sets the mtime
+to the time of deletion, and therefore its graph is identical to
+the ctime graph.  </p>
+
+<h2>7.7 Impact of user activity on deleted file MACtimes</h2>
+
+<p> Just like regular MACtimes, deleted file MACtimes are sensitive
+to system usage patterns.  The data in the previous section are
+typical for a dedicated machine that spends most of its time doing
+routine work. The analysis of a personal workstation is more complex,
+because system behavior is dominated by less predictable user
+activity.  </p>
+
+<p> Figure 7.6 shows deleted file MACtime patterns for a personal
+workstation. This machine was the user's primary work environment
+for sending and receiving email, for surfing the web, and for
+developing software. In addition, it also did a limited amount of
+routine WWW and DNS
+service. The MACtime patterns for this machine are dramatically
+different
+from those for the dedicated server in figure 7.5.  </p>
+
+<blockquote>
+
+<img src="figure7.6.gif">
+
+<p> Figure 7.6: Time distribution of deleted file MACtimes for a
+personal workstation file system. Time 0 corresponds to the present,
+and negative times represent the past.  The machine flying.fish.com
+is Dan's RedHat Linux workstation.  </p>
+
+</blockquote>
+
+<p> On the right-hand side, the deleted file ctime (time of deletion)
+and atime (last read access) graphs show decay of recent history.
+The decay is not nearly as smooth as in figure 7.5.  On the left-hand
+side, the ctime and atime graphs show residuals from significant
+activity in the more distant past.  As with the dedicated server,
+the residuals go back in time until the file system was created.
+</p>
+
+<p> The workstation's deleted file mtime (last modification) graph
+is unlike all the other graphs we have discussed.  The workstation's
+distribution is actually made up from two components.  One component
+correlates with the ctime and atime graphs, and corresponds to
+relatively short-lived files; the other component shows up as a
+more or less time-independent background of about 10 deleted file
+residuals a
+day.  </p>
+
+<p>
+
+<p> The existence of the time-independent component means that some
+files have no correlation between the time of last update and the
+time of deletion.  This is consistent with the primary user's
+behavior.  According to the user, files accumulated over time at a
+steady rate.  Every few months the user deleted a large number of
+files to free up some space.  </p>
+
+<h2>7.8 Trustworthiness of deleted file information</h2>
+
+<p> Deleted file MACtimes or contents present the investigator with
+great opportunities. Because deleted information is less visible
+than ordinary information, an opponent is less likely to be aware
+that the information exists, and therefore is less likely to tamper
+with it.  For example, if a logfile was modified, it is possible
+that portions of the unmodified file can still be recovered
+from unallocated file system space.  </p>
+
+<p> Deleted file MACtimes inherit only some of the limitations from
+existing file MACtimes. Prior to deletion, a file is relatively
+easy to access. Its MACtime information is volatile and is easily
+forged, as described in chapter 2. After deletion, it is relatively
+easy to non-selectively overwrite deleted file MACtimes by creating
+a large number of small files.  Changing specific deleted attributes
+becomes more difficult, at least on systems that can permanently
+revoke write access to kernel memory or disk devices (see, for
+example, section 5.6, "Protecting forensic information with kernel
+security levels").  </p>
+
+<p> A similar argument can be made for deleted file contents.
+Prior to deletion, information is relatively easy to access, and
+therefore relatively easy to modify.  After deletion, it is relatively
+easy to non-selectively overwrite deleted file contents by creating
+a small number of large files.  Changing specific deleted data
+blocks becomes more difficult, at least on systems that can
+permanently revoke write access to kernel memory or disk devices.
+</p>
+
+<p> After deletion, forging file MACtimes or contents can be risky.
+The straight-forward approach is to bypass the file system and to
+write to the raw disk.  There is a definite possibility of file
+system corruption when a mala fide opponent competes with a bona
+fide file system for access to the same file system block.  A more
+reliable approach would involve a kernel module that
+performs the cleansing while cooperating with the file system,
+rather than competing against it. </p>
+
+<p> Completeness is an obvious issue with deleted information.
+Contrary to existing file MACtimes
+or file contents,  deleted information can be overwritten at any
+point in time, and therefore it is more likely to be incomplete.
+As
+discussed in chapter 1, the absence of specific information must
+not be used as evidence that the information was never stored. With
+unallocated storage this is even more true than with ordinary file
+information.  </p>
+
+<h2>7.9 Why deleted file information can survive intact</h2>
+
+<p> In the previous sections we have shown that deleted information
+can escape destruction for months or even years.  In this section
+we'll illustrate how high-performance file system design can
+influence long-term survival of deleted file information.  </p>
+
+<p> High-performance file systems avoid disk head movements by
+keeping related information closely together. This not only reduces
+the fragmentation of individual file contents, it also reduces
+delays while traversing directories in order to access a file.
+Although the details given below are specific to popular UNIX
+systems, we expect that similar persistence effects happen with
+any file system that has good locality properties. </p>
+
+<p> The typical UFS or Ext3fs file system is organized into
+equal-sized zones (see figure 7.7).  These file systems descend from
+the Berkeley Fast File System [McKusick, 1984] and are found on
+Solaris,
+FreeBSD and Linux [Card, 1994].  Typical zone sizes are 32768
+blocks;
+the actual block size depends on file system type, and with some
+systems it also depends on the file system size.  New files are
+created preferably in the same file system zone as their parent
+directory; this improves the clustering of related information.
+New directories are created in zones that have few directories and
+lots of unused space.  </p>
+
+<blockquote>
+
+<img src="figure7.7.gif">
+
+<p> Figure 7.7: On-disk layout of a typical UFS or Ext3fs file system.
+Storage space is divided up into multiple zones. Each zone contains
+its own allocation bitmaps, file data blocks, and file attribute
+(inode) blocks.  Normally, information about a small file is stored
+entirely within one zone. The figure is not drawn to scale.  </p>
+
+</blockquote>
+
+<p> By keeping related information within the same file system
+zone, typical UFS or Ext3fs file systems tend to cluster the files
+from different users or applications according to different file
+system zones.  Because of this, the survival time of deleted
+information depends strongly on the amount of file write activity
+within its zone. As shown in figure 7.8, write activity can be
+highly focused within specific file system zones. </p>
+
+<blockquote>
+
+<img src="figure7.8.gif">
+
+<p> Figure 7.8: Percentage of data blocks per file system zone that
+were overwritten in one month time, for a small FreeBSD server with
+an 8Gbyte file system
+that was filled to 50% capacity. The figure shows that disk write
+activity is focused within specific zones.  Less than 4% of all
+data blocks were changed during this one-month time interval.  </p>
+
+</blockquote>
+
+<p> When a file is deleted in a high-activity zone, its data blocks
+and inode (file attribute) information will be overwritten relatively
+quickly by new files.  We saw an example of this in chapter 4, when
+we failed to recover files that were deleted from the <tt>/tmp</tt>
+directory.  </p>
+
+<p> On the other hand, when a file is deleted in a low-activity zone,
+its data blocks and inode (file attribute) information can escape
+destruction as long as file system activity stays within other file
+system zones.  As the disk fills up in the course of time, write
+activity will unavoidably migrate into the quiet neighborhoods of
+low-activity zones, turning them into destructive high-activity
+zones.  Until that time, deleted file information in low-activity
+zones can survive intact and in copious amounts.  </p>
+
+<p> In chapter 1 we observed that computer systems tend to spend
+most of their time running around in routine activity. In terms of
+file system zones, this means that write activity tends to be
+focused in a limited number of zones where information is created
+and destroyed relatively quickly. The rest of the file system is
+relatively static, and any file deleted there is likely to survive
+for a relatively long time. </p>
+
+<p> Thus, what we observed in chapters 1 and 2 for ordinary files
+turns out to be true for deleted files as well: traces from routine
+activity erode quickly, while unusual activity stands out because
+its traces survive longer.  </p>
+
+<h2>7.10 Conclusion</h2>
+
+<p> This chapter shows that deleted file information can survive
+intact for months or even years, and that deleted file attribute
+information can give insights about past system activity that you
+can't get from ordinary file attribute information.  </p>
+
+<p> In chapter 1 we found that MACtime file access time patterns
+of existing files can provide great insight into past system
+behavior.  We also found that they suffer from a major drawback:
+MACtime information is destroyed whenever a file is accessed in
+one way or another.  Existing file MACtime information is volatile,
+like footsteps in sand.  The next time you look it has changed.
+</p>
+
+<p> Deleted file MACtime information is different.  When a file is
+deleted, its MACtime information does not change until it is
+overwritten.  In other words, deleted file MACtime
+information becomes frozen in time.  </p>
+
+<p> The same is true for deleted file contents.  Once deleted, file
+content does not change until it is overwritten. On
+file systems with good clustering properties, deleted files can
+remain intact for years.  Deleted file information is like a fossil.
+A skeleton may be missing a bone here or there, but the fossil does
+not change until it is destroyed.  </p>
+
+<p> This phenomenon of deletion and persistence can happen at any
+abstraction level.  At the abstraction level of file systems,
+deleted information persists as unallocated disk blocks until it
+is overwritten.  At the abstraction level of magnetic disk reading
+heads, overwritten information persists as analog modulations on
+the newer information.  And at the abstraction level of magnetic
+domains, overwritten information persists as magnetic patterns on
+the side of magnetic tracks, as shown in figure 7.1.  </p>
+
+<p> At each layer in the hierarchy of abstractions that make up
+computer systems, information becomes frozen when it is deleted.
+Although deleted information becomes more and more ambiguous as we
+descend to lower and lower levels of abstraction, we also find that
+deleted information becomes more and more persistent.  Volatility
+is an artifact of the abstractions that make computer systems
+useful.  </p>
+
+<p> All this has major consequences not only for intruders whose
+activity is reconstructed with post-mortem intrusion analysis, but
+also for the privacy of legitimate users of computer systems.  For
+a discussion that covers much more than just computer systems, we
+refer the reader to Michael Caloyannides's book on privacy versus
+forensics [Caloyannides, 2004].  </p>
+
+<hr>
+
+<h2> References </h2>
+
+<p> [Caloyannides, 2004] Michael A. Caloyannides, "Privacy Protection
+and Computer Forensics", Second Edition. Artech House. 2004. </p>
+
+<p> [Card, 1994] Remy Card, Theodore Ts'o, Stephen Tweedie, "Design
+and Implementation of the Second Extended Filesystem", Proceedings
+of the First Dutch Internation al Symposium on Linux, Amsterdam,
+December 8-9, 1994.  <br> 
+<a href="http://web.mit.edu/tytso/www/linux/ext2intro.html">
+http://web.mit.edu/tytso/www/linux/ext2intro.html</a> </p>
+
+<p> [FIRE, 2004] The Forensic and Incident Response Environment
+bootable CD. <br> 
+<a href="http://biatchux.dmzs.com/"> http://biatchux.dmzs.com/</a>
+</p>
+
+<p> [Garfinkel, 2003] Simson L. Garfinkel, Abhi Shelat, "Remembrance
+of Data Passed: A Study of Disk Sanitization Practices".  IEEE
+Security & Privacy, vol. 1, no. 1, 2003. <br> 
+<a href="http://www.computer.org/security/v1n1/garfinkel.htm">
+http://www.computer.org/security/v1n1/garfinkel.htm</a> </p>
+
+<p> [Gutmann, 1996] Peter Gutmann, "Secure Deletion of Data from
+Magnetic and Solid-State Memory", Sixth USENIX Security Symposium
+Proceedings, San Jose, California, July 22-25, 1996. <br> 
+<a href="http://www.cs.auckland.ac.nz/~pgut001/pubs/secure_del.html">
+http://www.cs.auckland.ac.nz/~pgut001/pubs/secure_del.html</a> </p>
+
+<p> [Gutmann, 2001] Peter Gutmann, "Data Remanence in Semiconductor
+Devices", 10th USENIX Security Symposium, Washington, D.C., August
+13-17, 2001.  <br> 
+<a href="http://www.cryptoapps.com/~peter/usenix01.pdf">
+http://www.cryptoapps.com/~peter/usenix01.pdf</a> </p>
+
+<p> [KNOPPIX, 2004a] KNOPPIX Linux Live CD.  <br> 
+<a href="http://www.knoppix.org/"> http://www.knoppix.org/</a> </p>
+
+<p> [KNOPPIX, 2004b] KNOPPIX security tools distribution. <br> 
+<a href="http://www.knoppix-std.org/"> http://www.knoppix-std.org/</a>
+</p>
+
+<p> [McKusick, 1984] Marshall K. McKusick, William N. Joy, Samuel
+J.  Leffler, and Robert S. Fabry, "A Fast File System for UNIX",
+ACM Transactions on Computer Systems 2, 3 (August 1984), 181-197.
+<br> 
+<a href="http://docs.freebsd.org/44doc/smm/05.fastfs/paper.pdf">
+http://docs.freebsd.org/44doc/smm/05.fastfs/paper.pdf</a> </p>
+
+<p> [Farmer, 2004] The Coroner's toolkit, by Dan Farmer and Wietse
+Venema. <br> 
+<a href="http://www.porcupine.org/forensics/">
+http://www.porcupine.org/forensics/</a> <br> 
+<a href="http://www.fish2.com/forensics/">
+http://www.fish2.com/forensics/</a>.  </p>
+
+<p> [VEECO] The nanotheatre web pages on the Veeco web site. <br>
+<a href="http://www.veeco.com/">http://www.veeco.com/</a>.  </p>
+
+</body>
+
+</html>
+

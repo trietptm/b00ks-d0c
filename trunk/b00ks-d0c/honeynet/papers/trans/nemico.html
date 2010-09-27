@@ -1,0 +1,375 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html xmlns:o="urn:schemas-microsoft-com:office:office"
+xmlns:w="urn:schemas-microsoft-com:office:word"
+xmlns="http://www.w3.org/TR/REC-html40">
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+<meta name=ProgId content=Word.Document>
+<meta name=Generator content="Microsoft Word 9">
+<meta name=Originator content="Microsoft Word 9">
+<link rel=File-List href="./nemico_file/filelist.xml">
+<title>Know Your Enemy - Italian Version</title>
+<!--[if gte mso 9]><xml>
+ <o:DocumentProperties>
+  <o:Author>Sogei</o:Author>
+  <o:LastAuthor>Sogei</o:LastAuthor>
+  <o:Revision>31</o:Revision>
+  <o:TotalTime>271</o:TotalTime>
+  <o:Created>2000-11-21T18:48:00Z</o:Created>
+  <o:LastSaved>2001-01-10T09:58:00Z</o:LastSaved>
+  <o:Pages>3</o:Pages>
+  <o:Words>1960</o:Words>
+  <o:Characters>11172</o:Characters>
+  <o:Company>Sogei</o:Company>
+  <o:Lines>93</o:Lines>
+  <o:Paragraphs>22</o:Paragraphs>
+  <o:CharactersWithSpaces>13720</o:CharactersWithSpaces>
+  <o:Version>9.3821</o:Version>
+ </o:DocumentProperties>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:WordDocument>
+  <w:HyphenationZone>14</w:HyphenationZone>
+ </w:WordDocument>
+</xml><![endif]-->
+<style>
+<!--
+ /* Font Definitions */
+@font-face
+	{font-family:"Arial Narrow";
+	panose-1:2 11 5 6 2 2 2 3 2 4;
+	mso-font-charset:0;
+	mso-generic-font-family:swiss;
+	mso-font-pitch:variable;
+	mso-font-signature:647 0 0 0 159 0;}
+@font-face
+	{font-family:"Book Antiqua";
+	panose-1:2 4 6 2 5 3 5 3 3 4;
+	mso-font-charset:0;
+	mso-generic-font-family:roman;
+	mso-font-pitch:variable;
+	mso-font-signature:647 0 0 0 159 0;}
+@font-face
+	{font-family:Braggadocio;
+	panose-1:0 0 0 0 0 0 0 0 0 0;
+	mso-font-alt:"Times New Roman";
+	mso-font-charset:0;
+	mso-generic-font-family:roman;
+	mso-font-format:other;
+	mso-font-pitch:auto;
+	mso-font-signature:0 0 0 0 0 0;}
+ /* Style Definitions */
+p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{mso-style-parent:"";
+	margin:0cm;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";}
+a:link, span.MsoHyperlink
+	{color:blue;
+	text-decoration:underline;
+	text-underline:single;}
+a:visited, span.MsoHyperlinkFollowed
+	{color:blue;
+	text-decoration:underline;
+	text-underline:single;}
+p
+	{margin-right:0cm;
+	mso-margin-top-alt:auto;
+	mso-margin-bottom-alt:auto;
+	margin-left:0cm;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";}
+@page Section1
+	{size:595.3pt 841.9pt;
+	margin:70.85pt 2.0cm 2.0cm 2.0cm;
+	mso-header-margin:35.4pt;
+	mso-footer-margin:35.4pt;
+	mso-paper-source:0;}
+div.Section1
+	{page:Section1;}
+-->
+</style>
+<meta name=description
+content="Tools and methods used by most common black hat threat on the Internet, the Script Kiddie">
+<meta name=keywords
+content="hacking,security,script kiddie,exploits,scans,black hat,root,tools,methods">
+</head>
+
+<body lang=IT link=blue vlink=blue style='tab-interval:35.4pt'>
+
+<div class=Section1>
+
+<p class=MsoNormal><i>Strumenti e Metodologie dello </i><i><span
+style='mso-bidi-font-size:13.5pt'>Script Kiddie</span></i> <br>
+<span style='font-size:36.0pt;mso-bidi-font-size:12.0pt;font-family:"Book Antiqua"'>Conosci
+il tuo nemico<o:p></o:p></span></p>
+
+<p class=MsoNormal><span style='font-size:10.0pt'><a
+href="mailto:lance@spitzner.net?Subject=Know%20Your%20Enemy"><span
+style='font-family:"Book Antiqua"'>Lance Spitzner</span></a> <br>
+<a href="http://www.enteract.com/~lspitz/papers.html"><span style='font-family:
+"Book Antiqua"'>http://www.enteract.com/~lspitz/papers.html</span></a> </span><br>
+Ultima modifica: 21 Luglio, 2000 </p>
+
+<p class=MsoNormal><b><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></b></p>
+
+<p class=MsoNormal><b>Il mio comandante era solito dirmi che per difendersi da
+un nemico, e' necessario conoscerlo. Questo concetto militare e' facilmente
+applicabile al mondo della sicurezza di rete. Come il militare, voi avete
+risorse che cercate di proteggere. Per poterlo fare avete bisogno di conoscere chi
+è il vostro avversario e come ha intenzione di attaccarvi. Questo articolo, il
+primo di una serie, fa proprio questo, tratta degli strumenti e delle
+metodologie di una delle più comuni ed universali minacce, lo <i>Script Kiddie.</i><span
+style="mso-spacerun: yes">&nbsp; </span>Se voi o la vostra organizzazione avete
+delle risorse in Internet, allora tutto ciò è applicabile anche a voi.<o:p></o:p></b></p>
+
+<p><b><a href="http://www.enteract.com/~lspitz/enemy2.html">Conosci il tuo
+nemico: II</a> incentrato su come è possibile<span style="mso-spacerun:
+yes">&nbsp; </span>rilevare questi attacchi, come identificare gli strumenti
+che vengono usati e quali vulnerabilità vengono cercate. <a
+href="http://www.enteract.com/~lspitz/enemy3.html">Conosci il tuo nemico: III </a>incentrato
+su cosa accade una volta che gli attaccanti siano riusciti ad avere accesso
+come root.&nbsp; In particolare come gli attaccanti coprono le loro tracce e
+cosa posso fare in seguito. <a
+href="http://www.enteract.com/~lspitz/forensics.html">Conosci il tuo nemico: Forensics</a>
+tratta di come potete analizzare un tale attacco. Infine, <a
+href="http://www.enteract.com/~lspitz/motives">Conosci il tuo nemico:
+Motivazioni</a>, il risultato di un gruppo di lavoro, rivela le motivazioni e
+la psicologia di alcuni membri della comunità &quot;oscura&quot;, dalle loro
+stesse parole.<o:p></o:p></b></p>
+
+<p><b><span style='font-size:18.0pt;font-family:"Book Antiqua"'>Chi è lo Script
+Kiddie</span></b> </p>
+
+<p>Lo script kiddie è qualcuno alla ricerca di una intrusione facile. Non sono
+alla ricerca di informazioni specifiche nè cercano una particolare compagnia.
+Il loro obiettivo è quello di ottenere i privilegi di root nel modo più
+semplice possibile. Per ottenere ciò si concentrano su un piccolo numero di
+vulnerabilità, e cercano su tutta la Rete. Presto o tardi trovano qualche
+sistema vulnerabile.</p>
+
+<p>Alcuni di loro sono utenti esperti<span style="mso-spacerun: yes">&nbsp;
+</span>che sviluppano da soli i propri strumenti software (tools) e si lasciano
+dietro sofisticate &quot;porte di servizio&quot; (backdoors). Altri non hanno
+idea di quello che stanno facendo e sanno solo come digitare &quot;via&quot;
+al<span style="mso-spacerun: yes">&nbsp; </span>prompt dei comandi. Comunque, a
+prescindere dal loro livello di preparazione, hanno in comune una strategia
+comune, cercare in modo casuale per vulnerabilità specifiche e sfruttare queste
+debolezze.<span style="mso-spacerun: yes">&nbsp; </span></p>
+
+<p><b><span style='font-size:18.0pt;font-family:"Book Antiqua"'>La Minaccia</span></b>
+</p>
+
+<p>E' questa selezione casuale dei bersagli che rende cosi' pericoloso lo
+script kiddie. Presto o tardi il vostro sistema e la vostra rete verranno <a
+href="http://www.enteract.com/~lspitz/probed.txt">verranno testati</a>, non
+potete nascondervi. Conosco amministratori che si sono stupiti di avere i loro
+sistemi esplorati quando erano funzionanti da appena un paio di giorni e
+nessuno li conosceva. Non c'è da stupirsi. Molto probabilmente, i loro sistemi
+erano testati da uno script kiddie che stava &quot;spazzolando&quot; quel
+segmento di rete. </p>
+
+<p>Se questo fosse limitato a poche scansioni individuali la statistica sarebbe
+con voi. Con milioni di sistemi su Internet, è probabile che non vi trovino. Ma
+non e' questo il caso. Molti di questi strumenti sono facili da usare e
+largamente distribuiti, e chiunque può usarli. Un numero sempre maggiore di
+persone ottiene questi strumenti con un incremento allarmante. Non essendoci
+confini geografici su Internet, questa minaccia si è rapidamente sparsa nel
+mondo. Improvvisamente la legge delle probabilità vi e' contro. Con così tanti
+utenti su Internet che usano questi strumenti, non passerà molto tempo prima
+che voi veniate esplorati. </p>
+
+<p>Questo è un esempio di come la sicurezza tramite l'invisibilità può mettervi
+nei guai. Potreste credere che se nessuno conosce i vostri sistemi, siete al
+sicuro. Altri pensano che essendo i loro sistemi privi di interesse specifico,
+perchè qualcuno dovrebbe ispezionarli ? Sono questi i sistemi che gli script
+kiddie cercano, i sistemi non protetti che sono facilmente sfruttabili,
+l'intrusione facile. </p>
+
+<p><b><span style='font-size:18.0pt;font-family:"Book Antiqua"'>La Metodologia</span></b>
+</p>
+
+<p>La metodologia usata è semplice. Esplora Internet per una specifica
+vulnerabilità, quando la trovi, sfruttala. Molti degli strumenti usati sono
+automatici e richiedono solo una piccola interazione. Si lancia lo strumento e
+si torna a controllare i risultati qualche giorno.&nbsp;Non ci sono due script
+uguali, così come non ci sono vulnerabilità uguali. Comunque molti di questi
+strumenti usano la stessa strategia. Per prima cosa costruiscono un archivio di
+indirizzi IP. Quindi li testano per una specifica vulnerabilità. </p>
+
+<p>Per esempio, mettiamo che un utente abbia uno strumento che può sfruttare
+una vulnerabilità del programma imap su un sistema Linux, come fa<span
+style="mso-spacerun: yes">&nbsp; </span><a
+href="http://www.enteract.com/~lspitz/imapd_exploit.txt">imapd_exploit.c</a>.
+Prima di tutto l'attaccante costruisce un database di indirizzi IP che sia
+possibile testare (p.e., sistemi che siano funzionanti e raggiungibili). Una
+volta che questo database di indirizzi IP e' costruito, l'utente può
+determinare quali sistemi hanno Linux come sistema operativo. Molti scanner
+attuali possono facilmente determinare il sistema operativo spedendo pacchetti
+malformati a un sistema e vedendone la risposta, come fa <a
+href="http://www.insecure.org/nmap">nmap</a> di Fyodor. Quindi possono essere
+usati strumenti per determinare quali di questi sistemi Linux hanno in
+esecuzione imap. Tutto quello che rimane da fare ora e' entrare in quei sistemi
+vulnerabili. . </p>
+
+<p>Penserete che tutto ciò sia estremamente &quot;rumoroso&quot;, e che
+attragga l'attenzione. In realtà molte persone non controllano i sistemi, e non
+realizzano di essere sotto esame. Inoltre molti script kiddie ricercano silenziosamente
+un sistema in cui entrare. Una volta trovato, usano questo sistema come rampa
+di lancio. Così possono esaminare l'intera Internet senza timore di essere
+individuati. Se le loro operazioni vengono scoperte, sarà l'amministratore del
+sistema e non l'aggressore ad essere ritenuto responsabile. </p>
+
+<p>Inoltre i risultati di queste operazioni sono spesso archiviati o condivisi
+tra diversi utenti per essere usati in un altro momento.&nbsp; Per esempio un
+utente può creare una database con l'elenco delle porte aperte su un sistema
+Linux raggiungibile.&nbsp;L'utente costruisce questo database per sfruttare le
+vulnerabilità attuali di imap.&nbsp; Diciamo che un mese dopo venga
+identificata una nuova vulnerabilità Linux su una porta differente.&nbsp;Invece
+di costruire un nuovo database (che è la parte che porta via più tempo),
+l'utente può velocemente rivedere il suo database e compromettere i sistemi
+vulnerabili.&nbsp; In alternativa, è possibile condividere o anche acquistare
+database di sistemi vulnerabili.&nbsp;Potete leggere esempi di ciò in <a
+href="http://www.enteract.com/~lspitz/motives">Conosci il tuo nemico:
+Motivazioni</a> . In definitiva uno script kiddie può attaccare con successo il
+vostro sistema senza averlo mai esaminato prima.&nbsp;Quindi se il vostro
+sistema non è stato esaminato di recente, ciò non vuol dire che siate al
+sicuro. </p>
+
+<p>Gli aggressori più smaliziati, una volta compromesso il sistema vi
+piazzeranno trojans e backdoor . Le backdoor (porte di servizio) permettono un
+facile e sicuro accesso al sistema in qualsiasi momento. I trojans (cavalli di
+Troia) rendono invisibile l'intruso. Egli non sarà visibile in nessun log,
+processo di sistema o struttura file. Avrà un posto sicuro e confortevole da
+dove potrà continuare ad esaminare la Rete. Per maggiori informazioni, leggete <a
+href="http://www.enteract.com/~lspitz/enemy3.html">Conosci il tuo nemico: III</a>.
+</p>
+
+<p>Questi attacchi non sono circoscritti a certe ore della giornata. Molti
+amministratori controllano i loro log in cerca di eventi notturni, pensando che
+queste siano le ore in cui gli aggressori agiscono. I script kiddie attaccano
+in ogni momento. Siccome lavorano 24 ore al giorno, voi non potete avere idea
+di quando toccherà a voi. Inoltre questi attacchi sono lanciati da ovunque nel
+mondo. E siccome Internet non conosce confini geografici, non conosce neanche
+fusi orari. Potrebbe essere mezzanotte per l'intruso, ma essere l'una del
+pomeriggio per voi. </p>
+
+<p>Questa metodologia di ricerca di sistemi vulnerabili può essere usata per
+diversi fini. Recentemente sono stati riportati nuovi attacchi di
+&quot;negazione di servizio&quot; (Denial of Service, DoS), in particolare DDoS
+(Distributed Denial of Service attacks).&nbsp; Questi attacchi sono effettuati
+da un singolo utente che controlla centinaia, se non migliaia, di sistemi
+compromessi in tutto il mondo.&nbsp; Questi sistemi compromessi sono quindi
+coordinati remotamente per eseguire l'attacco contro la vittima o le
+vittime.&nbsp;A causa della molteplicità dei sistemi compromessi<span
+style="mso-spacerun: yes">&nbsp; </span>in uso, è estremamente difficile
+difendersi da questi attacchi ed identificarne la sorgente.&nbsp; Per prendere
+il controllo di così tanti sistemi, spesso sono impiegate tattiche di script
+kiddie.&nbsp; I sistemi vulnerabili vengono identificati in modo casuale e
+quindi compromessi per essere usati come rampe di lancio dell'attacco.&nbsp; Più
+sistemi compromessi, maggiore la potenza dell'attacco DDoS.&nbsp;Un esempio di
+un simile attacco è '<a href="ddos.txt">stacheldraht</a>',. Per saperne di più
+circa gli attacchi &quot;Distributed Denial of Service&quot; e su come
+proteggersi, potete vedere il sito di Paul Ferguson <a
+href="http://www.denialinfo.com">Denialinfo</a> </p>
+
+<p><b><span style='font-size:18.0pt;font-family:"Book Antiqua"'>Gli Strumenti</span></b>
+</p>
+
+<p>Gli strumenti implicati sono estremamente semplici da usare. Molti sono
+limitati ad un singolo fine con poche opzioni. Per primi vengono gli strumenti
+usati per costruire un database di indirizzi IP. Questi strumenti sono
+realmente casuali, in quanto esaminano indiscriminatamente Internet. Per
+esempio uno strumento ha una sola opzione, A, B, o C. La lettera che viene
+selezionata determina la dimensione della rete da esaminare. Lo strumento
+quindi seleziona casualmente quali rete IP esaminare. Un altro strumento usa un
+nome di dominio (z0ne è un eccellente esempio). Costruisce un database di
+indirizzi IP effettuando un trasferimento di zona del nome di dominio e di tutti
+i sotto domini. Alcuni utenti hanno costruito database con oltre 2 milioni di
+indirizzi IP esaminando gli interi domini<span style="mso-spacerun: yes">&nbsp;
+</span>.com e .edu . Una volta scoperti, gli IP vengono esaminati con strumenti
+atti a determinare varie vulnerabilità, quali la versione di named, il sistema
+operativo, o i servizi in esecuzione sul sistema. Una volta identificato il
+sistema vulnerabile, l'aggressore colpisce. Per una migliore comprensione
+sull'utilizzo di questi strumenti potete leggere <a
+href="http://www.enteract.com/~lspitz/forensics.html">Conosci Il Tuo Nemico:
+Forensics</a>. </p>
+
+<p><b><span style='font-size:18.0pt;font-family:"Book Antiqua"'>Come
+Proteggersi Contro Questa Minaccia<o:p></o:p></span></b></p>
+
+<p>Ci sono alcune cose che si possono fare per proteggersi da questa minaccia.
+Per prima cosa, lo script kiddie e' alla ricerca di una intrusione facile, cerca
+delle vulnerabilità comuni. Assicuratevi che i vostri sistemi e le vostre reti
+non siano soggetti a tali vulnerabilità. Sia<span style="mso-spacerun:
+yes">&nbsp; </span><a href="http://www.cert.org/">www.cert.org</a> che <a
+href="http://www.ciac.org/">www.ciac.org</a> sono eccellenti fonti riguardo le
+vulnerabilità più comuni. Inoltre, la lista <a
+href="http://www.securityfocus.com/forums/bugtraq/faq.html">bugtraq</a> (tenuta
+a <a href="http://www.securityfocus.com">securityfocus.com</a> ) è una della
+migliori fonti di informazione. Un'altra modo di proteggersi è quella di
+eseguire solo i servizi che vi sono necessari. Se un servizio non vi è
+necessario eliminatelo. Se un servizio vi è necessario, assicuratevi di usare
+l'ultima versione.&nbsp;Per esempi di come fare ciò, leggete <a
+href="http://www.enteract.com/~lspitz/armoring.html">Proteggere Solaris</a>
+,&nbsp; <a href="http://www.enteract.com/~lspitz/linux.html">Proteggere Linux</a>&nbsp;
+o&nbsp; <a href="http://www.enteract.com/~lspitz/nt.html">Proteggere NT.</a> </p>
+
+<p>Come avete visto nella sezione strumenti, i server DNS sono spesso usati per
+sviluppare database di sistemi che possono essere esaminati. Limitate i sistemi
+che possono fare trasferimenti di zona a partire dai vostri Name Server.
+Registrate ogni trasferimento di zona non autorizzato e seguitelo. Vi
+raccomando caldamente di aggiornarvi all'ultima versione di BIND (software
+usato per il Domain Name Service), che potete trovare a <a
+href="http://www.isc.org/bind.html">www.isc.org/bind.html</a>. Infine, controllate
+se i vostri sistemi sono sotto esame. Una volta identificati, potete tracciare
+questi eventi per ottenere una migliore comprensione della minaccia e poter
+reagire. </p>
+
+<p><b><span style='font-size:18.0pt;font-family:"Book Antiqua"'>Conclusione</span></b>
+</p>
+
+<p>Lo script kiddie minaccia tutti i sistemi. Non mostra preferenze ed esamina
+tutti i sistemi, a prescindere dalla localizzazione e dall'importanza. Presto o
+tardi, il vostro sistema sarà esaminato. Comprendendo le motivazioni ed i
+metodi, potrete proteggere in modo più efficace i vostri sistemi da questa
+minaccia. </p>
+
+<p><b><i><span style='font-family:"Arial Narrow"'><span style="mso-spacerun:
+yes">&nbsp;</span>Biografia dell'Autore</span></i></b> <br>
+<i>Lance Spitzner si diverte ad imparare facendo saltare i suoi sistemi Unix a
+casa. Prima di questo, era <a
+href="http://www.enteract.com/~lspitz/officer.html">Ufficiale della Forza di
+Intervento Rapido,</a> dove faceva saltare cose di diversa natura. E'
+raggiungibile a <a href="mailto:lance@spitzner.net">lance@spitzner.net</a> .</i>
+<br>
+&nbsp; <br>
+&nbsp; </p>
+
+<div align=center>
+
+<table border=1 cellpadding=0 style='mso-cellspacing:1.5pt;border:outset 4.5pt;
+ mso-padding-alt:0cm 0cm 0cm 0cm'>
+ <tr>
+  <td style='padding:.75pt .75pt .75pt .75pt'>
+  <p class=MsoNormal><i><span style='font-size:18.0pt;font-family:Braggadocio;
+  color:maroon'><a href="http://www.enteract.com/~lspitz/pubs.html">Whitepapers
+  / Publications</a></span></i></p>
+  </td>
+ </tr>
+</table>
+
+</div>
+
+<p class=MsoNormal><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+</div>
+
+</body>
+
+</html>

@@ -1,0 +1,55 @@
+#
+#  Lists of fingerprints for passive fingerprint monitoring
+#  Updated 23 May, 2000
+#
+#  Mail your signatures to Lance Spitzner <lance@spitzner.net>
+#
+# OS	     	VERSION	PLATFORM	TTL	WINDOW		DF	TOS
+#---	     	-------	--------	---	-----------	--	---
+
+DC-OSx          1.1-95  Pyramid/NILE    30      8192            n       0
+
+Windows	     	9x/NT	Intel		32	5000-9000	y	0
+
+NetApp  	OnTap   5.1.2-5.2.2     54      8760            y       0
+
+HPJetDirect     ?       HP_Printer      59      2100-2150       n       0
+
+AIX          	4.3.x   IBM/RS6000      60     	16000-16100     y       0
+AIX          	4.2.x   IBM/RS6000      60     	16000-16100     n       0
+Cisco           11.2    7507            60      65535           y       0
+DigitalUnix  	4.0     Alpha		60     	33580		y	16
+IRIX         	6.x     SGI             60     	61320           y       16
+OS390           2.6     IBM/S390        60      32756           n       0
+Reliant         5.43    Pyramid/RM1000  60      65534           n       0
+
+FreeBSD		3.x	Intel		64	17520		y	16
+JetDirect	G.07.x  J3113A		64	5804-5840	n	0
+Linux		2.2.x	Intel		64	32120		y	0
+OpenBSD 	2.x	Intel		64	17520		n	16
+OS/400		R4.4	AS/400		64	8192		y	0
+SCO		R5	Compaq		64	24820		n	0
+Solaris 	8       Intel/Sparc     64      24820           y       0
+FTX(UNIX)       3.3     STRATUS         64      32768           n       0
+Unisys		x	Mainframe	64	32768		n	0
+
+Netware 	4.11	Intel		128	32000-32768	y	0
+Windows		9x/NT	Intel		128	5000-9000	y	0
+Windows 	2000    Intel           128     17000-18000     y       0
+
+Cisco		12.0	2514		255	3800-5000	n	192
+Solaris		2.x	Intel/Sparc	255	8760		y	0	
+
+
+## ADDITIONAL NOTES
+#
+# Cisco IOS 12.0 normally starts all IP sessions with IP ID of 0
+# Solaris 8 uses a smaller TTL (64) then Solaris 7 and below (255).
+# Windows 2000 uses a much larger Window Size then NT.
+
+
+## Thanks to the following people for their fingprint contributions
+#
+# delta <delta@caravan.ru>
+# Craig <smithc@cinstate.cc.oh.us>
+# Richard Tomkinson <rto17@qantas.com.au>

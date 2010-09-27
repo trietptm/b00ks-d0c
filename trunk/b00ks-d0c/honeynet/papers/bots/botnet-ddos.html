@@ -1,0 +1,1179 @@
+<!-- $Id: botnet-ddos.html 786 2005-02-27 22:36:04Z tho $ -->
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <meta name="description" content="Tracking Botnets with help of Honeynets" />
+    <meta name="keywords" content="hacking,security,honeypots,honeynets,Honeynet Project,botnets,bots" />
+    <title>Know Your Enemy: Tracking Botnets</title>
+    <link rel="stylesheet" type="text/css" href="botnets.css" />
+  </head>
+<body>
+
+<div id="header">
+<h1>Know Your Enemy:<br /> Tracking Botnets - DDoS-attacks</h1>
+<h3 id="subtitle">Watching attackers DDoSing others</h3>
+<p id="metainfo">
+  <a href="mailto:project@honeynet.org?Subject=Know Your Enemy">Honeynet Project</a><br />
+  <a href="http://www.honeynet.org">http://www.honeynet.org</a><br />
+  Last Modified: XX February, 2005
+</p>
+</div>
+
+<p>The following table presents the information we have collected about
+DDoS-attacks between November 2004 and January 2005. These data were collected
+with the help of <i>drone</i>, our IRC client, which we smuggle into Botnets
+with the help of information we have collected through Honeynets. We gave
+the information we have collected to a Computer Emergency Response Team (CERT)
+for further analysis.</p>
+
+<p>This information is sanitized so that it does not allow to draw conclusions
+for specific attacks. This poses a certain protection for the victims of the
+DDoS-attacks in terms of privacy and data security.</p>
+
+<div id="table">
+<table class="inline">
+
+	<tr>
+		<th>Date</th>
+		<th>Nickname of attacker</th>
+		<th>Issued DDoS command</th>
+	</tr>
+
+  <tr>
+    <td>Nov 03 22:19:54</td>
+    <td>nick#1</td>
+    <td>!udp 209.75.160.XXX 20000 200 1 63089</td>
+  </tr>
+  <tr>
+    <td>Nov 03 22:21:10</td>
+    <td>nick#1</td>
+    <td>!syn 209.75.160.XXX 63089 120</td>
+  </tr>
+  <tr>
+    <td>Nov 04 21:38:13</td>
+    <td>nick#1</td>
+    <td>!syn 62.119.134.XXX 80 120</td>
+  </tr>
+  <tr>
+    <td>Nov 06 14:28:21</td>
+    <td>nick#2</td>
+    <td>$syn 69.64.36.XXX 6667 2000 -f -t</td>
+  </tr>
+  <tr>
+    <td>Nov 06 14:32:21</td>
+    <td>nick#2</td>
+    <td>$syn 69.64.50.XXX 6667 2000 -f -t</td>
+  </tr>
+  <tr>
+    <td>Nov 06 15:24:22</td>
+    <td>nick#2</td>
+    <td>$syn 207.44.152.XXX 6667 600 -f -t</td>
+  </tr>
+  <tr>
+    <td>Nov 06 15:24:22</td>
+    <td>nick#2</td>
+    <td>$syn 207.44.152.XXX 6667 600 -f -t</td>
+  </tr>
+  <tr>
+    <td>Nov 06 18:46:24</td>
+    <td>nick#3</td>
+    <td>$udp 207.44.152.XXX 9999 5400 1</td>
+  </tr>
+  <tr>
+    <td>Nov 07 21:56:42</td>
+    <td>nick#2</td>
+    <td>$syn 69.64.36.XXX 6667 800 -f -t -s</td>
+  </tr>
+  <tr>
+    <td>Nov 07 21:56:42</td>
+    <td>nick#2</td>
+    <td>$syn 69.64.50.XXX 6667 1000 -f -t -s</td>
+  </tr>
+  <tr>
+    <td>Nov 07 22:23:55</td>
+    <td>nick#2</td>
+    <td>$syn 69.64.36.XXX 6667 200 -f -t -s</td>
+  </tr>
+  <tr>
+    <td>Nov 07 22:23:55</td>
+    <td>nick#2</td>
+    <td>$syn 69.64.50.XXX 6667 200 -f -t -s</td>
+  </tr>
+  <tr>
+    <td>Nov 07 23:23:36</td>
+    <td>nick#2</td>
+    <td>$syn 212.227.51.XXX 6667 500 -f -t -s</td>
+  </tr>
+  <tr>
+    <td>Nov 07 23:23:36</td>
+    <td>nick#2</td>
+    <td>$syn 62.193.226.XXX 6667 500 -f -t -s</td>
+  </tr>
+  <tr>
+    <td>Nov 07 23:23:36</td>
+    <td>nick#2</td>
+    <td>$syn 66.132.253.XXX 6667 500 -f -t -s</td>
+  </tr>
+  <tr>
+    <td>Nov 07 23:47:43</td>
+    <td>nick#2</td>
+    <td>$syn 217.160.243.XXX 6667 500 -f -t -s</td>
+  </tr>
+  <tr>
+    <td>Nov 07 23:47:45</td>
+    <td>nick#2</td>
+    <td>$syn 64.158.219.XXX 6667 500 -f -t -s</td>
+  </tr>
+  <tr>
+    <td>Nov 07 23:50:38</td>
+    <td>nick#2</td>
+    <td>$syn 206.53.59.XXX 6667 500 -f -t -s</td>
+  </tr>
+  <tr>
+    <td>Nov 08 00:18:09</td>
+    <td>nick#2</td>
+    <td>$syn 206.53.59.XXX 6667 400 -f -t -s</td>
+  </tr>
+  <tr>
+    <td>Nov 08 00:18:09</td>
+    <td>nick#2</td>
+    <td>$syn 216.117.158.XXX 6667 400 -f -t -s</td>
+  </tr>
+  <tr>
+    <td>Nov 08 00:18:09</td>
+    <td>nick#2</td>
+    <td>$syn 217.160.243.XXX 6667 400 -f -t -s</td>
+  </tr>
+  <tr>
+    <td>Nov 08 00:18:09</td>
+    <td>nick#2</td>
+    <td>$syn 66.90.95.XXX 6667 400 -f -t -s</td>
+  </tr>
+  <tr>
+    <td>Nov 08 00:18:09</td>
+    <td>nick#2</td>
+    <td>$syn 67.15.70.XXX 6667 400 -f -t -s</td>
+  </tr>
+  <tr>
+    <td>Nov 08 00:19:40</td>
+    <td>nick#2</td>
+    <td>$syn 64.158.219.XXX 6667 400 -f -t -s</td>
+  </tr>
+  <tr>
+    <td>Nov 08 02:44:55</td>
+    <td>nick#4</td>
+    <td>$syn 217.160.243.XXX 22 500 -f -t -s</td>
+  </tr>
+  <tr>
+    <td>Nov 08 02:54:01</td>
+    <td>nick#4</td>
+    <td>$syn 217.160.243.XXX 389 500 -f -t -s</td>
+  </tr>
+  <tr>
+    <td>Nov 09 18:53:50</td>
+    <td>nick#2</td>
+    <td>$syn 69.10.138.XXX 80 600 -f -t -s</td>
+  </tr>
+  <tr>
+    <td>Nov 10 01:04:08</td>
+    <td>nick#3</td>
+    <td>$udp 69.26.165.XXX 9999 5400 1</td>
+  </tr>
+  <tr>
+    <td>Nov 10 20:12:39</td>
+    <td>nick#2</td>
+    <td>$syn 69.64.36.XXX 6667 500 -f -t -s</td>
+  </tr>
+  <tr>
+    <td>Nov 10 20:12:39</td>
+    <td>nick#2</td>
+    <td>$syn 69.64.50.XXX 6667 500 -f -t -s</td>
+  </tr>
+  <tr>
+    <td>Nov 11 23:18:11</td>
+    <td>nick#2</td>
+    <td>$syn 69.64.36.XXX 6667 500 -f -t -s</td>
+  </tr>
+  <tr>
+    <td>Nov 11 23:18:11</td>
+    <td>nick#2</td>
+    <td>$syn 69.64.50.XXX 6667 500 -f -t -s</td>
+  </tr>
+  <tr>
+    <td>Nov 14 23:41:21</td>
+    <td>nick#3</td>
+    <td>$udp 82.47.2.XXX 9999 5600 1 -s</td>
+  </tr>
+  <tr>
+    <td>Nov 16 05:31:29</td>
+    <td>nick#6</td>
+    <td>%udp 129.125.104.XXX 100000 150 0 -s</td>
+  </tr>
+  <tr>
+    <td>Nov 16 05:31:40</td>
+    <td>nick#6</td>
+    <td>%syn 129.125.104.XXX 443 10000 -s</td>
+  </tr>
+  <tr>
+    <td>Nov 17 18:26:09</td>
+    <td>nick#2</td>
+    <td>$syn 209.223.101.XXX 6667 500 -f -t -s</td>
+  </tr>
+  <tr>
+    <td>Nov 18 00:45:38</td>
+    <td>nick#2</td>
+    <td>$syn 207.150.163.XXX 6667 500 -f -t -s</td>
+  </tr>
+  <tr>
+    <td>Nov 18 00:45:38</td>
+    <td>nick#2</td>
+    <td>$syn 213.186.46.XXX 6667 500 -f -t -s</td>
+  </tr>
+  <tr>
+    <td>Nov 18 00:45:38</td>
+    <td>nick#2</td>
+    <td>$syn 62.193.225.XXX 6667 500 -f -t- s</td>
+  </tr>
+  <tr>
+    <td>Nov 18 00:45:38</td>
+    <td>nick#2</td>
+    <td>$syn 62.193.225.XXX 6667 500 -f -t -s</td>
+  </tr>
+  <tr>
+    <td>Nov 18 00:45:38</td>
+    <td>nick#2</td>
+    <td>$syn 62.193.226.XXX 6667 500 -f -t -s</td>
+  </tr>
+  <tr>
+    <td>Nov 18 00:58:48</td>
+    <td>nick#7</td>
+    <td>%syn 69.20.63.XXX 443 10000 -s</td>
+  </tr>
+  <tr>
+    <td>Nov 18 00:59:00</td>
+    <td>nick#7</td>
+    <td>%syn 69.20.63.XXX 113 10000 -s</td>
+  </tr>
+  <tr>
+    <td>Nov 18 01:00:54</td>
+    <td>nick#7</td>
+    <td>%icmp 69.20.63.XXX 10000 -s</td>
+  </tr>
+  <tr>
+    <td>Nov 18 01:03:13</td>
+    <td>nick#7</td>
+    <td>%icmp 216.66.21.XXX 10000 -s</td>
+  </tr>
+  <tr>
+    <td>Nov 18 01:03:21</td>
+    <td>nick#7</td>
+    <td>%syn 216.66.21.XXX 443 10000 -s</td>
+  </tr>
+  <tr>
+    <td>Nov 18 01:03:25</td>
+    <td>nick#7</td>
+    <td>%syn 216.66.21.XXX 113 10000 -s</td>
+  </tr>
+  <tr>
+    <td>Nov 21 21:52:19</td>
+    <td>nick#3</td>
+    <td>$udp 69.93.201.XXX</td>
+  </tr>
+  <tr>
+    <td>Nov 21 21:52:29</td>
+    <td>nick#3</td>
+    <td>$udp 69.93.201.XXX 9999 5400 1</td>
+  </tr>
+  <tr>
+    <td>Nov 21 22:52:20</td>
+    <td>nick#2</td>
+    <td>$syn 66.235.201.XXX 139 200 -f -t -s</td>
+  </tr>
+  <tr>
+    <td>Nov 21 23:15:00</td>
+    <td>nick#3</td>
+    <td>$syn 69.93.201.XXX 80 2000 -s</td>
+  </tr>
+  <tr>
+    <td>Nov 21 23:17:55</td>
+    <td>nick#3</td>
+    <td>$udp 69.93.201.XXX 9999 5400 1</td>
+  </tr>
+  <tr>
+    <td>Nov 22 06:13:46</td>
+    <td>nick#2</td>
+    <td>$syn irc.3fchat.net 6667 500 -f -t -s</td>
+  </tr>
+  <tr>
+    <td>Nov 23 07:33:24</td>
+    <td>nick#2</td>
+    <td>$syn irc.unixiirc.net 6667 1000</td>
+  </tr>
+  <tr>
+    <td>Nov 23 07:38:03</td>
+    <td>nick#2</td>
+    <td>$syn 217.160.240.XXX 6667 100</td>
+  </tr>
+  <tr>
+    <td>Nov 23 07:38:03</td>
+    <td>nick#2</td>
+    <td>$syn 62.193.225.XXX 6667 1000</td>
+  </tr>
+  <tr>
+    <td>Nov 23 07:38:03</td>
+    <td>nick#2</td>
+    <td>$syn 62.193.226.XXX 6667 1000</td>
+  </tr>
+  <tr>
+    <td>Nov 23 08:27:50</td>
+    <td>nick#2</td>
+    <td>$syn irc.unixiirc.net 6667 10000</td>
+  </tr>
+  <tr>
+    <td>Nov 23 09:34:19</td>
+    <td>nick#4</td>
+    <td>$syn 69.64.35.XXX 80809 500</td>
+  </tr>
+  <tr>
+    <td>Nov 23 13:37:13</td>
+    <td>nick#4</td>
+    <td>$syn 69.64.35.XXX 80809 500 -f -t -s</td>
+  </tr>
+  <tr>
+    <td>Nov 23 13:38:24</td>
+    <td>nick#4</td>
+    <td>$syn 69.64.35.XXX 80809 500 -f -t</td>
+  </tr>
+  <tr>
+    <td>Nov 23 13:51:03</td>
+    <td>nick#4</td>
+    <td>$syn 69.64.35.XXX 15273 500 -f -t</td>
+  </tr>
+  <tr>
+    <td>Nov 23 13:58:36</td>
+    <td>nick#4</td>
+    <td>$syn 69.64.35.XXX 389 500 -f -t</td>
+  </tr>
+  <tr>
+    <td>Nov 26 05:56:11</td>
+    <td>nick#3</td>
+    <td>$udp 193.12.148.XXX 9999 5400 1</td>
+  </tr>
+  <tr>
+    <td>Nov 26 06:17:18</td>
+    <td>nick#3</td>
+    <td>$udp 193.12.148.XXX 9999 5400 1</td>
+  </tr>
+  <tr>
+    <td>Nov 26 07:19:39</td>
+    <td>nick#3</td>
+    <td>$udp 62.163.97.XXX 99999 5400 1</td>
+  </tr>
+  <tr>
+    <td>Nov 26 07:50:39</td>
+    <td>nick#3</td>
+    <td>$udp 62.163.97.XXX 999999 5400 1</td>
+  </tr>
+  <tr>
+    <td>Nov 26 13:01:15</td>
+    <td>nick#2</td>
+    <td>$syn 217.160.240.XXX 6667 500 -f -t</td>
+  </tr>
+  <tr>
+    <td>Nov 27 17:22:11</td>
+    <td>nick#2</td>
+    <td>$syn 67.15.70.XXX 6667 500 -f -t</td>
+  </tr>
+  <tr>
+    <td>Nov 27 17:22:11</td>
+    <td>nick#2</td>
+    <td>$syn 69.72.192.XXX 6667 500 -f -t</td>
+  </tr>
+  <tr>
+    <td>Nov 27 17:22:11</td>
+    <td>nick#2</td>
+    <td>$syn 82.165.249.XXX 6667 500 -f -t</td>
+  </tr>
+  <tr>
+    <td>Dez 05 09:47:30</td>
+    <td>nick#5</td>
+    <td>.udp 67.19.98.XXX 27015 1000 100 -s</td>
+  </tr>
+  <tr>
+    <td>Dez 07 00:51:55</td>
+    <td>nick#8</td>
+    <td>.ddos.ack <a href="http://www.epassporte.com">www.epassporte.com</a> 1000 1 -n</td>
+  </tr>
+  <tr>
+    <td>Dez 07 00:52:17</td>
+    <td>nick#8</td>
+    <td>.ddos.ack <a href="http://www.epassporte.com">www.epassporte.com</a> 1000 1 1 -n</td>
+  </tr>
+  <tr>
+    <td>Dez 07 00:52:20</td>
+    <td>nick#8</td>
+    <td>.ddos.ack <a href="http://www.epassporte.com">www.epassporte.com</a> 1000 1 1 1-n</td>
+  </tr>
+  <tr>
+    <td>Dez 07 00:52:21</td>
+    <td>nick#8</td>
+    <td>.ddos.ack <a href="http://www.epassporte.com">www.epassporte.com</a> 1000 1 1 1 -n</td>
+  </tr>
+  <tr>
+    <td>Dez 07 07:42:58</td>
+    <td>nick#9</td>
+    <td>.syn breestu.ru 80 600</td>
+  </tr>
+  <tr>
+    <td>Dez 15 21:38:45</td>
+    <td>nick#10</td>
+    <td>.udp 66.90.114.XXX 100000 450000 1 6667</td>
+  </tr>
+  <tr>
+    <td>Dez 16 02:04:46</td>
+    <td>nick#11</td>
+    <td>.udp 4.42.58.XXX 139 65000 1000 -s</td>
+  </tr>
+  <tr>
+    <td>Dez 16 03:12:15</td>
+    <td>#nick12</td>
+    <td>.udp 4.42.58.XXX 139 65000 1000 -s</td>
+  </tr>
+  <tr>
+    <td>Dez 16 04:16:56</td>
+    <td>#nick12</td>
+    <td>.udp 67.18.1.XXX 27015 65000 1000 -s</td>
+  </tr>
+  <tr>
+    <td>Dez 19 04:35:24</td>
+    <td>nick#5</td>
+    <td>.udp 67.18.1.XXX 27015 65000 1000 -s</td>
+  </tr>
+  <tr>
+    <td>Dez 19 10:24:32</td>
+    <td>nick#10</td>
+    <td>.udp login.uagam3rs.net 1000 46000 1 2593 -s</td>
+  </tr>
+  <tr>
+    <td>Dez 22 19:35:57</td>
+    <td>nick#13</td>
+    <td>.ddos.udp 201.254.41.XXX 500000 64 1 9283</td>
+  </tr>
+  <tr>
+    <td>Dez 28 15:37:42</td>
+    <td>nick#14</td>
+    <td>.ddos.targa3 80.116.155.XXX 5000</td>
+  </tr>
+  <tr>
+    <td>Dez 28 15:44:31</td>
+    <td>nick#14</td>
+    <td>.ddos.targa3 80.116.155.XXX 5000</td>
+  </tr>
+  <tr>
+    <td>Dez 28 15:50:05</td>
+    <td>nick#14</td>
+    <td>.ddos.targa3 80.181.37.XXX 5000</td>
+  </tr>
+  <tr>
+    <td>Dez 28 15:55:23</td>
+    <td>nick#14</td>
+    <td>.ddos.random 80.181.37.XXX 21 200</td>
+  </tr>
+  <tr>
+    <td>Dez 28 20:37:33</td>
+    <td>nick#14</td>
+    <td>.ddos.random 66.225.200.XXX 22 150</td>
+  </tr>
+  <tr>
+    <td>Dez 28 20:38:38</td>
+    <td>nick#14</td>
+    <td>.ddos.syn 66.225.200.XXX 22 150</td>
+  </tr>
+  <tr>
+    <td>Dez 28 20:43:20</td>
+    <td>nick#14</td>
+    <td>.ddos.syn 69.31.78.XXX 4700 150</td>
+  </tr>
+  <tr>
+    <td>Dez 28 20:48:00</td>
+    <td>nick#14</td>
+    <td>.ddos.syn 69.31.78.XXX 4700 1000</td>
+  </tr>
+  <tr>
+    <td>Dez 29 14:44:07</td>
+    <td>nick#14</td>
+    <td>.ddos.syn 140.109.175.XXX 6667 300</td>
+  </tr>
+  <tr>
+    <td>Dez 29 16:00:33</td>
+    <td>nick#15</td>
+    <td>.udp 212.64.6.XXX 12000 12000 1 -s</td>
+  </tr>
+  <tr>
+    <td>Dez 29 16:02:04</td>
+    <td>nick#15</td>
+    <td>.udp 82.168.68.XXX 12000 12000 1 -s</td>
+  </tr>
+  <tr>
+    <td>Dez 29 16:15:17</td>
+    <td>nick#15</td>
+    <td>.udp 68.48.246.XXX 12000 12000 1</td>
+  </tr>
+  <tr>
+    <td>Dez 29 16:33:52</td>
+    <td>nick#15</td>
+    <td>.udp 211.26.63.XXX 20000 20000 1 -s</td>
+  </tr>
+  <tr>
+    <td>Dez 29 16:34:04</td>
+    <td>nick#15</td>
+    <td>.udp 203.214.64.XXX 20000 20000 1 -s</td>
+  </tr>
+  <tr>
+    <td>Dez 29 16:45:00</td>
+    <td>nick#14</td>
+    <td>.ddos.syn 69.31.78.XXX 6667 300</td>
+  </tr>
+  <tr>
+    <td>Dez 29 16:56:55</td>
+    <td>nick#14</td>
+    <td>.ddos.syn 69.31.78.XXX 6667 500</td>
+  </tr>
+  <tr>
+    <td>Jan 08 17:03:43</td>
+    <td>nick#15</td>
+    <td>.syn 200.32.5.XXX 80 200 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 09 15:01:24</td>
+    <td>nick#16</td>
+    <td>.syn 63.110.126.XXX 6667 100000 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 09 15:03:19</td>
+    <td>nick#16</td>
+    <td>.syn 206.41.117.XXX 6667 100000 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 09 15:45:59</td>
+    <td>nick#14</td>
+    <td>.ddos.random 82.49.51.XXX 21 200</td>
+  </tr>
+  <tr>
+    <td>Jan 09 16:13:17</td>
+    <td>nick#14</td>
+    <td>.ddos.random 81.208.38.XXX 6667 500</td>
+  </tr>
+  <tr>
+    <td>Jan 09 16:30:29</td>
+    <td>nick#15</td>
+    <td>.syn 200.80.26.XXX 80 100 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 09 16:33:21</td>
+    <td>nick#15</td>
+    <td>.syn 168.226.113.XXX 80 100 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 09 16:33:59</td>
+    <td>nick#15</td>
+    <td>.udpflood 72.20.17.XXX 999999 100000 2</td>
+  </tr>
+  <tr>
+    <td>Jan 09 17:31:22</td>
+    <td>nick#14</td>
+    <td>.ddos.random 63.208.1.XXX 6667 500</td>
+  </tr>
+  <tr>
+    <td>Jan 11 03:48:22</td>
+    <td>nick#16</td>
+    <td>udp 70.85.44.XXX 27015 65000 1000 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 11 19:55:58</td>
+    <td>nick#14</td>
+    <td>ddos.syn 82.48.245.XXX 21 130</td>
+  </tr>
+  <tr>
+    <td>Jan 15 13:59:01</td>
+    <td>nick#17</td>
+    <td>syn 200.80.26.XXX 80 100</td>
+  </tr>
+  <tr>
+    <td>Jan 15 14:00:08</td>
+    <td>nick#17</td>
+    <td>syn 200.80.26.XXX 6667 100</td>
+  </tr>
+  <tr>
+    <td>Jan 15 14:22:50</td>
+    <td>nick#17</td>
+    <td>syn  168.226.112.XXX 80 100 -s+</td>
+  </tr>
+  <tr>
+    <td>Jan 15 18:29:01</td>
+    <td>nick#17</td>
+    <td>syn 210.0.202.XXX 6667 200 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 15 18:29:07</td>
+    <td>nick#17</td>
+    <td>syn 210.0.202.XXX 6667 200 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 15 18:35:01</td>
+    <td>nick#17</td>
+    <td>syn 210.0.202.XXX 6667 100 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 15 18:39:22</td>
+    <td>nick#17</td>
+    <td>syn 210.0.202.XXX 6667 100 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 15 18:41:08</td>
+    <td>nick#17</td>
+    <td>syn 210.0.202.XXX 6667 100 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 15 18:44:53</td>
+    <td>nick#17</td>
+    <td>syn 210.0.202.XXX 80 100 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 15 18:44:55</td>
+    <td>nick#17</td>
+    <td>syn 210.0.202.XXX 25 100 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 15 18:44:59</td>
+    <td>nick#17</td>
+    <td>syn 210.0.202.XXX 110 100 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 15 18:47:54</td>
+    <td>nick#17</td>
+    <td>syn 210.0.202.XXX 110 100 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 15 19:33:37</td>
+    <td>nick#17</td>
+    <td>syn 69.93.44.XXX 80 200 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 16 19:35:37</td>
+    <td>nick#17</td>
+    <td>syn 219.11.8.XXX 80 100 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 16 19:35:40</td>
+    <td>nick#17</td>
+    <td>syn 219.11.8.XXX 22 100 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 16 19:35:44</td>
+    <td>nick#17</td>
+    <td>syn 219.11.8.XXX 25 100 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 16 19:40:05</td>
+    <td>nick#17</td>
+    <td>syn 219.11.8.XXX 22 100 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 16 19:40:05</td>
+    <td>nick#17</td>
+    <td>syn 219.11.8.XXX 25 100 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 17 00:26:34</td>
+    <td>nick#17</td>
+    <td>syn 200.114.146.XXX 22 100 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 17 00:26:38</td>
+    <td>nick#17</td>
+    <td>syn 200.114.146.XXX 25 100 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 17 00:26:42</td>
+    <td>nick#17</td>
+    <td>syn 200.114.146.XXX 139 100 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 17 00:46:10</td>
+    <td>nick#17</td>
+    <td>syn 24.98.126.XXX 6667 200 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 17 00:50:53</td>
+    <td>nick#17</td>
+    <td>syn 24.98.126.XXX 6667 200 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 17 06:42:15</td>
+    <td>nick#8</td>
+    <td>udp 67.15.136.XXX 10000 1 2593 -n</td>
+  </tr>
+  <tr>
+    <td>Jan 17 06:42:16</td>
+    <td>nick#8</td>
+    <td>udp 67.15.136.XXX 10000 1 2593 -n</td>
+  </tr>
+  <tr>
+    <td>Jan 17 06:42:17</td>
+    <td>nick#8</td>
+    <td>udp 67.15.136.XXX 10000 1 2593 -n</td>
+  </tr>
+  <tr>
+    <td>Jan 17 10:45:25</td>
+    <td>nick#18</td>
+    <td>udp 67.15.136.XXX 1000 45000 1 2593 -n</td>
+  </tr>
+  <tr>
+    <td>Jan 17 10:45:51</td>
+    <td>nick#18</td>
+    <td>udp 67.15.136.XXX 1000 45000 1 2593 -n</td>
+  </tr>
+  <tr>
+    <td>Jan 17 10:47:13</td>
+    <td>nick#18</td>
+    <td>udp 67.15.136.XXX 1000 45000 1 2593 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 17 10:47:19</td>
+    <td>nick#18</td>
+    <td>udp 67.15.136.XXX 10000 45000 1 2593 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 17 11:08:26</td>
+    <td>nick#18</td>
+    <td>udp 67.15.136.XXX 10000 45000 1 2593 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 17 11:09:11</td>
+    <td>nick#18</td>
+    <td>udp 67.15.136.XXX 10000 45000 1 2593 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 17 11:17:18</td>
+    <td>nick#18</td>
+    <td>udp 67.15.136.XXX 10000 45000 1 2593 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 19 01:40:28</td>
+    <td>nick#19</td>
+    <td>syn 168.243.222.XXX 22 100 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 19 01:40:45</td>
+    <td>nick#19</td>
+    <td>syn 168.243.222.XXX 80 100 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 19 02:08:38</td>
+    <td>nick#19</td>
+    <td>syn 168.243.222.XXX 80 100 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 19 02:08:41</td>
+    <td>nick#19</td>
+    <td>syn 168.243.222.XXX 22 100 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 19 02:47:41</td>
+    <td>nick#19</td>
+    <td>syn 168.243.222.XXX 22 100 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 19 02:47:44</td>
+    <td>nick#19</td>
+    <td>syn 168.243.222.XXX 80 100 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 19 03:02:30</td>
+    <td>nick#19</td>
+    <td>syn 200.55.93.XXX 20 100 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 19 03:02:35</td>
+    <td>nick#19</td>
+    <td>syn 200.55.93.XXX 80 100 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 20 10:57:17</td>
+    <td>nick#20</td>
+    <td>u 67.15.6.XXX 40000 10000 1 -n</td>
+  </tr>
+  <tr>
+    <td>Jan 20 10:57:42</td>
+    <td>nick#20</td>
+    <td>u 67.15.6.XXX 1000 45600 1 -n</td>
+  </tr>
+  <tr>
+    <td>Jan 20 10:58:09</td>
+    <td>nick#20</td>
+    <td>u 67.15.6.XXX 1000 45600 1 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 20 10:58:13</td>
+    <td>nick#20</td>
+    <td>u 67.15.6.XXX 1000 45679 1 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 20 11:01:43</td>
+    <td>nick#21</td>
+    <td>u 67.15.6.XXX 1000 45679 1 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 20 11:06:39</td>
+    <td>nick#21</td>
+    <td>u 67.15.136.XXX 1000 45679 1 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 20 11:07:39</td>
+    <td>nick#21</td>
+    <td>u 67.15.136.XXX 1000 45679 1 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 20 11:08:55</td>
+    <td>nick#21</td>
+    <td>u 67.15.136.XXX 1000 45679 1 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 20 11:10:35</td>
+    <td>nick#21</td>
+    <td>u 67.15.136.XXX 1000 45679 1 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 20 18:31:52</td>
+    <td>nick#14</td>
+    <td>ddos.syn 68.198.88.XXX 21 300</td>
+  </tr>
+  <tr>
+    <td>Jan 21 16:45:14</td>
+    <td>nick#14</td>
+    <td>ddos.syn 195.110.126.XXX 80 200</td>
+  </tr>
+  <tr>
+    <td>Jan 22 18:38:45</td>
+    <td>nick#21</td>
+    <td>syn 201.252.105.XXX 80 100 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 22 18:38:49</td>
+    <td>nick#21</td>
+    <td>syn 201.252.105.XXX 22 100 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 22 18:48:14</td>
+    <td>nick#21</td>
+    <td>.syn  201.252.105.XXX 22 100 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 22 18:48:20</td>
+    <td>nick#21</td>
+    <td>syn 201.252.105.XXX 22 100 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 23 11:25:45</td>
+    <td>nick#22</td>
+    <td>u 4.11.150.XXX 45000 45678 1 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 23 11:26:11</td>
+    <td>nick#22</td>
+    <td>u 4.11.150.XXX 45000 45678 1 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 23 11:26:19</td>
+    <td>nick#22</td>
+    <td>u 4.11.150.XXX 45000 45678 1 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 23 15:56:40</td>
+    <td>nick#1</td>
+    <td>udp 81.72.108.XXX 20000 200 1</td>
+  </tr>
+  <tr>
+    <td>Jan 23 19:27:52</td>
+    <td>nick#14</td>
+    <td>ddos.syn 151.49.8.XXX 21 200</td>
+  </tr>
+  <tr>
+    <td>Jan 23 19:56:58</td>
+    <td>nick#14</td>
+    <td>ddos.syn 213.202.217.XXX 6667 200</td>
+  </tr>
+  <tr>
+    <td>Jan 24 04:41:21 </td>
+    <td>nick#23 </td>
+    <td>syn 200.61.58.XXX 80 100 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 24 04:42:10 </td>
+    <td>nick#23 </td>
+    <td>syn 200.61.58.XXX 22 100 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 24 04:43:24 </td>
+    <td>nick#23 </td>
+    <td>syn 213.186.55.XXX 80 100 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 24 04:45:09 </td>
+    <td>nick#23 </td>
+    <td>syn 200.61.58.XXX 80 100 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 24 04:45:11 </td>
+    <td>nick#23 </td>
+    <td>syn 200.61.58.XXX 80 100 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 24 04:45:14 </td>
+    <td>nick#23 </td>
+    <td>syn 200.61.58.XXX 22 100 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 24 04:47:09 </td>
+    <td>nick#23 </td>
+    <td>syn 200.61.58.XXX 22 100 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 24 04:47:09 </td>
+    <td>nick#23 </td>
+    <td>syn 200.61.58.XXX 80 100 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 24 04:47:10 </td>
+    <td>nick#23 </td>
+    <td>syn 200.61.58.XXX 80 100 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 24 04:47:10 </td>
+    <td>nick#23 </td>
+    <td>syn 200.61.58.XXX 80 100 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 24 04:47:10 </td>
+    <td>nick#23 </td>
+    <td>syn 200.61.58.XXX 80 100 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 24 04:47:30 </td>
+    <td>nick#23 </td>
+    <td>syn 200.61.58.XXX 25 100 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 24 04:47:33 </td>
+    <td>nick#23 </td>
+    <td>syn 200.61.58.XXX 110 100 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 24 04:47:59 </td>
+    <td>nick#23 </td>
+    <td>udpflood  200.61.58.XXX 90000 200000 2</td>
+  </tr>
+  <tr>
+    <td>Jan 24 04:51:56 </td>
+    <td>nick#24 </td>
+    <td>udpflood 65.110.37.XXX 999999 99999999 2</td>
+  </tr>
+  <tr>
+    <td>Jan 24 04:53:40 </td>
+    <td>nick#24 </td>
+    <td>syn 65.110.37.XXX 80 100</td>
+  </tr>
+  <tr>
+    <td>Jan 24 04:56:48 </td>
+    <td>nick#24 </td>
+    <td>syn 65.110.37.XXX 6667 200 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 24 04:58:19 </td>
+    <td>nick#24 </td>
+    <td>syn 65.110.37.XXX 6669 200 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 24 05:01:37 </td>
+    <td>nick#24 </td>
+    <td>syn 65.110.37.XXX 6669 200 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 24 05:02:37 </td>
+    <td>nick#24 </td>
+    <td>syn 65.110.37.XXX 6669 200 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 24 05:03:06 </td>
+    <td>nick#24 </td>
+    <td>syn 65.110.37.XXX 80 200 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 24 05:11:43 </td>
+    <td>nick#24 </td>
+    <td>syn 65.110.37.XXX 6667 200 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 24 05:12:17 </td>
+    <td>nick#24 </td>
+    <td>syn 65.110.37.XXX 6667 200 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 24 05:13:39 </td>
+    <td>nick#24 </td>
+    <td>syn 65.110.37.XXX 6667 200 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 24 05:13:40 </td>
+    <td>nick#24 </td>
+    <td>syn 65.110.37.XXX 6667 200 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 24 05:13:40 </td>
+    <td>nick#24 </td>
+    <td>syn 65.110.37.XXX 6667 200 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 24 05:13:40 </td>
+    <td>nick#24 </td>
+    <td>syn 65.110.37.XXX 6667 200 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 25 19:27:50 </td>
+    <td>nick#25 </td>
+    <td>ddos.syn 80.183.59.XXX 21 130</td>
+  </tr>
+  <tr>
+    <td>Jan 25 19:29:10 </td>
+    <td>nick#25 </td>
+    <td>ddos.syn 80.221.214.XXX 21 130</td>
+  </tr>
+  <tr>
+    <td>Jan 26 19:48:03 </td>
+    <td>nick#25 </td>
+    <td>ddos.syn 208.53.149.XXX 6667 200</td>
+  </tr>
+  <tr>
+    <td>Jan 26 19:55:31 </td>
+    <td>nick#25 </td>
+    <td>ddos.syn 208.53.149.XXX 6667 200</td>
+  </tr>
+  <tr>
+    <td>Jan 26 19:55:42 </td>
+    <td>nick#25 </td>
+    <td>ddos.syn 208.53.149.XXX 6667 200</td>
+  </tr>
+  <tr>
+    <td>Jan 27 05:29:48 </td>
+    <td>nick#23 </td>
+    <td>syn 200.122.65.XXX 80 100 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 27 06:25:54 </td>
+    <td>nick#23 </td>
+    <td>syn 84.235.21.XXX 80 100 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 28 15:58:32 </td>
+    <td>nick#25 </td>
+    <td>ddos.syn 82.50.71.XXX 21 100</td>
+  </tr>
+  <tr>
+    <td>Jan 28 20:10:03 </td>
+    <td>nick#25 </td>
+    <td>ddos.syn 82.56.168.XXX 21 100 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 29 02:37:30 </td>
+    <td>nick#23 </td>
+    <td>syn 65.110.37.XXX 80 200 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 29 02:40:20 </td>
+    <td>nick#24 </td>
+    <td>syn 65.110.37.XXX 31337 100 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 29 02:41:59 </td>
+    <td>nick#24 </td>
+    <td>syn 65.110.37.XXX 80100</td>
+  </tr>
+  <tr>
+    <td>Jan 29 02:42:01 </td>
+    <td>nick#24 </td>
+    <td>syn 65.110.37.XXX 80 100</td>
+  </tr>
+  <tr>
+    <td>Jan 29 06:14:31 </td>
+    <td>nick#23 </td>
+    <td>syn 200.122.20.XXX 22 100 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 29 06:19:26 </td>
+    <td>nick#23 </td>
+    <td>syn 200.122.20.XXX 80 100 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 29 07:33:27 </td>
+    <td>nick#23 </td>
+    <td>syn 201.252.85.XXX 80 100 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 29 07:36:04 </td>
+    <td>nick#26 </td>
+    <td>syn 201.252.85.XXX 80 100 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 29 07:41:22 </td>
+    <td>nick#27 </td>
+    <td>syn 201.252.85.XXX 80 100 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 29 07:48:25 </td>
+    <td>nick#27 </td>
+    <td>syn 201.252.85.XXX 80 100 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 29 07:49:00 </td>
+    <td>nick#27 </td>
+    <td>syn 201.252.85.XXX 80 100 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 29 23:01:54 </td>
+    <td>nick#23 </td>
+    <td>syn 216.244.192.XXX 80 200 -s</td>
+  </tr>
+  <tr>
+    <td>Jan 30 03:31:16 </td>
+    <td>nick#28  </td>
+    <td>syn 68.63.216.XXX 21 35</td>
+  </tr>
+  <tr>
+    <td>Jan 30 20:39:44 </td>
+    <td>nick#25 </td>
+    <td>ddos.syn 61.92.185.XXX 21 50</td>
+  </tr>
+  <tr>
+    <td>Jan 30 21:41:27 </td>
+    <td>nick#28  </td>
+    <td>syn 24.183.196.XXX 21 390</td>
+  </tr>
+  <tr>
+    <td>Jan 31 04:28:58 </td>
+    <td>nick#28  </td>
+    <td>syn 68.63.216.XXX 21 500</td>
+  </tr>
+  <tr>
+    <td>Jan 31 08:29:06 </td>
+    <td>nick#28  </td>
+    <td>syn 24.141.2.XXX 21 100</td>
+  </tr>
+</table>
+
+</div>
+
+</body>
+</html>

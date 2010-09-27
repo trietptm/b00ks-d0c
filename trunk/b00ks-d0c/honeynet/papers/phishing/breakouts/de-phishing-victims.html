@@ -1,0 +1,2520 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <meta name="description" content="Learning more about phishing with help of Honeynets" />
+    <meta name="keywords" content="hacking,security,honeypots,Honeynets,Honeynet
+		Project,phishing,phishing mails, fraud" />
+		<title>Know your Enemy: Phishing</title>
+    <link rel="stylesheet" type="text/css" href="../phishing.css" />
+  </head>
+
+<body>
+
+<div id="header">
+	<h1>Know your Enemy:<br />Phishing</h1>
+	<h3 id="subtitle">Redirected Phishing Victims</h3>
+<p id="metainfo">
+  <a href="mailto:project@honeynet.org?Subject=Know Your Enemy">Honeynet Project</a><br />
+  <a href="http://www.honeynet.org">http://www.honeynet.org</a><br />
+  Last Modified: 14th May 2005
+</p>
+</div>
+
+<p> In this side note we provide an overview of the source IP addresses of potential
+victims in the redirection phishing attack described in phishing technique two. The data below was collected with the help of
+the compromised German honeypot and modified redir software. Over a period of about 36 hours
+we observed <strong>721 redirections</strong> of inbound HTTP requests to the honeypot,
+presumably recipients of a spam phishing email who were tricked into accessing the redirected
+content by clicking on the link provided. All are potential victims of the phishing attack, but
+as no personal data was captured we we cannot make an educated guess how many people
+actually entered sensitive information into the HTML form on the Chinese phishing web site.</p>
+
+<div id="table">
+<table class="inline">
+
+	<tr>
+		<th>Count</th>
+		<th>Source IP address range</th>
+	</tr>
+
+	<tr>
+		<td>28</td>
+		<td>203.186.X</td>
+	</tr>
+
+	<tr>
+		<td>16</td>
+		<td>80.58.X</td>
+	</tr>
+
+	<tr>
+		<td>13</td>
+		<td>212.138.X</td>
+	</tr>
+
+	<tr>
+		<td>12</td>
+		<td>195.175.X</td>
+	</tr>
+
+	<tr>
+		<td>9</td>
+		<td>61.56.X</td>
+	</tr>
+
+	<tr>
+		<td>9</td>
+		<td>213.42.X</td>
+	</tr>
+
+	<tr>
+		<td>8</td>
+		<td>62.220.X</td>
+	</tr>
+
+	<tr>
+		<td>8</td>
+		<td>200.141.X</td>
+	</tr>
+
+	<tr>
+		<td>8</td>
+		<td>195.229.X</td>
+	</tr>
+
+	<tr>
+		<td>7</td>
+		<td>200.207.X</td>
+	</tr>
+
+	<tr>
+		<td>5</td>
+		<td>200.226.X</td>
+	</tr>
+
+	<tr>
+		<td>5</td>
+		<td>200.171.X</td>
+	</tr>
+
+	<tr>
+		<td>5</td>
+		<td>142.32.X</td>
+	</tr>
+
+	<tr>
+		<td>5</td>
+		<td>133.11.X</td>
+	</tr>
+
+	<tr>
+		<td>4</td>
+		<td>61.19.X</td>
+	</tr>
+
+	<tr>
+		<td>4</td>
+		<td>219.249.X</td>
+	</tr>
+
+	<tr>
+		<td>4</td>
+		<td>203.162.X</td>
+	</tr>
+
+	<tr>
+		<td>4</td>
+		<td>203.113.X</td>
+	</tr>
+
+	<tr>
+		<td>4</td>
+		<td>202.129.X</td>
+	</tr>
+
+	<tr>
+		<td>4</td>
+		<td>201.6.X</td>
+	</tr>
+
+	<tr>
+		<td>4</td>
+		<td>200.204.X</td>
+	</tr>
+
+	<tr>
+		<td>3</td>
+		<td>82.129.X</td>
+	</tr>
+
+	<tr>
+		<td>3</td>
+		<td>66.173.X</td>
+	</tr>
+
+	<tr>
+		<td>3</td>
+		<td>65.214.X</td>
+	</tr>
+
+	<tr>
+		<td>3</td>
+		<td>216.189.X</td>
+	</tr>
+
+	<tr>
+		<td>3</td>
+		<td>212.0.X</td>
+	</tr>
+
+	<tr>
+		<td>3</td>
+		<td>211.248.X</td>
+	</tr>
+
+	<tr>
+		<td>3</td>
+		<td>202.175.X</td>
+	</tr>
+
+	<tr>
+		<td>3</td>
+		<td>200.168.X</td>
+	</tr>
+
+	<tr>
+		<td>3</td>
+		<td>200.153.X</td>
+	</tr>
+
+	<tr>
+		<td>3</td>
+		<td>193.95.X</td>
+	</tr>
+
+	<tr>
+		<td>3</td>
+		<td>193.188.X</td>
+	</tr>
+
+	<tr>
+		<td>3</td>
+		<td>163.28.X</td>
+	</tr>
+
+	<tr>
+		<td>2</td>
+		<td>81.192.X</td>
+	</tr>
+
+	<tr>
+		<td>2</td>
+		<td>81.168.X</td>
+	</tr>
+
+	<tr>
+		<td>2</td>
+		<td>81.116.X</td>
+	</tr>
+
+	<tr>
+		<td>2</td>
+		<td>80.55.X</td>
+	</tr>
+
+	<tr>
+		<td>2</td>
+		<td>80.53.X</td>
+	</tr>
+
+	<tr>
+		<td>2</td>
+		<td>69.56.X</td>
+	</tr>
+
+	<tr>
+		<td>2</td>
+		<td>68.167.X</td>
+	</tr>
+
+	<tr>
+		<td>2</td>
+		<td>67.163.X</td>
+	</tr>
+
+	<tr>
+		<td>2</td>
+		<td>66.6.X</td>
+	</tr>
+
+	<tr>
+		<td>2</td>
+		<td>66.250.X</td>
+	</tr>
+
+	<tr>
+		<td>2</td>
+		<td>66.207.X</td>
+	</tr>
+
+	<tr>
+		<td>2</td>
+		<td>66.135.X</td>
+	</tr>
+
+	<tr>
+		<td>2</td>
+		<td>64.139.X</td>
+	</tr>
+
+	<tr>
+		<td>2</td>
+		<td>63.70.X</td>
+	</tr>
+
+	<tr>
+		<td>2</td>
+		<td>61.220.X</td>
+	</tr>
+
+	<tr>
+		<td>2</td>
+		<td>61.179.X</td>
+	</tr>
+
+	<tr>
+		<td>2</td>
+		<td>61.131.X</td>
+	</tr>
+
+	<tr>
+		<td>2</td>
+		<td>24.106.X</td>
+	</tr>
+
+	<tr>
+		<td>2</td>
+		<td>219.148.X</td>
+	</tr>
+
+	<tr>
+		<td>2</td>
+		<td>218.30.X</td>
+	</tr>
+
+	<tr>
+		<td>2</td>
+		<td>217.166.X</td>
+	</tr>
+
+	<tr>
+		<td>2</td>
+		<td>217.14.X</td>
+	</tr>
+
+	<tr>
+		<td>2</td>
+		<td>216.37.X</td>
+	</tr>
+
+	<tr>
+		<td>2</td>
+		<td>216.244.X</td>
+	</tr>
+
+	<tr>
+		<td>2</td>
+		<td>216.108.X</td>
+	</tr>
+
+	<tr>
+		<td>2</td>
+		<td>213.212.X</td>
+	</tr>
+
+	<tr>
+		<td>2</td>
+		<td>212.165.X</td>
+	</tr>
+
+	<tr>
+		<td>2</td>
+		<td>211.75.X</td>
+	</tr>
+
+	<tr>
+		<td>2</td>
+		<td>210.95.X</td>
+	</tr>
+
+	<tr>
+		<td>2</td>
+		<td>210.212.X</td>
+	</tr>
+
+	<tr>
+		<td>2</td>
+		<td>210.193.X</td>
+	</tr>
+
+	<tr>
+		<td>2</td>
+		<td>210.177.X</td>
+	</tr>
+
+	<tr>
+		<td>2</td>
+		<td>208.59.X</td>
+	</tr>
+
+	<tr>
+		<td>2</td>
+		<td>207.250.X</td>
+	</tr>
+
+	<tr>
+		<td>2</td>
+		<td>203.87.X</td>
+	</tr>
+
+	<tr>
+		<td>2</td>
+		<td>203.75.X</td>
+	</tr>
+
+	<tr>
+		<td>2</td>
+		<td>203.233.X</td>
+	</tr>
+
+	<tr>
+		<td>2</td>
+		<td>203.177.X</td>
+	</tr>
+
+	<tr>
+		<td>2</td>
+		<td>203.154.X</td>
+	</tr>
+
+	<tr>
+		<td>2</td>
+		<td>203.147.X</td>
+	</tr>
+
+	<tr>
+		<td>2</td>
+		<td>202.157.X</td>
+	</tr>
+
+	<tr>
+		<td>2</td>
+		<td>202.138.X</td>
+	</tr>
+
+	<tr>
+		<td>2</td>
+		<td>200.68.X</td>
+	</tr>
+
+	<tr>
+		<td>2</td>
+		<td>200.45.X</td>
+	</tr>
+
+	<tr>
+		<td>2</td>
+		<td>200.247.X</td>
+	</tr>
+
+	<tr>
+		<td>2</td>
+		<td>200.216.X</td>
+	</tr>
+
+	<tr>
+		<td>2</td>
+		<td>200.206.X</td>
+	</tr>
+
+	<tr>
+		<td>2</td>
+		<td>200.161.X</td>
+	</tr>
+
+	<tr>
+		<td>2</td>
+		<td>200.14.X</td>
+	</tr>
+
+	<tr>
+		<td>2</td>
+		<td>196.40.X</td>
+	</tr>
+
+	<tr>
+		<td>2</td>
+		<td>195.92.X</td>
+	</tr>
+
+	<tr>
+		<td>2</td>
+		<td>193.251.X</td>
+	</tr>
+
+	<tr>
+		<td>2</td>
+		<td>168.143.X</td>
+	</tr>
+
+	<tr>
+		<td>2</td>
+		<td>163.27.X</td>
+	</tr>
+
+	<tr>
+		<td>2</td>
+		<td>148.244.X</td>
+	</tr>
+
+	<tr>
+		<td>2</td>
+		<td>148.240.X</td>
+	</tr>
+
+	<tr>
+		<td>2</td>
+		<td>12.154.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>84.9.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>84.114.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>82.67.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>82.194.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>82.156.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>82.144.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>82.112.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>82.108.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>81.86.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>81.193.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>81.115.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>80.65.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>80.51.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>80.48.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>80.235.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>80.191.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>80.183.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>80.178.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>80.15.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>80.13.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>80.132.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>80.108.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>69.95.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>69.8.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>69.88.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>69.76.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>69.50.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>69.26.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>69.201.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>68.9.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>68.95.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>68.81.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>68.60.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>68.255.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>68.228.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>68.169.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>68.164.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>68.163.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>68.161.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>68.153.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>68.122.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>68.120.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>67.50.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>67.162.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>67.132.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>67.10.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>67.109.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>67.101.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>67.100.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>66.95.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>66.93.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>66.8.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>66.69.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>66.56.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>66.30.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>66.255.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>66.23.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>66.228.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>66.214.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>66.201.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>66.178.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>66.159.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>66.150.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>66.147.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>66.0.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>65.75.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>65.69.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>65.33.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>65.202.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>65.198.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>65.197.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>65.166.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>65.115.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>65.113.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>64.84.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>64.7.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>64.76.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>64.5.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>64.39.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>64.31.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>64.2.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>64.26.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>64.219.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>64.217.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>64.205.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>64.198.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>64.173.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>64.167.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>64.166.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>64.145.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>64.132.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>64.12.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>64.114.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>64.105.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>63.86.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>63.245.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>63.209.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>63.171.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>63.169.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>63.167.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>63.162.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>63.145.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>63.134.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>62.69.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>62.39.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>62.252.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>62.190.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>62.103.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>61.62.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>61.241.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>61.236.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>61.222.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>61.221.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>61.219.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>61.218.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>61.206.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>61.197.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>61.17.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>61.150.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>61.145.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>61.138.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>4.7.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>4.79.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>4.60.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>4.42.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>4.239.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>38.5.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>38.118.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>24.74.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>24.28.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>24.252.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>24.242.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>24.220.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>24.217.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>24.209.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>24.175.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>24.167.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>24.140.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>24.13.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>24.129.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>24.11.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>24.117.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>24.0.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>222.51.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>222.35.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>222.111.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>221.2.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>221.142.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>220.80.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>220.65.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>220.255.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>220.244.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>220.172.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>220.135.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>220.130.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>219.93.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>219.89.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>219.239.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>219.166.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>219.163.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>219.161.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>219.147.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>219.142.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>219.137.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>219.133.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>218.93.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>218.89.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>218.76.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>218.5.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>218.56.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>218.188.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>218.157.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>218.152.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>218.145.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>218.144.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>218.108.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>217.95.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>217.84.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>217.56.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>217.33.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>217.172.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>217.167.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>217.136.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>217.128.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>216.86.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>216.77.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>216.43.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>216.253.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>216.250.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>216.246.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>216.239.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>216.221.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>216.191.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>216.190.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>216.185.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>216.161.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>216.155.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>216.154.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>216.153.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>216.144.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>216.139.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>216.135.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>216.104.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>213.81.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>213.56.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>213.3.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>213.229.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>213.199.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>213.186.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>213.172.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>213.164.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>213.157.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>213.132.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>213.121.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>212.97.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>212.95.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>212.55.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>212.37.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>212.182.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>212.112.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>211.92.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>211.72.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>211.57.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>211.46.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>211.38.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>211.251.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>211.249.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>211.241.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>211.23.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>211.22.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>211.21.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>211.184.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>211.167.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>211.114.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>211.108.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>210.93.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>210.90.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>210.83.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>210.60.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>210.249.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>210.187.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>210.150.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>210.138.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>210.104.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>210.100.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>210.0.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>209.88.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>209.63.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>209.58.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>209.250.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>209.239.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>209.232.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>209.226.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>209.205.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>209.204.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>209.195.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>209.183.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>209.173.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>209.113.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>208.63.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>208.62.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>208.42.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>208.29.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>208.232.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>208.203.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>208.19.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>208.191.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>208.190.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>208.16.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>208.153.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>208.147.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>207.6.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>207.69.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>207.44.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>207.28.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>207.233.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>207.212.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>207.192.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>207.177.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>207.152.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>207.121.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>207.109.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>206.205.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>206.173.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>206.163.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>205.208.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>205.201.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>205.188.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>205.145.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>204.69.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>203.59.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>203.51.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>203.252.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>203.208.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>203.199.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>203.195.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>203.185.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>203.172.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>203.157.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>203.151.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>203.145.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>203.131.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>203.130.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>203.121.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>203.112.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>203.10.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>202.85.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>202.67.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>202.5.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>202.58.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>202.54.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>202.47.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>202.39.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>202.216.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>202.213.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>202.174.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>202.169.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>202.162.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>202.159.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>202.155.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>202.14.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>202.130.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>202.106.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>201.3.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>201.2.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>201.225.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>201.129.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>200.87.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>200.85.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>200.59.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>200.40.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>200.30.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>200.253.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>200.251.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>200.250.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>200.228.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>200.212.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>200.203.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>200.201.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>200.182.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>200.165.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>200.163.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>200.158.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>200.144.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>200.12.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>200.119.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>200.118.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>200.114.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>199.80.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>199.246.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>199.243.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>199.203.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>199.174.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>198.81.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>198.248.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>198.173.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>198.165.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>196.33.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>195.69.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>195.68.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>195.61.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>195.56.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>195.39.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>195.222.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>195.205.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>195.117.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>194.78.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>194.243.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>193.253.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>193.170.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>192.136.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>192.115.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>170.154.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>168.234.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>168.209.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>166.114.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>165.98.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>165.21.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>163.23.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>163.20.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>162.6.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>162.39.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>159.54.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>158.130.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>156.110.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>155.212.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>151.99.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>151.195.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>149.106.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>148.223.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>143.248.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>142.179.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>141.158.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>140.131.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>138.88.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>137.204.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>129.44.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>128.200.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>12.42.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>12.176.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>12.160.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>12.147.X</td>
+	</tr>
+
+	<tr>
+		<td>1</td>
+		<td>12.101.X</td>
+	</tr>
+
+</table>
+
+<br />
+
+</div>
+
+<p>Click <a href="../index.html">here</a> to return to the main paper.</p>
+
+<div id="footer">
+  <a href="http://www.honeynet.org"><img src="http://www.honeynet.org/images/small.gif" alt="The Honeynet Project" /></a>
+</div>
+
+</body>
+</html>

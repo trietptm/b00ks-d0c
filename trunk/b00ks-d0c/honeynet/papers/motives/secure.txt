@@ -1,0 +1,49 @@
+#!/bin/sh
+
+#
+# secure script to secure some basic shit
+#
+
+if [ `uname` != SunOS ]; then
+  echo "#: sorry, but wtf are you doing?"
+  exit 0
+fi
+
+# defining stuff.
+# ansi-
+
+# pid numbers
+STATD=`ps -eaf |grep statd |grep -v "grep statd" | awk '{ print $2 }'`
+NLOCK=`ps -eaf |grep nlock |grep -v "grep nlock" | awk '{ print $2 }'`
+BIND=`ps -eaf |grep rpcbind |grep -v "grep rpcbind" | awk '{ print $2 }'`
+BNC=`ps -eaf |grep bnc |grep -v "grep bnc" | awk '{ print $2 }'`
+sys222=`ps -eaf |grep sys222 |grep -v "grep sys222" | awk '{ print $2 }'`
+sadmind=`ps -eaf |grep sadmind |grep -v "grep sadmind" | awk '{ print $2}'`
+rpc.ttdb=`ps -eaf |grep rpc.ttdb |grep -v "grep rpc.ttdb" | awk '{ print $2}'`
+rquotad=`ps -eaf |grep rquotad |grep -v "grep rquotad" | awk '{ print $2}'`
+# ok securing.
+
+echo "#: securing."
+echo "#: 1) changing modes on local files."
+echo "#: will add more local security later. "
+
+chmod -s /lib/fs/ufs/ufsrestore
+cat /etc/inetd.conf |grep -v "ttdb" |grep -v "nlock" |grep -v "rpc"|grep -v "sadmind"|grep -v "cmsd" >> /etc/ine ; mv /etc/ine /etc/inetd.conf
+echo "#: 2) remote crap like rpc.status , nlockmgr etc.."
+
+kill -9 $STATD
+kill -9 $BIND
+kill -9 $BNC
+kill -9 $sys222
+
+echo "#: 3) killed statd , rpcbind , nlockmgr "
+echo "#: 4) removing them so they ever start again!"
+
+cat /etc/rpc | grep -v status >>/tmp/bah ; mv /tmp/bah /etc/rpc
+rm -rf /usr/lib/nfs/statd
+rm -rf /etc/init.d/nfs.client
+rm -rf /usr/dt/bin/rpc.ttdbserverd
+touch /usr/lib/nfs/statd
+touch /usr/dt/bin/rpc.ttdbserverd
+touch /etc/init.d/nfs.client
+echo "5) secured."

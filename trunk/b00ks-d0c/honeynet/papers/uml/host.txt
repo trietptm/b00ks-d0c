@@ -1,0 +1,25 @@
+host #ifconfig -a
+eth0      Link encap:Ethernet  HWaddr 00:D0:59:DA:24:9C  
+          inet addr:192.168.1.1  Bcast:192.168.1.255  Mask:255.255.255.0
+          UP BROADCAST NOTRAILERS RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:66733 errors:0 dropped:0 overruns:0 frame:1
+          TX packets:41906 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:575 txqueuelen:100 
+          RX bytes:92593100 (88.3 Mb)  TX bytes:2994791 (2.8 Mb)
+          Interrupt:11 Base address:0x2000 
+
+lo        Link encap:Local Loopback  
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          UP LOOPBACK RUNNING  MTU:16436  Metric:1
+          RX packets:10 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:10 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0 
+          RX bytes:828 (828.0 b)  TX bytes:828 (828.0 b)
+
+tap0      Link encap:Ethernet  HWaddr 00:FF:D2:FB:35:B4  
+          inet addr:192.168.0.254  Bcast:192.168.0.255  Mask:255.255.255.255
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:168 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:21 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:100 
+          RX bytes:21804 (21.2 Kb)  TX bytes:1722 (1.6 Kb)

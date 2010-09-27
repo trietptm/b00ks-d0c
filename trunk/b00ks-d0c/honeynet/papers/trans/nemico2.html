@@ -1,0 +1,900 @@
+<html xmlns:o="urn:schemas-microsoft-com:office:office"
+xmlns:w="urn:schemas-microsoft-com:office:word"
+xmlns="http://www.w3.org/TR/REC-html40">
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+<meta name=ProgId content=Word.Document>
+<meta name=Generator content="Microsoft Word 9">
+<meta name=Originator content="Microsoft Word 9">
+<link rel=File-List href="./nemico2_file/filelist.xml">
+<title>Tracking their moves</title>
+<!--[if gte mso 9]><xml>
+ <o:DocumentProperties>
+  <o:Author>Sogei</o:Author>
+  <o:LastAuthor>Sogei</o:LastAuthor>
+  <o:Revision>41</o:Revision>
+  <o:TotalTime>273</o:TotalTime>
+  <o:Created>2000-11-22T10:42:00Z</o:Created>
+  <o:LastSaved>2001-01-10T10:51:00Z</o:LastSaved>
+  <o:Pages>5</o:Pages>
+  <o:Words>3936</o:Words>
+  <o:Characters>22438</o:Characters>
+  <o:Company>Sogei</o:Company>
+  <o:Lines>186</o:Lines>
+  <o:Paragraphs>44</o:Paragraphs>
+  <o:CharactersWithSpaces>27555</o:CharactersWithSpaces>
+  <o:Version>9.3821</o:Version>
+ </o:DocumentProperties>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:WordDocument>
+  <w:HyphenationZone>14</w:HyphenationZone>
+ </w:WordDocument>
+</xml><![endif]-->
+<style>
+<!--
+ /* Font Definitions */
+@font-face
+	{font-family:"Arial Narrow";
+	panose-1:2 11 5 6 2 2 2 3 2 4;
+	mso-font-charset:0;
+	mso-generic-font-family:swiss;
+	mso-font-pitch:variable;
+	mso-font-signature:647 0 0 0 159 0;}
+@font-face
+	{font-family:"Book Antiqua";
+	panose-1:2 4 6 2 5 3 5 3 3 4;
+	mso-font-charset:0;
+	mso-generic-font-family:roman;
+	mso-font-pitch:variable;
+	mso-font-signature:647 0 0 0 159 0;}
+@font-face
+	{font-family:Braggadocio;
+	panose-1:0 0 0 0 0 0 0 0 0 0;
+	mso-font-alt:"Times New Roman";
+	mso-font-charset:0;
+	mso-generic-font-family:roman;
+	mso-font-format:other;
+	mso-font-pitch:auto;
+	mso-font-signature:0 0 0 0 0 0;}
+ /* Style Definitions */
+p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{mso-style-parent:"";
+	margin:0cm;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";}
+a:link, span.MsoHyperlink
+	{color:blue;
+	text-decoration:underline;
+	text-underline:single;}
+a:visited, span.MsoHyperlinkFollowed
+	{color:purple;
+	text-decoration:underline;
+	text-underline:single;}
+p
+	{margin-right:0cm;
+	mso-margin-top-alt:auto;
+	mso-margin-bottom-alt:auto;
+	margin-left:0cm;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";}
+@page Section1
+	{size:595.3pt 841.9pt;
+	margin:70.85pt 2.0cm 2.0cm 2.0cm;
+	mso-header-margin:35.4pt;
+	mso-footer-margin:35.4pt;
+	mso-paper-source:0;}
+div.Section1
+	{page:Section1;}
+ /* List Definitions */
+@list l0
+	{mso-list-id:330111631;
+	mso-list-type:hybrid;
+	mso-list-template-ids:825494982 -1423014780 634782742 24688788 -1364576480 1277221134 -1933809462 1795714116 -1005185150 1566463688;}
+@list l0:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:36.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;
+	mso-ansi-font-size:10.0pt;
+	font-family:Symbol;}
+@list l1
+	{mso-list-id:1624264734;
+	mso-list-type:hybrid;
+	mso-list-template-ids:-1731529300 1789940630 124835460 811916196 -1642946020 -1162060436 1747225114 -1366799092 598928622 572704310;}
+@list l1:level1
+	{mso-level-number-format:bullet;
+	mso-level-text:\F0B7;
+	mso-level-tab-stop:36.0pt;
+	mso-level-number-position:left;
+	text-indent:-18.0pt;
+	mso-ansi-font-size:10.0pt;
+	font-family:Symbol;}
+ol
+	{margin-bottom:0cm;}
+ul
+	{margin-bottom:0cm;}
+-->
+</style>
+<meta name=description
+content="Published article on how to armor Solaris 2.6.  Includes a script that will automatically backup and armor your operating system">
+<meta name=keywords
+content="hacking,solaris,armoring,hardening,logging,inetd,syslog,TCP Wrappers">
+</head>
+
+<body lang=IT link=blue vlink=purple style='tab-interval:35.4pt'>
+
+<div class=Section1>
+
+<p class=MsoNormal><i><span style='font-size:13.5pt;font-family:"Arial Narrow"'>Segui
+le loro mosse</span></i> <br>
+<span style='font-size:36.0pt;font-family:"Book Antiqua"'>Conosci Il Tuo
+Nemico: II</span> </p>
+
+<p><b><span style='font-size:10.0pt'><a
+href="mailto:lance@spitzner.net?Subject=Know%20Your%20Enemy:II">Lance Spitzner</a></span></b><span
+style='font-size:10.0pt'> <br>
+<a href="http://www.enteract.com/~lspitz/papers.html">http://www.enteract.com/~lspitz/papers.html</a>
+</span><br>
+Ultima Modifica: 7 Luglio, 2000 </p>
+
+<p><b>Questo articolo è il secondo di una serie di tre parti. Nel primo
+articolo, <a href="http://www.enteract.com/~lspitz/enemy.html">Conosci Il Tuo
+Nemico</a>, abbiamo trattato degli strumenti e delle metodologie dello Script
+Kiddie.&nbsp;&nbsp;In particolare, come vengono scoperte le vulnerabilità e
+come avviene l'attacco.&nbsp;Il <a
+href="http://www.enteract.com/~lspitz/enemy3.html">terzo articolo</a> tratta di
+cosa gli script kiddie fanno una volta ottenuti i privilegi di root.&nbsp;In particolare
+come vengono nascoste le tracce e cosa succede dopo. Qui, nel secondo
+articolo,&nbsp;si tratterà di come seguire le loro mosse.&nbsp;Come in campo
+militare, si vuole seguire il nemico e sapere cosa sta facendo.&nbsp;Tratteremo
+di cosa si può e cosa non si può determinare, con i log di sistema.&nbsp;Si può
+essere in grado di determinare se qualcuno vi sta esaminando, per cosa vi sta
+esaminando,&nbsp;che strumenti sta usando e se sta avendo successo.&nbsp;Gli
+esempi proposti sono relativi a Linux, ma possono essere applicati a quasi
+tutti gli Unix. Tenete a mente che non c'è un modo garantito di seguire ogni
+passo dell'aggressore. Ad ogni modo questo articolo è un buon punto di
+partenza.</b> </p>
+
+<p><b><span style='font-size:18.0pt;font-family:"Arial Narrow"'>Proteggere i
+vostri log</span></b><br>
+Questo articolo non è sulla rilevazione di intrusione (Intrusion Detection,
+IDS), ci sono già molte eccellenti fonti che trattano di IDS.&nbsp;Se siete
+interessati alla IDS, vi consiglio applicazioni come <a
+href="http://www.nfr.net">Network Flight Recorder</a>&nbsp; o <a
+href="http://www.clark.net/~roesch/security.html">snort</a>.&nbsp; Questo
+articolo è incentrato sulla raccolta di informazioni. In particolare come
+sapere cosa il nemico sta facendo dalla lettura dei vostri log di
+sistema.&nbsp;Sarete sorpresi da quante informazioni potrete trovare nei vostri
+file di log. Comunque, prima di parlare della lettura dei log, dovremo parlare
+della sicurezza dei log di sistema.&nbsp;I vostri file di log sono inutili se
+non siete in grado di assicurare la loro integrità. La prima cosa che la
+maggior parte degli intrusi fanno è alterare i file di log del sistema
+compromesso.&nbsp;Ci sono una varietà di rootkits che cancellano la loro
+presenza dai file di log (come ad esempio cloak), o alterano tutte le
+registrazioni insieme (come ad esempio dei syslogd &quot;cavalli di
+troia&quot;).&nbsp; Quindi, il primo passo per utilizzare i log è la sicurezza
+dei log stessi. </p>
+
+<p>Questo significa che avrete bisogno di utilizzare un server dei log
+remoto.&nbsp;A prescindere da quanto sia sicuro il vostro sistema, voi non
+potrete garantire la veridicità dei log su un sistema compromesso. Se non altro,
+l'intruso può semplicemente dare un <b><span style='font-size:10.0pt;
+font-family:"Courier New"'>rm -rf /*</span></b><span style="mso-spacerun:
+yes">&nbsp; </span>sul vostro sistema, cancellando il disco rigido.&nbsp;Questo
+rende difficile recuperare i vostri log.&nbsp;Per proteggersi da ciò, potete
+fare in modo che i vostri sistemi registrino il traffico sia localmente che su
+un server remoto.&nbsp;Raccomando di fare in modo che il log server sia una
+macchina dedicata, cioè che la sola cosa che faccia sia raccogliere log dagli
+altri sistemi.&nbsp; Se il problema sono i soldi, potete facilmente mettere su
+una linux box che agisca da log server.&nbsp;Questo server dovrà essere
+estremamente sicuro, con tutti i servizi disabilitati e<span
+style="mso-spacerun: yes">&nbsp; </span>che permetta il solo accesso da console
+(vedi <a href="http://www.enteract.com/~lspitz/linux.html">Proteggere Linux</a>
+per un esempio).&nbsp;Inoltre, assicuratevi<span style="mso-spacerun:
+yes">&nbsp; </span>che la porta 514 UDP sia bloccata o dietro un firewall per
+un collegamento Internet.&nbsp;Questo proteggerà<span style="mso-spacerun:
+yes">&nbsp; </span>il vostro log server dal ricevere informazioni di log non
+autorizzate o maligne. </p>
+
+<p>Per quelli di voi a cui piacciono le cose più difficili, a volte io ricompilo
+syslogd per fargli leggere un file di configurazione differente, come
+/var/tmp/.conf.&nbsp; In questo modo il malintenzionato non capirà dove sia il
+vero file di configurazione. Ciò può essere fatto semplicemente cambiando la
+stringa &quot;/etc/syslog.conf&quot; nel codice sorgente<span
+style="mso-spacerun: yes">&nbsp; </span>con il file che volete.&nbsp;Quindi
+possiamo sistemare il nostro nuovo file di configurazione per avere i log sia
+localmente che sul server di log remoto (<a
+href="http://www.enteract.com/~lspitz/syslog.txt">vedi esempio</a>).&nbsp;
+Assicuratevi di mantenere una copia standard del file di configurazione,
+/etc/syslog.conf, che punti a tutti i log locali.&nbsp;Anche se questo file di
+configurazione è ora inutile, ciò porterà l'intruso fuori strada nel capire la
+vera destinazione della registrazione remota.&nbsp;Un'altra opzione è usare un
+metodo di log sicuro sui vostri server.&nbsp; Una possibilità è sostituire
+l'eseguibile syslogd con qualche prodotto che abbia il controllo di integrità
+ed una grande varietà di opzioni.&nbsp;Una scelta può essere syslog-ng,
+che<span style="mso-spacerun: yes">&nbsp; </span>potete trovare a&nbsp;<a
+href="http://www.balabit.hu/products/syslog-ng.html">http://www.balabit.hu/products/syslog-ng.html</a>
+<br>
+&nbsp; </p>
+
+<p>Molti dei log che useremo sono quelli archiviati sul log server
+remoto.&nbsp;Come menzionato in precedenza,<span style="mso-spacerun:
+yes">&nbsp; </span>possiamo essere ragionevolmente sicuri dell'integrità di
+questi log in quanto sono residenti su un server remoto ed in
+sicurezza.&nbsp;Inoltre, siccome tutti i sistemi registrano su un singolo
+punto, è molto più facile identificare<span style="mso-spacerun: yes">&nbsp;
+</span>dei modelli in questi log.&nbsp; Potremo vedere cosa succede su tutti i
+sistemi da un singolo punto.&nbsp;L'unico momento in cui vorremo controllare i
+log locali sarà per compararli con quelli del log server.&nbsp;Sarà possibile
+determinare se i log locali sono stati alterati comparandoli con quelli del log
+server remoto. </p>
+
+<p><b><span style='font-size:18.0pt'>Corrispondenza di modello</span></b> <br>
+Leggendo i vostri log, potete in genere determinare se siete oggetto di una
+esplorazione delle porte (port scanning).&nbsp;Molti Script Kiddie esaminano
+una rete per una singola vulnerabilità.&nbsp;Se i vostri log mostrano che la
+maggior parte dei vostri sistemi hanno connessioni dallo stesso server remoto,
+sulla stessa porta, questa probabilmente<span style="mso-spacerun: yes">&nbsp;
+</span>è una esplorazione per vulnerabilità (exploit scan).&nbsp; In genere
+l'aggressore e' in possesso di un exploit per una singola vulnerabilità, ed esamina
+la vostra rete cercandola.&nbsp;Quando la trova, la sfrutta. Nella maggior
+parte dei sistemi Linux, TCP Wrappers è installato per default.&nbsp; Così
+potrete trovare molte di queste connessioni in /var/log/secure.&nbsp; Per altri
+tipi di Unix,<span style="mso-spacerun: yes">&nbsp; </span>è possibile registrare
+tutte le connessioni tramite inetd<span style="mso-spacerun: yes">&nbsp;
+</span>eseguendo inetd stesso con il parametro &quot;-t&quot;. Un tipico
+exploit scan assomiglierà a quello qui di seguito. Qui abbiamo qualcuno che
+cerca vulnerabilità di wu-ftpd. </p>
+
+<p>/var/log/secure <br>
+<span style='font-size:10.0pt;font-family:"Courier New"'>Apr 10 13:43:48 mozart
+in.ftpd[6613]: connect from 192.168.11.200</span> <br>
+<span style='font-size:10.0pt;font-family:"Courier New"'>Apr 10 13:43:51 bach
+in.ftpd[6613]: connect from 192.168.11.200</span> <br>
+<span style='font-size:10.0pt;font-family:"Courier New"'>Apr 10 13:43:54 hadyen
+in.ftpd[6613]: connect from 192.168.11.200</span> <br>
+<span style='font-size:10.0pt;font-family:"Courier New"'>Apr 10 13:43:57
+vivaldi in.ftpd[6613]: connect from 192.168.11.200</span> <br>
+<span style='font-size:10.0pt;font-family:"Courier New"'>Apr 10 13:43:58 brahms
+in.ftpd[6613]: connect from 192.168.11.200</span> </p>
+
+<p>Qui vediamo l'IP <span style='font-size:10.0pt;font-family:"Courier New"'>192.168.11.200</span>
+(fonte) che esamina la nostra rete.&nbsp; Notate come la fonte esamina
+sequenzialmente ogni IP (non è sempre questo il caso).&nbsp;Questo è un
+vantaggio dell'avere un log server,<span style="mso-spacerun: yes">&nbsp;
+</span>perchè con i log combinati è possibile identificare più facilmente dei
+modelli nella vostra rete.&nbsp;Le ripetute connessioni alla porta 21, ftp,
+indicano che probabilmente stanno cercando un exploit per wu-ftpd.&nbsp;Avete
+appena determinato cosa sta cercando l'aggressore.&nbsp;Spesso le esplorazioni
+tendono ad arrivare a fasi.&nbsp;Qualcuno rilascia il codice per un exploit di
+imap, e voi improvvisamente vedete un aumento delle esplorazioni per imap sui
+vostri log.&nbsp; Il prossimo mese sarà la volta del ftp.&nbsp;Un eccellente
+fonte per gli exploit attuali è <a href="http://www.cert.org/advisories/">http://www.cert.org/advisories/</a>&nbsp;.
+A volte vengono usati strumenti che permettono di esplorare diversi exploit
+alla volta, ed in questi casi vedrete una singola fonte che si connette a
+diverse porte. </p>
+
+<p>Tenete a mente che se non registrate l'attività del servizio, non potrete
+sapere se siete sotto osservazione per quell servizio.&nbsp;Per esempio molte
+connessioni<span style="mso-spacerun: yes">&nbsp; </span>rpc non sono
+registrate.&nbsp;Comunque molti servizi possono semplicemente essere aggiunti a
+/etc/inetd.conf<span style="mso-spacerun: yes">&nbsp; </span>per essere
+registrati tramite TCP Wrappers.&nbsp; Per esempio potete aggiungere una riga
+in /etc/inetd.conf per NetBus. Potete quindi configurare TCP Wrappers per
+negare e registrare le connessioni in modo sicuro. (vedi <a
+href="http://www.enteract.com/~lspitz/ids.html">Intrusion Detection</a> per
+maggiori informazioni). </p>
+
+<p><b><span style='font-size:18.0pt'>Quali sono gli strumenti?</span></b> <br>
+A volte è possibile determinare quali strumenti vengono usati per esplorare la
+vostra rete.&nbsp;Alcuni dei più semplici strumenti ricercano una specifica
+vulnerabilità, come <a href="http://www.enteract.com/~lspitz/ftp-scan.txt">ftp-scan.c</a>.
+Se viene esplorata una sola porta o vulnerabilità, è molto probabile che<span
+style="mso-spacerun: yes">&nbsp; </span>stiano usando uno di questi
+strumenti<span style="mso-spacerun: yes">&nbsp;
+</span>&quot;mono-obiettivo&quot;.&nbsp; Esistono comunque strumenti che
+ricercano molteplici vulnerabilità o debolezze, i due più popolari sono sscan
+di Jsbach e <a href="http://www.insecure.org/nmap">nmap</a> di Fyodor.&nbsp; Ho
+menzionato questi due perché<span style="mso-spacerun: yes">&nbsp;
+</span>rappresentano le due &quot;categorie&quot; di strumenti di
+esplorazione.&nbsp;Vi raccomando caldamente di eseguirli sulla vostra rete,
+sarete sorpresi dai risultati :)<br>
+<b>NOTA:</b>. sscan è attualmente vecchio di un anno e seriamente antiquato.
+Viene qui trattato solo come esempio. Per esplorare le vulnerabilità della
+vostra rete vi consiglio <a href="http://www.nessus.org">Nessus</a>. </p>
+
+<ul type=disc>
+ <li class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;
+     mso-list:l0 level1 lfo3;tab-stops:list 36.0pt'>sscan rappresenta lo
+     strumento di esplorazione &quot;tuttofare&quot; dello Script Kiddie. Esso
+     fa un test della rete per un gruppo di vulnerabilità specifiche. E' configurabile,
+     permettendo l'aggiunta di nuovi test di vulnerabilità.&nbsp;Dovete solo
+     fornire allo strumento una rete ed una maschera di rete (netmask), ed il
+     resto lo farà lui.&nbsp;Comunque l'utente deve essere root per
+     usarlo.&nbsp; Il risultato è<span style="mso-spacerun: yes">&nbsp;
+     </span>estremamente facile da interpretare (rendendolo quindi molto
+     popolare):&nbsp;viene dato un conciso riassunto di molti servizi
+     vulnerabili.&nbsp;Tutto quello che è necessario fare è eseguirlo verso una
+     rete, cercare la parola &quot;VULN&quot; nei risultati, e quindi eseguire
+     &quot;l'impresa del giorno&quot;.&nbsp; Di seguito un esempio di sscan
+     eseguito contro il sistema mozart (<span style='font-size:10.0pt;
+     font-family:"Courier New"'>172.17.6.30</span>).</li>
+</ul>
+
+<p class=MsoNormal><span style='font-size:10.0pt;font-family:"Courier New"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+otto #./sscan -o 172.17.6.30</span> </p>
+
+<p class=MsoNormal style='margin-left:72.0pt'><span style='font-size:10.0pt;
+font-family:"Courier New"'>--------------------------&lt;[ * report for host
+mozart *</span> <br>
+<span style='font-size:10.0pt;font-family:"Courier New"'>&lt;[ tcp port: 80
+(http) ]&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;[ tcp port: 23 (telnet)
+]&gt;</span> <br>
+<span style='font-size:10.0pt;font-family:"Courier New"'>&lt;[ tcp port: 143
+(imap) ]&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;[ tcp port: 110 (pop-3) ]&gt;</span>
+<br>
+<span style='font-size:10.0pt;font-family:"Courier New"'>&lt;[ tcp port: 111
+(sunrpc) ]&gt;&nbsp;&nbsp;&nbsp; &lt;[ tcp port: 79 (finger) ]&gt;</span> <br>
+<span style='font-size:10.0pt;font-family:"Courier New"'>&lt;[ tcp port: 53
+(domain) ]&gt;&nbsp;&nbsp;&nbsp;&nbsp; &lt;[ tcp port: 25 (smtp) ]&gt;</span> <br>
+<span style='font-size:10.0pt;font-family:"Courier New"'>&lt;[ tcp port: 21
+(ftp) ]&gt;</span> <br>
+<span style='font-size:10.0pt;font-family:"Courier New"'>--&lt;[ *OS*: mozart:
+os detected: redhat linux 5.1</span> <br>
+<span style='font-size:10.0pt;font-family:"Courier New"'>mozart: VULN: linux
+box vulnerable to named overflow.</span> <br>
+<span lang=EN-GB style='font-size:10.0pt;font-family:"Courier New";mso-ansi-language:
+EN-GB'>-&lt;[ *CGI*: 172.17.6.30: tried to redirect a /cgi-bin/phf request.</span><span
+lang=EN-GB style='mso-ansi-language:EN-GB'> <br>
+</span><span lang=EN-GB style='font-size:10.0pt;font-family:"Courier New";
+mso-ansi-language:EN-GB'>-&lt;[ *FINGER*: mozart: root: account exists.</span><span
+lang=EN-GB style='mso-ansi-language:EN-GB'> <br>
+</span><span lang=EN-GB style='font-size:10.0pt;font-family:"Courier New";
+mso-ansi-language:EN-GB'>--&lt;[ *VULN*: mozart: sendmail will 'expn' accounts
+for us</span><span lang=EN-GB style='mso-ansi-language:EN-GB'> <br>
+</span><span lang=EN-GB style='font-size:10.0pt;font-family:"Courier New";
+mso-ansi-language:EN-GB'>--&lt;[ *VULN*: mozart: linux bind/iquery remote
+buffer overflow</span><span lang=EN-GB style='mso-ansi-language:EN-GB'> <br>
+</span><span lang=EN-GB style='font-size:10.0pt;font-family:"Courier New";
+mso-ansi-language:EN-GB'>--&lt;[ *VULN*: mozart: linux mountd remote buffer
+overflow</span><span lang=EN-GB style='mso-ansi-language:EN-GB'> <br>
+</span><span lang=EN-GB style='font-size:10.0pt;font-family:"Courier New";
+mso-ansi-language:EN-GB'>---------------------------&lt;[ * scan of mozart
+completed *</span><span lang=EN-GB style='mso-ansi-language:EN-GB'><o:p></o:p></span></p>
+
+<ul type=disc>
+ <li class=MsoNormal style='mso-margin-top-alt:auto;mso-margin-bottom-alt:auto;
+     mso-list:l1 level1 lfo6;tab-stops:list 36.0pt'>Nmap rappresenta il gruppo
+     di strumenti &quot;raw data&quot;.&nbsp; Non vi dice quali vulnerabilità
+     esistono, piuttosto dice quali porte sono aperte, e voi determinerete
+     l'impatto di sicurezza.&nbsp;Nmap è diventato rapidamente il port scanner
+     di riferimento, e con buona ragione.&nbsp; Esso prende il meglio di
+     diversi port scanner e mette tutte le loro funzionalità all'interno di un unico
+     strumento, inclusa la determinazione del sistema operativo, varie opzioni
+     di<span style="mso-spacerun: yes">&nbsp; </span>assemblaggio dei pacchetti
+     , esplorazione UDP e TC, randomizzazione, etc.&nbsp; Ad ogni modo è
+     necessario avere conoscenze di rete per usarlo ed interpretare i dati. Di
+     seguito un esempio di nmap eseguito contro lo stesso server.</li>
+</ul>
+
+<p class=MsoNormal style='margin-left:72.0pt'><span style='font-size:10.0pt;
+font-family:"Courier New"'>otto #nmap -sS -O 172.17.6.30</span> </p>
+
+<p style='margin-left:72.0pt'><span style='font-size:10.0pt;font-family:"Courier New"'>Starting
+nmap V. 2.08 by Fyodor (fyodor@dhp.com, www.insecure.org/nmap/)</span> <br>
+<span style='font-size:10.0pt;font-family:"Courier New"'>Interesting ports on
+mozart (172.17.6.30):</span> <br>
+<span style='font-size:10.0pt;font-family:"Courier New"'>Port&nbsp;&nbsp;&nbsp;
+State&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Protocol&nbsp; Service</span> <br>
+<span style='font-size:10.0pt;font-family:"Courier New"'>21&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+open&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; tcp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ftp</span> <br>
+<span style='font-size:10.0pt;font-family:"Courier New"'>23&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+open&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+tcp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; telnet</span> <br>
+<span style='font-size:10.0pt;font-family:"Courier New"'>25&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+open&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+tcp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; smtp</span> <br>
+<span style='font-size:10.0pt;font-family:"Courier New"'>37&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+open&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+tcp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; time</span> <br>
+<span style='font-size:10.0pt;font-family:"Courier New"'>53&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+open&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+tcp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; domain</span> <br>
+<span style='font-size:10.0pt;font-family:"Courier New"'>70&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+open&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+tcp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; gopher</span> <br>
+<span style='font-size:10.0pt;font-family:"Courier New"'>79&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+open&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+tcp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; finger</span> <br>
+<span style='font-size:10.0pt;font-family:"Courier New"'>80&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+open&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+tcp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; http</span> <br>
+<span style='font-size:10.0pt;font-family:"Courier New"'>109&nbsp;&nbsp;&nbsp;&nbsp;
+open&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+tcp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; pop-2</span> <br>
+<span style='font-size:10.0pt;font-family:"Courier New"'>110&nbsp;&nbsp;&nbsp;&nbsp;
+open&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+tcp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; pop-3</span> <br>
+<span style='font-size:10.0pt;font-family:"Courier New"'>111&nbsp;&nbsp;&nbsp;&nbsp;
+open&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+tcp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; sunrpc</span> <br>
+<span style='font-size:10.0pt;font-family:"Courier New"'>143&nbsp;&nbsp;&nbsp;&nbsp;
+open&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+tcp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; imap2</span> <br>
+<span style='font-size:10.0pt;font-family:"Courier New"'>513&nbsp;&nbsp;&nbsp;&nbsp;
+open&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+tcp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; login</span> <br>
+<span style='font-size:10.0pt;font-family:"Courier New"'>514&nbsp;&nbsp;&nbsp;&nbsp;
+open&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+tcp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; shell</span> <br>
+<span style='font-size:10.0pt;font-family:"Courier New"'>635&nbsp;&nbsp;&nbsp;&nbsp;
+open&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+tcp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; unknown</span> <br>
+<span style='font-size:10.0pt;font-family:"Courier New"'>2049&nbsp;&nbsp;&nbsp;
+open&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+tcp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; nfs</span> </p>
+
+<p style='margin-left:72.0pt'><span lang=EN-GB style='font-size:10.0pt;
+font-family:"Courier New";mso-ansi-language:EN-GB'>TCP Sequence Prediction:
+Class=truly random</span><span lang=EN-GB style='mso-ansi-language:EN-GB'> <br>
+</span><span lang=EN-GB style='font-size:10.0pt;font-family:"Courier New";
+mso-ansi-language:EN-GB'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Difficulty=9999999 (Good luck!)</span><span lang=EN-GB style='mso-ansi-language:
+EN-GB'> <br>
+</span><span lang=EN-GB style='font-size:10.0pt;font-family:"Courier New";
+mso-ansi-language:EN-GB'>Remote operating system guess: Linux 2.0.35-36</span><span
+lang=EN-GB style='mso-ansi-language:EN-GB'> <o:p></o:p></span></p>
+
+<p style='margin-left:72.0pt'><span lang=EN-GB style='font-size:10.0pt;
+font-family:"Courier New";mso-ansi-language:EN-GB'>Nmap run completed -- 1 IP
+address (1 host up) scanned in 2 seconds</span><span lang=EN-GB
+style='mso-ansi-language:EN-GB'><o:p></o:p></span></p>
+
+<p class=MsoNormal>Analizzando I vostri log, potete determinare quali di questi
+strumenti è stato usato contro di voi.&nbsp;Per<span style="mso-spacerun:
+yes">&nbsp; </span>fare questo, è necessario capire come funzionano.&nbsp; </p>
+
+<p class=MsoNormal>Un sscan si connetterà come mostrato di seguito (questo e' uno
+scan di default senza modifiche a nessun file di configurazione): </p>
+
+<p><span style='font-size:10.0pt;font-family:"Courier New"'>/var/log/secure</span>
+<br>
+<span style='font-size:10.0pt;font-family:"Courier New"'>Apr 14 19:18:56 mozart
+in.telnetd[11634]: connect from 192.168.11.200</span> <br>
+<span style='font-size:10.0pt;font-family:"Courier New"'>Apr 14 19:18:56 mozart
+imapd[11635]: connect from 192.168.11.200</span> <br>
+<span style='font-size:10.0pt;font-family:"Courier New"'>Apr 14 19:18:56 mozart
+in.fingerd[11637]: connect from 192.168.11.200</span> <br>
+<span style='font-size:10.0pt;font-family:"Courier New"'>Apr 14 19:18:56 mozart
+ipop3d[11638]: connect from 192.168.11.200</span> <br>
+<span style='font-size:10.0pt;font-family:"Courier New"'>Apr 14 19:18:56 mozart
+in.telnetd[11639]: connect from 192.168.11.200</span> <br>
+<span style='font-size:10.0pt;font-family:"Courier New"'>Apr 14 19:18:56 mozart
+in.ftpd[11640]: connect from 192.168.11.200</span> <br>
+<span style='font-size:10.0pt;font-family:"Courier New"'>Apr 14 19:19:03 mozart
+ipop3d[11642]: connect from 192.168.11.200</span> <br>
+<span style='font-size:10.0pt;font-family:"Courier New"'>Apr 14 19:19:03 mozart
+imapd[11643]: connect from 192.168.11.200</span> <br>
+<span style='font-size:10.0pt;font-family:"Courier New"'>Apr 14 19:19:04 mozart
+in.fingerd[11646]: connect from 192.168.11.200</span> <br>
+<span style='font-size:10.0pt;font-family:"Courier New"'>Apr 14 19:19:05 mozart
+in.fingerd[11648]: connect from 192.168.11.200</span> </p>
+
+<p><span lang=EN-GB style='font-size:10.0pt;font-family:"Courier New";
+mso-ansi-language:EN-GB'>/var/log/maillog</span><span lang=EN-GB
+style='mso-ansi-language:EN-GB'> <br>
+</span><span lang=EN-GB style='font-size:10.0pt;font-family:"Courier New";
+mso-ansi-language:EN-GB'>Apr 14 21:01:58 mozart imapd[11667]: command stream
+end of file, while reading line user=??? host=[192.168.11.200]</span><span
+lang=EN-GB style='mso-ansi-language:EN-GB'> <br>
+</span><span lang=EN-GB style='font-size:10.0pt;font-family:"Courier New";
+mso-ansi-language:EN-GB'>Apr 14 21:01:58 mozart ipop3d[11668]: No such file or
+directory while reading line user=??? host=[192.168.11.200]</span><span
+lang=EN-GB style='mso-ansi-language:EN-GB'> <br>
+</span><span lang=EN-GB style='font-size:10.0pt;font-family:"Courier New";
+mso-ansi-language:EN-GB'>Apr 14 21:02:05 mozart sendmail[11675]: NOQUEUE:
+[192.168.11.200]: expn root</span><span lang=EN-GB style='mso-ansi-language:
+EN-GB'> <o:p></o:p></span></p>
+
+<p><span lang=EN-GB style='font-size:10.0pt;font-family:"Courier New";
+mso-ansi-language:EN-GB'>/var/log/messages</span><span lang=EN-GB
+style='mso-ansi-language:EN-GB'> <br>
+</span><span lang=EN-GB style='font-size:10.0pt;font-family:"Courier New";
+mso-ansi-language:EN-GB'>Apr 14 21:03:09 mozart telnetd[11682]: ttloop:&nbsp;
+peer died: Invalid or incomplete multibyte or wide character</span><span
+lang=EN-GB style='mso-ansi-language:EN-GB'> <br>
+</span><span lang=EN-GB style='font-size:10.0pt;font-family:"Courier New";
+mso-ansi-language:EN-GB'>Apr 14 21:03:12 mozart ftpd[11688]: FTP session closed</span><span
+lang=EN-GB style='mso-ansi-language:EN-GB'> <o:p></o:p></span></p>
+
+<p>sscan ricerca anche vulnerabilità di cgi-bin.&nbsp;Questi tentativi non sono
+registrati da syslogd, è possibile trovarli in access_log.&nbsp; Ho deciso di
+includerli comunque per vostro piacere :) </p>
+
+<p><span style='font-size:10.0pt;font-family:"Courier New"'>/var/log/httpd/access_log</span>
+<br>
+<span style='font-size:10.0pt;font-family:"Courier New"'>192.168.11.200 - -
+[14/Apr/1999:16:44:49 -0500] &quot;GET /cgi-bin/phf HTTP/1.0&quot; 302 192</span>
+<br>
+<span style='font-size:10.0pt;font-family:"Courier New"'>192.168.11.200 - -
+[14/Apr/1999:16:44:49 -0500] &quot;GET /cgi-bin/Count.cgi HTTP/1.0&quot; 404
+170</span> <br>
+<span style='font-size:10.0pt;font-family:"Courier New"'>192.168.11.200 - -
+[14/Apr/1999:16:44:49 -0500] &quot;GET /cgi-bin/test-cgi HTTP/1.0&quot; 404 169</span>
+<br>
+<span style='font-size:10.0pt;font-family:"Courier New"'>192.168.11.200 - -
+[14/Apr/1999:16:44:49 -0500] &quot;GET /cgi-bin/php.cgi HTTP/1.0&quot; 404 168</span>
+<br>
+<span style='font-size:10.0pt;font-family:"Courier New"'>192.168.11.200 - -
+[14/Apr/1999:16:44:49 -0500] &quot;GET /cgi-bin/handler HTTP/1.0&quot; 404 168</span>
+<br>
+<span style='font-size:10.0pt;font-family:"Courier New"'>192.168.11.200 - -
+[14/Apr/1999:16:44:49 -0500] &quot;GET /cgi-bin/webgais HTTP/1.0&quot; 404 168</span>
+<br>
+<span style='font-size:10.0pt;font-family:"Courier New"'>192.168.11.200 - -
+[14/Apr/1999:16:44:49 -0500] &quot;GET /cgi-bin/websendmail HTTP/1.0&quot; 404
+172</span> <br>
+<span style='font-size:10.0pt;font-family:"Courier New"'>192.168.11.200 - -
+[14/Apr/1999:16:44:49 -0500] &quot;GET /cgi-bin/webdist.cgi HTTP/1.0&quot; 404
+172</span> <br>
+<span style='font-size:10.0pt;font-family:"Courier New"'>192.168.11.200 - -
+[14/Apr/1999:16:44:49 -0500] &quot;GET /cgi-bin/faxsurvey HTTP/1.0&quot; 404
+170</span> <br>
+<span style='font-size:10.0pt;font-family:"Courier New"'>192.168.11.200 - -
+[14/Apr/1999:16:44:49 -0500] &quot;GET /cgi-bin/htmlscript HTTP/1.0&quot; 404
+171</span> <br>
+<span style='font-size:10.0pt;font-family:"Courier New"'>192.168.11.200 - -
+[14/Apr/1999:16:44:49 -0500] &quot;GET /cgi-bin/pfdisplay.cgi HTTP/1.0&quot;
+404 174</span> <br>
+<span style='font-size:10.0pt;font-family:"Courier New"'>192.168.11.200 - -
+[14/Apr/1999:16:44:49 -0500] &quot;GET /cgi-bin/perl.exe HTTP/1.0&quot; 404 169</span>
+<br>
+<span style='font-size:10.0pt;font-family:"Courier New"'>192.168.11.200 - -
+[14/Apr/1999:16:44:49 -0500] &quot;GET /cgi-bin/wwwboard.pl HTTP/1.0&quot; 404
+172</span> <br>
+<span style='font-size:10.0pt;font-family:"Courier New"'>192.168.11.200 - -
+[14/Apr/1999:16:44:50 -0500] &quot;GET /cgi-bin/ews/ews/architext_query.pl
+HTTP/1.0&quot; 404 187</span> <br>
+<span style='font-size:10.0pt;font-family:"Courier New"'>192.168.11.200 - -
+[14/Apr/1999:16:44:50 -0500] &quot;GET /cgi-bin/jj HTTP/1.0&quot; 404 163</span>
+</p>
+
+<p>Notate come viene effettuata una connessione completa per tutte le porte
+(SYN, SYN-ACK, ACK)&nbsp; e quindi chiusa.&nbsp;Questo perché sscan determina
+cosa e' in esecuzione a livello di application layer.&nbsp; Non solo sscan
+vuole sapere <b>se</b> la vostra porta ftp è aperta, ma <b>quale</b> ftp daemon
+è in esecuzione.&nbsp;La stessa cosa per<span style="mso-spacerun: yes">&nbsp;
+</span>imap, pop, ecc.&nbsp; Quasto può essere visto usando sniffit, uno
+strumento comunemente usato per &quot;sniffare&quot; password. </p>
+
+<p><span lang=EN-GB style='font-size:10.0pt;font-family:"Courier New";
+mso-ansi-language:EN-GB'>mozart $ cat 172.17.6.30.21-192.168.11.200.7238</span><span
+lang=EN-GB style='mso-ansi-language:EN-GB'> <br>
+</span><span lang=EN-GB style='font-size:10.0pt;font-family:"Courier New";
+mso-ansi-language:EN-GB'>220 mozart.example.net FTP server (Version
+wu-2.4.2-academ[BETA-17](1) Tue Jun 9 10:43:14 EDT 1998) ready.</span><span
+lang=EN-GB style='mso-ansi-language:EN-GB'> <o:p></o:p></span></p>
+
+<p>Come visto sopra, viene effettuata una connessione completa per determinare
+la versione del wu-ftpd che è in esecuzione.&nbsp;Quando vedete una connessione
+completa nei vostri log, come quella qui sopra, molto probabilmente siete
+oggetto di una esplorazione da parte di uno strumento di questo
+tipo.&nbsp;Questi strumenti<span style="mso-spacerun: yes">&nbsp; </span>effettuano
+una connessione completa per determinare cosa state facendo eseguire. </p>
+
+<p>Nmap, come molti port scanner, non si interessa di <b>cosa</b> state facendo
+eseguire, ma <b>se</b> state facendo eseguire servizi specifici.&nbsp;Per fare
+ciò, nmap possiede un nutrito gruppo di opzioni, lasciando a voi la scelta del
+tipo di connessione da effettuare, inclusi SYN, FIN, Xmas, Null, ecc.&nbsp; Per
+una descrizione dettagliata di queste opzioni, fare riferimento a <a
+href="http://www.insecure.org/nmap/nmap_doc.html">http://www.insecure.org/nmap/nmap_doc.html.&nbsp;</a>&nbsp;
+A causa di queste opzioni i vostri log possono essere differenti secondo le
+opzioni selezionate dall'utente remoto.&nbsp;Una connessione effettuata con
+l'opzione -sT<span style="mso-spacerun: yes">&nbsp; </span>è una connessione
+completa, e nei log sarà simile a quella di sscan, anche se di norma<span
+style="mso-spacerun: yes">&nbsp; </span>nmap esplora più porte. </p>
+
+<p><span style='font-size:10.0pt;font-family:"Courier New"'>/var/log/secure</span>
+<br>
+<span style='font-size:10.0pt;font-family:"Courier New"'>Apr 14 21:20:50 mozart
+in.rlogind[11706]: connect from 192.168.11.200</span> <br>
+<span style='font-size:10.0pt;font-family:"Courier New"'>Apr 14 21:20:51 mozart
+in.fingerd[11708]: connect from 192.168.11.200</span> <br>
+<span style='font-size:10.0pt;font-family:"Courier New"'>Apr 14 21:20:51 mozart
+ipop2d[11709]: connect from 192.168.11.200</span> <br>
+<span style='font-size:10.0pt;font-family:"Courier New"'>Apr 14 21:20:51 mozart
+in.rshd[11710]: connect from 192.168.11.200</span> <br>
+<span style='font-size:10.0pt;font-family:"Courier New"'>Apr 14 21:20:51 mozart
+gn[11711]: connect from 192.168.11.200</span> <br>
+<span style='font-size:10.0pt;font-family:"Courier New"'>Apr 14 21:20:51 mozart
+gn[11711]: error: cannot execute /usr/sbin/gn: No such file or directory</span>
+<br>
+<span style='font-size:10.0pt;font-family:"Courier New"'>Apr 14 21:20:52 mozart
+in.timed[11712]: connect from 192.168.11.200</span> <br>
+<span style='font-size:10.0pt;font-family:"Courier New"'>Apr 14 21:20:52 mozart
+imapd[11713]: connect from 192.168.11.200</span> <br>
+<span style='font-size:10.0pt;font-family:"Courier New"'>Apr 14 21:20:52 mozart
+ipop3d[11714]: connect from 192.168.11.200</span> <br>
+<span style='font-size:10.0pt;font-family:"Courier New"'>Apr 14 21:20:52 mozart
+in.telnetd[11715]: connect from 192.168.11.200</span> <br>
+<span style='font-size:10.0pt;font-family:"Courier New"'>Apr 14 21:20:52 mozart
+in.ftpd[11716]: connect from 192.168.11.200</span> </p>
+
+<p>Una cosa da tenere a mente è l'opzione -D (o decoy).&nbsp; Questa opzione di
+nmap<span style="mso-spacerun: yes">&nbsp; </span>permette all'utente remoto di
+mimetizzare l'indirizzo di partenza. Potreste vedere delle esplorazioni da 15
+differenti fonti nello stesso momento, ma una sola è quella reale. E'
+estremamente difficile determinare quale delle 15 fonti è quella vera.&nbsp;
+Più spesso gli utenti usano l'opzione -sS durante l'esplorazione delle porte.
+Questa è una opzione che nasconde, in quanto viene inviato solo un pacchetto
+SYN.&nbsp;&nbsp;Se il sistema risponde, la connessione viene immediatamente
+interrotta con un RST.&nbsp; I log da questo tipo di esplorazione assomigliano
+a queeli qui di seguito(<b>NOTA</b>: Sono inclusi solo i primi cinque
+tentativi). </p>
+
+<p><span lang=EN-GB style='mso-ansi-language:EN-GB'>/var/log/secure <br>
+</span><span lang=EN-GB style='font-size:10.0pt;font-family:"Courier New";
+mso-ansi-language:EN-GB'>Apr 14 21:25:08 mozart in.rshd[11717]: warning: can't
+get client address: Connection reset by peer</span><span lang=EN-GB
+style='mso-ansi-language:EN-GB'> <br>
+</span><span lang=EN-GB style='font-size:10.0pt;font-family:"Courier New";
+mso-ansi-language:EN-GB'>Apr 14 21:25:08 mozart in.rshd[11717]: connect from
+unknown</span><span lang=EN-GB style='mso-ansi-language:EN-GB'> <br>
+</span><span lang=EN-GB style='font-size:10.0pt;font-family:"Courier New";
+mso-ansi-language:EN-GB'>Apr 14 21:25:09 mozart in.timed[11718]: warning: can't
+get client address: Connection reset by peer</span><span lang=EN-GB
+style='mso-ansi-language:EN-GB'> <br>
+</span><span lang=EN-GB style='font-size:10.0pt;font-family:"Courier New";
+mso-ansi-language:EN-GB'>Apr 14 21:25:09 mozart in.timed[11718]: connect from
+unknown</span><span lang=EN-GB style='mso-ansi-language:EN-GB'> <br>
+</span><span lang=EN-GB style='font-size:10.0pt;font-family:"Courier New";
+mso-ansi-language:EN-GB'>Apr 14 21:25:09 mozart imapd[11719]: warning: can't
+get client address: Connection reset by peer</span><span lang=EN-GB
+style='mso-ansi-language:EN-GB'> <br>
+</span><span lang=EN-GB style='font-size:10.0pt;font-family:"Courier New";
+mso-ansi-language:EN-GB'>Apr 14 21:25:09 mozart imapd[11719]: connect from
+unknown</span><span lang=EN-GB style='mso-ansi-language:EN-GB'> <br>
+</span><span lang=EN-GB style='font-size:10.0pt;font-family:"Courier New";
+mso-ansi-language:EN-GB'>Apr 14 21:25:09 mozart ipop3d[11720]: warning: can't
+get client address: Connection reset by peer</span><span lang=EN-GB
+style='mso-ansi-language:EN-GB'> <br>
+</span><span lang=EN-GB style='font-size:10.0pt;font-family:"Courier New";
+mso-ansi-language:EN-GB'>Apr 14 21:25:09 mozart ipop3d[11720]: connect from
+unknown</span><span lang=EN-GB style='mso-ansi-language:EN-GB'> <br>
+</span><span lang=EN-GB style='font-size:10.0pt;font-family:"Courier New";
+mso-ansi-language:EN-GB'>Apr 14 21:25:09 mozart in.rlogind[11722]: warning:
+can't get client address: Connection reset by peer</span><span lang=EN-GB
+style='mso-ansi-language:EN-GB'> <br>
+</span><span lang=EN-GB style='font-size:10.0pt;font-family:"Courier New";
+mso-ansi-language:EN-GB'>Apr 14 21:25:09 mozart in.rlogind[11722]: connect from
+unknown</span><span lang=EN-GB style='mso-ansi-language:EN-GB'> <br>
+&nbsp; <o:p></o:p></span></p>
+
+<p>Notate gli errori nelle connessioni.&nbsp;Siccome la sequenza SYN-ACK è
+interrotta prima che possa essere stabilita una connessione completa, il daemon
+del servizio non può determinare il sistema di partenza.&nbsp;I log mostrano che
+siete stati oggetto di esplorazione, ma sfortunatamente non sapete da parte di
+chi.&nbsp; Ciò che è più allarmante è che, in molti sistemi (inclusi I più
+recenti kernel di Linux), nessuno di questi errori viene registrato.&nbsp;<span
+lang=EN-GB style='mso-ansi-language:EN-GB'>Per citare Fyodor &quot; ... based
+on all the 'connection reset by peer' messages.&nbsp; This is a Linux 2.0.XX
+oddity -- virtually every other system (including the 2.2 and later 2.1
+kernels) will show nothing.&nbsp; That bug (accept() returning before
+completion of the 3-way handshake) was fixed.&quot; <o:p></o:p></span></p>
+
+<p>Nmap include altre opzioni di mimetizzazione, such as -sF, -sX, -sN dove
+sono usati vari flag.&nbsp; Di seguito quanto mostrato dai log per questi
+tentativi:</p>
+
+<p><span lang=EN-GB style='font-size:10.0pt;font-family:"Courier New";
+mso-ansi-language:EN-GB'>/var/log/secure</span><span lang=EN-GB
+style='mso-ansi-language:EN-GB'> <br style='mso-special-character:line-break'>
+<![if !supportLineBreakNewLine]><br style='mso-special-character:line-break'>
+<![endif]><o:p></o:p></span></p>
+
+<p>Notate qualcosa qui, non ci sono log !&nbsp; Inquietante huh, siete stati
+appena esplorati, e non lo avete saputo.&nbsp; Tutti e tre I tipi di
+esplorazione danno lo stesso risultato, ma voi siete in grado di registrare
+solo il primo tipo, -sT (connessione completa).&nbsp; Per scoprire queste altre
+esplorazioni nascoste, avete bisogno di usare divere programmi di log come <a
+href="http://www.kalug.lug.net/tcplogd/">tcplogd</a> o <a
+href="http://www.via.ecp.fr/~hugo/ippl/">ippl</a>&nbsp;&nbsp; anche alcuni
+firewall commerciali sono in grado di scoprirle (Ho avuto conferma su
+Checkpoint Firewall 1). <br>
+&nbsp; </p>
+
+<p><b><span style='font-size:18.0pt'>Hanno Avuto Accesso?</span></b> <br>
+Una volta che avete determinato di essere stati esplorati, e per cercare cosa,
+la prossima grande domanda è &quot;Sono entrati?&quot;.&nbsp;Molti degli
+attuali exploit remoti sono basati su buffer overflow (altrimenti conosciuto
+come &quot;smashing the stack&quot; (NdT. &quot;spaccalapila&quot;).&nbsp;
+Detto in parole povere, un buffer overflow è dato da un programma (in genere un
+daemon o server) riceve più dati di quanti se ne aspetta, andando così a
+scrivere in aree critiche della memoria. Vengono quindi eseguiti alcuni codici,
+che generalmente danno all'utente una accesso di root.&nbsp;Per maggiori
+informazioni sui buffer overflow, vedete l'eccellente lavoro di Aleph1a<span
+style="mso-spacerun: yes">&nbsp; </span><a
+href="ftp://ftp.technotronic.com/rfc/phrack49-14.txt">ftp://ftp.technotronic.com/rfc/phrack49-14.txt</a>.
+</p>
+
+<p>E' generalmente possibile identificare un attacco di buffer overflow nel log
+file /var/log/messages (o /var/adm/messages per altri tipi di Unix) per
+attacchi tipo mountd.&nbsp; Si possono vedere anche log simili in maillog per
+questo tipo di attacchi contro imapd.&nbsp; Un attacco di buffer overflow
+assomiglierà a questo: </p>
+
+<p><span lang=EN-GB style='font-size:10.0pt;font-family:"Courier New";
+mso-ansi-language:EN-GB'>Apr 14 04:20:51 mozart mountd[6688]: Unauthorized
+access by NFS client 192.168.11.200.</span><span lang=EN-GB style='mso-ansi-language:
+EN-GB'> <br>
+</span><span lang=EN-GB style='font-size:10.0pt;font-family:"Courier New";
+mso-ansi-language:EN-GB'>Apr 14 04:20:51 mozart syslogd: Cannot glue message
+parts together</span><span lang=EN-GB style='mso-ansi-language:EN-GB'> <br>
+</span><span lang=EN-GB style='font-size:10.0pt;font-family:"Courier New";
+mso-ansi-language:EN-GB'>Apr 14 04:20:51 mozart mountd[6688]: Blocked attempt of
+192.168.11.200 to mount</span><span lang=EN-GB style='mso-ansi-language:EN-GB'>
+<br>
+</span><span lang=EN-GB style='font-size:10.0pt;font-family:"Courier New";
+mso-ansi-language:EN-GB'>~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~</span><span
+lang=EN-GB style='mso-ansi-language:EN-GB'> <br>
+</span><span lang=EN-GB style='font-size:10.0pt;font-family:"Courier New";
+mso-ansi-language:EN-GB'>P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~</span><span
+lang=EN-GB style='mso-ansi-language:EN-GB'> <br>
+</span><span lang=EN-GB style='font-size:10.0pt;font-family:"Courier New";
+mso-ansi-language:EN-GB'>P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~</span><span
+lang=EN-GB style='mso-ansi-language:EN-GB'> <br>
+</span><span lang=EN-GB style='font-size:10.0pt;font-family:"Courier New";
+mso-ansi-language:EN-GB'>P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~</span><span
+lang=EN-GB style='mso-ansi-language:EN-GB'> <br>
+</span><span lang=EN-GB style='font-size:10.0pt;font-family:"Courier New";
+mso-ansi-language:EN-GB'>P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~</span><span
+lang=EN-GB style='mso-ansi-language:EN-GB'> <br>
+</span><span lang=EN-GB style='font-size:10.0pt;font-family:"Courier New";
+mso-ansi-language:EN-GB'>P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~</span><span
+lang=EN-GB style='mso-ansi-language:EN-GB'> <br>
+</span><span lang=EN-GB style='font-size:10.0pt;font-family:"Courier New";
+mso-ansi-language:EN-GB'>P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~</span><span
+lang=EN-GB style='mso-ansi-language:EN-GB'> <br>
+</span><span lang=EN-GB style='font-size:10.0pt;font-family:"Courier New";
+mso-ansi-language:EN-GB'>P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~</span><span
+lang=EN-GB style='mso-ansi-language:EN-GB'> <br>
+</span><span lang=EN-GB style='font-size:10.0pt;font-family:"Courier New";
+mso-ansi-language:EN-GB'>P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~</span><span
+lang=EN-GB style='mso-ansi-language:EN-GB'> <br>
+</span><span lang=EN-GB style='font-size:10.0pt;font-family:"Courier New";
+mso-ansi-language:EN-GB'>P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~</span><span
+lang=EN-GB style='mso-ansi-language:EN-GB'> <br>
+</span><span lang=EN-GB style='font-size:10.0pt;font-family:"Courier New";
+mso-ansi-language:EN-GB'>P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~</span><span
+lang=EN-GB style='mso-ansi-language:EN-GB'> <br>
+</span><span lang=EN-GB style='font-size:10.0pt;font-family:"Courier New";
+mso-ansi-language:EN-GB'>P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~</span><span
+lang=EN-GB style='mso-ansi-language:EN-GB'> <br>
+</span><span lang=EN-GB style='font-size:10.0pt;font-family:"Courier New";
+mso-ansi-language:EN-GB'>P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~</span><span
+lang=EN-GB style='mso-ansi-language:EN-GB'> <br>
+</span><span lang=EN-GB style='font-size:10.0pt;font-family:"Courier New";
+mso-ansi-language:EN-GB'>P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~</span><span
+lang=EN-GB style='mso-ansi-language:EN-GB'> <br>
+</span><span lang=EN-GB style='font-size:10.0pt;font-family:"Courier New";
+mso-ansi-language:EN-GB'>P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~</span><span
+lang=EN-GB style='mso-ansi-language:EN-GB'> <br>
+</span><span lang=EN-GB style='font-size:10.0pt;font-family:"Courier New";
+mso-ansi-language:EN-GB'>P~P~P3Û3À°^[Í~@3Ò3À~KÚ°^FÍ~@þÂuô1À°^BÍ~@~EÀubëb^V¬&lt;ýt^FþÀt^Këõ°0þÈ~HFÿëì^°^B~</span><span
+lang=EN-GB style='mso-ansi-language:EN-GB'> <br>
+</span><span lang=EN-GB style='font-size:10.0pt;font-family:"Courier New";
+mso-ansi-language:EN-GB'>I^FþÈ~IF^D°^F~IF^H°f1ÛþÃ~IñÍ~@~I^F°^Bf~IF^L°*f~IF^N~MF^L~IF^D1À~IF^P°^P~IF^H°</span><span
+lang=EN-GB style='mso-ansi-language:EN-GB'> <br>
+</span><span lang=EN-GB style='font-size:10.0pt;font-family:"Courier New";
+mso-ansi-language:EN-GB'>fþÃÍ~@°^A~IF^D°f³^DÍ~@ë^DëLëR1À~IF^D~IF^H°fþÃÍ~@~HÃ°?1ÉÍ~@°?þÁÍ~@°?þÁÍ~@¸.bin@~</span><span
+lang=EN-GB style='mso-ansi-language:EN-GB'> <br>
+</span><span lang=EN-GB style='font-size:10.0pt;font-family:"Courier New";
+mso-ansi-language:EN-GB'>I^F¸.sh!@~IF^D1À~HF^G~Iv^H~IF^L°^K~Ió~MN^H~MV^LÍ~@1À°^A1ÛÍ~@èEÿÿÿÿýÿPrivet</span><span
+lang=EN-GB style='mso-ansi-language:EN-GB'> <br>
+</span><span lang=EN-GB style='font-size:10.0pt;font-family:"Courier New";
+mso-ansi-language:EN-GB'>ADMcrew~P(-^E^H(-^E^H(-^E^H(-^E^H(-^E^H(-^E^H(-^E^H(-^E^H(-^E^H(Apr
+14 04:20:51</span><span lang=EN-GB style='mso-ansi-language:EN-GB'> <br>
+</span><span lang=EN-GB style='font-size:10.0pt;font-family:"Courier New";
+mso-ansi-language:EN-GB'>mozart
+^H(-^E^H(-^E^H(-^E^H(-^E^H(-^E^H(-^E^H(-^E^H(-^E^H(-^E^H(-^E^H(-^E^H(-^</span><span
+lang=EN-GB style='mso-ansi-language:EN-GB'> <br>
+</span><span lang=EN-GB style='font-size:10.0pt;font-family:"Courier New";
+mso-ansi-language:EN-GB'>E^H(-^E^H-^E^H(-^E^H(-^E^H(-^E^H(-^E^H(-^E^H(-^E^H(-^E^H(-^E^H(-^E^H(-^E^H(-^E</span><span
+lang=EN-GB style='mso-ansi-language:EN-GB'> <br>
+</span><span lang=EN-GB style='font-size:10.0pt;font-family:"Courier New";
+mso-ansi-language:EN-GB'>^H(-^E^H-^E^H(-^E^H(-^E^H(-^E^H(-^E^H(-^E^
+H(-^E^H(-^E^H(-^E^H(-^E^H(-^E^H(-^E</span><span lang=EN-GB style='mso-ansi-language:
+EN-GB'> <br>
+</span><span lang=EN-GB style='font-size:10.0pt;font-family:"Courier New";
+mso-ansi-language:EN-GB'>^H(-^E^H(-^E</span><span lang=EN-GB style='mso-ansi-language:
+EN-GB'> <br>
+&nbsp; <o:p></o:p></span></p>
+
+<p>Quando vedete qualcosa del genere nei vostri log, qualcuno ha tentato di
+entrare nel vostro sistema.&nbsp;E' difficile determinare se l'attacco ha avuto
+successo.&nbsp;Un modo per farlo, seguendo il tentativo di accesso, è vedere se
+ci sono connessioni da una fonte remota al vostro sistema.&nbsp; Se accedono
+con successo dal sistema remoto, allora sono entrati.&nbsp;Un altro indizio è
+se trovate account tipo &quot;moof&quot;, &quot;rewt&quot;, &quot;crak0&quot;,
+o &quot;w0rm&quot; aggiunti al vostro /etc/passwd file.&nbsp; Questi account,
+uid 0, vengono aggiunti da alcuni dei più comuni script di exploit.&nbsp;Una
+volta che l'aggressore ha avuto accesso, normalmente la prima cosa che farà
+sarà cancellare I vostri log ed alterare (trojan) il vostro programma di log
+(syslogd), per maggiori informazioni, vedere <a
+href="http://www.enteract.com/~lspitz/enemy3.html">Conosci Il Tuo Nemico: III</a>.&nbsp;
+Da questo momento in poi non riceverete più nessun log dal vostro sistema in
+quanto compromesso.&nbsp;Cosa fare a questo punto è l'oggetto di un altro
+articolo :).&nbsp;&nbsp;Nel frattempo, consiglio una visita a<span
+style="mso-spacerun: yes">&nbsp; </span><a
+href="http://www.cert.org/nav/recovering.html">http://www.cert.org/nav/recovering.html</a>
+</p>
+
+<p>Per aiutarmi nella ricerca di anomalie nei miei file di log, ho messo giù
+uno script che li analizza I log<span style="mso-spacerun: yes">&nbsp;
+</span>per me. Per informazioni più dettagliate su ricerca ed ordinamento dei
+file di log, date un'occhiata a questo contributo di <a
+href="http://www.nfr.net/firewall-wizards/mail-archive/1997/Sep/0098.html">Marcus
+Ranum</a>. </p>
+
+<p class=MsoNormal align=center style='text-align:center'>&nbsp;<a
+href="http://www.enteract.com/~lspitz/bash.txt"><span lang=EN-GB
+style='mso-ansi-language:EN-GB'>Bourne shell script</span></a><span lang=EN-GB
+style='mso-ansi-language:EN-GB'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span><a href="http://www.enteract.com/~lspitz/ksh.txt"><span lang=EN-GB
+style='mso-ansi-language:EN-GB'>Korn shell script</span></a><span lang=EN-GB
+style='mso-ansi-language:EN-GB'><o:p></o:p></span></p>
+
+<p class=MsoNormal><b><span style='font-size:18.0pt;font-family:"Arial Narrow"'>Conclusione</span></b>
+<br>
+Le registrazioni dei vostri sistemi possono dirvi molto circa il
+nemico.&nbsp;Comunque il primo passo è garantire l'integrità dei vostri file di
+log.&nbsp;Uno dei modi migliori per farlo<span style="mso-spacerun: yes">&nbsp;
+</span>è usare un server dei log remoto che riceva e mantenga I log di tutti I
+sistemi. Una volta resi sicuri i vostri file di log, potete identificare dei
+modelli dalla loro analisi.&nbsp;In base a questi modelli ed al contenuto dei
+log, potete determinare che cosa l'aggressore cerca e potenzialmente che
+strumenti usa. Sapendo questo potrete dare maggior sicurezza e protezione ai
+vostri sistemi. <br>
+&nbsp; </p>
+
+<p><b><i><span style='font-family:"Arial Narrow"'>Biografia dell'Autore</span></i></b>
+<br>
+<i>Lance Spitzner si diverte ad imparare facendo saltare i suoi sistemi Unix a
+casa. Prima di questo, era <a
+href="http://www.enteract.com/~lspitz/officer.html">Ufficiale della Forza di
+Intervento Rapido,</a> dove faceva saltare cose di diversa natura. E'
+raggiungibile a <a href="mailto:lance@spitzner.net">lance@spitzner.net</a> .</i>
+<br>
+&nbsp; <br>
+&nbsp; </p>
+
+<div align=center>
+
+<table border=1 cellpadding=0 style='mso-cellspacing:1.5pt;border:outset 4.5pt;
+ mso-padding-alt:0cm 0cm 0cm 0cm'>
+ <tr>
+  <td style='padding:.75pt .75pt .75pt .75pt'>
+  <p class=MsoNormal><i><span style='font-size:18.0pt;font-family:Braggadocio;
+  color:maroon'><a href="http://www.enteract.com/~lspitz/pubs.html">Whitepapers
+  / Publications</a></span></i></p>
+  </td>
+ </tr>
+</table>
+
+</div>
+
+<p class=MsoNormal>&nbsp; </p>
+
+</div>
+
+</body>
+
+</html>

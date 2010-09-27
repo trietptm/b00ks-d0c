@@ -1,0 +1,863 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1250">
+<title>Przynęty Definicje </title>
+
+<style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:Wingdings;
+	panose-1:5 0 0 0 0 0 0 0 0 0;}
+@font-face
+	{font-family:"Book Antiqua";
+	panose-1:2 4 6 2 5 3 5 3 3 4;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin:0cm;
+	margin-bottom:.0001pt;
+	font-size:12.0pt;
+	font-family:"Times New Roman";}
+p.MsoBodyText, li.MsoBodyText, div.MsoBodyText
+	{margin:0cm;
+	margin-bottom:.0001pt;
+	font-size:10.0pt;
+	font-family:"Times New Roman";}
+a:link, span.MsoHyperlink
+	{color:blue;
+	text-decoration:none none;}
+a:visited, span.MsoHyperlinkFollowed
+	{color:purple;
+	text-decoration:underline;}
+p
+	{margin-right:0cm;
+	margin-left:0cm;
+	font-size:12.0pt;
+	font-family:"Times New Roman";}
+@page Section1
+	{size:595.3pt 841.9pt;
+	margin:70.85pt 70.85pt 70.85pt 70.85pt;}
+div.Section1
+	{page:Section1;}
+ /* List Definitions */
+ ol
+	{margin-bottom:0cm;}
+ul
+	{margin-bottom:0cm;}
+-->
+</style>
+
+</head>
+
+<body lang=PL link=blue vlink=purple>
+<div class=Section1> 
+  <p class=MsoNormal style='text-align:center'><span lang=EN-US
+style='font-size:36.0pt;font-family:"Book Antiqua"'>Honeypots<br>
+    </span><span lang=EN-US style='font-size:13.5pt;font-family:"Book Antiqua"'>Definitions 
+    and Value of Honeypots</span><span lang=EN-US style='font-family:"Book Antiqua"'> 
+    </span></p>
+  <p align=center style='text-align:center'><span style='font-size:10.0pt;
+font-family:Arial'><a href="mailto:lance@honeynet.org?Subject=Honeypots"><span
+lang=EN-US>Lance Spitzner</span></a></span><span lang=EN-US style='font-size:
+10.0pt;font-family:Arial'><br>
+    With extensive help from Marty Roesch and David Dittrich<br>
+    </span><span style='font-size:10.0pt;font-family:Arial'><a
+href="http://www.enteract.com/~lspitz"><span lang=EN-US>http://www.enteract.com/~lspitz</span></a></span><span
+lang=EN-US style='font-size:10.0pt;font-family:Arial'><br>
+    <br>
+    </span></p>
+  <p align=center style='text-align:center'><b><span style='font-family:Arial'>Przynęty 
+    – Definicje i wartość przynęt</span></b></p>
+  <p align=center style='text-align:center'><span style='font-size:10.0pt;
+font-family:Arial'>Tłumaczenie: Piotr Dorosz (<a
+href="mailto:pit@zsi.pwr.wroc.pl">pit@zsi.pwr.wroc.pl</a>)</span></p>
+  <p align=center style='text-align:center'><span style='font-size:10.0pt;
+font-family:Arial'> </span><span style='font-family:Arial'> </span></p>
+  <p style='text-align:justify'><span style='font-size:10.0pt;font-family:Arial'><font face="Verdana, Arial, Helvetica, sans-serif" size="2">Przez 
+    ostatnich kilka lat rośnie zainteresowanie przynętami i pokrewnymi do systemów 
+    przynęt technologiami. Przynęty nie są nową technologią, po raz pierwszy idea 
+    ich została wytłumaczona w kilku bardzo dobrych opracowaniach prekursorów 
+    bezpieczeństwa sieciowego – książce Cliff’a Stoll’a „Cuckoo’s Egg” (książka 
+    ta została wydana w Polsce pod tytułem „Kukułcze jajo”) oraz Steve’a Bellovin’a 
+    i Bill’a Cheswick’a w pracy „An Evening with Bedford” („Wieczór Wieczór Bedfordem”). 
+    Celem tego opracowania jest próba rozwinięcia ich idei i przedyskutowanie, 
+    czym są przynęty, jaką mogą mieć wartość dla organizacji oraz omówienie kilku 
+    rozwiązań wykorzystywanych w systemach przynęt. Istnieje wiele nieporozumień 
+    na temat czym jest przynęta, jakie jest jej działanie i jaka może być jej 
+    wartość dla organizacji. Nadzieją autora tego opracowania było rozwianie tych 
+    wątpliwości. Dodatkowo stosunkowo niewielu ludzi jest świadomych ryzyka i 
+    innych aspektów związanych z wykorzystaniem systemów przynęt. Mimo, że systemy 
+    przynęt mogą być przydatne, często lepiej jest poświęcić czas i zasoby na 
+    wprowadzenie innych rozwiązań. Jeżeli po przeczytaniu tego opracowania czytelnik 
+    będzie zainteresowany poszerzeniem swoich informacji o przynętach, powinien 
+    rozważyć subskrypcję listy mailingowej poświęconej tym technologiom (<a
+href="http://www.securityfocus.com/cgi-bin/forums.pl">http://www.securityfocus.com/cgi-bin/forums.pl</a>)</font></span></p>
+  <p class=MsoNormal style='text-align:justify'><span lang=EN-US>&nbsp;</span></p>
+  <p class=MsoNormal style='text-align:justify'><font face="Verdana, Arial, Helvetica, sans-serif"><b>Definicje 
+    </b> </font></p>
+  <p class=MsoBodyText style='text-align:justify'><font face="Verdana, Arial, Helvetica, sans-serif">Zanim 
+    przejdziemy do sedna sprawy, powinniśmy ustalić najpierw kilka definicji. 
+    Zbyt często widzi się ludzi kłócących się na listach mailingowych o przynęty. 
+    To, co jest zabawne, to fakt, że ma się wrażenie, iż mówią oni o dwóch całkowicie 
+    różnych pojęciach. Gdyby poświęcili chwilę, aby zgodzić się na to, o co kłócili 
+    się w pierwszej chwili, życie byłoby znacznie prostsze dla każdego (włączając 
+    w to moją skrzynkę odbiorczą). Aby upewnić się, że rozmawiamy o tych samych 
+    rzeczach, konieczne jest uzgodnienie kilku definicji. Na użytek tego opracowania 
+    bazując na standardowej definicji przynęty, wyróżnimy dwa różne typy systemów 
+    przynęt i różne rodzaje bezpieczeństwa. </font></p>
+  <p class=MsoNormal style='text-align:justify'><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>&nbsp;</span></font></p>
+  <p class=MsoNormal style='text-align:justify'><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>Na 
+    użytek tego opracowania zdefiniujemy przynętę jako „zasób, którego podstawową 
+    funkcją jest bycie atakowanym i nadużywanym”. Oznacza to, że cokolwiek, co 
+    desygnujemy do bycia przynętą, oczekujemy, że system ten będzie próbkowany, 
+    atakowany i być może atak taki zakończy się potencjalnym przejęciem kontroli 
+    nad systemem przez napastnika. Należy mieć na uwadze, że systemy przynęt nie 
+    są same w sobie rozwiązaniem. Systemy tego typu niczego nie ‘naprawiają’. 
+    Zamiast tego systemy przynęt są po prostu narzędziami. Sposób, w jaki używasz 
+    tego narzędzia zależy od ciebie i zależy od celu, jaki chcesz osiągnąć. Przynęta 
+    może być systemem, który jedynie emuluje inne systemy lub aplikacje, tworzy 
+    środowisko pułapki, lub też jest standardową instalacją systemu operacyjnego. 
+    Niezależnie od sposobu, w jaki przynęta będzie stworzona i używana, jej przeznaczeniem 
+    jest bycie atakowaną. </span></font></p>
+  <p class=MsoNormal style='text-align:justify'><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>&nbsp;</span></font></p>
+  <p class=MsoNormal style='text-align:justify'><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'> Rozdzielimy 
+    przynęty na dwie szerokie kategorie, które zdefiniował twórca Snort’a Marty 
+    Roesch. Marty naświetlił mi, że dwa główne rodzaje przynęt to systemy „produkcyjne” 
+    i „badawcze”, podział ten uznałem za bardzo użyteczny. Przyczyną tworzenia 
+    przynęty typu produkcyjnego jest próba obniżenia ryzyka ataku. Przynęta taka 
+    nadaje nowe możliwości kreowania polityki bezpieczeństwa organizacji. Druga 
+    kategoria, przynęty badawcze, są zaprojektowane po to, aby pozyskać jak największą 
+    ilość informacji o społeczności hackerów. Przynęty tego rodzaju nie są same 
+    w sobie istotnym ogniwem polityki bezpieczeństwa organizacji, lecz zamiast 
+    tego używa się ich do badania rzeczywistych zagrożeń, na jakie ona jest narażona 
+    oraz jak się przed nimi ustrzec. Informacja zebrana przez tego typu przynęty 
+    jest następnie przetwarzana i na jej podstawie modyfikować można politykę 
+    bezpieczeństwa organizacji.</span></font></p>
+  <p class=MsoNormal style='text-align:justify'><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>&nbsp;</span></font></p>
+  <p class=MsoNormal style='text-align:justify'><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>Zanim 
+    skupimy się na sposobach, za pomocą których przynęty umożliwiają podniesienie 
+    poziomu bezpieczeństwa organizacji, zdefiniujmy najpierw czym jest bezpieczeństwo. 
+    Proces zabezpieczania systemu wiąże się z obniżeniem ryzyka. Nie można tego 
+    ryzyka całkowicie wyeliminować, ale zabezpieczanie systemów komputerowych 
+    pozwala na obniżenie ryzyka, na jakie narażona jest organizacja i jej zasoby 
+    informacyjne. Podczas dyskusji nad bezpieczeństwem dobrze jest całe zagadnienie 
+    podzielić na trzy obszary, zdefiniowane przez Bruce’a Shneier’a w <i>Secrets 
+    and Lies. </i>Bezpieczeństwo systemów komputerowych może być podzielone na 
+    trzy poniższe kategorie:</span></font></p>
+  <p class=MsoNormal style='text-align:justify'><span style='font-size:10.0pt'>&nbsp;</span></p>
+</div>
+<ul>
+  <li> 
+    <div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><b><span
+style='font-size:10.0pt'>Zapobieganie</span></b><span style='font-size:10.0pt'> 
+      – celem naszym jest zatrzymanie ataków hackerów. Gdyby chodziło o zabezpieczenie 
+      domu zapobieganie polegałoby na przykład na założeniu łańcuchów na drzwi, 
+      zamknięciu okien, i być może założeniu ogrodzenia dookoła podwórka. Stosuje 
+      się wszelkie możliwe środki do zapobieżenia niebezpieczeństwu.</span></font></div>
+  </li>
+  <font face="Verdana, Arial, Helvetica, sans-serif"><br>
+  </font>
+  <li> 
+    <div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><b><span
+style='font-size:10.0pt'>Wykrywanie</span></b><span style='font-size:10.0pt'> 
+      – chcemy wykryć hackera podczas próby wniknięcia do naszego systemu. Prędzej 
+      czy później samo zapobieganie nie wystarczy. Chcemy być pewni, że jeżeli 
+      będziemy mieli do czynienia z próbą ataku, to będziemy o tym wiedzieć. Znowu 
+      posługując się analogią do domu, było by to działania takie jak instalacja 
+      alarmu przeciw włamaniowego i czujników ruchu w domu. Alarmy te zadziałają, 
+      jeżeli ktoś będzie próbował się włamać. Jeżeli samo zapobieganie włamaniu 
+      nie wystarczy, to chcemy o jego próbie być poinformowani tak szybko jak 
+      to możliwe.</span></font></div>
+  </li>
+  <font face="Verdana, Arial, Helvetica, sans-serif"><br>
+  </font>
+  <li><font face="Verdana, Arial, Helvetica, sans-serif"><b><span
+style='font-size:10.0pt'>Reakcja</span></b><span style='font-size:10.0pt'> – Chcemy 
+    zareagować na działania hackerów, jak tylko je wykryjemy. Wykrycie próby nadużycia 
+    czy włamania nie ma wielkiej wartości, jeżeli nie mamy możliwości zareagowania 
+    na taki stan. Jakie korzyści płyną z faktu bycia poinformowanym o włamaniu 
+    do domu, jeżeli  nie podejmujemy żadnej reakcji na działania włamywacza? Jeżeli 
+    ktoś włamuje się do naszego domu, uruchamiając alarm antywłamaniowy, mamy 
+    nadzieję ze policja będzie mogła szybko przystąpić do działania. Tak samo 
+    jest z bezpieczeństwem informacji – jeżeli wykryte zostało nadużycie (lub 
+    jego próba) konieczna jest odpowiednia reakcja na zaistniały incydent.</span></font></li>
+</ul>
+<div class=Section1></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>Teraz, 
+  kiedy lepiej rozumiemy czym jest bezpieczeństwo, przekonajmy się jak przynęty 
+  wpływają na każdą z trzech przedstawionych kategorii bezpieczeństwa. </span></font></div>
+<div class=Section1>
+  <p><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>&nbsp;</span></font></p>
+</div>
+<div class=Section1></div>
+<div class=Section1><b><font face="Verdana, Arial, Helvetica, sans-serif">Wartość 
+  przynęt</font></b><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>&nbsp;</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>Przynęty 
+  posiadają pewne zalety (jak i wady), jeżeli traktujemy je jako narzędzia pozwalające 
+  na zabezpieczenie systemu. Zalety tego typu narzędzi pozwalają ocenić rzeczywistą 
+  wartość przynęty. Piękno przynęty leży w jej prostocie. Jest ona narzędziem, 
+  zaprojektowanym po to, aby było atakowane, nie oferuje ona żadnych usług i nie 
+  jest systemem produkcyjnym. Oznacza to że, ruch sieciowy kierowany i wychodzący 
+  z systemu przynęty bardzo rzadko jest normalnym ruchem sieciowym, który generują 
+  systemy produkcyjne. Za każdym razem, gdy nawiązywane jest połączenie z systemem 
+  przynęty, jest to najprawdopodobniej próba skanowania systemu lub próba ataku. 
+  Jeżeli jakieś połączenia sieciowe są inicjowane przez system przynęty, oznacza 
+  to że system ten padł ofiarą hackera. Ponieważ do systemu przynęty nie dochodzi 
+  i nie wychodzi normalny ruch sieciowy, cały przychodzący i wychodzący z przynęty 
+  ruch jest z definicji uważany za podejrzany. Oczywiście nie zawsze musi być 
+  to regułą, czasem mają miejsce przypadki, takie jak nieodpowiednie wpisy DNS 
+  czy przypadkowe próby nawiązania przez zdalnego użytkownika połączenia ze złym 
+  adresem IP. Mimo to większość połączeń z i do przynęty oznacza próbę wykonania 
+  na systemie czynności przez nieautoryzowanego użytkownika.</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>&nbsp;</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>Z 
+  tego powodu przynęty posiadają kilka „dziedzicznych” zalet jak i wad. Spróbujmy 
+  przytoczyć kilka z nich:</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>
+</span></font></div>
+<ul><li>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>Zaleta 
+  – gromadzenie danych</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span
+style='font-size:10.0pt'>&nbsp;</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span
+style='font-size:10.0pt'>Przynęty gromadzą małe ilości danych. Dane, które zostają 
+  zgromadzone mają zwykle dużą wartość. Pozwala to na obniżenie ilości szumu informacyjnego, 
+  ułatwia zbieranie i archiwizowanie danych. Jednym z najpoważniejszych problemów 
+  w bezpieczeństwie jest konieczność przebrnięcia przez gigabajty danych w celu 
+  odnalezienia tego, czego na prawdę potrzebujemy. Przynęty dają ci dokładnie 
+  informacje, jakich oczekujesz, prezentując je w łatwy do zrozumienia sposób. 
+  Przykładowo Projekt Honeynet (<i>Honeynet Project</i>), będący grupą przynęt 
+  stworzoną w celu badawczym, gromadzi przeciętnie tylko 1 – 5 MB danych dziennie. 
+  Informacja ta ma zwykle dużą wartość, nie tylko ze względu na fakt, iż reprezentuje 
+  ona całość ruchu sieciowego, ale również akcje podejmowane przez atakującego, 
+  po przejęciu przez niego kontroli nad systemem. Temat ten zostanie rozwinięty 
+  podczas omawiania wpływu przynęt na wykrywalność incydentów. </span></font></div>
+
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span
+style='font-size:10.0pt'>&nbsp;</span></font></div>
+</li><li>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>Zaleta 
+  – zasoby </span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span
+style='font-size:10.0pt'>&nbsp;</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span
+style='font-size:10.0pt'>Wiele z narzędzi używanych w bezpieczeństwie, może przestać 
+  spełniać swoje zadanie z powodu nadmiernej ilości danych kierowanych do nich 
+  lub zbyt dużej ilości akcji podejmowanych w systemie. Przykładowo systemy wykrywania 
+  intruzów mogą nie być w stanie analizować każdego pakietu, gubiąc niektóre z 
+  nich, w tym pakiety od atakującego. Centralne serwery służące do logowania wszystkich 
+  zdarzeń w systemie mogą nie być w stanie zebrać wszystkich zdarzeń systemowych 
+  potencjalnie nie zapisując do dzienników aktywności niektórych z nich. Przynęty 
+  nie posiadają tej wady, zapisując wszystko, co do nich dochodzi.</span></font></div>
+
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span
+style='font-size:10.0pt'>  </span></font></div>
+</li><li>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>Wada 
+  – pojedyncza sonda</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span
+style='font-size:10.0pt'>&nbsp;</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span
+style='font-size:10.0pt'>Wszystkie systemy przynęt posiadają jedną wspólną wadę 
+  – stają się bezużyteczne, jeżeli nikt ich nie atakuje. Potrafią wspaniale ułatwić 
+  zrozumienie samego ataku jak i jego celu, jednak jeżeli potencjalny intruz nie 
+  wysyła do przynęty żadnych pakietów, system przynęty będzie trwał w błogiej 
+  nieświadomości nieautoryzowanej aktywności. </span></font></div>
+
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span
+style='font-size:10.0pt'> </span></font></div>
+</li><li>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>Wada 
+  – ryzyko </span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span
+style='font-size:10.0pt'>&nbsp;</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span
+style='font-size:10.0pt'>Przynęty mogą zwiększyć ryzyko całego systemu informacyjnego 
+  organizacji. Tak jak zostało to omówione poniżej różne typy przynęt cechują 
+  się różnym poziomem ryzyka. Niektóre z nich praktycznie nie zwiększają ryzyka 
+  powodzenia ataku na system informacyjny, w którym są zainstalowane, inne zaś 
+  mogą dać intruzowi możliwość wykorzystania ich jako systemu, z którego zacznie 
+  się właściwy atak na inne systemy. Ryzyko jest różne w zależności od typu i 
+  sposobu instalacji przynęty. </span></font></div>
+</li></ul>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>&nbsp;</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>Przyczyną 
+  wad, które posiadają przynęty jest fakt, iż nie zastępują one żadnych istniejących 
+  mechanizmów polityki bezpieczeństwa organizacji. Przynęty współpracując z istniejącymi 
+  systemami mogą tylko spowodować, że poprawi się ogólne bezpieczeństwo całego 
+  systemu. Skoro przeanalizowaliśmy cechy przynęt, spróbujmy wykorzystać je do 
+  podniesienia bezpieczeństwa systemu.</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>&nbsp;</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>Jak 
+  stwierdzone zostało wcześniej, istnieją dwa rodzaje przynęt – produkcyjne i 
+  badawcze. Przeanalizujmy najpierw systemy przynęt produkcyjnych i ich wartość. 
+  Następnie skupimy się na cechach przynęt badawczych.</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>&nbsp;</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>Produkcyjny 
+  typ przynęty jest używany wewnątrz organizacji w celu zminimalizowania ryzyka. 
+  Poprawia tym samym bezpieczeństwo zasobów wykorzystywanych przez organizację. 
+  Spróbujmy określić jak produkcyjne rodzaje przynęt wpływają na trzy przedstawione 
+  powyżej kategorie bezpieczeństwa systemów komputerowych.</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>&nbsp;</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'> </span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><b><span style='font-size:10.0pt'>Zapobieganie</span></b><span
+style='font-size:10.0pt'> </span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>Osobiście 
+  nie wydaje się, że systemy przynęt odgrywają dużą rolę w zapobieganiu atakom. 
+  Systemy przynęt nie powstrzymają hackerów. To co ich powstrzyma to szeroko znane 
+  praktyki takie jak wyłączanie niewykorzystywanych oraz niebezpiecznych usług 
+  sieciowych, wgrywanie najnowszych łat oraz wymuszanie używania silnych mechanizmów 
+  autentykacji użytkownika. Pozwoli to na powstrzymanie potencjalnych intruzów. 
+  Przynęta, będąca systemem który ma być atakowany, nie będzie odstraszała potencjalnego 
+  intruza. W rzeczywistości, jeżeli zostanie nieodpowiednio zaimplementowana, 
+  może ułatwić intruzowi sforsowanie zabezpieczeń systemu.</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>&nbsp;</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>Dyskutowana 
+  jest wartość systemów przynęt jako środków odstraszających potencjalnych intruzów. 
+  Podstawą tej tezy jest stwierdzenie, że atakujący będzie tracił czas i zasoby 
+  na atakowanie systemu przynęty, podczas gdy systemy produkcyjne będą bezpieczne. 
+  Potencjalny intruz musi zostać, więc zwiedziony i zaatakować przynętę, przez 
+  co systemy produkcyjne staną się bezpieczne. Mimo że instalowanie przynęt może 
+  wpłynąć na odwrócenie uwagi od rzeczywistych systemów produkcyjnych, wydaje 
+  się, że większość organizacji będzie wolała poświecić swój czas i zasoby na 
+  zabezpieczenie systemów produkcyjnych nie zaś przynęt. Zwodzenie przeciwnika 
+  może mieć wpływ na zapobieganie atakom, organizacja jednak osiągnie dużo większy 
+  efekt poprzez poświęcenie tego samego czasu i zasobów na wprowadzenie w życie 
+  wspomnianych powyżej praktyk administracyjnych.</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>&nbsp;</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>Dodatkowo 
+  zwodzenie przeciwnika jest zupełnie nieefektywne w przypadku dwóch obecnie najczęściej 
+  wykorzystywanych typów ataków; wykorzystaniu automatycznych narzędzi do przeprowadzania 
+  ataku oraz robaków. W dzisiejszych czasach coraz więcej ataków jest wykonywana 
+  automatycznie. Automatyczne narzędzia przeskanują, zaatakują i wykorzystają 
+  każdą istniejącą w systemie dziurę w zabezpieczeniach, jaką mają zapisaną w 
+  swojej bazie wiedzy. Te narzędzia zaatakują system przynęty, lecz automatycznie 
+  zaatakują też inne systemy w sieci organizacji. Jeżeli filiżanka do kawy będzie 
+  posiadała stos IP, to również ona zostanie zaatakowana. Zwodzenie nie wpłynie 
+  na zapobieganie takim atakom, ze względu na fakt, iż atak odbywa się automatycznie 
+  i nie ma w nim świadomie działającej jednostki ludzkiej, którą można by oszukać.</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>Z 
+  tego względu wydaje się być słusznym pogląd, że systemy przynęt nie wpływają 
+  w dużym stopniu na zapobieganie atakom. Organizacje powinny zatem skupić swoje 
+  zasoby na stosowaniu wspomnianych praktyk bezpieczeństwa. </span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>&nbsp;</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>&nbsp;</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><b><span style='font-size:10.0pt'>Wykrywanie</span></b><span
+style='font-size:10.0pt'> </span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>Mimo 
+  że systemy przynęt nie wpływają w znaczącym stopniu na zapobieganie atakom, 
+  wydaje się być uzasadnionym fakt, iż mają duży wpływ na wykrywanie potencjalnych 
+  ataków. Wykrywanie i identyfikacja ataku jest ogromnym problemem dla wielu organizacji. 
+  Często organizacje są tak przytłoczone ilością zapisywanych w dziennikach zdarzeń 
+  (związanych z jak najbardziej legalnym działaniem użytkowników oraz zwykła działalnością 
+  produkcyjną), że wykrycie czy i kiedy system został zaatakowany (lub nawet przejęty 
+  przez hackera) staje się ekstremalnie trudne. Systemy wykrywania intruzów (<i>Intrusion 
+  Detection Systems</i>) są jednym z możliwych rozwiązań pozwalających na wykrywanie 
+  włamań. Mimo to administratorzy systemów IDS mogą być przytłoczeni przez generowane 
+  przez nie fałszywe alarmy. Fałszywe alarmy są ogłaszane kiedy system wykrywania 
+  intruzów ogłasza alarm, rozpoznając sygnaturę ataku, ale w rzeczywistości żadne 
+  podejrzane działanie nie ma miejsca. Problemem może być fakt, iż administratorzy 
+  tych systemów mogą otrzymywać codziennie taką ilość fałszywych alarmów, ze nie 
+  będą na nią w stanie odpowiedzieć. Dodatkowo mogą przyzwyczaić się do ignorowania 
+  zgłaszanych przez system ataków, skoro pojawiają się one codziennie i większość 
+  z nich jest tylko fałszywym alarmem. W ten sposób sensor systemu wykrywania 
+  intruzów staje się nieefektywny, jeżeli nie ograniczy się ilości generowanych 
+  przez niego fałszywych alarmów. Nie oznacza to oczywiście, że przynęty nie będą 
+  ogłaszały fałszywych alarmów, oznacza to tylko że będą one znacznie rzadsze 
+  niż w przypadku większości implementacji systemów IDS. </span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'> </span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>Następnym 
+  czynnikiem zwiększającym ryzyko jest ilość nie wykrytych przez IDS ataków. Wiele 
+  systemów IDS, niezależnie od tego czy działają w oparciu o bazę sygnatur ataków, 
+  weryfikację różnych protokołów itp. mogą nie wykryć nowego lub nieznanego typu 
+  ataku. Jest bardzo prawdopodobne, że nowy rodzaj ataku nie zostanie wykryty 
+  przez obecne metodologie systemów IDS. Dodatkowo ciągle powstają i są rozprowadzane 
+  nowe metody ominięcia systemów IDS. Możliwe jest zastosowanie nowego rodzaju 
+  ataku, który może nie zostać w ogóle wykryty, jak to miało miejsce w przypadku 
+  ataku ADM Mutate przeprowadzonego przez grupę K2. Przynęty znacznie lepiej radzą 
+  sobie z nieznanymi rodzajami ataku, ponieważ próby takich ataków są logowane, 
+  znacznie trudniej jest też ominąć system przynęty lub niezauważenie zastosować 
+  na nim nowy exploit. Jedną z największych zalet przynęt jest fakt, iż mogą one 
+  wykryć że ma miejsce nowy rodzaj ataku, poprzez monitorowanie stanu systemu 
+  a nie sygnatury ataku. Dodatkowo administrator po wykryciu nowego rodzaju ataku 
+  nie musi trudzić się z dodawaniem go do bazy danych ataków, łataniem engine’u 
+  służącego do wykrywania anomalii itp. Przynęta przechwyci zatem każdy z ataków, 
+  który zostanie na niej zastosowany. Jednak jak zostało napisane wcześniej przechwycenie 
+  ataku może nastąpić tylko, jeżeli atak został wymierzony w system przynęty. 
+  </span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>&nbsp;</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>Przynęty 
+  mogą uprościć proces wykrywania ataków. Ponieważ systemy przynęt nie oczekują 
+  na zwykły ruch ani też same nie nawiązują żadnych połączeń, wszystkie połączenia 
+  z i do systemu przynęty są z natury podejrzane. Z definicji, jeżeli tylko nawiązywana 
+  jest próba połączenia z systemem przynęty, to mamy do czynienia z próbą skanowania, 
+  enumeracji zasobów lub ataku. Jeżeli przynęta próbuje nawiązać połączenie z 
+  innym systemem to najprawdopodobniej nastąpiła udana próba włamania na serwer. 
+  Pozwala to na ograniczenie fałszywych alarmów oraz wykrywanie nowych, nieznanych 
+  rodzajów ataków, znacząco upraszczając proces wykrywania włamań. Pod żadnym 
+  pozorem jednak system przynęty nie powinien zastąpić istniejących systemów wykrywania 
+  intruzów oraz być jedyną istniejącą metodą wykrywania włamań w systemie komputerowym 
+  organizacji. Mimo tego systemy przynęt mogą odgrywać znaczącą rolę w poprawieniu 
+  i uzupełnieniu możliwości wykrywania ataków.</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'> </span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><b><span style='font-size:10.0pt'>Reakcja</span></b></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>Mimo 
+  że nie jest to często brane pod uwagę, przynęty mogą być pomocne przy reagowaniu 
+  na działania intruza. Często, gdy system wewnątrz organizacji przejdzie pod 
+  kontrolę intruza, tak wiele zwyczajnego ruchu sieciowego, który generują serwery 
+  produkcyjne zostawi ślad w dziennikach aktywności systemu, że informacje dotyczące 
+  samego incydentu będą trudne do wydobycia. Często w takim przypadku osoby odpowiedzialne 
+  za bezpieczeństwo systemów w organizacji, nie będą w stanie stwierdzić jakich 
+  działań dokonywał intruz przed, w trakcie i po włamaniu. Często zdarzało się 
+  autorowi tego opracowania współdziałać z różnymi grupami reagującymi na incydenty, 
+  tylko po to aby przekonać się że po samym włamaniu i naruszeniu zabezpieczeń 
+  systemu setki użytkowników dalej korzystały z oferowanych przez niego usług 
+  sieciowych. Dowody włamania i ślady intruza znacznie trudniej zebrać w takim 
+  środowisku.</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>&nbsp;</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>Drugim 
+  poważnym problemem, z którym borykają się organizacje jest niemożliwość odłączenia 
+  opanowanego przez hackera systemu od sieci. Usługi sieciowe, które opanowany 
+  system dostarcza nie mogą przestać być dostępne. Z tej przyczyny sztab specjalistów 
+  odpowiedzialnych za reagowanie na incydenty nie może przeprowadzić wnikliwej 
+  analizy stanu systemu po włamaniu do niego. </span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>&nbsp;</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>Przynęty 
+  mogą zredukować ryzyko lub nawet wyeliminować występowanie tego typu problemów. 
+  Przynęta jest systemem, który nie jest zanieczyszczony ogromną ilością danych 
+  uniemożliwiającą zauważenia próby włamania, dodatkowo jest systemem, bez którego 
+  organizacja może się obejść, w związku, z czym odłączenie go od sieci nie stanowi 
+  problemu. Przykładowo, jeżeli organizacja posiada trzy serwery web i każdy z 
+  nich został opanowany przez intruza, jej podstawowym celem będzie przywrócenie 
+  pełnionych przez te systemy funkcji. Kierownictwo organizacji najprawdopodobniej 
+  pozwoli tylko na załatanie istniejących w systemach niektórych występujących 
+  w nich dziur. W takim wypadku najprawdopodobniej nie będziemy nigdy w stanie 
+  szczegółowo dowiedzieć się, jaka luka w zabezpieczeniach serwerów została użyta 
+  do włamania, jakich w systemie dokonano zniszczeń, czy intruz ma w dalszym ciągu 
+  dostęp do systemu i w końcu czy rzeczywiście udało się przywrócić normalne funkcjonowanie 
+  opanowanego systemu.</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>&nbsp;</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>Jeżeli 
+  zaś jeden z tych systemów był przynętą, organizacja dysponowałaby systemem, 
+  który bez żadnego szwanku dla jej funkcjonowania można odłączyć od sieci w celu 
+  poddania go dokładnej analizie. Bazując na tak przeprowadzonej analizie możemy 
+  dowiedzieć się nie tylko jak intruz zdołał wedrzeć się do systemu, lecz także, 
+  co zrobił mając już nad nim kontrolę. Tak zdobyta wiedza może być następnie 
+  wykorzystana do zabezpieczenia pozostałych systemów, pozwalając w przyszłości 
+  lepiej zidentyfikować atak i przywrócić system do normalnego działania.</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>&nbsp;</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><b><span style='font-size:10.0pt'>Systemy 
+  badawcze</span></b></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>Jak 
+  to zostało opisane wcześniej, istnieją dwie kategorie przynęt: produkcyjne i 
+  badawcze. Przedstawiono przyczyny, dla których produkcyjne systemy przynęt umożliwiają 
+  podniesienie bezpieczeństwa organizacji. Teraz przedyskutujemy zalety płynące 
+  z wykorzystania badawczych systemów przynęt.</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>&nbsp;</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>Jednym 
+  z największych wyzwań, jakie ma przed sobą społeczność specjalistów do spraw 
+  bezpieczeństwa jest brak informacji o intruzach. Powstają pytania kto jest potencjalnym 
+  zagrożeniem, dlaczego intruz przeprowadza atak, w jaki sposób atakuje, jakich 
+  używa do tego narzędzi i kiedy prawdopodobnie uderzy. Są to pytania, na które 
+  osoby odpowiedzialne za bezpieczeństwo systemów w organizacji nie są często 
+  w stanie odpowiedzieć. Organizacje militarne przez stulecia skupiały się na 
+  zbieraniu informacji, aby zrozumieć i chronić się przed wrogiem. Aby bronić 
+  się przed zagrożeniem, konieczna jest wiedza o nim. Jakkolwiek w przypadku ochrony 
+  informacji dysponujemy najczęściej niewystarczającą ilością takich informacji.</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>&nbsp;</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>Przynęty 
+  mogą przyczynić się do uzyskania informacji o potencjalnych intruzach ze względu 
+  na fakt, iż stanowią platformę umożliwiającą poznanie zagrożenia. Jaki jest 
+  lepszy sposób na zdobycie informacji na temat intruza niż obserwacja jego poczynań, 
+  analizowanie krok po kroku ich działań i sposobów w jaki dostają się do systemu. 
+  Jeszcze większą wartość przedstawiają informacje na temat ich następnych działań 
+  na opanowanym już systemie, takich jak komunikowanie się z innymi hackerami 
+  i obserwacja jak instalują nowe zestawy narzędzi. Potencjał umożliwiany przez 
+  przynęty jest jedną z najbardziej unikalnych ich cech. Dodatkowo przynęty produkcyjne 
+  są wspaniałymi systemami do wyłapywania zautomatyzowanych ataków, jak na przykład 
+  auto-rooter’y czy robaki. Ataki tego typu wymierzone są w całą sieć organizacji, 
+  co powoduje, że badawcze systemy przynęt mogą szybko wyłapać ten rodzaj ataku 
+  i poddać go analizie.</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>&nbsp;</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>Ogólnie 
+  rzecz biorąc badawcze systemy przynęt nie obniżają ryzyka, na jakie narażone 
+  są organizacje. Informacje zdobyte z analizy takiego systemu przynęty mogą być 
+  wykorzystane do zapobieżenia podobnym incydentom w przyszłości, poprawienia 
+  wykrywania incydentów oraz ulepszenia sposobów reagowania na nie. Mimo to badawcze 
+  systemy przynęt nie przyczyniają się bezpośrednio do podniesienia bezpieczeństwa 
+  organizacji. Jeżeli organizacja zamierza poprawić bezpieczeństwo swoich systemów 
+  produkcyjnych, może ona wziąć pod uwagę wykorzystanie produkcyjnych systemów 
+  przynęt, ze względu na łatwość ich utrzymania i wdrożenia. Jeżeli organizacje 
+  takie jak uniwersytety, organizacje rządowe czy bardzo duże przedsiębiorstwa 
+  są zainteresowane w poznaniu technik działania intruzów, to możliwe jest zastosowanie 
+  badawczych systemów przynęt. The Honeypot Project jest przykładem organizacji 
+  używającej badawczych przynęt do zdobywania informacji na temat środowiska hackerów.</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>&nbsp;</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>&nbsp;</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>&nbsp;</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><b>Rozwiązania 
+  stosowane w systemach przynęt</b></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>Po 
+  omówieniu różnych rodzajów przynęt oraz przeanalizowaniu ich wad i zalet, przejdźmy 
+  do zaprezentowania kilku przykładów. Im więcej autor tego opracowania ma styczności 
+  z przynętami, tym lepiej rozumie, że nie istnieją dwa identyczne systemy przynęt. 
+  Z tego powodu wprowadził on własną miarę, którą nazwał poziomem interakcji (level 
+  of interaction). Krótko mówiąc, im większe możliwości interakcji z systemem 
+  przynęty posiada hacker, tym większą ilość informacji możemy uzyskać z tego 
+  systemu, jednak system taki staje się coraz większym ryzykiem dla bezpieczeństwa 
+  całej organizacji. </span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>&nbsp;</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>Im 
+  więcej intruz może wykonać akcji na przynęcie, tym więcej informacji możemy 
+  o nim zdobyć. Ale kij ma dwa końce: im więcej czynności intruz może wykonać 
+  na systemie przynęty, tym większych zniszczeń może również dokonać w przypadku 
+  przejęcia nad nią kontroli. Przykładowo przynęta o małej interakcji byłaby łatwa 
+  do zainstalowania i po prostu emulowałaby kilka usług. Atakujący może w niewielkim 
+  zakresie skanować i połączyć się z niewielką ilością portów. W tym przypadku 
+  zdobywana informacja jest ograniczona (głównie do tego, kto usiłował łączyć 
+  się z jakimi portami i kiedy), mimo to istniej niewiele usług które hacker może 
+  wykorzystać. Na drugim biegunie byłyby systemy przynęt umożliwiające wysoki 
+  poziom interakcji. Mogą to być rzeczywiste systemy operacyjne. Możemy w tym 
+  przypadku dowiedzieć się znacznie więcej, jako że atakujący ma do czynienia 
+  z faktycznie działającym systemem operacyjnym, mimo to istnieje bardzo duże 
+  ryzyko, jeżeli umożliwimy intruzowi pracę z rzeczywistym systemem operacyjnym. 
+  Żadne z tych rozwiązań nie jest lepszą przynętą. Ocena zależy od tego, co zamierzasz 
+  osiągnąć instalując system przynęty. Należy przy tym pamiętać ze przynęty same 
+  w sobie nie są rozwiązaniem problemów związanych z bezpieczeństwem. Są one tylko 
+  narzędziem umożliwiającym rozwiązanie tego problemu. Ich przydatność zależy 
+  głównie od tego, jaki zostanie przed nimi postawiony cel, od wczesnego ostrzegania 
+  i wykrywania do badania działań intruza. Bazując na poziomie interakcji spróbujmy 
+  porównać kilka istniejących rozwiązań.</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>&nbsp;</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>Na 
+  użytek tego opracowania omówimy sześć systemów przynęt. Są również inne możliwe 
+  rozwiązania, jednak te systemy reprezentują większość różnych trendów. Omówione</span><span
+lang=EN-US style='font-size:10.0pt'> zostaną BackOfficer Friendly, Specter, Deception 
+  Toolkit, domowe systemy przynęt, Mantrap i HoneyNets. </span><span
+style='font-size:10.0pt'>Celem tego opracowania nie jest wyczerpujący opis tych 
+  produktów. Autor raczej ma na celu zasygnalizowanie niektórych ich cech. Celem 
+  autora było przedstawienie możliwych rozwiązań, opisu działania tych systemów 
+  oraz zademonstrować ich przydatność jak również ryzyko związane z ich wykorzystaniem. 
+  Jeżeli czytelnik ma zamiar dowiedzieć się więcej na temat możliwości tych rozwiązań, 
+  gorąco zachęcamy do przetestowania ich samemu w kontrolowanych, laboratoryjnych 
+  warunkach.</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>&nbsp;</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><b><span style='font-size:10.0pt'>BackOfficer 
+  Friendly</span></b></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>BOF 
+  (jak jest powszechnie zwany) jest bardzo prostym, aczkolwiek wysoce skutecznym 
+  systemem przynęty stworzonym przez Marcus’a Ranum i załogę NFR. Jest on świetnym 
+  przykładem przynęty o małej interakcji.</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>&nbsp;</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>Powód, 
+  dla którego jest on opisywany to jego prostota. System ten jest świetnym przykładem 
+  umożliwiającym wprowadzenie początkującego użytkownika w pojęcia i przydatność 
+  przynęt. BOF działa na większości systemów Windows. Wszystko co potrafi, to 
+  emulować podstawowe usługi sieciowe takie jak http, ftp, telnet, poczta elektroniczna 
+  oraz BackOrrifice. Jeżeli ktoś próbuje połączyć się z jednym z portów na których 
+  nasłuchuje BOF, próba ta jest logowana. BOF posiada również opcję „udawania 
+  odpowiedzi”, która pozwala intruzowi rzeczywiste połączenie z systemem. W ten 
+  sposób możliwe jest logowanie ataków wykorzystujących protokół http, próby brutalnego 
+  łamania haseł i logowania za pomocą telnetu i wiele innych działań. Autor opracowania 
+  często uruchamia BOF na swoim laptopie co pozwala mu na uzyskanie podstawowych 
+  informacji o tym co dzieje się z systemem. BOF może być użyty podobnie jak alarm 
+  antywłamaniowy – ułatwia wykrycie niepożądanego działania. Może on, co prawda 
+  monitorować tylko niewielką liczbę portów, jednak za portami tymi kryją się 
+  często skanowane i atakowane usługi.</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>&nbsp;</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><b><span style='font-size:10.0pt'>Specter</span></b></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>Specter 
+  jest komercyjnym produktem, który można również zaliczyć do klasy systemów o 
+  niskim stopniu interakcji. Jest podobny do BOF, ponieważ również emuluje działanie 
+  usług, może jednak emulować znacznie więcej usług sieciowych i aplikacji. Dodatkowo 
+  potrafi nie tylko emulować działanie usług sieciowych, ale również różne systemy 
+  operacyjne. Podobnie jak BOF jest łatwy do instalacji i jego instalacja nie 
+  wiąże się ze znaczącym zwiększeniem ryzyka ataku na sieć, w której jest zainstalowany. 
+  Pracuje na systemach Windows. Ryzyko jest obniżone ze względu na fakt, iż nie 
+  intruz nie ma możliwości interakcji z rzeczywistym systemem operacyjnym. Przykładowo 
+  Specter potrafi emulować serwer wekowy lub demona telnetu zainstalowanego na 
+  dowolnym systemie operacyjnym. Po połączeniu się intruza, wyświetlany jest mu 
+  monit autoryzacji http lub okno logowania. Następnie atakujący może podjąć próbę 
+  ściągnięcia stron WWW lub załogowania się do systemu. To działanie jest logowane 
+  i zapisywane przez Specter, poza nim jednak atakujący nie ma zbyt wielu możliwości 
+  podjęcia innych akcji. Intruz nie pracuje z rzeczywistą aplikacją, a z emulatorem, 
+  który potrafi emulować tylko część funkcjonalności. Przydatność Specter leży 
+  w wykrywaniu. System ten potrafi szybko zidentyfikować, kto czego szuka. Jako 
+  przynęta pozwala na obniżenie zarówno fałszywych alarmów jak i nie wykrytych 
+  ataków, upraszczając cały proces wykrywania intruzów. Specter posiada również 
+  rozbudowane możliwości logowania i alarmowania. </span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>&nbsp;</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>Jedną 
+  z unikalnych cech Specter jest możliwość automatycznego gromadzenia informacji 
+  o potencjalnym intruzie. Część z tych funkcji jest czysto pasywna jak WHOIS 
+  czy DNS lookup, część jednak należy bez wątpienia zaliczyć do aktywnych sposobów 
+  zbierania informacji o intruzie takich jak skanowanie jego portów. Mimo że ta 
+  możliwość może być przydatna, wielokrotnie chcemy, aby atakujący nie miał pojęcia, 
+  że jest obserwowany. Należy być ostrożnym podczas implementacji jakichkolwiek 
+  aktywnych automatycznych mechanizmów odpowiedzi na działania atakującego.</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>&nbsp;</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><b><span style='font-size:10.0pt'>Domowe 
+  przynęty </span></b></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>Następną 
+  często spotykaną grupą przynęt są systemy tworzone przez użytkowników na własne 
+  potrzeby. Ten rodzaj przynęt zwykle charakteryzuje się niskim poziomem interakcji. 
+  Ich celem jest zwykle próba wyłapania konkretnej próby ataku czy wykorzystania 
+  konkretnych usług. Przykładem działania takiego systemu może być próba zabezpieczenia 
+  się przed atakiem robaków internetowych czy skanowaniem portów. Systemy tego 
+  typu mogą być używane jako systemy badawcze jak i produkcyjne, zależnie od realizowanego 
+  przez nie celu. Podobnie jak poprzednio intruz nie jest w stanie wykonać wielu 
+  akcji na systemie przynęty, co powoduje, że ryzyko jest mniejsze, gdyż może 
+  on wyrządzić mniej szkód. Częstym przykładem jest utworzenie narzędzia nasłuchującego 
+  na porcie 80 (http) wyłapującego cały ruch sieciowy kierowany do tego portu. 
+  Narzędzia takie są często stosowane do zabezpieczenia się przed atakami robaków 
+  internetowych. Jedną z możliwości implementacji tego typu narzędzia może być 
+  wykorzystanie programu netcat:</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>&nbsp;</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span lang=EN-US
+style='font-size:10.0pt'><font face="Courier New, Courier, mono" size="3">netcat 
+  –l –p 80 &gt; c:\honeypot\worm</font></span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span lang=EN-US
+style='font-size:10.0pt'>&nbsp;</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>Przykładowo 
+  gdyby robak internetowy połączył się z 80 portem naszej przynęty i udało mu 
+  się nawiązać połączenie oraz przetransferować swój kod na nasz system, zostałby 
+  on bezpiecznie zapisany na dysku lokalnym. Następnie administrator może przeanalizować 
+  kod robaka i ocenić zagrożenie, jakie niesie uruchomienie jego kodu. Organizacje 
+  takie jak SANS czy SecurityFocus.com część swoich sukcesów odniosły właśnie 
+  dzięki własnym domowej roboty przynętom, które pozwalają na przechwytywanie 
+  robaków internetowych i wszelkiego rodzaju zautomatyzowanych ataków. </span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>&nbsp;</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>Domowej 
+  roboty przynęty mogą być przystosowane do wykonywania wielu innych czynności 
+  i emulowania innych usług sieciowych, co może wymagać wyższego poziomu interakcji 
+  z potencjalnym intruzem i niesie ze sobą większe zagrożenie dla systemu. Przykładowo 
+  FreeBSD umożliwia wykorzystanie narzędzia jail pozwalającego administratorowi 
+  na stworzenie kontrolowanego środowiska wewnątrz systemu operacyjnego. Intruz 
+  następnie działa w tym kontrolowanym środowisku. Zaletą tego narzędzia jest 
+  fakt, iż im więcej działań wykonał intruz tym więcej administrator systemu może 
+  się od niego nauczyć. Jakkolwiek wszelkie tego rodzaju próby należy podejmować 
+  z dużą ostrożnością pamiętając, że im więcej funkcjonalności systemu intruz 
+  może wykorzystać tym większe prawdopodobieństwo, że coś może pójść źle i zabezpieczenia 
+  systemu mogą zostać złamane. </span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>&nbsp;</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>&nbsp;</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><b><span style='font-size:10.0pt'>Deception 
+  Toolkit</span></b></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>Stworzony 
+  przez Fred’a Cohen’a, deception toolkit jest przynętą w pierwotnym tego słowa 
+  znaczeniu. DTK (jak jest często nazywany) można określić jako przynętę o małym 
+  do średniego poziomie interakcji z użytkownikiem. Umożliwia wykonanie znacznie 
+  większej ilości akcji przez intruza w porównaniu do Scepter, trudniejszy jest 
+  jednak w instalacji i po zainstalowaniu go zwiększa się ryzyko przejęcia systemu 
+  przez hackera. Mimo to nie jest to ciągle przynęta o wysokim poziomie interakcji, 
+  ze względu na fakt, iż nie jest to prawdziwy system operacyjny, na którym działać 
+  mógłby intruz. DTK jest zbiorem skryptów PERL’a zaprojektowanych dla środowiska 
+  UNIX, emulujących wiele znanych dziur w tych systemach. Dużym plusem tego systemu 
+  jest fakt, iż jest on całkowicie darmowy i że dostępne są jego kody źródłowe. 
+  Wadą tego rozwiązania jest możliwość wykonania exploitów na skryptach i ewentualne 
+  przejęcie systemu przez intruza. Każdy ze skryptów emuluje znaną dziurę w zabezpieczeniach. 
+  Przykładowo jeden ze skryptów emuluje podatny na atak serwer SMTP. Jeżeli atakującemu 
+  uda się wykonać exploit, system przynęty może być skonfigurowany w ten sposób, 
+  że prześle np. fałszywy plik z hasłami do intruza.</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>&nbsp;</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>Tak 
+  jak zostało stwierdzone na witrynie systemu DTK, system ten ma spełniać dwa 
+  zadania; zwodzenie (zapobieganie) oraz alarmowanie (wykrywanie). Jak zostało 
+  napisane wcześniej wydaje się, że zwodzenie nie ma wielkiego wpływu na zapobieganie 
+  włamaniom. Kiedy DTK zostało pierwszy raz wydane, zwodzenie intruza miało ogromne 
+  znaczenie, ponieważ większość ataków była przeprowadzana ręcznie przez ludzi. 
+  Dzisiaj jednak większość ataków jest zautomatyzowana, jak w przypadku auto-rooter'ów 
+  czy robaków internetowych, które spróbują przeskanować i zaatakować wszystko, 
+  co posiada stos IP. W tej sytuacji po drugiej stronie połączenia sieciowego 
+  nie ma człowieka, którego można by oszukać, bo nie jest konieczna żadna interakcja 
+  ze strony człowieka aby narzędzia te przeprowadziły atak. Mimo to DTK jest przydatne 
+  przy wykrywaniu. Tak jak Specter DTK może być wykorzystane do wykrycia próby 
+  ataku na system. Zaletą DTK jest fakt, iż użytkownik może modyfikować skrypty 
+  tak aby emulowały takie luki w zabezpieczeniach systemu, jakie chce. Wadą jest 
+  fakt, iż zainstalowanie i uruchomienie systemu wymaga większego wkładu pracy 
+  z jego strony.</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>&nbsp;</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>W 
+  tej części dokumentu przejdziemy do opisu przynęt o wyższym poziomie interakcji. 
+  Te rozwiązania dostarczają nam dużo większej ilości informacji, jednak niosą 
+  ze sobą dużo większe ryzyko. W tej grupie systemów omówiony zostanie Mantrap 
+  oraz honeynets. </span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>&nbsp;</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><b><span style='font-size:10.0pt'>Mantrap</span></b></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>Wyprodukowany 
+  przez Recouse Mantrap jest komercyjnym systemem przynęty. Zamiast emulowania 
+  usług sieciowych, Mantrap ma możliwość utworzenia do czterech podsystemów, często 
+  zwanych „więzieniami” (jails). Te „więzienia” są logicznie rozdzielonymi systemami 
+  operacyjnymi oddzielonymi od głównego systemu operacyjnego. Inżynierowie do 
+  spraw bezpieczeństwa mogą ingerować w „więzienia” tak jak mogliby modyfikować 
+  ustawienia zwykłego systemu operacyjnego, włączając w to instalację aplikacji 
+  takich jak baza danych Oracle czy serwer Apache. To sprawia, że system przynęty 
+  jest znacznie bardziej elastyczny, przypominając tym zwyczajny system operacyjny. 
+  Atakujący ma do dyspozycji zwykły system operacyjny, na którym może działać 
+  i aplikacje, które może próbować atakować. Całe jego działanie jest przechwytywane 
+  i zapisywane. Nie tylko możliwe jest więc wykrycie skanowania portów i prób 
+  logowania za pomocą telnetu, ale można również przechwycić rootkity i ataki 
+  wymierzone w aplikację oraz wiele innych zagrożeń. Jakkolwiek możemy się wiele 
+  nauczyć obserwując poczynania hackerów, wiele czynników może również zawieźć. 
+  Raz złamawszy zabezpieczenia „więzienia” atakujący może użyć tego środowiska 
+  do wykonania ataku na inne systemy. Konieczna jest duża ostrożność, aby zminimalizować 
+  to ryzyko. Ze względu na przytoczone powyżej informacje autor określa ten charakteryzuje 
+  ten produkt średnim lub wysokim poziomem interakcji. Również ten rodzaj przynęt 
+  może być użyty jako przynęta typu produkcyjnego lub jako przynęta badawcza umożliwiająca 
+  pozyskanie wiadomości o istniejących zagrożeniach. Istnieją również ograniczenia 
+  opisanego rozwiązania. Największym z nich jest fakt, że użytkownik jest ograniczony 
+  do możliwości zaimplementowanych przez twórców tego systemu. Obecnie, istnieje 
+  wersja systemu Mantrap działająca na platformie Solaris.</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>&nbsp;</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><b><span style='font-size:10.0pt'>Honeynets</span></b></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>Hneynets 
+  reprezentuje ekstremalną wersję badawczego systemu przynęt. Są to przynęty o 
+  wysokim poziomie interakcji, pozwalające na uzyskanie ogromnej ilości informacji, 
+  co jednak za tym idzie reprezentujące się wysoki poziom ryzyka. Ich główna wartość 
+  leży w zdobywaniu informacji o zagrożeniach istniejących obecnie w Internecie. 
+  Honeynet jest siecią produkcyjnych systemów. W przeciwieństwie do omawianych 
+  wcześniej systemów przynęt, w tym wypadku nic nie jest emulowane. Honeynets 
+  są zwyczajnymi systemami operacyjnymi, które na użytek spełnianej przez siebie 
+  funkcji nie zostały w ogóle (lub w bardzo małym stopniu) zmodyfikowane. Umożliwia 
+  to intruzowi dostęp do pełnej gamy systemów, aplikacji i funkcji, które może 
+  wykorzystać przy próbie ataku. Wykorzystując tego rodzaju systemy, możliwe jest 
+  zdobycie informacji nie tylko o narzędziach taktykach wykorzystywanych przez 
+  hackerów, ale również o metodach ich komunikacji, organizacji w grupy i motywach 
+  działania. Co należy jednak z całą stanowczością podkreślić – z tymi wszystkimi 
+  możliwościami wiąże się duże ryzyko. Różnorodne testy muszą być przeprowadzone 
+  aby mieć pewność, że po udanym ataku system przynęty nie będzie ponownie wykorzystany 
+  do atakowania innych systemów. Tego typu systemy mogą być używane jako przynęty 
+  produkcyjne, głównie do wykrywania i reagowania na ataki, jednak tego typu wykorzystanie 
+  ich nie jest warte czasu i wysiłku włożonego we wdrożenie i administrowanie 
+  tymi systemami. Większość systemów przynęt o niższym poziomie interakcji jest 
+  równie przydatna w wykrywaniu i reagowaniu na ataki a jest znacznie prostsza 
+  w administracji i niesie ze sobą mniejsze ryzyko. Osoby zainteresowane tą tematyką 
+  powinny szukać obszerniejszych informacji w książce „Know your Enemy”</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'> </span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>Opisaliśmy 
+  sześć różnych rodzajów przynęt. Żaden z nich nie jest lepszy od innych, każdy 
+  posiada zalety i wady, wykorzystanie ich zależy od tego, co użytkownik przy 
+  pomocy przynęty będzie chciał osiągnąć. Aby lepiej skategoryzować przynęty podzieliliśmy 
+  je na grupy, wykorzystując poziom interakcji ze zdalnym użytkownikiem jako parametr 
+  różnicujący. Ogólnie można powiedzieć, że im wyższy poziom interakcji systemu 
+  przynęty, tym więcej informacji można pozyskać instalując tego typu system, 
+  ale również tym większe wiąże się z tym ryzyko. Przykładowo BOF i Specter reprezentują 
+  niski poziom interakcji ze zdalnym użytkownikiem. Są to systemy łatwe do wdrożenia 
+  i wdrożenie ich nie powoduje zwiększenia ryzyka ataku. Z tego jednak względu 
+  ograniczone są do emulowania wybranych usług i systemów operacyjnych, co implikuje 
+  wykorzystanie ich raczej jako systemy do wykrywania ataków. Mantrap i Honeynets 
+  są systemami przynęt o średnim i wysokim poziomie interakcji. Oferują pozyskanie 
+  znacznie głębszych informacji, jednak wiąże się to z dużą ilością pracy i dodatkowym 
+  ryzykiem. </span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>&nbsp;</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>&nbsp;</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><b>Aspekty 
+  prawne</b></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>Żadna 
+  dyskusja o systemach przynęt nie byłaby kompletna, bez omówienia aspektów prawnych, 
+  które wiążą się z ich wykorzystaniem. Przynęty po prostu są zbyt fajnym narzędziem, 
+  aby nie wiązały się z żadnymi ograniczeniami prawnymi. Autor (podobnie z resztą 
+  jak i tłumacz) nie jest prawnikiem. Nie ma on żadnej prawniczej praktyki ani 
+  wykształcenia. W rzeczywistości, autor studiował Historię, nie był zresztą w 
+  tym przedmiocie zbyt dobry. To więc co zostanie w tej części opracowania przedstawione 
+  to jego własne opinie, niemające żadnego potwierdzenia w żadnych aktach prawnych. 
+  Podczas dyskusji nad systemami przynęt bierze się pod uwagę dwa zagadnienia 
+  entrapment (<a name="OLE_LINK1">prowokacji</a>) i kwestię prywatności. Krótko 
+  opiszemy te dwa zagadnienia. Zacznijmy od pierwszego. Prawna definicja prowokacji 
+  jest następująca:</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>&nbsp;</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span lang=EN-US
+style='font-size:10.0pt'><i>A person is entrapped when he is induced or persuaded 
+  by law officers or their agents to commit a crime that he had no previous intent 
+  to commit.</i></span></font></div>
+<div class=Section1><i><font face="Verdana, Arial, Helvetica, sans-serif"><span lang=EN-US
+style='font-size:10.0pt'>&nbsp;</span></font></i></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>Co 
+  używając potocznego języka (<b>nie prawniczego</b>) można by przetłumaczyć jako:</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>&nbsp;</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>Osoba 
+  jest sprowokowana, gdy jest nakłoniona lub przekonana przez przedstawiciela 
+  prawa (egzekutora prawa) lub jego podmiot do popełnienia zbrodni (wykroczenia), 
+  którego nie maiła zamiaru popełnić.</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>&nbsp;</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>Autor 
+  osobiście uważa, że prowokacja nie jest w wypadku systemów przynęt kwestią, 
+  która nie ma zbyt wielkiego znaczenia. Po pierwsze większość osób i organizacji 
+  nie jest egzekutorami prawa ani ich podmiotami. Nie działamy pod kontrolą egzekutorów 
+  prawa ani nie mamy zamiaru podczas zwykłych działań wnosić przeciwko nikomu 
+  oskarżenia. Z tego powodu prawna definicja prowokacji nie ma tutaj zastosowania. 
+  Nawet biorąc pod uwagę egzekwowanie prawa, systemy przynęt nie stosują się do 
+  tej definicji, jako że nie są używane do nakłonienia ani przekonania intruza 
+  do ataku. Nie są podejmowane żadne akcje mające na celu sprowokowanie intruza. 
+  Zamiast tego intruz wybiera cel ataku i atakuje system przynęty z własnej inicjatywy. 
+  Z tych powodów należy sądzić, że prowokacja nie ma zastosowania w przypadku 
+  systemów przynęt.</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>&nbsp;</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>Następną 
+  kwestią jest kwestia prywatności, którą należy rozpatrywać w dwóch przypadkach 
+  – z jednej strony ze względu na pliku umieszczane na przez intruza po złamaniu 
+  zabezpieczeń systemu, z drugiej ze względu możliwość przejęcia komunikacji (zwykle 
+  prowadzonej z wykorzystaniem IRC), która przechodzi przez system przynęty. Mimo, 
+  że istnieją przepisy prawne regulujące kwestię utraty prywatności, co do danych 
+  przechowywanych na skradzionym komputerze, lub systemie przejętym przez intruza 
+  i używanym bez zgody właściciela, mniejszy nacisk kładzie się na fakt ewentualnego 
+  przejęcia komunikacji, która przechodzi przez ten system. Prawa dotyczące prywatności 
+  są w USA zalegalizowane w postaci stanowych statutów oraz statutów federalnych. 
+  Stanowe regulacje mogą wypierać lub być wyparte przez federalne. </span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>&nbsp;</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>Na 
+  poziomie praw federalnych, dwoma głównymi statutami dotyczącymi prywatności 
+  komunikacji są Akt dotyczący prywatności komunikacji elektronicznej (Electronic 
+  Communication Privacy Act 18 USC 2701-11) oraz federalny Status dotyczący podsłuchów 
+  (Title III, 18 USC 2510-22). Należy pamiętać, że inne kraje mogą posiadać podobne 
+  prawa dotyczące praw prywatności, które należy brać pod uwagę podczas wdrożenia 
+  systemów przynęt poza Stanami Zjednoczonymi. </span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>&nbsp;</span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>Honeypot 
+  Project stara się ustalić, jakie aspekty prawne istnieją i w jaki sposób wpływają 
+  na organizacje w dniu dzisiejszym. Dopóki nie zostanie ustalony zbiór przepisów 
+  prawnych wchodzących w grę, organizacje powinny <b>ustalić wszelkie aspekty 
+  prawne wdrożenia systemu przynęty z własnymi radcami prawnymi.</b></span></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><b><span style='font-size:10.0pt'>&nbsp;</span></b></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><b><span style='font-size:10.0pt'>&nbsp;</span></b></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><b><span style='font-size:10.0pt'>&nbsp;</span></b></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"><b>Wnioski</b></font></div>
+<div class=Section1><font face="Verdana, Arial, Helvetica, sans-serif"></font><font face="Verdana, Arial, Helvetica, sans-serif"><span style='font-size:10.0pt'>Systemy 
+  przynęt są po prostu narzędziem. Sposób użycia tego narzędzia zależy tylko od 
+  użytkownika. Istnieje wiele różnych rodzajów systemów przynęt, z których każdy 
+  posiada różny stopień przydatności dla organizacji. W tym opracowaniu podzieliliśmy 
+  systemy przynęt na dwa rodzaje – systemy produkcyjne i badawcze. Głównym zadaniem 
+  przynęt produkcyjnych jest zmniejszenie ryzyka ataku na pozostałe systemy organizacji. 
+  Mimo, że nie mają one zbytniego wpływu na zapobieganie włamaniom, mogą przyczynić 
+  się do wykrywania i reagowania na ataki. Zadanie badawczych systemów przynęt 
+  nie polega na zmniejszeniu ryzyka związanego z ewentualnym włamaniem, zamiast 
+  tego systemy te są stosowane jako narzędzie pozwalające na przestudiowanie i 
+  rozpoznanie zagrożeń występującym w dzisiejszym Internecie. Niezależnie od rodzaju 
+  przynęty, należy zawsze zwracać uwagę na jej „poziom interakcji” z intruzem. 
+  Oznacza to, że im więcej działań intruz może wykonać za pomocą systemu przynęty, 
+  tym więcej jej administrator może zdobyć informacji, jednak tym realniejsze 
+  również ryzyko. Należy samemu, więc określić, jakie istnieje powiązanie między 
+  ryzykiem związanym z wykorzystaniem danego typu przynęty, a jej możliwościami 
+  i korzyściami związanymi z jej wdrożeniem. Systemy przynęt nie rozwiążą problemów 
+  związanych z bezpieczeństwem. Tym problemom zaradzić może tylko wykorzystanie 
+  najlepszych praktyk administracyjnych, systemy przynęt mogą być jedynie narzędziem, 
+  które przyczyni się do tego celu. </span></font></div>
+<div class=Section1>
+  <p>&nbsp;</p>
+  <center>
+<table BORDER=5 >
+<tr>
+<td><i><font size=+2><a href="http://www.enteract.com/~lspitz">
+Whitepapers </a></font></i></td>
+</tr>
+</table>
+</center>
+  <p>&nbsp;</p>
+</div>
+</body>
+
+</html>

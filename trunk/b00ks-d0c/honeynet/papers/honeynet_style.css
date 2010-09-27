@@ -1,0 +1,68 @@
+.bold {
+	font-weight: bold;
+}
+p {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	line-height: 16px;
+	color: #333333;
+}
+
+.intro {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	line-height: 18px;
+	color: #FFFFFF;
+}
+
+.introBold {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	line-height: 18px;
+	color: #FFFFFF;
+	font-weight: bold;
+
+}
+.heading {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 13px;
+	color: #666666;
+	font-weight: bold;
+
+}
+a:link {
+	color: #FF6600;
+	text-decoration: none;
+}
+a:visited {
+	color: #FF6600;
+	text-decoration: none;
+
+}
+a:hover {
+	color: #FF6600;
+	text-decoration: underline;
+	font-weight: bold;
+
+}
+a:active {
+	color: #FF6600;
+}
+.pstyle {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	line-height: 16px;
+	color: #000000;
+}
+.printHeading {
+	font-size: 16px;
+	font-weight: bold;
+	color: #666666;
+}
+.newsDate {
+	font-size: 9px;
+	color: #896E37;
+}
+.newsText {
+	font-size: 12px;
+}

