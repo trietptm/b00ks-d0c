@@ -1,0 +1,408 @@
+/* 
+ * ftpscan 1.o - by vENOMOUS of rdC - Mar 29, 1999
+ *
+ * This will open a specific file [-f file], get the IPs from it,
+ * then, check if FTP port [ -p 21 ] is open and log  the  version.
+ * If you specify the [ -o ] flag  it will try log into the FTP
+ * and execute LIST command [recursive], this is usefull 
+ * for see if there are any world writeable directories.
+ *
+ * You should know what you can do with that.
+ *
+ * credits: localip (lip) routine has been taken from queSO.
+ *
+ * Greets: ka0z [!thanks for the help, ideas and advices buddy!] - meengo
+ *         #rdC - ub
+ *
+*/
+
+#include <stdio.h>
+#include <string.h>
+#include <netdb.h>
+#include <netinet/in.h>
+#include <sys/socket.h>
+#include <sys/types.h>
+#include <sys/time.h>
+#include <unistd.h>
+#include <errno.h>
+#include <time.h>
+#include <signal.h>
+#include "blah.h"    /* taken from queSO */
+
+char rdcopenfile(char g0d[257]);
+void usage(char *damn);
+void RDCconnect2(char host[1000], int puerto);
+int bindit(int socket_type, u_short port, int *listener); 
+void sigh(int z);
+u_long lip(void); /* QueSO */
+
+FILE *file;
+FILE *fileout;
+
+char ipsfile[256],
+     bleh[100000][200],
+     homer[256],
+     beer[256],
+     huhense[32];
+
+u_long localip; 
+
+int sockfd,
+    leen2=0,
+    listing=0,
+    sockfd1,
+    ip1=0, 
+    ip2=0, 
+    ip3=0, 
+    ip4=0, 
+    lsock=-1,
+    port2=-1,
+    lala=0,
+    dfinder=0,
+    gotit=0,
+    xx=0;
+ 
+int main(int argc, char **argv)
+{
+char arg;
+
+int  p0rt=21;
+
+        if ( argc < 3 ) 
+        { 
+        usage(argv[0]); 
+        }
+        
+        while ((arg = getopt(argc, argv, "f:p:o")) != EOF)
+        {
+                switch(arg)
+                {
+                        case 'f':
+                           strncpy(ipsfile,optarg,128);
+                           break;
+                        case 'p':
+                           p0rt = atoi (optarg);
+                           break;
+                        case 'o':
+                           listing = 1;
+                           break;
+                        default:
+                           usage(argv[0]);
+                        break;
+
+                }
+        }
+        while (dfinder < 5)
+                {
+                   char disp[500];
+                        sprintf(disp,"ppp%d",dfinder);
+                        strcpy(huhense,disp);
+                        localip = lip();
+                        sscanf((char *) inet_ntoa(localip),"%d.%d.%d.%d", &ip1, &ip2, &ip3, &ip4);
+                        if ((ip3 && ip4) != 0)
+                                {
+                                        gotit=1;
+                                        break;
+                                }
+                        dfinder++;
+                }
+
+        dfinder=0;
+        if (gotit == 1)
+                dfinder=6;
+        while (dfinder < 5)
+                {
+                   char disp[500];
+                        sprintf(disp,"eth%d",dfinder);
+                        strcpy(huhense,disp);
+                        localip = lip();
+                        sscanf((char *) inet_ntoa(localip),"%d.%d.%d.%d", &ip1, &ip2, &ip3,&ip4);
+                        if ((ip3 && ip4) != 0)
+                                {
+                                        gotit=1;
+                                        break;
+                                }
+                        dfinder++;
+                }
+
+        if (gotit == 0)
+        {
+                fprintf(stdout,"\nCannot define local ip address, aborting!\n\n");
+                fflush(stdout);
+                exit(1);
+        }
+
+        fprintf(stdout,"Local IP is %s\nStarting Scan...  \n\n",inet_ntoa(localip));
+        fflush(stdout);
+
+        sprintf(beer,"PORT %d,%d,%d,%d,69,%d\nLIST -lR\n", ip1, ip2, ip3 ,ip4, 222 + lala);
+        strlen(beer);
+
+        rdcopenfile(ipsfile);
+        for (xx = 0 ; xx < leen2 ; xx++)
+                {
+                        RDCconnect2(bleh[xx], p0rt);
+                        lala++;
+                }
+}
+
+char rdcopenfile(char g0d[257])
+{
+int x;
+
+         /* see if the file can be read... */
+        if ((file=fopen(g0d,"r")) == NULL) 
+        {
+                printf("\nftpscan 1.o by vENOMOUS of rdC - venomous@iname.com - o3/99\n");
+                printf("\nCannot open file %s for reading\n\n", g0d);
+                exit(1);
+        }
+        /* get the all the lines */
+        for ( ; fgets(bleh[leen2], 190, file) != NULL ; leen2++);
+        fclose(file);
+}
+
+
+void RDCconnect2(char host[1000], int puerto)
+{
+char versi0n[5000];
+int nmb;
+        struct sockaddr_in beb;
+        struct hostent *d0h;
+//      struct timeval timev; 
+        beb.sin_family = AF_INET;
+        beb.sin_port = htons(puerto);
+        d0h = gethostbyname(host);
+        if (!d0h) 
+        {
+                if ( (beb.sin_addr.s_addr = inet_addr(host)) == INADDR_NONE) 
+                        {
+                                printf("\nftpscan 1.o by vENOMOUS of rdC - venomous@iname.com - o3/99\n");
+                                printf("\nPut a correct address\n\n");
+                                exit(0);
+                        }
+        } else
+                {
+                           bcopy( d0h->h_addr, (struct in_addr *) &beb.sin_addr, d0h->h_length);
+                }
+
+        strcpy(homer,"unable to connect: Connection refused");
+        sockfd = socket(AF_INET, SOCK_STREAM,0);
+        fprintf(stdout,"\n------------------------------------------------------------------------------n");
+        fprintf(stdout,"IP: %s", host);
+        fflush(stdout);
+        signal(SIGALRM, sigh);
+        alarm(10); 
+        if(connect(sockfd, (struct sockaddr *)&beb, sizeof(struct sockaddr)) < 0)
+                {
+                        fprintf(stdout,"%s\n\n",homer);
+                        fflush(stdout);
+                        return;
+
+                }
+        alarm(0);
+        bzero(versi0n, sizeof(versi0n));
+        if ((nmb = recv(sockfd, versi0n, 5000, 0)) == -1)
+                {
+                        fprintf(stdout,"Connection reset by peer?\n\n");
+                        fflush(stdout);
+                } 
+        if (strlen(versi0n) == 0)
+                {
+                        close(sockfd);
+                        return;
+                }
+        if (strstr(versi0n,"Microsoft") != NULL)
+                {
+                        fprintf(stdout,"Skipping host, cuz its runing wind0ze\n\n");
+                        fflush(stdout);
+                        close(sockfd);
+                        return;
+                }
+        if (strstr(versi0n,"WinSock") != NULL)
+                {
+                        fprintf(stdout,"Skipping host, cuz its runing wind0ze\n\n");
+                        fflush(stdout);
+                        close(sockfd);
+                        return;
+                }
+        if (strstr(versi0n,"NetWare") != NULL)
+                {
+                        fprintf(stdout,"Skipping host cuz its runing NetWare\n\n");
+                        fflush(stdout);
+                        close(sockfd);
+                        return;
+                }
+        if (strstr(versi0n,"Proxy Server") != NULL)
+                {
+                        fprintf(stdout,"Runing ProxyServer, skipping host\n\n");
+                        fflush(stdout);
+                        close(sockfd);
+                        return;
+                }
+
+        fprintf(stdout,"FTP banner:\n");
+        fprintf(stdout,"%s\n",versi0n); 
+        fflush(stdout);
+        if (listing == 1)
+                {
+                   char username[70],
+                        sendear[17200],
+                        listit[100];
+                        
+                        int n;
+
+                        /* login in */
+                        strcpy(username,"anonymous");
+                        sprintf(sendear,"USER %s\n",username);
+                        fprintf(stdout,"Login as: %s\n",username);
+                        write(sockfd,sendear,strlen(sendear));
+                        read(sockfd,sendear,sizeof(sendear));
+                        if (strstr(sendear,"denied") != NULL)
+                        {
+                                fprintf(stdout,"Anonymous access denied, skipping\n\n");
+                                close(sockfd);
+                                return;
+                        }
+                        if (strstr(sendear,"USER anonymous") != NULL)
+                        {
+                                fprintf(stdout,"Remote host has closed the connection.\n\n");
+                                close(sockfd);
+                                return;
+                        }
+                        if (strstr(sendear,"unknown") != NULL)
+                        {
+                                fprintf(stdout,"Anonymous access unknown\n\n");
+                                close(sockfd);
+                                return;
+                        }
+                        if (strstr(sendear,"not found") != NULL)
+                        {
+                                fprintf(stdout,"User anonymous not found\n\n");
+                                close(sockfd);
+                                return;
+                        }
+                        fprintf(stdout,"Answer: %s\n",sendear);
+                        bzero(sendear, sizeof(sendear));
+                        fprintf(stdout,"Using password: bleh@\n");
+                        write(sockfd,"PASS bleh@\n",11);
+                        read(sockfd,sendear,sizeof(sendear));
+                        if (strstr(sendear,"Can't set") != NULL)
+                        {
+                                fprintf(stdout,"Cant set guest privileges\n\n");
+                                close(sockfd);
+                                return;
+                        }
+                        fprintf(stdout,"Answer: %s\n",sendear);
+                        bzero(sendear, sizeof(sendear));
+                        fprintf(stdout,"Setting PORT to %d\n",17886+lala);
+                        bzero(beer,sizeof(beer));
+                        sprintf(beer,"PORT %d,%d,%d,%d,69,%d\nLIST -lR\n",ip1, ip2, ip3 ,ip4, 222 + lala);
+                        write(sockfd,beer,strlen(beer) + 4);
+                        read(sockfd,beer,sizeof(beer)); 
+                        /* bind the port for data transfer */
+                        sockfd1 = bindit(SOCK_STREAM, port2, &lsock);
+                        read(sockfd,sendear,sizeof(sendear)); 
+                        fprintf(stdout,"Using LIST command\n");
+                        fprintf(stdout,"Answer: %s\n",sendear); 
+                        bzero(sendear, sizeof(sendear));  
+                        read(sockfd1,sendear,sizeof(sendear));
+                        fprintf(stdout,"Recursive list:\n %s\n",sendear);
+                        bzero(sendear, sizeof(sendear));
+                        fflush(stdout);
+                //      lala++;
+              } 
+        close(sockfd);
+        close(sockfd1);
+}
+        
+int bindit(int socket_type, u_short port, int *listener)
+{
+struct sockaddr_in address;
+int listening_socket;
+int connected_socket = -1;
+int reuse_addr = 1;
+char sendear[17200];
+
+        port = htons(17886+lala);
+        memset((char *) &address, 0, sizeof(address));
+        address.sin_family = AF_INET;
+        address.sin_port = port;
+        address.sin_addr.s_addr = htonl(INADDR_ANY);
+
+        listening_socket = socket(AF_INET, socket_type, 0);
+        if (listening_socket < 0) 
+        {
+                fprintf(stdout,"Cant recive list.\n\n");
+                fflush(stdout);
+                return;
+        }
+
+        if (listener != NULL)
+                *listener = listening_socket;
+
+        setsockopt(listening_socket, SOL_SOCKET, SO_REUSEADDR, &reuse_addr, sizeof(reuse_addr));
+
+        if (bind(listening_socket, (struct sockaddr *) &address, sizeof(address)) < 0) 
+        {
+                fprintf(stdout,"Error\n\n");
+                fflush(stdout);
+                close(listening_socket);
+                exit(1);
+        }
+        
+        listen(listening_socket, 1);
+        signal(SIGALRM, sigh);
+        alarm(10);
+        
+        while(connected_socket < 0) 
+        {
+                connected_socket = accept(listening_socket, NULL, NULL); 
+        }
+}
+
+void sigh(int z)
+{
+        alarm(0);
+        signal(SIGALRM, SIG_DFL);
+        strcpy(homer,"Unable to connect: timeout");
+}
+
+
+u_long lip (void)
+{
+  int pvto,
+      yesto,
+      traversal;
+  struct sockaddr_in *dim0n;
+  struct ifreq *i;
+  struct ifconf ic;
+  char bufercito[512];
+
+  pvto = socket (AF_INET, SOCK_STREAM, 0);
+  ic.ifc_pum = 512;
+  ic.ifc_buf = bufercito;
+  ioctl (pvto, SIOCGIFCONF, (char *) &ic);
+  i = ic.ifc_req;
+  yesto = (ic.ifc_pum / sizeof(struct ifreq));
+  for (traversal = 0; traversal < yesto; traversal++) {
+
+      ioctl(pvto, SIOCGIFADDR, (char *) &i);
+      dim0n = (struct sockaddr_in *) &i->ifr_ifru.ifru_addr;
+      if (!strcmp (i->ifr_name, huhense))
+      return dim0n->sin_addr.s_addr;
+      i++;
+      }
+}
+
+void usage(char *damn)
+{
+printf("\n<[(  ftpscan 1.o by vENOMOUS of rdC - venomous@iname.com - o3/99 )]>");
+printf("<[(  usage:\n");
+printf("<[(        %s -f file [-p port] [-o]\n\n",damn);
+printf("<[( -f file: file is the IPs file.\n");
+printf("<[( -p port: port to connect to, default 21.\n");
+printf("<[(      -o: with this flag, ftpscan will log into the FTPserver\n");
+printf("<[(          as anonymous, and do a recursive list.\n\n");
+exit(0);
+}

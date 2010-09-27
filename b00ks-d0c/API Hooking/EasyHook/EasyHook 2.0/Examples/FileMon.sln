@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileMon", "FileMon\FileMon.csproj", "{19F6D407-24D8-44F7-8439-88B12460486B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileMonInject", "FileMonInject\FileMonInject.csproj", "{73E422FF-37EB-4AE5-B13B-352CA6EA4728}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{19F6D407-24D8-44F7-8439-88B12460486B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19F6D407-24D8-44F7-8439-88B12460486B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19F6D407-24D8-44F7-8439-88B12460486B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19F6D407-24D8-44F7-8439-88B12460486B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{73E422FF-37EB-4AE5-B13B-352CA6EA4728}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73E422FF-37EB-4AE5-B13B-352CA6EA4728}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73E422FF-37EB-4AE5-B13B-352CA6EA4728}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73E422FF-37EB-4AE5-B13B-352CA6EA4728}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

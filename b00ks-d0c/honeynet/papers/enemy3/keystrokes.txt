@@ -1,0 +1,251 @@
+Red Hat Linux release 5.1 (Manhattan)
+Kernel 2.0.35 on an i586
+
+mozart login: rewt
+Password: 
+[root@mozart /root]# w
+  4:11pm  up 17:39,  0 users,  load average: 0.00, 0.00, 0.00
+USER     TTY      FROM              LOGIN@   IDLE   JCPU   PCPU  WHAT
+[root@mozart /root]# ps aux
+USER       PID %CPU %MEM  SIZE   RSS TTY STAT START   TIME COMMAND
+bin        250  0.0  1.1   776   352  ?  S   03:32   0:00 portmap 
+daemon     228  0.0  1.3   796   416  ?  S   03:32   0:00 /usr/sbin/atd 
+root         1  0.0  1.4   792   432  ?  S   03:31   0:03 init [3] 
+root         2  0.0  0.0     0     0  ?  SW  03:31   0:00 (kflushd)
+root         3  0.0  0.0     0     0  ?  SW< 03:31   0:00 (kswapd)
+root         4  0.0  0.0     0     0  ?  SW  03:31   0:00 (md_thread)
+root         5  0.0  0.0     0     0  ?  SW  03:31   0:00 (md_thread)
+root        36  0.0  1.1   752   364  ?  S   03:32   0:00 /sbin/kerneld 
+root        61  0.0  2.2  1196   688  ?  S   03:32   0:00 bash /etc/rc.d/rc 3 
+root       208  0.0  0.4   268   152  ?  S   03:32   0:00 syslogd 
+root       217  0.0  1.7   928   548  ?  S   03:32   0:00 klogd 
+root       239  0.0  1.5   864   488  ?  S   03:32   0:00 crond 
+root       261  0.0  2.5  1252   776  ?  S   03:32   0:00 /usr/sbin/snmpd -f 
+root       273  0.0  0.4   168   140  ?  S   03:32   0:00 inetd 
+root       284  0.0  2.0  1000   620  ?  S   03:32   0:00 named 
+root       297  0.0  2.2  1192   684  ?  S   03:32   0:00 sh /etc/rc.d/rc3.d/S6
+root       306  0.0  1.6   852   504  ?  S   03:32   0:00 rpc.mountd 
+root       314  0.0  1.3   876   404  ?  S   03:32   0:00 rpc.nfsd 
+root       599  0.4  2.2  1240   696  ?  S   21:11   0:00 in.telnetd 
+root       600  1.3  2.5  1184   772  p0 S   21:11   0:00 -bash 
+root       614  0.0  1.2   920   400  p0 R   21:11   0:00 ps aux 
+[root@mozart /root]# cd /usr/sbin
+[root@mozart sbin]# ls
+ClockProg	      innd		    sendfax
+SVGATextMode	      inndstart		    sendmail
+accton		      ipop2d		    set80
+adduser		      ipop3d		    setVGAreg
+am-eject	      kbdconfig		    setclock
+amd		      klogd		    setconsole
+amq		      logrotate		    setpalette
+apmd		      lpc		    setup
+atd		      lpd		    showmount
+atrun		      lpf		    sliplogin
+automount	      makewhatis	    smbd
+bootpd		      mk-amd-map	    smbmount
+bootpef		      mkdict		    smbumount
+bootpgw		      mklost+found	    smrsh
+bootptest	      mkpasswd		    sndconfig
+callback	      mouseconfig	    sniff.pid
+chat		      named		    snmpd
+chpasswd	      named-xfer	    snmptrapd
+chroot		      named.reload	    squid
+clockprobe	      named.restart	    squid.novm
+create-cracklib-dict  ncpserv		    stm
+crond		      ndc		    stm-menu
+ctlinnd		      newusers		    strfile
+dbmmanage	      nmbd		    swapdev
+dhcpd		      ntpdate		    syslogd
+dhcrelay	      ntpq		    tcp.log
+dip		      ntptrace		    tcpd
+diplogin	      ntsysv		    tcpdchk
+dump-acct	      nwbind		    tcpdmatch
+dump-utmp	      nwclient		    tcpdump
+edquota		      nwconn		    tickadj
+exportfs	      nwserv		    timeconfig
+faxrunqd	      pac		    timed
+fixmount	      packer		    timedc
+fsinfo		      pmap_dump		    tmpwatch
+fuser		      pmap_set		    traceroute
+gated		      portmap		    try-from
+getVGAreg	      pppd		    tunelp
+getpalette	      pppstats		    unstr
+grabmode	      pwck		    useradd
+groupadd	      pwconv		    userdel
+groupdel	      pwunconv		    userhelper
+groupmod	      quotastats	    usermod
+grpck		      ramsize		    usernetctl
+grpconv		      rdev		    uuchk
+grpunconv	      rdistd		    uucico
+hlfsd		      readprofile	    uuconv
+htdigest	      repquota		    uusched
+htpasswd	      rhbackup		    uuxqt
+httpd		      rmt		    vidmode
+huntd		      rootflags		    vipw
+imapd		      routed		    warnquota
+in.comsat	      rpc.bootparamd	    wire-test
+in.fingerd	      rpc.mountd	    wsmbconf
+in.ftpd		      rpc.nfsd		    xferstats
+in.identd	      rpc.rquotad	    xntpd
+in.nnrpd	      rpc.rusersd	    xntpdc
+in.ntalkd	      rpc.rwalld	    ypbind
+in.rexecd	      rpc.yppasswdd	    yppoll
+in.rlogind	      rpc.ypxfrd	    yppush
+in.rshd		      rpcinfo		    ypserv
+in.talkd	      rwhod		    ypset
+in.telnetd	      sa		    zdump
+in.tftpd	      safe_finger	    zic
+in.timed	      samba
+inetd		      sbpnpprobe
+[root@mozart sbin]# paste tcp.log
+
+1Cust118.tnt1.long-branch.nj.da.uu.net => mozart [23]
+ #'vt1002!rewt
+satori
+last -210110
+cd /log
+ls
+/cd /var/log
+ls
+
+----- [Timed Out]
+
+router => mozart [23]
+ !"'#o% 38400,38400'VT100root
+fergit
+ls
+cat /etc/hosts
+
+----- [Timed Out]
+Exiting...
+[root@mozart sbin]# w
+  4:11pm  up 17:39,  0 users,  load average: 0.00, 0.00, 0.00
+USER     TTY      FROM              LOGIN@   IDLE   JCPU   PCPU  WHAT
+[root@mozart sbin]# cat /etc/hosts
+127.0.0.1		localhost localhost.localdomain
+172.20.1.130		mozart mozart
+172.20.1.1	router
+[root@mozart sbin]# uname -a
+Linux mozart 2.0.35 #1 Tue Jul 14 23:56:39 EDT 1998 i586 unknown
+[root@mozart sbin]# netstat -r
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags   MSS Window  irtt Iface
+172.20.1.0      *               255.255.255.0   U      1500 0          0 eth0
+127.0.0.0       *               255.0.0.0       U      3584 0          0 lo
+default         router          0.0.0.0         UG     1500 0          0 eth0
+[root@mozart sbin]# netstat -rs
+netstat: illegal option -- s
+usage: netstat [-veenNcCF] [<Af>] -r         netstat {-V|--version|-h|--help}
+       netstat [-vnNcaeo] [<Socket>]
+       netstat { [-veenNac] -i | [-vnNc] -L | [-cnNe] -M }
+
+        -r, --route              display routing table
+        -L, --netlink            display netlink kernel messages
+        -i, --interfaces         display interface table
+        -M, --masquerade         display masqueraded connections
+
+        -v, --verbose            be verbose
+        -n, --numeric            dont resolve names
+        -e, --extend             display other/more informations
+        -c, --continuous         continuous listing
+
+        -a, --all, --listening   display all
+        -o, --timers             display timers
+
+<Socket>={-t|--tcp} {-u|--udp} {-w|--raw} {-x|--unix} --ax25 --ipx --netrom
+<Af>= -A {inet|ipx|netrom|ddp|ax25},... --inet --ipx --netrom --ddp --ax25
+[root@mozart sbin]#ls
+ClockProg	      innd		    sendfax
+SVGATextMode	      inndstart		    sendmail
+accton		      ipop2d		    set80
+adduser		      ipop3d		    setVGAreg
+am-eject	      kbdconfig		    setclock
+amd		      klogd		    setconsole
+amq		      logrotate		    setpalette
+apmd		      lpc		    setup
+atd		      lpd		    showmount
+atrun		      lpf		    sliplogin
+automount	      makewhatis	    smbd
+bootpd		      mk-amd-map	    smbmount
+bootpef		      mkdict		    smbumount
+bootpgw		      mklost+found	    smrsh
+bootptest	      mkpasswd		    sndconfig
+callback	      mouseconfig	    sniff.pid
+chat		      named		    snmpd
+chpasswd	      named-xfer	    snmptrapd
+chroot		      named.reload	    squid
+clockprobe	      named.restart	    squid.novm
+create-cracklib-dict  ncpserv		    stm
+crond		      ndc		    stm-menu
+ctlinnd		      newusers		    strfile
+dbmmanage	      nmbd		    swapdev
+dhcpd		      ntpdate		    syslogd
+dhcrelay	      ntpq		    tcp.log
+dip		      ntptrace		    tcpd
+diplogin	      ntsysv		    tcpdchk
+dump-acct	      nwbind		    tcpdmatch
+dump-utmp	      nwclient		    tcpdump
+edquota		      nwconn		    tickadj
+exportfs	      nwserv		    timeconfig
+faxrunqd	      pac		    timed
+fixmount	      packer		    timedc
+fsinfo		      pmap_dump		    tmpwatch
+fuser		      pmap_set		    traceroute
+gated		      portmap		    try-from
+getVGAreg	      pppd		    tunelp
+getpalette	      pppstats		    unstr
+grabmode	      pwck		    useradd
+groupadd	      pwconv		    userdel
+groupdel	      pwunconv		    userhelper
+groupmod	      quotastats	    usermod
+grpck		      ramsize		    usernetctl
+grpconv		      rdev		    uuchk
+grpunconv	      rdistd		    uucico
+hlfsd		      readprofile	    uuconv
+htdigest	      repquota		    uusched
+htpasswd	      rhbackup		    uuxqt
+httpd		      rmt		    vidmode
+huntd		      rootflags		    vipw
+imapd		      routed		    warnquota
+in.comsat	      rpc.bootparamd	    wire-test
+in.fingerd	      rpc.mountd	    wsmbconf
+in.ftpd		      rpc.nfsd		    xferstats
+in.identd	      rpc.rquotad	    xntpd
+in.nnrpd	      rpc.rusersd	    xntpdc
+in.ntalkd	      rpc.rwalld	    ypbind
+in.rexecd	      rpc.yppasswdd	    yppoll
+in.rlogind	      rpc.ypxfrd	    yppush
+in.rshd		      rpcinfo		    ypserv
+in.talkd	      rwhod		    ypset
+in.telnetd	      sa		    zdump
+in.tftpd	      safe_finger	    zic
+in.timed	      samba
+inetd		      sbpnpprobe
+[root@mozart sbin]# rpc.nfsd
+ят[root@mozart sbin]# ps aux
+USER       PID %CPU %MEM  SIZE   RSS TTY STAT START   TIME COMMAND
+bin        250  0.0  1.1   776   352  ?  S   03:32   0:00 portmap 
+daemon     228  0.0  1.3   796   416  ?  S   03:32   0:00 /usr/sbin/atd 
+root         1  0.0  1.4   792   432  ?  S   03:31   0:03 init [3] 
+root         2  0.0  0.0     0     0  ?  SW  03:31   0:00 (kflushd)
+root         3  0.0  0.0     0     0  ?  SW< 03:31   0:00 (kswapd)
+root         4  0.0  0.0     0     0  ?  SW  03:31   0:00 (md_thread)
+root         5  0.0  0.0     0     0  ?  SW  03:31   0:00 (md_thread)
+root        36  0.0  1.1   752   364  ?  S   03:32   0:00 /sbin/kerneld 
+root        61  0.0  2.2  1196   688  ?  S   03:32   0:00 bash /etc/rc.d/rc 3 
+root       208  0.0  0.4   268   152  ?  S   03:32   0:00 syslogd 
+root       217  0.0  1.7   928   548  ?  S   03:32   0:00 klogd 
+root       239  0.0  1.5   864   488  ?  S   03:32   0:00 crond 
+root       261  0.0  2.5  1252   776  ?  S   03:32   0:00 /usr/sbin/snmpd -f 
+root       273  0.0  0.4   168   140  ?  S   03:32   0:00 inetd 
+root       284  0.0  2.0  1000   620  ?  S   03:32   0:00 named 
+root       297  0.0  2.2  1192   684  ?  S   03:32   0:00 sh /etc/rc.d/rc3.d/S6
+root       306  0.0  1.6   852   504  ?  S   03:32   0:00 rpc.mountd 
+root       314  0.0  1.3   876   404  ?  S   03:32   0:00 rpc.nfsd 
+root       599  0.0  2.2  1240   696  ?  S   21:11   0:00 in.telnetd 
+root       600  0.1  2.5  1184   772  p0 S   21:11   0:00 -bash 
+root       626  0.0  1.2   920   400  p0 R   21:12   0:00 ps aux 
+[root@mozart sbin]# rm tcp.log
+rm: remove `tcp.log'? y
+[root@mozart sbin]# kill -9 314
+[root@mozart sbin]# rm rpc.nfsd

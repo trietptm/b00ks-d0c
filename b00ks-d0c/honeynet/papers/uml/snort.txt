@@ -1,0 +1,41 @@
+laptop #snort -vdr *snort.log
+Log directory = /var/log/snort
+
+Initializing Network Interface tap0
+
+        --== Initializing Snort ==--
+Decoding Ethernet on interface tap0
+
+        --== Initialization Complete ==--
+
+-*> Snort! <*-
+Version 1.8.7 (Build 128)
+By Martin Roesch (roesch@sourcefire.com, www.snort.org)
+10/11-18:45:05.521560 192.168.0.144 -> 192.168.1.105
+ICMP TTL:64 TOS:0x0 ID:0 IpLen:20 DgmLen:84 DF
+Type:8  Code:0  ID:35330   Seq:0  ECHO
+31 1C A7 3D 0B F5 07 00 08 09 0A 0B 0C 0D 0E 0F  1..=............
+10 11 12 13 14 15 16 17 18 19 1A 1B 1C 1D 1E 1F  ................
+20 21 22 23 24 25 26 27 28 29 2A 2B 2C 2D 2E 2F   !"#$%&'()*+,-./
+30 31 32 33 34 35 36 37                          01234567
+
+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+
+
+10/11-18:45:06.539397 192.168.0.144 -> 192.168.1.105
+ICMP TTL:64 TOS:0x0 ID:0 IpLen:20 DgmLen:84 DF
+Type:8  Code:0  ID:35330   Seq:256  ECHO
+32 1C A7 3D BC 3A 08 00 08 09 0A 0B 0C 0D 0E 0F  2..=.:..........
+10 11 12 13 14 15 16 17 18 19 1A 1B 1C 1D 1E 1F  ................
+20 21 22 23 24 25 26 27 28 29 2A 2B 2C 2D 2E 2F   !"#$%&'()*+,-./
+30 31 32 33 34 35 36 37                          01234567
+
+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+
+
+10/11-18:45:07.579452 192.168.0.144 -> 192.168.1.105
+ICMP TTL:64 TOS:0x0 ID:0 IpLen:20 DgmLen:84 DF
+Type:8  Code:0  ID:35330   Seq:512  ECHO
+33 1C A7 3D 33 D7 08 00 08 09 0A 0B 0C 0D 0E 0F  3..=3...........
+10 11 12 13 14 15 16 17 18 19 1A 1B 1C 1D 1E 1F  ................
+20 21 22 23 24 25 26 27 28 29 2A 2B 2C 2D 2E 2F   !"#$%&'()*+,-./
+30 31 32 33 34 35 36 37                          01234567
+

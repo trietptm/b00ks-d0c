@@ -1,0 +1,1234 @@
+<!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>Chapter 3: File System Basics</title>
+</head>
+
+<body>
+
+<p>
+<h1> Chapter 3: File System Basics </h1>
+<p>
+
+<p>
+<h2> 3.1 - Introduction </h2>
+<p>
+
+In this chapter we will explore some fundamental properties of file systems. As the
+primary storage component of a computer the file system can be the source of a great
+deal of forensic information.  We'll start with the basic organization
+of file systems and directories, including how they may be mounted on
+top of each other to hide information.  We'll then move onto various
+types of files along with their limits and peculiarities, as well as
+the basic inode and data block relationship.  Next we outline the lowest
+levels of the file system - partitions, zones, inode and data bitmaps,
+and the superblock.  Along the way we'll discuss and introduce a variety
+of tools and methods to facilitate our exploration and analysis.
+
+<p>
+
+It is important to note that forensic data must be captured at the
+appropriate abstraction level. For example, tools that use the normal file
+system interface will only be able to access existing files. In order to
+capture information about the unused space that exists between files, one
+has to use lower-level tools that bypass the file system. Such lower-level
+tools have additional benefits: they eliminate the possibility of false
+reports by maliciously modified file system code.  This chapter will lay
+the groundwork to go into more serious analysis in the following chapter,
+"File System Analysis."
+
+<p>
+<h2> 3.2 - Alphabet Soup of File Systems</h2>
+<p>
+
+There are more file systems than there are operating systems.  Microsoft
+has several and 
+UNIX certainly has its share, in typical acronym fashion: FFS, UFS,
+Ext2fs <sup>1</sup>, XFS, etc. Much has been written about these
+[McKusick, 1984], [Card, 1994],
+[Nemeth, 2002], and others), and we aren't trying to
+write the definitive or complete file system reference. The purpose
+of this chapter is to illustrate general file system properties and
+their relevance to forensic analysis, irrespective of their origin.  However, to keep the discussion succinct
+we'll focus on file systems that are either based on or very similar to
+the UNIX Fast File System (FFS).  The FFS
+was well-designed and has a fairly easy to understand design that has
+influenced many other file systems.
+
+<blockquote>
+Footnote 1: Ext3fs is Ext2fs with journaling added.  While there
+are other differences, for this chapter on basics we will treat them
+as the same, and you may replace Ext3fs for Ext2fs in the text wherever
+desired.  See section 2.8, "Journaling file systems and MACtimes",
+for more on file system journaling.
+
+</blockquote>
+
+<p>
+
+The original UNIX file system dates back to the early days of UNIX
+evolution. While many improvements have been made in the course of time,
+the fundaments of the design have not changed in 30 years.  That is
+amazing, considering that disk capacity has increased by a factor of ten
+thousand, and it means that the initial design was done by very smart
+people ([Ritchie, 1974]).
+
+<h2> 3.3 - UNIX file organization</h2>
+
+All UNIX file systems are organized within a single tree structure
+underneath one root directory.  Leaves or nodes in the tree are separated
+by slashes, and have names like /home/you/mailbox. There is no
+forest of directory trees beginning with host or network names, let
+alone each disk having its own name space (A:'s, B:'s, and C:'s, anyone?) as
+found with some other systems.  Even non-file devices such as terminals,
+printers, and disks themselves are abstracted and accessed via names in
+the file system.
+
+<p>
+
+In order to make files on a disk partition accessible, the disk partition
+has to be mounted at some directory in the file system tree.  As figure 3.1
+demonstrates, when a disk partition is mounted over a directory its
+contents overlay the directory it is mounted over, much like roof tiles
+overlap each other.
+
+<p>
+
+<blockquote>
+<a name="figure3.1"> <img src="figure3.1.gif" alt="UNIX FS Tree"></a>
+<p>
+Figure 3.1: UNIX file system tree built from multiple disk partitions.
+</blockquote>
+
+<p>
+
+You may mount many different types of file systems on top of each other -
+not only the UNIX standards but also
+those accessed across the network (NFS, AFS, etc.) and from completely different
+vendors (Microsoft, Apple, etc.) and operating systems.  Unfortunately,
+while all these file systems will behave somewhat as standard UNIX
+file systems, this beauty is sometimes only skin deep. When mounted
+onto UNIX you'll sometimes only get a subset of the Microsoft, Apple,
+etc. semantics.  The network abstraction will usually strip off even
+more lower-level details of the file system.  You can even mount files
+containing block file system formats onto special devices (such as the
+loopback file or vnode pseudo disk device drivers, which we'll talk
+about in Chapter 4: File system analysis.)
+
+<p>
+
+Disks can contain many file systems, and the file system tree can be
+built from multiple disk partitions.  Note that the tiling effect
+mentioned above means that you can hide things underneath a mount point.
+Here <tt>df</tt> shows the mounted file systems before and after a file
+system is stacked on top of the "/research" directory and how the contents
+of a file underneath a mount point cannot be read with <tt>cat</tt>.
+
+<p>
+
+<blockquote>
+<pre>
+# <strong>df</strong>
+Filesystem   1k-blocks     Used  Available Use% Mounted on
+/dev/sda1     1008872    576128     381496  60%      /
+/dev/sda5    16580968  15136744     601936  96%      /home 
+# <strong>ls /research</strong>
+foo 
+# <strong>cat /research/foo</strong>
+hello, world 
+# <strong>mount /dev/sdb1 /research</strong>
+# <strong>ls /research</strong> 
+lost+found     src     tmp 
+# <strong>cat /research/foo </strong> 
+cat: /research/foo: No such file or directory 
+</pre>
+</blockquote>
+
+<p>
+
+The file system provides little if any help when you want to know about
+details of where and how it stores information; indeed, the entire
+purpose of file systems is to hide such detail.  In order to look under
+the file system, you have to bypass the file system code and use tools
+that duplicate some of the file system's functionality.
+
+<p>
+
+If a mounted file system isn't currently being used the <tt>umount</tt>
+command may be used to remove it from the directory tree.  File systems
+are called busy and cannot be unmounted when they contain files that
+are currently open or have running processes whose current directory
+or executable file is within the file system.  You may try to force
+the file system to unmount under Solaris, FreeBSD, and Linux by using
+<tt>umount</tt>'s <tt>-f</tt> option, but this can crash processes that
+have their virtual rug pulled from underneath them.  The <tt>fuser</tt>
+or <tt>lsof</tt> commands may be used to determine which processes are
+preventing us from unmounting
+a busy file system.  In the next section we'll also reveal
+how to peer under mount points when we discuss inodes in more detail.
+
+<p>
+
+Another fine way to conceal information is not by ensconcing it under
+another file system, but to simply neglect to mount the file system at
+all, so that it doesn't appear in the directory structure.  There is no
+easy way to find all the file systems (or hardware in general) that may
+be attached to a system - especially since they may not be even turned on
+while you're examining the computer.  Being in the same physical location
+as the computer is helpful (so you may see the devices in question),
+but with components getting smaller every day (e.g. keyboards and mice
+with USB or memory sockets) even this is not a foolproof solution.
+
+<p>
+
+However, a UNIX computer will usually record the existence of hardware
+attached to it as it boots to a ring buffer of kernel memory. (It's
+called a ring because the buffer will overwrite older messages with
+more recent entries as the buffer is filled.)  Linux and FreeBSD, as
+well as older versions of Solaris, have the <tt>dmesg</tt> command to
+print out this buffer. (With recent Solaris versions, the dmesg command
+displays information from system logfiles that are updated by syslogd.)
+While the records vary from system to system you may get valuable
+information by pouring over this record - see listing 3.1 for an illustration
+of this.
+
+<p>
+
+<blockquote>
+<pre>
+freebsd# <strong>dmesg</strong>
+[...]
+ppi0: &lt;Parallel I/O&gt; on ppbus0
+ad0: 114440MB &lt;WDC WD1200JB-75CRA0&gt;[232514/16/63] at ata0-master UDMA100
+ad1: 114440MB &lt;WDC WD1200JB-75CRA0&gt;[232514/16/63] at ata0-slave UDMA100
+ad3: 114473MB &lt;WDC WD1200BB-00CAA0&gt;[232581/16/63] at ata1-slave UDMA33
+acd0: CDROM &lt;LTN526S&gt;at ata1-master PIO4
+Mounting root from ufs:/dev/ad0s2a
+/dev/vmmon: Module vmmon: registered with major=200 minor=0 tag=$Name: build-570$
+/dev/vmmon: Module vmmon: initialized
+[...]
+</pre>
+Listing 3.1: Elided <tt>dmesg</tt> output, displaying three hard disks and
+a CDROM on a FreeBSD system.  It also shows the capacity of the disks,
+potential mount points, and additional miscellaneous information.
+</blockquote>
+
+<p>
+
+After the system has completed its startup phase, newly added hardware
+will be reported to the ring buffer, or cause the UNIX kernel to log a
+message via the <tt>syslogd</tt> (Solaris and FreeBSD) or <tt>klogd</tt>
+(Linux) daemons.  Keeping an eye on <tt>dmesg</tt> or these log files
+can be the only indication that the configuration has changed.
+
+<p>
+
+FreeBSD and Linux also have the <tt>fdisk</tt> command (each, of course,
+with its own set of options), which displays any partitions on a given
+disk, while Solaris' <tt>prtvtoc</tt> command prints out a disk's geometry
+and partitions contained in the VTOC (volume table of contents.)
+
+<p>
+
+In the following example, <tt>df</tt> shows what file systems are mounted,
+while <tt>fdisk</tt> uncovers a hidden Linux partition named /dev/sda5:
+
+<p>
+<blockquote>
+<pre>
+linux# <strong>df</strong>
+Filesystem   1k-blocks     Used  Available Use% Mounted on
+/dev/sda1     1008872    576128     381496  60%      /
+linux# <strong>fdisk -l /dev/sda</strong>
+Disk /dev/sda: 64 heads, 32 sectors, 17501 cylinders
+Units = cylinders of 2048 * 512 bytes
+
+   Device Boot    Start       End    Blocks   Id  System
+/dev/sda1   *         1      1001   1025008   83  Linux
+/dev/sda2          1002     17501  16896000    5  Extended
+/dev/sda5          1002     17452  16845808   83  Linux
+</pre>
+</blockquote>
+<p>
+
+We can then mount the hidden file system and explore its contents.
+
+<p>
+<blockquote>
+<pre>
+linux# <strong>mount /dev/sda5 /mnt</strong>
+linux# <strong>df</strong>
+Filesystem   1k-blocks     Used  Available Use% Mounted on
+/dev/sda1     1008872    576128     381496  60%      /
+/dev/sda5    16580968  15136744     601936  96%      /mnt
+</pre>
+</blockquote>
+
+<p>
+
+We'll talk about how to capture file system data in chapter 4, "File
+System Analysis."
+
+<h2> 3.4 - UNIX file names</h2>
+
+File names are stored in directories (see directories, below), and
+may contain any character save the "/" or the null character.  Some
+systems disallow character values above 127.  (It should be noted
+that non-UNIX types of mounted file systems could possess file names
+with these illegal characters.)
+
+The POSIX standard ([POSIX, 2004]) specifies a minimum
+upper bound for file names of 255 bytes, which is the current limit for
+most if not all implementations of UFS, FFS, and Ext2fs.
+
+<p>
+
+This flexibility can cause problems with unprepared programs that trust
+the input they receive to be well-behaved.  For instance, the <tt>touch</tt>
+command can create a file name with a newline character embedded in it:
+
+<p>
+<blockquote>
+<pre>
+$ <strong>touch '/tmp/foo
+/etc/passwd'</strong>
+</pre>
+</blockquote>
+<p>
+
+If such a file name exists and someone with root privileges was foolish
+enough to try this housekeeping command (which attempts to remove files
+in the temporary directory that were modified a day or more ago):
+
+<p>
+<blockquote>
+<pre>
+# <strong>find /tmp -mtime +1 | xargs rm -f</strong>
+</pre>
+</blockquote>
+<p>
+
+The password file would be deleted, probably not what was wanted.
+This example mirrors a bug that was found in several UNIX
+distributions.  <tt>Cron</tt>, the program that allows users to
+schedule periodic execution of programs, had just such a command
+that was executed with super-user privileges.  Because of this
+problem many implementations of <tt>find</tt> and <tt>xargs</tt>
+now include an option (usually "-print0" or "-0") to separate file
+names by a null character, which should be relatively safe since
+nulls, as previously noted, cannot be in a file name.
+
+<h2> 3.5 - UNIX pathnames</h2>
+
+As mentioned earlier in this chapter, pathnames are built from
+strings separated by "/" characters.  While directory and file
+pathnames may generally be of arbitrary length,
+there is a limit on the length of a pathname that you can
+specify when accessing a file.  Solaris and FreeBSD currently allow 1024
+characters, while Linux can go up to 4096.
+
+<p>
+
+These size limits for directories and files names are rarely a concern for
+day to day operations, but they give opportunities to hide information
+or to prevent programs from working.  For instance, this file (with a
+complete pathname length of 1028 bytes, composed of four directories of
+255 characters each with the actual file name of "foo"):
+
+<blockquote>
+<pre>
+/111 ... 111/222 ... 222/333 ... 333/444 ... 444/foo
+</pre>
+</blockquote>
+
+This file is a tricky one to access in both Solaris or FreeBSD (and if the file
+name were a bit longer this would be true for Linux as well); you
+cannot specify the full pathname because its length is above the
+limit that you may use in a system call such as <tt>open</tt>.
+For the same reason you cannot directly change into a very long
+directory pathname, because the <tt>chdir</tt> system call is
+subject to the same pathname length restriction as other system
+calls.
+
+<p>
+
+Programs like <tt>find</tt> suffer from limits that are imposed by
+their environment.  Even without hard limits built into the software
+itself, such programs will ultimately fail when the directory tree is
+sufficiently deep, as the system runs out of memory to keep track of
+nesting or out of file descriptors for reading directories.
+
+<p>
+
+The basic problem is not that UNIX allows long file names and deeply
+nested directory trees, but that you - as a programmer or a user
+- should be wary of trusting anything outside your sphere of
+control.  When investigating a system it is important to
+understand how the system and your tools will behave under stress
+or unusual circumstances.  All tools have a breaking point - good
+ones will fail gracefully and inform you of the failure and the
+reasons why.  When in doubt always exercise extreme diligence and
+caution.
+
+<p>
+<h2> 3.6 - UNIX file types</h2>
+<p>
+
+From the user point of view, the UNIX file system is made up from
+directories and an assortment of files of various types. To UNIX, however,
+a directory is just another type of file, one that ordinary users cannot
+modify directly.  On a typical UNIX system you will find regular files,
+directories, symbolic links, IPC endpoints, and device files.  
+
+<p>
+<p>
+<strong> Regular files</strong>
+<p>
+
+Regular files are the most common type of file on a UNIX system and are
+the kind of file that contains data or software.  
+<p>
+<strong> Directories</strong>
+<p>
+
+Directories are another type of file, but users cannot update a directory
+directly.  Instead this is done via primitives that create, rename
+or remove a directory entry. 
+
+<p>
+
+A directory contains all the names of files and directories within it;
+the basic ls(1) command is therefore easy to understand - or code - even
+if you know nothing about the underlying low-level details.  You simply
+open the directory (via the opendir() function) and read the contents
+with the readdir() system call.  The Perl program in listing 3.2 does
+just that.
+
+<p>
+<blockquote>
+<pre>
+$ <strong>cat ls.pl</strong>
+#
+# Usage: "program [directory-name]"
+#
+# Defaults to reading the current directory unless we give it an argument
+#
+$ARGV[0] = "." unless $#ARGV >= 0;
+
+opendir(DIR, $ARGV[0]) || die "Can't open directory $ARGV[0]\n";
+
+# read the directory, one file name at a time, and print it out
+while (($next_file = readdir(DIR))) {
+       	print "$next_file\n";
+       	}
+$
+$ <strong>perl ls.pl /tmp</strong>
+.
+..
+ps_data
+ups_data
+</pre>
+Listing 3.2: Trivial "ls" command which prints out a directory's entries
+</blockquote>
+
+<p>
+<strong> Symbolic Links</strong>
+<p>
+
+A symbolic link is an alias for another
+file name or directory.  Simply removing a symbolic link doesn't affect
+the file being referred to, but be aware that any output directed at
+the symbolic link will affect the target, not the symbolic link.
+
+<p>
+<strong> IPC (Inter-Process Communications) Endpoints</strong>
+<p>
+
+IPC Endpoints in the file system <sup>1</sup> allow one process to talk
+to another process running on the same machine. A FIFO (also called
+named pipe) may be created with the mkfifo() system call, and provides a
+one-way communication channel, while a socket is created with the socket()
+system call and provides a two-way channel each time a connection is made.
+
+<p>
+
+<blockquote>
+Footnote 1: 
+As opposed to other IPC endpoints, such as Internet sockets.
+</blockquote>
+
+<p>
+
+Named pipes can be trouble if they aren't connected to any data stream,
+for a process that attempts to read the contents of the named pipe will
+hang, waiting for data.
+
+<p>
+<strong> Device Files</strong>
+<p>
+
+UNIX uses device files to access hardware.  The two types - character
+and block - give access to device drivers that control disks, terminals,
+and so on. Typically, they are found below the <tt>/dev</tt> directory,
+are created with the <tt>mknod</tt> command, and are protected via the
+same file system permission bits as other files.
+
+<p>
+
+Block devices access the hardware via the block structure that the
+physical medium uses, and use buffering in the kernel.  Disks are the
+primary example of a block device.  Character devices can use (generally
+smaller) buffers as well, but allow byte level access (either virtual or
+real) to hardware, and are not buffered as block devices are.  Terminals,
+line printers, and physical memory are some of the more common character
+devices, but many block devices also have a character-device interface.
+Disk and tape character devices are called raw devices, and they are
+not buffered in the kernel.
+
+<p>
+
+The interface between hardware and software can cause a variety of
+problems.  When a device has both a character and block device interface
+you may run into trouble when trying to access data through character
+device since the kernel is buffering the data and may not have written
+it to the actual device.  We'll show an example of this in the next section.
+Device files may also be duplicated and placed anywhere on a file system
+- users that have system privileges may place a normally restricted
+device in an unusual or hidden location with weaker than desired file
+permissions.  The FreeBSD and Linux <tt>mount</tt> command has a "nodev"
+option which forbids access to block or character device files.  Care must
+be also be taken when memory-mapped devices are present on the system
+(such as when registers in graphics cards are mapped to the virtual
+address space to provide faster performance), for probing or searching
+these memory locations (say, via <tt>/dev/mem</tt> or <tt>/dev/kmem</tt>,
+or <tt>TCT</tt>'s <tt>pcat</tt> command; see appendix A for more about
+TCT and the tools within) can cause the system to freeze or even crash.
+
+<p>
+<h2> 3.7 - A first look under the hood - file system internals</h2>
+<p>
+
+In order to discuss the more unusual properties of the UNIX file
+system it is necessary to peel back its outer layer and examine
+some of its file system internals.
+
+<p>
+
+A UNIX directory is organized as a sequence of directory entries that are
+not necessarily sorted.  Each directory entry consists of at least two
+parts: a name and a number.  Directory entries in Ext2fs and modern FFS
+file systems also list the file type, unlike Solaris' UFS.  The file name
+is what humans and programs normally use in order to access a file. The
+number refers to a file's inode, and is what UNIX uses internally.
+This number is an index into a table of so-called <b>inode</b> blocks
+that describe all file properties except the file name.  The inode block
+has references to the data blocks that contain the actual contents of
+the file.  Figure 3.2 illustrates these relationships.
+
+<p>
+
+<blockquote>
+<a name="figure3.2"> <img src="figure3.2.gif" alt="Simplified UNIX FS"></a>
+<p>
+
+Figure 3.2: Simplified structure of the UNIX file system.
+
+</blockquote>
+<p>
+
+The inode itself contains a wealth of information about a file;
+at a minimum it includes:
+
+<ul>
+
+<li>Ownership: the numerical user and group ID of the owner (the symbolic
+and numerical user and group IDs are stored in the password and group
+databases.)
+
+<p>
+
+Some UNIX versions allow unprivileged users to change the ownership of
+files that they own to another user.  This rather dangerous practice
+is disallowed in FreeBSD and Linux systems altogether, but the POSIX
+RSTCHOWN parameter can be used in Solaris and other systems to control
+this behavior (it is turned off by default.)
+
+<p>
+
+<li>Permissions for owner, group or other access are determined via the
+examination of the read, write, and execute bits associated with a file.
+In addition to these bits there are the infamous set-uid and set-gid bits
+(allowing execution of a program with the user or group privileges of
+the file owner) and the sticky bit (which these days is only useful on
+directories), which restricts the rename or remove operations to the
+owner of the directory or files within the sticky directory.
+
+<p>
+
+Command interpreters with set-uid or set-gid file permissions are
+frequently left behind by intruders as a way to regain privileged access.
+Always be wary of set-uid or set-gid files, but especially those that
+weren't installed with the vendor's operating system.  The <tt>find</tt>
+command may be used to locate such files, but it's best
+to simply use the <tt>nosuid</tt> option when mounting untrusted file
+systems - this flag takes away the special properties of set-uid and
+set-gid files.
+
+<p>
+
+Some file systems include support for immutable or append-only bits.
+The former disallows changing, moving or deleting such a file, while
+the latter is an immutable file that also allows data to be appended to
+its end [McKusick, 2005].
+
+<p>
+
+<li>File type: what the file is.  There are directories, regular files,
+symbolic links (a file name alias), devices, named pipes (also called
+FIFO), sockets, and so on.
+
+<p>
+
+<li> Hard link count: this is how many directory entries refer to this
+inode. In other words, one inode may have multiple file names. A hard
+link should not to be confused with a symbolic link, which is simply an
+alias of or a pointer to another file name.  Hard links are also simply
+referred to as links.
+
+<p>
+
+UNIX file systems allow a file to be removed even while it is still
+being accessed or executed. The directory entry will be removed, but
+the file's inode and data blocks are still labeled as "in use" until the
+file is no longer needed.  TCT's <tt>ils</tt> and <tt>icat</tt> may be
+used in conjunction to recover files that are open but have been removed.
+
+<p>
+
+A file can even have entries in directories not owned by the file
+owner. Thus, when a file is found in a directory, the file wasn't
+necessarily put there by the file's owner. The directory owner could
+have created the hard link with the <tt>ln</tt> command.  It also means
+that a file does not necessarily go away when it is deleted!  The file
+is deleted only when the link count is zero.
+
+<p>
+
+<li>File size in bytes. With regular files, the file size is the
+number of bytes that can be read before reaching the end of the
+file. The UNIX file system has no overhead for record
+boundaries that silently add to a file's size.
+
+<p>
+
+<li>Time stamps. As we briefly saw in chapter 2, UNIX maintains
+three time stamps that we often refer to as <b>MAC</b>times:
+
+<p>
+
+<ul>
+
+<li>Last <b>M</b>odification time. For directories, the last time
+an entry was added, renamed or removed. For other file types, the
+last time the file was written to.
+
+<p>
+
+<li>Last <b>A</b>ccess (read) time. For directories, the last time
+it was searched. For other file types, the last time the file was
+read.
+
+<p>
+
+<li>Last status <b>C</b>hange. Examples of status change are: change
+of owner, change of access permission, change of hard link count,
+or an explicit change of any of the MACtimes.
+
+<p>
+
+<li><b>D</b>eletion time.  Ext2fs and Ext3fs record the time a file was
+deleted in the dtime stamp.
+
+</ul>
+
+<p>
+
+We'll be talking more about MACtimes in Chapter 4: "File system analysis".
+
+<p>
+
+<li>Data block addresses.  The location of the actual contents of a
+regular file, symbolic link or directory.  Actually, this is a bit
+of a simplification. With files larger than 12 blocks, the 13th data
+block address refers to a disk block that is dedicated entirely to storing
+disk block numbers.  This disk block is called a singly-indirect block;
+when it fills up, the 14th data block address refers to a disk block that
+contains the block numbers of singly-indirect blocks.  This disk block
+is called a doubly-indirect block. UNIX file systems support up to three
+levels of indirection where one data block contains the addresses of
+data blocks or indirect blocks.
+
+</ul>
+
+<p>
+
+FreeBSD and Solaris don't come with any programs to query inodes (Linux
+has the <tt>stat</tt> command, which prints the inode contents), but you
+may construct your own.  The <tt>stat()</tt>, <tt>fstat()</tt>, and <tt>lstat()</tt> system calls return most
+of the above information, as illustrated by this Perl code fragment:
+
+<p>
+<blockquote>
+<pre>
+($dev, $inode, $mode, $nlink, $uid, $gid, $rdev, $size,
+       $atime, $mtime, $ctime, $blksize, $blocks) = lstat($filename);
+<br>
+print "$filename: $dev, $inode, $mode, $nlink, $uid, $gid, $rdev, $size,
+       $atime, $mtime, $ctime, $blksize, $blocks\n";
+</pre>
+</blockquote>
+<p>
+
+(Further information on specific inode information can be found in its
+corresponding file system header file or in the <tt>stat(2)</tt> man page.)
+
+<p>
+
+TCT contains two programs that delve into inodology. The <tt>ils</tt> command
+reads inode content, and the <tt>icat</tt> command reads the data blocks
+that an inode refers to.  The <tt>icat</tt> command may be used exactly like
+cat, except that instead of accessing a file by name, <tt>icat</tt> access
+a file by its device name and inode number.  A third tool, <tt>fls</tt>
+([Carrier, 2004], lists file and directory names
+similar to <tt>ls</tt>. Again, instead of a pathname one specifies a
+device name and inode number.
+
+<p>
+
+All three tools bypass the file system and access disk blocks
+directly, and this is why they use device names and inode numbers
+instead of pathnames.  The tools can be used not only to examine
+a disk partition that contains a file system, they can also be used
+to examine a file system image, that is, a regular file that contains
+the content of a disk partition. More information about how disk
+images are created and how they are used can be found in the next
+chapter.
+
+<p>
+
+Earlier in this chapter we showed how files could be hidden from
+<tt>cat</tt> under a mount point, but the dynamic duo of <tt>fls</tt>
+and <tt>icat</tt> will not be fooled, as they bypass the file system
+by utilizing a lower-level abstraction.
+
+<p>
+
+To demonstrate this we show two different ways to access a file.
+First <tt>ls</tt> reads "foo"'s directory entry to recover the file
+name and inode number, while <tt>cat</tt> prints the contents via the
+file name.  Next <tt>fls</tt> and <tt>icat</tt> bypass the file system
+altogether to read "foo"'s inode number and contents directly.
+
+<p>
+<blockquote>
+<pre>
+# <strong>df</strong>
+Filesystem           1k-blocks      Used Available Use% Mounted on
+/dev/sda1              1008872    576128    381496  60% / 
+/dev/sda5             16580968  15136744    601936  96% /home 
+# <strong>ls -1ia /research</strong>
+32065    .
+2        ..
+96741    foo
+# <strong>fls -ap /dev/sda1 32065</strong>
+-/d 96193:  .
+-/d 2:      ..
+-/r 96741:  foo
+# <strong>cat /research/foo </strong>
+hello, world
+# <strong>icat /dev/sda1 96741</strong>
+hello, world
+</pre>
+</blockquote>
+<p>
+
+We now mount a second file system on top of the directory file "foo"
+lived in.  When we look again, <tt>ls</tt> and <tt>cat</tt> cannot see
+the file, but <tt>fls</tt> and <tt>icat</tt> have no problems peering
+underneath the mount point.
+
+<p>
+<blockquote>
+<pre>
+# <strong>mount /dev/sdb1 /research</strong>
+# <strong>ls -1ia /research</strong>
+      2 .
+      2 ..
+     11 lost+found
+  32449 tmp
+# <strong>fls -ap /dev/sda1 32065</strong>
+-/d 96193:  .
+-/d 2:      ..
+-/r 96741:  foo
+# <strong>cat /research/foo </strong>
+cat: /research/foo: No such file or directory
+# <strong>icat /dev/sda1 96741</strong>
+hello, world
+</pre>
+</blockquote>
+<p>
+
+<p>
+
+As previously mentioned, directories are simply another type of file; most
+file systems allow direct reading of a directory (via <tt>strings</tt>
+or <tt>cat</tt>), but Linux requires <tt>icat</tt> or some other program
+to directly access its contents.
+
+<p>
+
+Directories mounted over the network (as with NFS) often cannot be
+directly accessed at all.  This loss of low-level detail is one of the
+main reasons why forensic and other serious investigative data should
+always be directly gathered on the computer hosting the data rather than
+accessed across a network.
+
+<p>
+
+To further confound matters, sometimes <tt>icat</tt> won't get you what
+you want... but <tt>cat</tt> will!  Watch what happens when we create a
+simple file and try to access the contents via its name versus its inode:
+
+<p>
+
+<blockquote>
+<pre>
+solaris# <strong>df</strong>
+ Filesystem            kbytes    used   avail capacity  Mounted on
+/dev/dsk/c0t0d0s7    2902015 1427898 1416077    51%    /export/home
+solaris# <strong>echo hello, world > test-file</strong>
+solaris# <strong>ls -i test-file</strong>
+119469    test-file
+solaris# <strong>cat test-file</strong>
+hello, world
+solaris# <strong>icat /dev/dsk/c0t0d0s7 119469</strong>
+solaris# <strong>icat /dev/rdsk/c0t0d0s7 119469</strong>
+hello, world
+</pre>
+</blockquote>
+
+<p>
+
+This is all possible
+because of how the file system buffers data (we'll see more about
+this in chapter 8, "Beyond Processes").  In this case the data blocks
+pointed to by inode number 119469 have not been written to disk yet.
+Trying to access them via the raw device bypasses file system buffers,
+so <tt>icat</tt> sees nothing.
+
+<p>
+
+An interesting feature of UNIX file systems is that when an application
+skips over areas without writing to them the data blocks will not be
+allocated for this empty space.  This happens when a program writes data
+after seeking past the end of a file; after the write this hole is read as
+though it was full of null bytes.  The Berkeley DB (e.g. "filename.db")
+and DBM files (e.g. "filename.pag") files, used in USENET news history,
+<tt>Sendmail</tt> maps, and the like are examples of such, which
+are sometimes called sparse files.
+
+<p>
+
+To see the difference we'll use a Perl program to create two files,
+one with a hole and one without:
+
+<p>
+
+<blockquote>
+<pre>
+$ <strong>cat hole.pl</strong>
+#!/usr/local/bin/perl
+
+# Create two files, F1 & F2
+open(F1, "&gt;F1") or die "can't open F1\n";
+open(F2, "&gt;F2") or die "can't open F2\n";
+
+# With holes
+print F1 "Text before test";
+seek(F1, 100000, 2);    # boldly seek where no data has gone before
+print F1 "Text after test";
+
+# Without holes
+print F2 "Text before test";
+print F2 "\000" x 100000;    # output 100,000 NULLS
+print F2 "Text after test";
+
+close(F1);
+close(F2);
+</pre>
+</blockquote>
+<p>
+
+After executing this Perl program look how <tt>ls</tt> shows the different
+block allocation sizes of the sparse and regular files, but when the
+files are run through <tt>cmp</tt> (a file content comparison program)
+no difference is shown.
+
+<p>
+
+<blockquote>
+<pre>
+linux $ <strong>./hole.pl</strong>
+linux $ <strong>ls -ls F1 F2</strong>
+  12 -rw-------   1 zen      root       100031 May 30 15:09 F1
+ 104 -rw-------   1 zen      root       100031 May 30 15:09 F2
+linux $ <strong>cmp F1 F2</strong>
+linux $ <strong>hexdump -c F1</strong>
+0000000   T   e   x   t       b   e   f   o   r   e       t   e   s   t
+0000010  \0  \0  \0  \0  \0  \0  \0  \0  \0  \0  \0  \0  \0  \0  \0  \0
+*
+00186b0   T   e   x   t       a   f   t   e   r       t   e   s   t    
+00186bf
+linux $
+</pre>
+</blockquote>
+
+<p>
+
+In particular holes can cause problems when a program tries to read
+the data via the file system - it is nearly impossible to tell which
+nulls were written to disk or not ([Zwicky, 1991]),
+and the size of the file read and what is actually stored on the disk
+can be quite different.  Programs that can bypass the file system
+(such as <tt>dd</tt> and <tt>dump</tt>) have no problems with holes,
+but when using the normal file system interface to copy or read the file
+additional null bytes will be read and the result will be larger than
+what is actually on the disk.
+
+<p>
+<h2> 3.8 - UNIX file system layout</h2>
+<p>
+
+Below the abstraction of inodes and data blocks lies the abstraction
+of zones, labels, and partitions.  The typical UNIX disk partition is
+organized into equal-sized zones (see figure 3.3).  Typical zone sizes are
+32768 blocks; the block size depends on file system type, and with some
+systems it also depends on the file system size.  UFS, FFS and Ext2fs
+use a block size that is a multiple of 1024 bytes.
+
+<p>
+
+<blockquote>
+<a name="figure3.3"> <img src="figure3.3.gif" alt="UNIX FS layout"></a>
+
+<p>
+
+Figure 3.3: On-disk layout of a typical UNIX file system.  Figure is
+not drawn to scale, and files may appear larger in your rear-view
+mirror than they do in real life.
+
+</blockquote>
+
+<p>
+
+Storage space is divided up into multiple zones, each of which has
+its own copy of the superblock, allocation bitmaps, file data blocks,
+and file attribute (inode) blocks.  Normally, information about a
+small file is stored entirely within one zone.  Disk labels hold disk
+geometry data about its cylinders, tracks, sector, and partition layout
+
+<p>
+
+Excessive disk head motion is avoided by keeping related information
+closely together. This not only reduces the fragmentation of individual
+file contents, it also reduces delays while traversing directories
+in order to access a file.  Good file system locality can be expected
+to happen with any file system that doesn't fragment its information
+randomly over the disk.  The TCT program <tt>Lazarus</tt> takes advantage
+of this property when attempting to reconstitute the structure of deleted
+or lost file system data.
+
+<p>
+<h2> 3.9 - I've got you under my skin - delving under the file system</h2>
+<p>
+
+When data is accessed or modified through the file system evidence of the
+activity may exist in MACtime bits or in any system or kernel accounting.
+Instead of modifying a file through the file system, however, you may
+modify the data blocks by writing directly to the device that contains
+the data in question, to bypass the file system in order to avoid leaving
+behind traces of file access.  You'll remember that we used <tt>fls</tt>
+and <tt>icat</tt> to read underneath a file system; the program in
+listing 3.3 modifies data
+by directly accessing the disk device itself and change logs that might register an
+attacker's presence.  It does so by reading until it sees the attacker's
+system name ("evil.fish.com") and replacing this with an innocuous log
+entry ("localhost"):
+
+<blockquote>
+<pre>
+#
+# Usage: "program device-file"
+#
+
+# open the device or file for both reading and writing
+open(DEVICE, "+&lt;$ARGV[0]") || die "can't open $ARGV[0]\n";
+
+# make sure the change is the same length!
+$TARGET    = "connection from \"evil.fish.com\"";
+$MUTATE    = "connection from \"localhost\"    ";
+
+$BYTESIZED = 4096;
+$n = $position = 0;
+
+while (($num_read = read(DEVICE,$block,$BYTESIZED))) {
+	if ($block =~ /$TARGET/) {
+		$current = tell(DEVICE);
+		$block =~ s/$TARGET/$MUTATE/g;
+		seek(DEVICE, $position, 0) || die "Can't seek to $position\n";
+		print DEV $block;
+		seek(DEVICE, $current,  0) || die "Can't seek to $position\n";
+		}
+	$n++;
+	$position = $n * $BYTESIZED;
+	}
+
+</pre>
+Listing 3.3:  Those with guts - or using someone else's system - can
+bypass the file system with this Perl program.
+</blockquote>
+
+<p>
+
+Only those who are a bit carefree or on death row should attempt this
+with any regularity, as serious file corruption could happen when the
+program and the system race to write to the same block.  Intruders,
+of course, might not care about your data as much as you do.
+
+<p>
+
+Unless your logs or files are kept in multiple locations or on different
+hosts, low-level countermeasure like FreeBSD's securelevel(7) (see section
+5.6, "Protecting forensic information with kernel security levels",
+for more about this) are required to truly
+defend against this sort of obnoxious behavior.  It can be detected,
+but even that may be difficult.  Files may be compared with backups that
+have been saved either entirely off-line or on a different computer.
+Performing digital signatures on individual blocks of files is another
+way - you know that last week's records of log file, for instance,
+should rarely be changing after the events in question - but is very
+cumbersome to perform in practice.  [Schneier, 1998]
+describes a method of protecting log files so that intruders cannot read
+or undetectably modify log data that was written before the system was
+compromised - but of course, you must have this type of mechanism in
+place <strong>before</strong> any incident occurs.
+
+<p>
+
+Data may be kept from disclosure or undetected modification by utilizing
+encryption, but in a rather unusual approach the Steganographic
+File System ([Anderson, 1998]) goes even further.
+The Steganographic File System is a way of hiding data by encrypting
+the data and writing it multiple times to random places on a disk.
+It not only keeps the data encrypted but provides plausible mathematical
+deniability that data is even there.  It also provides has multiple layers
+of encryption, where the unused blocks of layer N may contain the data of
+a hidden file system N+1.  This means an investigator cannot find out if
+all the keys for all the levels have been surrendered.  StegFS 
+([McDonald, 1999]), a modified implementation of the
+system, uses unallocated blocks of an Ext2fs file system to hide its data.
+
+<p>
+<h2> 3.10 - The Twilight zone, or dangers below the file system interface</h2>
+<p>
+
+We've travelled up and down the file system, but there are still a few
+dark corners we haven't visited yet.  Most UNIX computers never utilize
+significant amounts of space on a disk even if it is reaching "full."
+This is mostly due to the layers of abstraction that we've laid on top of
+the underlying disk - many of the things that make systems easier to use
+also sacrifice a bit of performance and introduce some amount of waste.
+For normal usage this may be easily ignored - when you have a terabyte
+of storage or more what does it matter if some amorphous gigabytes are
+wasted or unaccounted for?  However, for someone with something to hide,
+the more capable a system is, the faster it is, the more space it has
+to store data, the easier it is to conceal information and programs -
+as well as it is harder to detect.  And while some methods give more
+room than others, all give plenty of room for malware and hidden data
+to rest comfortably.
+
+<p>
+
+Although UNIX file systems have an efficient set of algorithms that
+prevent serious fragmentation or waste of space under most situations,
+there will be a certain amount of overhead and waste in any file system.
+Since UFS, FFS and Ext2fs will not write data to the disk in multiples
+of less than their block size, any file that doesn't have a size in
+an exact multiple of the block size will have a bit of unused room
+(often called slack space) at the end of the data block.  With a
+block size of 1024 bytes a file will, on average, waste 512 bytes of
+space - about 50 megabytes for each 100,000 files.  The <tt>bmap</tt>
+[Ridge, 2002] tool can read, write, and wipe data in
+the slack space at the end of Ext2fs files.
+
+<p>
+
+When a UFS, FFS or Ext2fs file system is created by <tt>newfs</tt> it
+reserves about 3 percent of the disk blocks for use by inodes.  This is
+a one-size fits all scheme, however - there are only so many inodes to
+go around, and once you're out you cannot create files or new inodes.
+For the vast majority of systems this is more than enough - however,
+this also means that the majority of inodes are never used.  When we
+examined some 70 UNIX workstations we found that about 2.5% of the inodes
+were used (and only one system used more than half its maximum inodes.)
+This means that in a 100GB file system there will be about 3 GB of
+virgin territory that will never be touched by the file system.
+
+<p>
+
+We've already seen how entire disks or partitions may be hidden or unused,
+and how to detect this with <tt>fdisk</tt> or <tt>prtvtoc</tt>.  However,
+there is often sometimes a bit of space left over between disk partitions
+or at the tail end of a disk that may also be used for hidden storage.
+Swap files or swap partitions may also be used as a potential cache, for
+as memory chips have lowered dramatically in price and likewise increased
+in storage space swap is probably being used less frequently, and could
+be used for some time without being overwritten.
+
+<p>
+<h2> 3.11 - Conclusion</h2>
+<p>
+
+The basic hierarchical file system model used by UNIX (and other) file
+systems has proven to be remarkably resilient and adaptable over the
+years, and we foresee it continuing to be so for some years to come.
+
+<p>
+
+Some might wonder why we talk about various minutiae concerning UNIX file
+systems when what you really want for post-mortem analysis is to copy the
+entire disk with a low-level software program such as <tt>dd</tt> or via
+a hardware solution.  The file system abstraction is not only useful in
+day to day operations of a computer, but also when performing an analysis
+on a system, as we shall see in the next chapter, "File System Analysis."
+In addition, content-based examinations may easily be derailed by data
+that has been encrypted, compressed, or simply fragmented into various
+pieces over the disk.
+
+<p>
+
+As reported elsewhere ([Miller, 2000] and
+[Zwicky, 1991]), UNIX system tools are prone to have
+unexpected failure modes that result in inaccuracy or even corruption of
+information.  Given the need for accuracy and the often serious nature
+of investigations, that file systems and forensic tools appear to be
+no different is even more alarming.  Our own work is not immune - while
+writing this chapter we discovered (and fixed) some problems in our own
+forensic software, <tt>TCT</tt>; presumably there are more problems and
+issues as yet discovered.  As people try to push these complex systems
+to their limits - and beyond - things will break unless we are very
+careful indeed.  Tread lightly and keep your eyes open.
+
+<p>
+
+<hr>
+
+<p>
+<h2> References </h2>
+<p>
+
+[Anderson, 1998]  Ross Anderson, Roger Needham, & Adi Shamir
+"The Steganographic File System".  2nd Information Hiding Workshop, 1998.<br>
+http://www.cl.cam.ac.uk/ftp/users/rja14/sfs3.ps.gz
+
+<p>
+
+[Card, 1994]  Remy Card, Theodore Ts'o, Stephen Tweedie,
+"Design and Implementation of the Second Extended Filesystem".
+Proceedings of the First Dutch International Symposium on Linux,
+Amsterdam, December 8-9, 1994.<br>
+http://web.mit.edu/tytso/www/linux/ext2intro.html
+
+<p>
+
+[Carrier, 2004]  Brian Carrier, TASK (Sleuth Kit):<br>
+http://www.sleuthkit.org
+
+<p>
+
+[McDonald, 1999] Andrew D. McDonald, Markus G. Kuhn,
+StegFS: A Steganographic File System for Linux, to appear in the
+proceedings of Workshop on Information Hiding, IHW'99, Dresden,
+Germany, Sept. 29-Oct. 1, 1999, LNCS, Springer-Verlag.<br>
+http://www.cl.cam.ac.uk/~mgk25/ih99-stegfs.pdf
+
+<p>
+
+[McKusick, 1984]  Marshall K. McKusick, William N. Joy, Samuel J.
+Leffler, and Robert S. Fabry, "A Fast File System for UNIX". ACM
+Transactions on Computer Systems 2, 3 (August 1984), 181-197.<br>
+http://docs.freebsd.org/44doc/smm/05.fastfs/paper.pdf
+
+<p>
+
+[McKusick, 2005] Marshall K. McKusick and George V. Neville-Neil,
+The Design and Implementation of the FreeBSD Operating System.
+2005, Pearson Education, Inc.
+
+<p>
+
+[Miller, 2000] Barton P. Miller et al., "Fuzz Revisited: A Re-examination of the
+Reliability of UNIX Utilities and Services", February 2000, Computer
+Sciences Department, University of Wisconsin, 1210 W. Dayton Street,
+Madison, WI 53706-1685, USA.<br>
+ftp://grilled.cs.wisc.edu/technical_papers/fuzz-revisited.ps
+
+<p>
+
+[Nemeth, 2001]  Evi Nemeth, Garth Snyder, Scott Seebass,
+Trent R. Hein, et al., "Unix Administration Handbook, 3rd Edition".
+2001, Prentice Hall.
+
+<p>
+
+[Nemeth, 2002]  Evi Nemeth, Garth Snyder, Trent R. Hein, et al.
+"Linux Administration Handbook", 2002, Prentice Hall.
+
+<p>
+
+[POSIX, 2004]  For more on the POSIX and POSIX.1 standards,
+see the FAQ:<br>
+http://www.opengroup.org/austin/papers/posix_faq.html
+
+<p>
+
+[Ridge, 2002]  <tt>bmap</tt> was written by
+Daniel Ridge.  A discussion on how to use it: <br>
+http://www.linuxsecurity.com/feature_stories/data-hiding-forensics.html
+
+<p>
+
+[Ritchie, 1974]  D.M. Ritchie, K. Thompson, "The UNIX
+Time-Sharing System".  Communications of the ACM, 17, No. 7 (July
+1974), pp. 365-375.<br>
+http://cm.bell-labs.com/cm/cs/who/dmr/cacm.html
+
+<p>
+
+[Schneier, 1998]  B. Schneier and J. Kelsey,
+"Cryptographic Support for Secure Logs on Untrusted Machines", The
+Seventh USENIX Security Symposium Proceedings, USENIX Press, January 1998,
+pp. 53-62.<br>
+http://www.counterpane.com/secure-logs.html
+
+<p>
+
+[Zwicky, 1991]  Elizabeth D Zwicky,
+"Torture-testing Backup and Archive Programs: Things You Ought to
+Know But Probably Would Rather Not", Lisa V Proceedings,
+San Diego, CA.  Sep. 30-Oct. 3, 1991.
+
+</body>
+</html>

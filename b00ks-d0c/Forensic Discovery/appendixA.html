@@ -1,0 +1,338 @@
+<!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+
+<title>Appendix A: The Coroner's Toolkit and related software</title>
+
+</head>
+
+
+<body bgcolor="#ffffff">
+
+<h1>Appendix A: The Coroner's Toolkit and related software </h1>
+
+<h2>A.1 Introduction </h2>
+
+<p> The Coroner's Toolkit is a collection of forensic utilities by
+Wietse Venema and Dan Farmer [Farmer and Venema, 2004]. The software
+was presented first in 1999, in a one-day forensic analysis class
+at the IBM T.J. Watson Research Center. The first general release
+was in 2000, via the author's websites. The software was extended
+in various ways by Brian Carrier, who makes his version available
+as the Sleuth Kit [Carrier, 2004a].  This appendix presents an
+overview of TCT and of some of its extensions.  </p>
+
+<h2>A.2 Data gathering with <tt>grave-robber</tt> </h2>
+
+<p> The <tt>grave-robber</tt> command collects forensic
+information. This tool can be used either on a "live" victim machine,
+or on a disk image from a victim's file system.  In "live" collection
+mode, <tt>grave-robber</tt> aims to respect the Order Of Volatility
+(see Appendix B). It uses many of the utilities that are part of
+TCT to collect information in the following order:
+
+<ul>
+
+<li> <p> The attributes of all the commands and files that TCT
+accesses while it gathers information. These are collected first
+in order to preserve their MACtime attributes. </p>
+
+<li> <p> Process status information, and optionally, the memory of
+all running processes. </p>
+
+<li> <p> Deleted files that are still active. </p>
+
+<li> <p> The executable files of all processes. </p>
+
+<li> <p> All attributes from deleted files. </p>
+
+<li> <p> Network status information. </p>
+
+<li> <p> Host status information, via system dependent commands
+that provide system configuration information. </p>
+
+<li> <p> Attributes of existing files; this produces the <tt>body</tt>
+file that is used by the <tt>mactime</tt> tool as described below. </p>
+
+<li> <p> Optionally, security sensitive information that is under
+control by users of the system, such as files that grant remote
+access to a user's account, and <tt>cron</tt> jobs for unattended
+command execution on behalf of users. </p>
+
+<li> <p> Copies of configuration files and other critical files.
+</p>
+
+</ul>
+
+<p> All this information is stored in a "vault", a protected
+directory structure that is named after the host and the time of
+the start of data collection. For each file that is stored into
+the vault, <tt>grave-robber</tt> also computes the MD5 hash.  At the end,
+as the vault is closed,  <tt>grave-robber</tt> computes the MD5 hash over
+all individual file hashes. </p>
+
+<p> By definition, <tt>grave-robber</tt> is exposed to information that
+comes from the untrusted victim machine. It frequently uses this
+information while executing TCT commands and system commands.
+While doing so, it takes great care to never expose that untrusted
+information to a shell command interpreter. For more of the
+philosophical issues behind <tt>grave-robber</tt>, see Appendix B.  </p>
+
+<h2>A.3 Time analysis with <tt>mactime</tt> </h2>
+
+<p> The <tt>mactime</tt> command takes file attribute information
+from a <tt>body</tt> file
+that was produced by <tt>grave-robber</tt>, and produces a chronological
+report of all file access methods by file name.  Alternatively,
+<tt>mactime</tt> can generate a <tt>body</tt> file on the fly while
+it scans a file
+system. This tool was written several years before the authors
+started work on the TCT, and was adapted to fit into the
+<tt>grave-robber</tt>
+framework.  <tt>mactime</tt> is introduced in chapter 2, "Time
+machines", and a larger example can be found in chapter 4, "File
+system analysis".  </p>
+
+<p> As an example of the kind of insight that <tt>mactime</tt> can
+give, listings A.1 and A.2 present different views of the same remote
+login session. The first shows what the remote user sees, and the
+second shows the corresponding MACtime report.  For educational
+reasons the example uses a very old machine so that the MACtimes
+are spread out over time. This allows us to see a clear separation
+between the start-up of the telnet server and login software, the
+access of system files while the user logs in, and the start-up of
+the user's login shell process.  </p>
+
+<blockquote>
+<pre>
+$ <b>telnet sunos.fish.com</b>
+Trying 216.240.49.177...
+Connected to sunos.fish.com.
+Escape character is '^]'.
+
+SunOS UNIX (sunos)
+
+login: zen
+Password:
+Last login: Thu Dec 25 09:30:21 from flying.fish.com
+Welcome to ancient history!
+$
+</pre>
+
+<p> Listing A.1: User view of a remote login session. </p>
+
+</blockquote>
+
+<blockquote>
+<pre>
+<i>Time        Size MAC Permission Owner Group File name</i>
+19:47:04   49152 .a. -rwsr-xr-x root  staff /usr/bin/login
+           32768 .a. -rwxr-xr-x root  staff /usr/etc/in.telnetd
+19:47:08     272 .a. -rw-r--r-- root  staff /etc/group
+             108 .a. -r--r--r-- root  staff /etc/motd
+            8234 .a. -rw-r--r-- root  staff /etc/ttytab
+            3636 m.c -rw-rw-rw- root  staff /etc/utmp
+           28056 m.c -rw-r--r-- root  staff /var/adm/lastlog
+         1250496 m.c -rw-r--r-- root  staff /var/adm/wtmp
+19:47:09    1041 .a. -rw-r--r-- root  staff /etc/passwd
+19:47:10  147456 .a. -rwxr-xr-x root  staff /bin/csh
+</pre>
+
+<p> Listing A.2: MACtime view of the listing A.1 remote login session.
+The MAC column indicates the file access method (Modify, read Access,
+or status Change).  Files names with the same time stamp are sorted
+alphabetically.  </p>
+
+</blockquote>
+
+<h2>A.4 File reconstruction with <tt>lazarus</tt> </h2>
+
+<p> As discussed in chapters 3 and 7, modern file systems minimize
+file access times by keeping related information closely together.
+Among other things, this reduces the fragmentation of individual
+files.  The TCT program <tt>lazarus</tt> takes advantage of this property
+when attempting to reconstitute the structure of deleted file
+content.  </p>
+
+<p> <tt>lazarus</tt> is a simple program whose goal is to give unstructured
+data some form that is both viewable and manipulatable by users.
+It relies on a few simple principles and heuristics: </p>
+
+<ul>
+
+<li> <p> All popular file systems divide their storage space into
+equal-sized blocks. Typical block sizes are 1024 bytes and 4096
+bytes.  As long as <tt>lazarus</tt> uses an input block size that is consistent
+with this, it will never miss an opportunity for dividing up a file
+appropriately.  </p>
+
+<li> <p> File systems like to avoid file fragmentation performance
+reasons. In particular, UNIX file systems tend to be relatively
+fragmentation free even after years of use. </p>
+
+<li> <p> Files often have a distinct signature at the beginning.
+The venerable UNIX <tt>file</tt> utility uses a database with
+patterns to recognize files by the signature of their content.
+<tt>lazarus</tt> uses this in addition to a built-in pattern matcher to
+recognize file headers and to classify other file content.  </p>
+
+<li> <p> If a disk block looks similar to the previous disk block,
+then <tt>lazarus</tt> assumes that both blocks are part of the same file. </p>
+
+</ul>
+
+<p>
+
+With these in mind <tt>lazarus</tt> implements a sort of primitive digital
+X-ray device.  It creates a map of the disk that essentially makes
+the drive transparent -- you can peer into the disk and see the
+data by content type, but the highly useful filesystem abstraction
+is lost.  Figure A.1 shows an example of the interface and a
+once-deleted image file.  </p>
+
+<blockquote>
+
+<img src="figureA.1.gif">
+
+<p> Figure A.1: <tt>lazarus</tt> uncovering a deleted image. </p>
+
+</blockquote>
+
+<p> In the map of a disk, <tt>lazarus</tt> uses simple text characters to
+represent data chunks.  A capital letter is used for the first block
+of a chunk, while lower case is used for its remainder.
+For example, "C"'s represent C source code, "H"'s are hypertext,
+"L"'s are log files, "M"'s mail, "U"'s uuencoded content, and
+"."'s unrecognized binary data. </p>
+
+<p> In order to keep the map manageable, <tt>lazarus</tt> compresses large
+chunks using a logarithmic (base 2) scale.  This means a single
+character is 1 block of data, the second character 2 blocks, the
+third 4, etc.  This allows large files to be visually significant
+but not overwhelming - with a 1024 byte block size, a megabyte file
+would only take up ten times
+the space of a single block file. </p>
+
+<p> <tt>lazarus</tt> demonstrates that UNIX file systems like to keep related
+information within the same file system zone. For example, figure
+A.1 shows that email files (indicated with "Mmmm") tend to be
+clustered together. The figure also shows that email with lots of
+hypertext
+or uuencoded content is likely to be mis-identified.  The clustering
+of files and file activity has important consequences for the
+persistence of deleted information, as we see in chapter 7,
+"Persistence of Deleted File Information".  </p>
+
+<p> Software such as <tt>lazarus</tt> presents a problem of non-trivial
+scope.  While <tt>lazarus</tt> takes care to neutralize active content in
+hypertext etc. by rendering it as plain text, it does no sanity
+checks on other data such as images, and may trip up bugs in a very
+large and complex web browser program.  </p>
+
+<p> <tt>lazarus</tt> has not evolved since its initial release. People who
+want to browse disks should consider using Brian Carrier's Autopsy
+tool [Carrier, 2004b].  </p>
+
+<h2>A.5 Low-level file system utilities </h2>
+
+<p> The TCT comes with a number of utilities that bypass the file
+system layer. This allows the software to access existing file as
+well as deleted file information.  Instead of file names, these
+programs use
+the abstraction of inode numbers and bitmap allocation blocks, or
+the even lower-level abstraction of disk block numbers. These
+lower-level concepts are introduced in chapter 3, "File system
+basics". </p>
+
+<p> The TCT supports popular UNIX file systems such as UFS (BSD
+and Solaris), and EXT2FS and EXT3FS (Linux). The Sleuth Kit also
+adds support for non-UNIX file systems such as NTFS, FAT16 and
+FAT32 (Microsoft Windows). </p>
+
+<p> Utilities that are part of the original TCT distribution:</p>
+
+<ul>
+
+<li> <p> <tt>ils </tt> Access file attributes by their inode number.
+By default, this lists all unallocated file attributes. </p>
+
+<li> <p> <tt>icat </tt> Access file content by their inode number.
+This is used primarily to look up deleted file content. </p>
+
+<li> <p> <tt>unrm </tt> Access disk blocks by their disk block
+number. By default, this reads all unallocated file content, and
+produces output that can be used by programs such as <tt>lazarus</tt>.  In
+the Sleuth Kit distribution, <tt>unrm </tt> is renamed to <tt>dls</tt>.
+</p>
+
+</ul>
+
+<p> The Sleuth Kit adds a number of other low-level utilities, such
+as: </p>
+
+<ul>
+
+<li> <p> <tt>ffind </tt> Map an inode number to the directory
+entry that references the inode.  </p>
+
+<li> <p> <tt>fls</tt> List directory entries, including deleted
+ones.  Section 4.14 shows an example of the use of this utility.
+</p>
+
+<li> <p> <tt>ifind</tt> Map a data block number to the inode that
+references the data block. </p>
+
+</ul>
+
+<p> The success rate of low-level file system tools with deleted
+file information
+is highly dependent on the file system type, and even on the version
+of the operating system software. Section 4.11, "what happens when
+a file is deleted", discusses how much
+information
+is lost and what is preserved when a file is deleted. </p>
+
+<h2>A.6 Low-level memory utilities </h2>
+
+<p> The tools described in this section are more for exploratory
+use than rock-solid analysis. The reason for this is that their
+output contains little or no structural meta information, so that
+it is suitable only for processing with tools that don't take
+advantage of such information. </p>
+
+<ul>
+
+<li> <p> <tt>pcat</tt> Dump the memory of a running process.  This
+program is used in section 2.6; other examples of its use can be
+found on the book's website. </p>
+
+<li> <p> <tt> memdump</tt> Dump system memory while disturbing it
+as little as possible. The output should be sent across the network,
+in order to avoid interaction with the content of the file system
+cache.  This program is used for some of the measurements in Chapter
+8.  </p>
+
+</ul>
+
+<hr>
+
+<h2> References </h2>
+
+<p> [Carrier, 2004a] Brian Carrier's Sleuth Kit. <br>
+Available from: http://www.sleutkit.org/</p>
+
+<p> [Carrier, 2004b] Brian Carrier's Autopsy Forensic Browser. <br>
+Available from: http://www.sleutkit.org/</p>
+
+<p> [Farmer and Venema, 2004] The Coroner's Toolkit software by
+Dan Farmer and Wietse Venema. <br> Available from:
+http://www.fish2.com/tct/<br> and http://www.porcupine.org/tct/</p>
+
+</body>
+
+</html>

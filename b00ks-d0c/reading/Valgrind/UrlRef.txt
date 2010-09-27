@@ -1,0 +1,4 @@
+Pin http://www.pintool.org/
+DynamoRIO Dynamic Instrumentation Tool Platform http://dynamorio.org
+Valgrind http://valgrind.org/
+dynamic program analysis http://en.wikipedia.org/wiki/Dynamic_program_analysis

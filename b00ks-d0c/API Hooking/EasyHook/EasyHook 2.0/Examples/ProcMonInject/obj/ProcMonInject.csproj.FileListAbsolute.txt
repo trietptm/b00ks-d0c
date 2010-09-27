@@ -1,0 +1,20 @@
+C:\Projekte\EasyHook\Examples\Debug\ProcMonInject.dll
+C:\Projekte\EasyHook\Examples\Debug\ProcMonInject.pdb
+C:\Projekte\EasyHook\Examples\ProcMonInject\obj\Debug\ResolveAssemblyReference.cache
+C:\Projekte\EasyHook\Examples\ProcMonInject\obj\Debug\ProcMonInject.dll
+C:\Projekte\EasyHook\Examples\ProcMonInject\obj\Debug\ProcMonInject.pdb
+C:\Projekte\EasyHook - Copy\Examples\Debug\ProcMonInject.dll
+C:\Projekte\EasyHook - Copy\Examples\Debug\ProcMonInject.pdb
+C:\Projekte\EasyHook - Copy\Examples\ProcMonInject\obj\Debug\ResolveAssemblyReference.cache
+C:\Projekte\EasyHook - Copy\Examples\ProcMonInject\obj\Debug\ProcMonInject.dll
+C:\Projekte\EasyHook - Copy\Examples\ProcMonInject\obj\Debug\ProcMonInject.pdb
+C:\Projects\EasyHook 2.0.0.0\Examples\Debug\ProcMonInject.dll
+C:\Projects\EasyHook 2.0.0.0\Examples\Debug\ProcMonInject.pdb
+C:\Projects\EasyHook 2.0.0.0\Examples\ProcMonInject\obj\Debug\ResolveAssemblyReference.cache
+C:\Projects\EasyHook 2.0.0.0\Examples\ProcMonInject\obj\Debug\ProcMonInject.dll
+C:\Projects\EasyHook 2.0.0.0\Examples\ProcMonInject\obj\Debug\ProcMonInject.pdb
+D:\Projects\EasyHook 2.0.0.0\Examples\Debug\ProcMonInject.dll
+D:\Projects\EasyHook 2.0.0.0\Examples\Debug\ProcMonInject.pdb
+D:\Projects\EasyHook 2.0.0.0\Examples\ProcMonInject\obj\Debug\ResolveAssemblyReference.cache
+D:\Projects\EasyHook 2.0.0.0\Examples\ProcMonInject\obj\Debug\ProcMonInject.dll
+D:\Projects\EasyHook 2.0.0.0\Examples\ProcMonInject\obj\Debug\ProcMonInject.pdb

@@ -1,0 +1,132 @@
+host #vmware-config.pl
+Making sure VMware GSX Server's services are stopped.
+
+Stopping VMware services:
+   Virtual machine monitor                                 [  OK  ]
+   Bridged networking on /dev/vmnet0                       [  OK  ]
+   DHCP server on /dev/vmnet1                              [  OK  ]
+   Host-only networking on /dev/vmnet1                     [  OK  ]
+   DHCP server on /dev/vmnet8                              [  OK  ]
+   NAT networking on /dev/vmnet8                           [  OK  ]
+   Host-only networking on /dev/vmnet8                     [  OK  ]
+   Virtual ethernet                                        [  OK  ]
+
+Trying to find a suitable vmmon module for your running kernel.
+
+None of VMware GSX Server's pre-built vmmon modules is suitable for your running
+kernel.  Do you want this script to try to build the vmmon module for your 
+system (you need to have a C compiler installed on your system)? [yes] 
+
+What is the location of the directory of C header files that match your running 
+kernel? [/lib/modules/2.4.18-19.7.x/build/include] 
+
+Extracting the sources of the vmmon module.
+
+Building the vmmon module.
+
+make: Entering directory `/tmp/vmware-config0/vmmon-only'
+make[1]: Entering directory `/tmp/vmware-config0/vmmon-only'
+make[2]: Entering directory `/tmp/vmware-config0/vmmon-only/driver-2.4.18-19.7.x'
+make[2]: Leaving directory `/tmp/vmware-config0/vmmon-only/driver-2.4.18-19.7.x'
+make[2]: Entering directory `/tmp/vmware-config0/vmmon-only/driver-2.4.18-19.7.x'
+make[2]: Leaving directory `/tmp/vmware-config0/vmmon-only/driver-2.4.18-19.7.x'
+make[1]: Leaving directory `/tmp/vmware-config0/vmmon-only'
+make: Leaving directory `/tmp/vmware-config0/vmmon-only'
+The module loads perfectly in the running kernel.
+
+Trying to find a suitable vmnet module for your running kernel.
+
+None of VMware GSX Server's pre-built vmnet modules is suitable for your running
+kernel.  Do you want this script to try to build the vmnet module for your 
+system (you need to have a C compiler installed on your system)? [yes] 
+
+Extracting the sources of the vmnet module.
+
+Building the vmnet module.
+
+make: Entering directory `/tmp/vmware-config0/vmnet-only'
+make: Leaving directory `/tmp/vmware-config0/vmnet-only'
+The module loads perfectly in the running kernel.
+
+You have already setup networking.
+
+Would you like to skip networking setup and keep your old settings as they are? 
+(yes/no) [yes] no
+
+Do you want networking for your Virtual Machines? (yes/no/help) [yes] 
+
+Would you prefer to modify your existing networking configuration using the 
+wizard or the editor? (wizard/editor/help) [wizard] editor
+
+The following virtual networks have been defined:
+
+. vmnet0 is bridged to eth0
+. vmnet1 is a host-only network on subnet 10.10.10.0.
+. vmnet8 is NAT network on a private subnet 0.0.0.0.
+
+Do you wish to make any changes to the current virtual networks settings? 
+(yes/no) [no] yes
+
+Which virtual network do you wish to configure? (0-99) 0
+
+The network vmnet0 has been reserved for a bridged network.  You may change it, 
+but it is highly recommended that you use it as a bridged network.  Are you sure
+you want to modify it? (yes/no) [no] yes
+
+What type of virtual network do you wish to set vmnet0? 
+(bridged,hostonly,nat,none) [bridged] none
+
+Removing a bridged network for vmnet0.
+
+The following virtual networks have been defined:
+
+. vmnet1 is a host-only network on subnet 10.10.10.0.
+. vmnet8 is NAT network on a private subnet 0.0.0.0.
+
+Do you wish to make additional changes to the current virtual networks settings?
+(yes/no) [no] yes
+
+Which virtual network do you wish to configure? (0-99) 8
+
+The network vmnet8 has been reserved for a NAT network.  You may change it, but 
+it is highly recommended that you use it as a NAT network.  Are you sure you 
+want to modify it? (yes/no) [no] yes
+
+What type of virtual network do you wish to set vmnet8? 
+(bridged,hostonly,nat,none) [nat] none
+
+Removing a NAT network for vmnet8.
+
+The following virtual networks have been defined:
+
+. vmnet1 is a host-only network on subnet 10.10.10.0.
+
+Do you wish to make additional changes to the current virtual networks settings?
+(yes/no) [no] 
+
+Please specify a port for remote console connections to use [902] 
+
+Stopping xinetd:                                           [  OK  ]
+Starting xinetd:                                           [  OK  ]
+Configuring the VMware VmPerl Scripting API.
+
+Building the VMware VmPerl Scripting API.
+
+Installing the VMware VmPerl Scripting API.
+
+The installation of the VMware VmPerl Scripting API succeeded.
+
+Do you want to enter a serial number now? (yes/no/help) [no] no
+
+Starting VMware services:
+   Virtual machine monitor                                 [  OK  ]
+   Virtual ethernet                                        [  OK  ]
+   Host-only networking on /dev/vmnet1 (background)        [  OK  ]
+
+The configuration of VMware GSX Server 2.0.1 build-2129 for Linux for this 
+running kernel completed successfully.
+
+Enjoy,
+
+--the VMware team
+

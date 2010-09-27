@@ -1,0 +1,148 @@
+<html>
+<head>
+	<title>Poznajte Svojega Sovražnika: I</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=windows-1250">
+<meta http-equiv="Content-Language" content="sl">
+</head>
+
+<body bgcolor="#ffffff" text="#000000">
+<font face="verdana" size=2>
+<i>Orodja in metodologija script kiddie-v<br></i>
+<br>
+<br><font size=6><strong>
+Poznajte Svojega Sovražnika: I<br></font></strong>
+<br>
+<br>
+<a href="mailto:lanze@spitzner.net">Lanze Spitzner</a><br>
+Zadnjič spremenjeno: 06.05.2000<br>
+<br><BR><b>
+Moj komandir mi je nekoč dejal, da je treba za zaščito pred sovražnikom najprej poznati sovražnika. To vojaško pravilo velja tudi za 
+varnost na internetu. Prav tako kot vojska, tudi mi skušamo zaščititi določene podatke. Da bi lažje zaščitili te podatke je treba vedeti
+kdo "sovražniki" so in kako napadajo. Ta članek je prvi od treh delov celotne serije in opisuje prav to - orodja ter način, ki ga 
+uporabljajo najbolj pogosti sovražniki - "Script Kiddies" (Skriptni otročaji). Drugi del opisuje, kako zaznati poskuse vdora, katere
+programe vdiralci uporabljajo in kakšne varnostne luknje iščejo. Tretji del pa opisuje kaj se dogaja ko vdiralec enkrat dobi koreninski
+dostop do strežnika, še posebno kako zabrišejo svoje sledi ter kaj storijo potem.</b> 
+<br><BR>
+<font size=4>Kdo je "Skriptni Otročaj"?<br></font>
+<br><BR>
+"Skriptni Otročaj" (v nadaljevanju script kiddie) je nekdo, ki išče lahke tarče. Ne osredotoči se na specifične informacije o določenem
+podjetju. Njegov cilj je dobiti koreninski dostop na kateremukoli strežniku karseda hitro in enostavno. To počnejo z maloštevilnimi
+"exploiti" (izkoriščanji varnostnih lukenj), tako da preiskujejo celoten Internet za določen exploit. Prej ko slej najdejo koga, ki je ranljiv.
+<BR><BR>
+Nekateri izmed njih so izurjeni, ki sami razvijajo zelo prefinjena programska orodja, s katerimi si pomagajo pri vdiranju. Drugi sploh
+nimajo pojma kaj počnejo in vedo samo kako napisati "go" v ukazno vrstico. Neglede na njihove sposobnosti ter znanja imajo podobno 
+strategijo - naključno iskanje ranljivih računalnikov ter udiranje vanje.
+<br><BR>
+<font size=4>Nevarnost<br></font>
+<br><BR>
+Ravno to naključno iskanje žrtev dela script kiddie-a nevarnega. Prej ko slej bodo tudi vaša omrežja in sistemi v njem "preiskani"
+od script kiddie-v in ne morete se skriti pred njimi. Poznam administratorje, ki so bili zelo začudeni, ko so ugotovili, da jim je nekdo
+preiskal strežnike, pa čeprav so bili postavljeni na internet šele dva dni in nihče še ni vedel zanje. Tu ni nič presenetljivega. 
+Najbolj verjetno so bili strežniki preiskani od script kiddie-a, ki je po naključju pregledoval to omrežno območje. 
+<br><br>
+Če je bil dogodek omejen le na nekaj posameznih pregledov (v nadaljevanju "scan"), potem se nimate česa bati. Glede na to, da so na 
+svetu milijoni računalnikov, bi bilo čudno, da vas nihče ne bi našel. Velika večina vdiralskih orodij je zelo razširjenih in preprostih
+za uporabo, tako jih lahko uporablja vsakdo. Število ljudi, ki poseduje ta orodja se vrtoglavo veča. Ker Internet ne pozna nobenih 
+geografskih meja, se je tako ravnanje hitro razširilo po celem svetu. Zaradi tako velikega števila uporabnikov teh orodij, ni več 
+vprašanje ČE bomo preiskani, temveč KDAJ bomo preiskani. 
+<br><br>
+Lahko mislite, da nihče ne ve za vaše računalnike na internetu in da ste zato varni. Nekateri mislijo, da so njihovi sistemi tako ali 
+tako brez vrednosti, torej zakaj bi jih sploh kdo poskusil napasti? Ravno te računalnike script kiddie-i iščejo, saj niso zavarovani
+in so zelo lahke tarče. <br>
+<br>
+<font size=4>Metodologija<br></font>
+<br><BR>
+Metodologija script kiddie-a je preprosta. Preišči Internet za določene šibkosti (varnostne luknje), ko jo najdeš, jo izkoristi. Večina
+orodij, ki jih script kiddie-i uporabljajo so avtomatizirana in potrebujejo malo pozornosti. Poženeš orodje, prideš nazaj pogledat čez
+par dni ter dobiš rezultate. Ni dveh enakih orodij, kot ni dveh enakih varnostnih lukenj. Vseeno večina orodij uporablja podobno
+strategijo. Najprej naredi bazo IP naslovov, ki jih lahko preiščeš. Potem preišči le-te za določeno ranljivost. 
+<br><BR>
+Recimo, da ima nekdo orodje, s katerim lahko izkoristi varnostno luknjo v IMAPD strežnikih v Linux sistemih, kot recimo imapd_exploit.c.
+Najprej bi naredil bazo IP naslovov, ki bi jih lahko preiskal (računalniki, ki so na internetu ter ki so dosegljivi). Ko je baza kreirana,
+bi ta uporabnik hotel ugotoviti, na katerih računalnikih teče Linux. Veliko scannerjev (preiskovalcev) dandanes lahko to enostavno 
+ugotovijo s pošiljanjem nepravilnih paketkov na določen računalnik ter z opazovanjem odgovorov le-tega na določen paketek, kot je recimo
+Fyodor-jev <A href="http://www.insecure.org/nmap">nmap</a>. Nato bi uporabil orodje, s katerim bi ugotovil, kateri strežnik ima odprt
+IMAP servis. Nazadnje samo še vdrejo v ranljivi sistem.<br>
+<br>
+Morda mislite, da je vse to skeniranje zelo glasno ter da vzbudi veliko pozornosti. Na žalost pa veliko ljudi sploh ne spremlja 
+dogodkov na svojih strežnikih, tako sploh ne vedo, da so bili skenirani. Veliko script kiddie-v najprej poišče nek sistem, ter vdre vanj.
+Ko so enkrat v njem, uporabijo ta računalnik kot odskočno desko za vse nadaljnje vdore. Brez skrbi lahko skenirajo celoten Internet, ne
+da bi se jim bilo treba bati kakršnih koli posledic. Če so njihova nadaljnja skeniranja ugotovljena, bo nosil posledice administrator
+računalnika iz katerega je uporabnik skeniral in ne uporabnik sam. <br>
+<br>
+Rezultati skeniranj omrežij so pogosto shranjeni za kasnejšo uporabo ter izmenjani med uporabniki. Na primer: uporabnik naredi bazo
+odprtih vrat (ports) za določen strežnik. Uporabnik je zgradil to bazo zato, da bi izkoristil varnostno luknjo v IMAP servisu na tem 
+strežniku. Ker nimajo vsi računalniki odprtega IMAP servisa, uporabnik shrani rezultate skeniranja v arhiv. Čez kakšen mesec pa pride
+v javnost kakšna nova varnostna luknja na drugih vratih. Namesto, da bi ponovno gradili bazo podatkov o odprtih vratih, lahko uporabnik
+hitro pregleda stare arhive in napade ranljive sisteme. Script kiddie-i te baze med seboj delijo ter celo kupujejo drug od drugega.
+Tako lahko script kiddie vdre v sistem, ne da bi ga moral predhodno skenirati. Ker vaš sistem ni bil pred nedavnim skeniran še ne pomeni,
+da ste varni pred napadi. <br>
+<br>
+Bolj prefinjeni vdiralci (black-cat) uporabijo trojanske konje ter zadnja vrata (v nadaljevanju backdoor), ko vdrejo v določen sistem. 
+Backdoor omogoča enostaven in neopazen dostop do sistema kadarkoli uporabnik hoče. Trojanski konji naredijo vdiralca neodkriljivega.
+Sledi se ne bi prikazale v nobenem izmed dnevnikov (logs), procesov ali v datotečni strukturi. Izgradi si udoben in varen dom, od kjer
+lahko brezskrbno skenira celoten Internet. Za več informacij o tem si oglejte <a href="pss3.html">Poznajte Svojega Sovražnika III</a>.
+<br>
+<BR>
+Napadi se dogajajo neglede na čas. Veliko administratorjev bere svoje dnevnike samo od poznega večera, saj mislijo, da vdiralci vdirajo
+samo takrat. Script kiddie-i napadajo ves čas. Ker skenirajo 24 ur na dan, ne morete vedeti kdaj se bo poskus zgodil. Napadi se izvajajo
+po celem svetu. Ker pa Internet ne pozna geografskih meja, ne pozna niti časovnih območij. Lahko je polnoč pri vdiralcu, ko je pri vas
+1h popoldan.<br>
+<br>
+Ta metodologija iskanja ranljivih sistemov je lahko uporabljena za vrsto namenov. Nedavno tega, so poročali o novih DoS (Denial of
+Service) napadih, natančneje o DDoS (Distributed Denial of Service) napadih. Ti napadi temeljijo na enem uporabniku, ki ima pod kontrolo
+stotine, celo tisočine zavzetih računalnikov po celem svetu. Ti sistemi so koordinirani tako, da izvajajo DoS napade na določeno žrtev.
+Ker je v napadu uporabljeno veliko število različnih računalnikov se je zelo težko ubraniti pred njimi ter odkriti krivca. Več kot je
+uporabljenih računalnikov, bolj intenziven je DDoS napad. Primer takega napada je <a href="ddos.html">'stacheldraht'</A>. Za več 
+informacij o DDoS napadih si oglejte stran Paula Fergusona - <A href="http://www.denialinfo.com">Denialinfo</A>.<br>
+<br>
+<font size=4>Orodja<br></font>
+<BR>
+<br>
+Orodja, ki se uporabljajo so zelo enostavna za uporabo. Večina jih enonamenskih z nekaj opcijami. Najprej so tu orodja, s katerimi se
+izgradi bazo IP naslovov. Ta orodja povsem naključno skenirajo Internet. Na primer neko orodje ima eno opcijo: A, B ali C. Črka, ki jo
+izberete pomeni velikost omrežja, ki ga skenirate. Orodje nato naključno izbere IP omrežje, ki ga skenira. Druga orodja uporabljajo 
+domenska imena (z0ne na primer). Ta orodja zgradi bazo IPjev s pomočjo "zone transfers" (prenosa podatkov o določeni domeni) za neko
+domeno ali pod-domeno. Uporabnik lahko izgradi bazo s preko 2 milijona IP naslovi z skeniranjem celotne .edu ali .com domene. 
+<br>
+<BR>
+Ko je enkrat baza IP naslovov narejena, uporabnik te naslove preišče za določene varnostne luknje, kot recimo različica NAMED-a, 
+operacijskega sistema ali drugih servisov, ki so omogočeni na računalnikih. Ko vdiralec najde ranljive sisteme, napade. Obstaja veliko
+orodij, ki združujejo naštete možnosti skupaj, kar poenostavi celoten proces, kot sta recimo <a href="http://www.ben2.ucla.edu/~jsbach/">
+sscan</a> od jsbach-a ali <a href="README.cracker.txt">cracker.pl</A>. Za boljše razumevanje kako ta
+orodja delujejo, si oglejte <a href="pss2.html>Poznajte Svojega Sovražnika II">Poznajte Svojega Sovražnika II</A>.
+<br>
+<BR>
+<font size=4>Kako se obvarovati pred temi nevarnostmi<br></font>
+<br>
+<BR>
+Z nekaj preventivnimi akcijami, se lahko obvarujete pred tovrstnimi pretnjami. Script kiddie bi rad hitro vdrl v računalnik, zaradi tega
+uporablja dobro znane exploite. Zaščitite svoje sisteme pred temi exploiti. <a href="http://www.cert.org/">http://www.cert.org</A> in 
+<a href="http://www.ciac.org">http://www.ciac.org</A> sta izvrstni strani z dobro znanimi exploiti. Tudi mailing-lista 
+<a href="http://www.securityfocus.com/forums/bugtraq/faq.html">bugtraq </A>je odličen vir tovrstnih informacij. 
+<br>
+<BR>
+Drug način, kako se zavarovati pred nevarnostmi je, da poganjate samo servise, ki jih uporabljate. Če ne potrebujete določenega servisa, 
+ga izklopite. Če pa ga potrebujete, poskrbite, da boste imeli najnovejšo različico le-tega. Kako to storiti, je lepo opisano na straneh
+<a href="arm_sol.html">Oboroževanje Solarisa</A>, <a href="arm_lin.html">Oboroževanje Linuxa</A> ter <a href="arm_nt.html">Oboroževanje
+Windows NT</A>. <br>
+<br>
+Kot ste lahko prebrali v odstavku "Orodja", so domenski (DNS) strežniki pogosto uporabljeni za kreiranje baze podatkov o strežnikih, 
+ki so lahko skenirani. Omejite vaše sisteme tako, da se lahko "zone transferi" vršijo samo med vami ter vašimi domenskimi strežniki. 
+Logirajte (delajte dnevnik) vse neavtorizirane zone transferje in jim sledite. Toplo priporočam nadgradnjo BIND-a (programska oprema
+ki skrbi za DNS servis), ki ga lahko najdete na <A href="http://www.isc.org/bind.html">http://www.isc.org/bind.html</A>. <br>
+<br>
+Nazadnje, opazujte vaše sisteme za skeniranja. Če jih odkrijete, jih zasledujte, saj se boste s tem veliko naučili o varnosti na 
+internetu in o pretnjah, ki vam pretijo. <br>
+<br>
+<font size=4>Povzetek<br></font>
+<BR>
+<br>
+Script kiddie predstavlja grožnjo vsem sistemom. Nimajo nikakršnih predsodkov ter skenirajo vse sisteme neglede na lokacijo in vrednost
+le-teh. Prej ko slej bo tudi vaš sistem skeniran. Z razumevanjem njihovih motivov ter metod, se lahko bolje zaščitite pred nevarnostmi. 
+<br>
+Opomba: Zahvaljujem se Brad-u Powell-u iz Sun's Security Team za njegovo pomoč pri pisanju tega članka.<br>
+<br></font>
+
+</body>
+</html>

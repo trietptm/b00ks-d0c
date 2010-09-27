@@ -1,0 +1,25 @@
+Compiling should work without any problems.
+
+But to get the final DLL you will have to do some further steps.
+
+1) After compilation there are four files in the solution directory:
+	a) "Debug\EasyHook32.dll"
+	b) "Debug\EasyHook64.dll"
+	c) "Debug\x86\EasyHookSvc.exe"
+	d) "Debug\x64\EasyHookSvc.exe"
+   To produce all of them you will have to compile for 32- and 64-bit
+   by switching the target architecture after each build.	
+   
+2) Copy all of the above files into "EasyHook\Resources".
+3) Execute "EasyHook\Resources\GZIP.exe" by double clicking it.
+   This will produce GZipped versions of all EXE and DLL files in the 
+   resource directory.
+4) Now you will have to compile the "EasyHook" project again.
+5) This will produce a file named "Debug\EasyHook.dll" that should be
+   about 260 KB in size and contains those four files.
+
+HINT: If you only want to update the "EasyHook" project, then none of the
+above steps are necessary. But if you make changes to the "EasyHookSvc"
+or "EasyHook_Specific" project, you will have to go through all of the above
+steps to properly update the final "EasyHook.dll"
+

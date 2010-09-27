@@ -1,0 +1,457 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <meta name="description" content="Tracking Botnets with help of Honeynets" />
+    <meta name="keywords" content="hacking,security,honeypots,honeynets,Honeynet Project,botnets,bots" />
+    <title>Know your Enemy: Tracking Botnets - Source Code</title>
+    <link rel="stylesheet" type="text/css" href="botnets.css" />
+  </head>
+<body>
+
+<div id="header">
+<h1>Know your Enemy: <br /> Tracking Botnets - Source Code</h1>
+<h3 id="subtitle">What techniques bots use</h3>
+<p id="metainfo">
+  <a href="mailto:project@honeynet.org?Subject=Know Your Enemy">Honeynet Project</a><br />
+  <a href="http://www.honeynet.org">http://www.honeynet.org</a><br />
+  Last Modified: 17 February, 2005
+</p>
+</div>
+
+<p>In this side note, we take a closer look at the source code of some
+bots. We demonstrate several examples of techniques used by current bots to either speed-up
+computations or to detect suspicious environments, such as detection of debuggers 
+or virtual machines such as VMware. Furthermore, some bots use different
+techniques to make forensic analysis much more difficult. 
+
+<ol>
+
+	<li><h3>Detecting SoftICE</h3>
+
+<pre>
+
+/*
+	Function: IsSICELoaded
+	Description: This method is used by a lot of crypters/compresors it uses INT 41, 
+	             this interrupt is used by Windows debugging interface to detect if a 
+	             debugger is present. Only works under Windows.  
+	Returns: true if a debugger is detected
+*/
+
+__inline bool IsSICELoaded() {
+	_asm {
+		mov ah, 0x43
+		int 0x68
+		cmp ax, 0x0F386 // Will be set by all system debuggers.
+		jz out_
+
+		xor ax, ax
+		mov es, ax
+		mov bx, word ptr es:[0x68*4]
+		mov es, word ptr es:[0x68*4+2]
+		mov eax, 0x0F43FC80
+		cmp eax, dword ptr es:[ebx]
+		jnz out_
+		jmp normal_
+	normal_:
+		xor eax, eax
+		leave
+		ret
+	out_:
+		mov eax, 0x1
+		leave
+		ret
+	}
+	return false;
+}
+
+</pre>
+</li>
+
+<li><h3>Detecting SoftICE NT</h3>
+<pre>
+
+/*
+	Function: IsSoftIceNTLoaded
+	Description: Like the previous one but for use under Win NT only
+	Returns: true if SoftIce is loaded
+*/
+
+__inline BOOL IsSoftIceNTLoaded() {
+	HANDLE hFile=CreateFile( "\\\\.\\NTICE",
+				GENERIC_READ | GENERIC_WRITE,
+				FILE_SHARE_READ | FILE_SHARE_WRITE,
+				NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+
+	if(hFile!=INVALID_HANDLE_VALUE) { CloseHandle(hFile); return true; }
+		return false; 
+	}
+
+</pre>
+</li>
+
+	<li><h3>Detecting OllyDbg</h3>
+
+	<pre>
+	
+/*
+	Function: IsODBGLoaded
+	Description: Tests if OllyDbg/other app debuggers is/are enabled
+	Returns: true if a debugger is detected
+*/
+
+__inline bool IsODBGLoaded() {
+	char *caption="DAEMON";
+	_asm {
+		push 0x00
+		push caption
+
+		mov eax, fs:[30h] 		// pointer to PEB
+		movzx eax, byte ptr[eax+0x2]
+		or al,al
+		jz normal_
+		jmp out_
+	normal_:
+		xor eax, eax
+		leave
+		ret
+	out_:
+		mov eax, 0x1
+		leave
+		ret
+	}
+}
+
+</pre>
+</li>
+
+<li><h3>Detecting Breakpoints</h3>
+
+<pre>
+
+/*
+	Functions are declared as __inline, this causes the expansion of this code each time a function
+	is invoked, this is to difficult the cracker work by using this function more than once time
+	
+	Function: IsBPX
+	Description: Checks if the given memory address is a breakpoint
+	Returns: true if it is a breakpoint
+*/
+
+__inline bool IsBPX(void *address) {
+	_asm {
+		mov esi, address	// load function address
+		mov al, [esi]		// load the opcode
+		cmp al, 0xCC		// check if the opcode is CCh
+		je BPXed		// yes, there is a breakpoint
+
+		// jump to return true
+		xor eax, eax 		// false,
+		jmp NOBPX 		// no breakpoint
+	BPXed:
+		mov eax, 1		// breakpoint found
+	NOBPX:
+	}
+}
+
+</pre>
+</li>
+
+<li><h3>Detecting VMWare</h3>
+<pre>
+/*
+	executes VMware backdoor I/O function call
+*/
+
+#define VMWARE_MAGIC		0x564D5868	// Backdoor magic number
+#define VMWARE_PORT		0x5658		// Backdoor port number
+#define VMCMD_GET_VERSION	0x0a		// Get version number
+
+int VMBackDoor(unsigned long *reg_a, unsigned long *reg_b, unsigned long *reg_c, unsigned long *reg_d) {
+	unsigned long a, b, c, d;
+	b=reg_b?*reg_b:0;
+	c=reg_c?*reg_c:0;
+
+	xtry {
+		__asm {
+			push eax
+			push ebx
+			push ecx
+			push edx
+
+			mov eax, VMWARE_MAGIC
+			mov ebx, b
+			mov ecx, c
+			mov edx, VMWARE_PORT
+
+			in eax, dx
+
+			mov a, eax
+			mov b, ebx
+			mov c, ecx
+			mov d, edx
+
+			pop edx
+			pop ecx
+			pop ebx
+			pop eax
+		}
+	} xcatch(...) {}
+
+	if(reg_a) *reg_a=a; if(reg_b) *reg_b=b; if(reg_c) *reg_c=c; if(reg_d) *reg_d=d;
+	return a; 
+}
+
+/*
+	Check VMware version only
+*/
+
+int VMGetVersion() {
+	unsigned long version, magic, command;
+	command=VMCMD_GET_VERSION;
+	VMBackDoor(&amp;version, &amp;magic, &amp;command, NULL);
+	if(magic==VMWARE_MAGIC) return version;
+	else return 0; }
+
+/*
+	Check if running inside VMWare
+*/
+
+int IsVMWare() {
+	int version=VMGetVersion();
+	if(version) return true; else return false; 
+}
+
+</pre>
+</li>
+
+<li><h3>Fooling ProcDump</h3>
+<pre>
+
+/*
+	Fool ProcDump with increasing size
+*/
+
+void FoolProcDump() {
+	__asm {
+		mov eax, fs:[0x30]
+		mov eax, [eax+0xC]
+		mov eax, [eax+0xC]
+		add dword ptr [eax+0x20], 0x2000	// increase size variable
+	}
+}
+
+</pre>
+</li>
+
+<li><h3>Combining everything</h3>
+
+<pre>
+
+bool CDebugDetect::IsDebug() {
+#ifdef _DEBUG
+
+	return false;
+
+#else
+
+	if(m_bIsDebug) return true;
+
+#ifndef _WIN32
+	// Anti-PTrace
+//	if(ptrace(PTRACE_TRACEME, 0, 1, 0)&lt;0) {
+//		m_bIsDebug=true; return true;
+//	}
+#else
+	pfnIsDebuggerPresent IsDbgPresent=NULL;
+	HMODULE hK32=GetModuleHandle("KERNEL32.DLL");
+	if(!hK32) hK32=LoadLibrary("KERNEL32.DLL");
+	if(hK32) {
+		IsDbgPresent=(pfnIsDebuggerPresent)GetProcAddress(hK32, "IsDebuggerPresent");
+	}
+
+	FoolProcDump();
+	ScrewWithVirtualPC();
+
+	unsigned long lStartTime=GetTickCount();
+
+	if(IsBPX(&amp;IsBPX)) {
+#ifdef DBGCONSOLE
+		g_cConsDbg.Log(5, "Breakpoint set on IsBPX, debugger active...\n");
+#endif // DBGCONSOLE
+		m_bIsDebug=true; return true;
+	}
+
+	if(IsBPX(&amp;IsSICELoaded)) {
+#ifdef DBGCONSOLE
+		g_cConsDbg.Log(5, "Breakpoint set on IsSICELoaded, debugger active...\n");
+#endif // DBGCONSOLE
+		m_bIsDebug=true; return true;
+	}
+
+	if(IsBPX(&amp;IsSoftIceNTLoaded)) {
+#ifdef DBGCONSOLE
+		g_cConsDbg.Log(5, "Breakpoint set on IsSoftIceNTLoaded, debugger active...\n");
+#endif // DBGCONSOLE
+		m_bIsDebug=true; return true;
+	}
+
+	if(IsBPX(&amp;IsVMWare)) {
+#ifdef DBGCONSOLE
+		g_cConsDbg.Log(5, "Breakpoint set on IsVMWare, debugger active...\n");
+#endif // DBGCONSOLE
+		m_bIsDebug=true; return true;
+	}
+
+	if(IsSoftIceNTLoaded()) {
+#ifdef DBGCONSOLE
+		g_cConsDbg.Log(5, "SoftIce named pipe exists, maybe debugger is active...\n");
+#endif // DBGCONSOLE
+		m_bIsDebug=true; return true;
+	}
+
+	if(IsSICELoaded()) {
+#ifdef DBGCONSOLE
+		g_cConsDbg.Log(5, "SoftIce is loaded, debugger active...\n");
+#endif // DBGCONSOLE
+		m_bIsDebug=true; return true;
+	}
+
+//	if(IsVMWare()) {
+//#ifdef DBGCONSOLE
+//		g_cConsDbg.Log(5, "Running inside VMWare, probably honeypot...\n");
+//#endif // DBGCONSOLE
+//		m_bIsDebug=true; return true;
+//	}
+
+	if(IsDbgPresent) {
+		if(IsBPX(&amp;IsDbgPresent)) {
+#ifdef DBGCONSOLE
+			g_cConsDbg.Log(5, "Breakpoint set on IsDebuggerPresent, debugger active...\n");
+#endif // DBGCONSOLE
+			m_bIsDebug=true; return true;
+		}
+
+		if(IsDbgPresent()) {
+#ifdef DBGCONSOLE
+			g_cConsDbg.Log(5, "IsDebuggerPresent returned true, debugger active...\n");
+#endif // DBGCONSOLE
+			m_bIsDebug=true; return true;
+		}
+	}
+
+	if((GetTickCount()-lStartTime) &gt; 5000) {
+#ifdef DBGCONSOLE
+		g_cConsDbg.Log(5, "Routine took too long to execute, probably single-step...\n");
+#endif // DBGCONSOLE
+		m_bIsDebug=true; return true;
+	}
+#endif // WIN32
+
+	return false;
+
+#endif // _DEBUG
+}
+
+</pre>
+</li>
+
+
+<li><h3>Calculating TCP/IP checksum in assembler to gain speed</h3>
+
+<pre>
+/*
+	This calculates a TCP/IP checksum
+*/
+
+#ifdef WIN32
+	#define USE_ASM
+#endif // WIN32
+
+unsigned short checksum(unsigned short *buffer, int size) {
+	unsigned long cksum=0;
+
+#ifdef USE_ASM
+
+	unsigned long lsize=size;
+	char szMMBuf[8], *pMMBuf=szMMBuf;
+
+	__asm {
+		FEMMS
+
+		MOV			ECX, lsize				// ecx=lsize;
+		MOV			EDX, buffer				// edx=buffer;
+		MOV			EBX, cksum				// ebx=cksum;
+
+		CMP			ECX, 2					// size&lt;2;
+		JS			CKSUM_LOOP2				// goto loop 2
+
+CKSUM_LOOP:
+
+		XOR			EAX, EAX				// eax=0;
+		MOV			AX, WORD PTR [EDX]			// ax=(unsigned short*)*buffer;
+		ADD			EBX, EAX				// cksum+=(unsigned short*)*buffer;
+
+		SUB			ECX, 2					// size-=2;
+		ADD			EDX, 2					// buffer+=2;
+		CMP			ECX, 1					// size&gt;1
+		JG			CKSUM_LOOP				// while();
+
+		CMP			ECX, 0					// if(!size);
+		JE			CKSUM_FITS				// fits if equal
+
+CKSUM_LOOP2:
+
+		XOR			EAX, EAX				// eax=0;
+		MOV			AL, BYTE PTR [EDX]			// al=(unsigned char*)*buffer;
+		ADD			EBX, EAX				// cksum+=(unsigned char*)*buffer;
+
+		SUB			ECX, 1					// size-=1;
+		ADD			EDX, 1					// buffer+=1;
+		CMP			ECX, 0					// size&gt;0;
+		JG			CKSUM_LOOP2				// while();
+
+CKSUM_FITS:
+
+		MOV			cksum, EBX				// cksum=ebx;
+
+		MOV			EAX, cksum				// eax=cksum;
+		SHR			EAX, 16					// eax=cksum&gt;&gt;16;
+		MOV			EBX, cksum				// ebx=cksum;
+		AND			EBX, 0xffff				// ebx=cksum&0xffff;
+
+		ADD			EAX, EBX				// eax=(cksum&gt;&gt;16)+(cksum&amp;0xffff);
+
+		MOV			EBX, EAX				// ebx=cksum;
+		SHR			EBX, 16					// ebx=cksum&gt;&gt;16;
+		ADD			EAX, EBX				// cksum+=(cksum&gt;&gt;16);
+
+		MOV			cksum, EAX				// cksum=EAX;
+
+		FEMMS
+	}
+
+#else // USE_ASM
+
+	while(size&gt;1) { cksum+=*buffer++; size-=2; }
+	if(size) cksum+=*(unsigned char*)buffer;
+
+	cksum=(cksum&gt;&gt;16)+(cksum&amp;0xffff);
+	cksum+=(cksum&gt;&gt;16);
+
+#endif // USE_ASM
+
+	return (unsigned short)(~cksum); }
+*/
+
+</pre>
+</li>
+
+</ol>
+
+<div id="footer">
+  <a href="http://www.honeynet.org"><img src="http://www.honeynet.org/images/small.gif" alt="The Honeynet Project" /></a>
+</div>
+
+</body>
+</html>

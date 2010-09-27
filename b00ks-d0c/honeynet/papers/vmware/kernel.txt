@@ -1,0 +1,8 @@
+Dec 20 18:28:21 laptop kernel: device vmnet1 entered promiscuous mode
+Dec 20 18:28:21 laptop kernel: device eth0 entered promiscuous mode
+Dec 20 18:28:21 laptop kernel: br0: port 2(eth0) entering listening state
+Dec 20 18:28:21 laptop kernel: br0: port 1(vmnet1) entering listening state
+Dec 20 18:28:36 laptop kernel: br0: port 2(eth0) entering learning state
+Dec 20 18:28:36 laptop kernel: br0: port 1(vmnet1) entering learning state
+
+

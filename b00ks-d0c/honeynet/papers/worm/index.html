@@ -1,0 +1,564 @@
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="description" content="Tools and methods used by most common black hat threat on the Internet, the Script Kiddie">
+   <meta name="keywords" content="hacking,security,script kiddie,exploits,scans,black hat,root,tools,methods">
+   <title>Know Your Enemy</title>
+<style type="text/css">
+<!--
+a:active {  text-decoration: none}
+a:hover {  text-decoration: none}
+a:link {  text-decoration: none}
+a:visited {  text-decoration: none}
+-->
+</style>
+</head>
+<body link="#0000FF">
+
+<center>
+<font face="Palatino,Book Antiqua"><font size=+4>Know Your Enemy: <br>
+Worms at War</font></font><br>
+<i><font face="Palatino,Book Antiqua"><font size=+1>The
+Not so Friendly World of Cyberspace</font></font></i>
+<br>
+<p>
+<a href="mailto:project@honeynet.org?Subject=Honeynet Project">Honeynet
+Project</a>
+<br>
+<a href="http://www.honeynet.org">
+http://www.honeynet.org</a>
+<br>
+Last Modified: 9 November, 2000
+</center>
+
+<p>
+<b><font face="Palatino,Book Antiqua">This paper was born out of pure
+curiosity. Our Honeynet was being pounded with UDP port 137 and TCP port
+139 scans.&nbsp; The network was getting scanned 5-10 times a day on these
+ports, something was up.&nbsp; The goal was to learn what these scans were
+all about.&nbsp; What was out&nbsp; in the Internet causing all of this
+activity?&nbsp; Based on the ports, we assumed that the scans were looking
+for Window's based vulnerabilities.&nbsp; The plan was to setup a Win98
+honeypot, sit back and wait.&nbsp; We didn't have to wait long.
+A continuation of the <a href="../enemy.html">
+Know Your Enemy</a> series.</font></b>
+<br>&nbsp;
+<p>
+<b><font face="Palatino,Book Antiqua"><font size=+2>The Setup</font></font></b>
+<br>
+During a one month period (20 Sep - 20 Oct) we confirmed 
+<a href="../worm/worm.txt">524 unique NetBIOS scans</a> 
+on our Honeynet network.&nbsp; These scans consisted
+of UDP port 137 (NetBIOS Naming Service) probes, usually followed by TCP
+port 139 (NetBIOS Session Service).&nbsp; That is large number of scans
+probing for a specific service, something was up, we decided to find out
+what. The Honeynet network does not advertises itself to the Internet.&nbsp;
+We just put the systems on our network and sit back and wait.&nbsp; That
+means that the majority of scans we receive are random scans that are most
+likely probing most of the Internet.&nbsp; These are the same threats your
+systems face.&nbsp; As these scans are probing Windows based systems, they
+are most likely focusing on the common homeowner with a DSL or Cable connection
+to their house.&nbsp; We are not talking about corporate espionage or web
+defacing, we are talking about simple homeowners as the target here.&nbsp;
+We were curious, who was doing these scans, what was their purpose, and
+why the vast number of scans?&nbsp; Was this a coordinated effort, were
+these worms?&nbsp; Lots of questions.&nbsp; So, we decided to find out
+and added a Windows98 honeypot to our collection.&nbsp; We did a default
+installation of Windows98 and enabled sharing of the C: drive. A Windows98
+honeypot may not sound glamorous, however there are several things to be
+gained from setting up such a system.
+<ol>
+<li>
+Windows98 represent a huge number of systems connected to the Internet,
+and this number is growing fast.&nbsp; Typically, these are the systems
+with the weakest security, as homeowners are the ones using these systems.&nbsp;
+What people do not realize is the risk these systems are exposed to, as
+many of them have dedicated connections to the Internet.</li>
+
+<li>
+This was our first crack at a Microsoft based honeypot.&nbsp; The plan
+was to start off simple and learn from there.</li>
+</ol>
+On October 31, the system was installed, sharing was enabled, and connected
+to the Internet.&nbsp; We then sat back and waited, the wait was not long.
+<p><b><font face="Palatino,Book Antiqua"><font size=+2>The First Worm</font></font></b>
+<br>Less then 24 hours later we received our first visitor.&nbsp; The system
+216.191.92.10 (host-010.hsf.on.ca) scanned the network looking for Window
+systems.&nbsp; It found ours and began querying it.&nbsp; If first began
+by getting the system name and determine if sharing was enabled.&nbsp;
+Once it determined that sharing was enabled, it then probed for specific
+binaries on our system.&nbsp; Its goal was to determine if a specific worm
+was installed, and if not, then it would install itself.&nbsp; In this
+case, the specific worm was not installed.&nbsp; The worm is known as the
+"<a href="http://www.symantec.com/avcenter/venc/data/w32.hllw.bymer.html">Win32.Bymer
+Worm</a> ".&nbsp; The purpose of this worm is to take advantage of your
+CPU cycles to help an individual win the <a href="http://www.distributed.net">distributed.net</a>
+contest.&nbsp; Distributed.net is group that uses the idle process of distributed
+computers for various challenges (such as cracking <a href="http://www.distributed.net/rc5/">RC5-64
+challenge</a>).&nbsp; People are awarded prizes if the crack the challenge.&nbsp;
+The more computers and CPU cycles you have under your control, the better
+of your chances of winning.&nbsp; In our case, someone "volunteered" us
+for the project by installing the worm on our system.
+<p>An individual (in this case, <b><i>bymer@inec.kiev.ua</i></b>), created
+a self replicating worm that would find vulnerable Window systems and install
+the distributed.net client on unsuspecting systems.&nbsp; Once installed
+and executed, the worm utilizes your CPU cycles in attempt to help the
+author win the contest.&nbsp; Meanwhile the worm begins probing for other
+vulnerable systems it can take over.&nbsp; The goal is&nbsp; to have access
+to as many computers and CPU cycles as possible.&nbsp; This process grows
+exponentially as more systems are compromised.&nbsp; Lets take a look at
+the attack using packet captures of the network traffic (in this case,
+we used the <a href="http://www.snort.org">IDS sniffer snort</a>).&nbsp;
+For more advanced analysis of the NetBIOS protocol, you may want to use
+a protcol analyzer, such as the free utility <a href="http://www.ethereal.com">Ethereal</a>.&nbsp;
+Throughout the sniffer traces below, the system 172.16.1.105 is the IP
+address of the honeypot.
+<p>The worm begins by first checking to see if the file<b> <i>dnetc.ini</i></b>
+is on the system.&nbsp; This is the standard configuration file for the
+distributed.net client.&nbsp; This configuration file tells the main server
+who should get credit for all the CPU cycles.&nbsp; This is also the person
+that most likely created the worm.&nbsp; Here we see the packet trace where
+the remote system (NetBIOS name GHUNT, account GHUNT, domain HSFOPROV)
+copies the configuration file to our honeypot.
+<p><tt><font color="#FF0000">11/01-15:29:18.580895 216.191.92.10:2900 ->
+172.16.1.105:139</font></tt>
+<br><tt><font color="#FF0000">TCP TTL:112 TOS:0x0 ID:50235&nbsp; DF</font></tt>
+<br><tt><font color="#FF0000">*****PA* Seq: 0x12930C6&nbsp;&nbsp; Ack:
+0x66B7068&nbsp;&nbsp; Win: 0x2185</font></tt>
+<br><tt><font color="#FF0000">00 00 00 5B FF 53 4D 42 2D 00 00 00 00 00
+01 00&nbsp; ...[.SMB-.......</font></tt>
+<br><tt><font color="#FF0000">00 00 00 00 00 00 00 00 00 00 00 00 00 C8
+57 1C&nbsp; ..............W.</font></tt>
+<br><tt><font color="#FF0000">00 00 82 D1 0F FF 00 00 00 07 00 91 00 16
+00 20&nbsp; ...............</font></tt>
+<br><tt><font color="#FF0000">00 DC 1C 00 3A 10 00 00 00 00 00 00 00 00
+00 00&nbsp; ....:...........</font></tt>
+<br><tt><font color="#FF0000">00 00 00 1A 00 5C 57 49 4E 44 4F 57 53 5C
+53 59&nbsp; .....</font><b><font color="#000000">\WINDOWS\SY</font></b></tt>
+<br><tt><font color="#FF0000">53 54 45 4D 5C 64 6E 65 74 63 2E 69 6E 69
+00&nbsp;&nbsp;&nbsp;&nbsp; </font><b><font color="#000000">STEM\dnetc.ini</font></b><font color="#FF0000">.</font></tt>
+<p><font color="#000000">Below we see the actual file transfer of the configuration
+file <b><i>dnetc.ini</i></b>.&nbsp; Notice who is the point of contact
+for this, <b><i>bymer@inec.kiev.ua</i></b>.&nbsp; This is the individual
+that receives the credit for the CPU cycles, and most likely the author
+of the worm attacking us.</font>
+<p><tt><font color="#FF0000">11/01-15:29:18.729337 216.191.92.10:2900 ->
+172.16.1.105:139</font></tt>
+<br><tt><font color="#FF0000">TCP TTL:112 TOS:0x0 ID:50747&nbsp; DF</font></tt>
+<br><tt><font color="#FF0000">*****PA* Seq: 0x1293125&nbsp;&nbsp; Ack:
+0x66B70AD&nbsp;&nbsp; Win: 0x2140</font></tt>
+<br><tt><font color="#FF0000">00 00 01 11 FF 53 4D 42 0B 00 00 00 00 00
+01 00&nbsp; .....SMB........</font></tt>
+<br><tt><font color="#FF0000">00 00 00 00 00 00 00 00 00 00 00 00 00 C8
+57 1C&nbsp; ..............W.</font></tt>
+<br><tt><font color="#FF0000">00 00 02 D2 05 00 00 E1 00 00 00 00 00 E1
+00 E4&nbsp; ................</font></tt>
+<br><tt><font color="#FF0000">00 01 E1 00 5B 6D 69 73 63 5D 20 0D 0A 70
+72 6F&nbsp; ....[misc] ..pro</font></tt>
+<br><tt><font color="#FF0000">6A 65 63 74 2D 70 72 69 6F 72 69 74 79 3D
+4F 47&nbsp; ject-priority=OG</font></tt>
+<br><tt><font color="#FF0000">52 2C 52 43 35 2C 43 53 43 2C 44 45 53 0D
+0A 0D&nbsp; R,RC5,CSC,DES...</font></tt>
+<br><tt><font color="#FF0000">0A 5B 70 61 72 61 6D 65 74 65 72 73 5D 0D
+0A 69&nbsp; .[parameters]..</font><b><font color="#000000">i</font></b></tt>
+<br><tt><font color="#FF0000">64 3D 62 79 6D 65 72 40 69 6E 65 63 2E 6B
+69 65&nbsp; </font><b><font color="#000000">d=bymer@inec.kie</font></b></tt>
+<br><tt><font color="#FF0000">76 2E 75 61 0D 0A 0D 0A 5B 72 63 35 5D 0D
+0A 66&nbsp; </font><b><font color="#000000">v.ua</font></b><font color="#FF0000">....[rc5]..f</font></tt>
+<br><tt><font color="#FF0000">65 74 63 68 2D 77 6F 72 6B 75 6E 69 74 2D
+74 68&nbsp; etch-workunit-th</font></tt>
+<br><tt><font color="#FF0000">72 65 73 68 6F 6C 64 3D 36 34 0D 0A 72 61
+6E 64&nbsp; reshold=64..rand</font></tt>
+<br><tt><font color="#FF0000">6F 6D 70 72 65 66 69 78 3D 32 31 37 0D 0A
+0D 0A&nbsp; omprefix=217....</font></tt>
+<br><tt><font color="#FF0000">5B 6F 67 72 5D 0D 0A 66 65 74 63 68 2D 77
+6F 72&nbsp; [ogr]..fetch-wor</font></tt>
+<br><tt><font color="#FF0000">6B 75 6E 69 74 2D 74 68 72 65 73 68 6F 6C
+64 3D&nbsp; kunit-threshold=</font></tt>
+<br><tt><font color="#FF0000">31 36 0D 0A 0D 0A 5B 74 72 69 67 67 65 72
+73 5D&nbsp; 16....[triggers]</font></tt>
+<br><tt><font color="#FF0000">0D 0A 72 65 73 74 61 72 74 2D 6F 6E 2D 63
+6F 6E&nbsp; ..restart-on-con</font></tt>
+<br><tt><font color="#FF0000">66 69 67 2D 66 69 6C 65 2D 63 68 61 6E 67
+65 3D&nbsp; fig-file-change=</font></tt>
+<br><tt><font color="#FF0000">79 65 73 0D 0A&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+yes..</font></tt>
+<p><font color="#000000">The next file to be transferred is the actual
+distributed.net client,<b> <i>dnetc.exe</i></b>.&nbsp; This is a valid
+executable, it is not malicious in nature.&nbsp; We confirmed this by taking
+an MD5 signature of the client found on the honeypot. We then downloaded the
+client from distributed.net and took an MD5 hash of the dnetc.exe client.
+The MD5 hashes were identical (d0fd1f93913af70178bff1a1953f5f7d), indicating that
+this code is not the worm.  This is the binary that uses your CPU cycles as 
+part of the distributed.net challenge.&nbsp; However,
+the worm intends on using this binary without your permission nor knowledge,
+all for the author's gain.</font>
+<p><tt><font color="#FF0000">11/01-15:34:09.044822 216.191.92.10:2900 ->
+172.16.1.105:139</font></tt>
+<br><tt><font color="#FF0000">TCP TTL:112 TOS:0x0 ID:33084&nbsp; DF</font></tt>
+<br><tt><font color="#FF0000">*****PA* Seq: 0x129341A&nbsp;&nbsp; Ack:
+0x66B71C0&nbsp;&nbsp; Win: 0x202D</font></tt>
+<br><tt><font color="#FF0000">00 00 00 5B FF 53 4D 42 2D 00 00 00 00 00
+01 00&nbsp; ...[.SMB-.......</font></tt>
+<br><tt><font color="#FF0000">00 00 00 00 00 00 00 00 00 00 00 00 00 C8
+57 1C&nbsp; ..............W.</font></tt>
+<br><tt><font color="#FF0000">00 00 04 26 0F FF 00 00 00 07 00 91 00 16
+00 20&nbsp; ...&amp;...........</font></tt>
+<br><tt><font color="#FF0000">00 FE 1D 00 3A 10 00 00 00 00 00 00 00 00
+00 00&nbsp; ....:...........</font></tt>
+<br><tt><font color="#FF0000">00 00 00 1A 00 5C 57 49 4E 44 4F 57 53 5C
+53 59&nbsp; .....</font><b><font color="#000000">\WINDOWS\SY</font></b></tt>
+<br><tt><font color="#FF0000">53 54 45 4D 5C 64 6E 65 74 63 2E 65 78 65
+00&nbsp;&nbsp;&nbsp;&nbsp; </font><b><font color="#000000">STEM\dnetc.exe.</font></b></tt>
+<p><font color="#000000">Next we see the actual worm being transferred,
+<b><i>msi216.exe</i></b>.
+This is the self-replicating worm that randomly probes for vulnerable systems
+and copies itself.&nbsp; This is the worm that is most likely causing a
+great number of the scans we are receiving.</font>
+<p><tt><font color="#FF0000">11/01-15:37:23.083643 216.191.92.10:2900 ->
+172.16.1.105:139</font></tt>
+<br><tt><font color="#FF0000">TCP TTL:112 TOS:0x0 ID:40765&nbsp; DF</font></tt>
+<br><tt><font color="#FF0000">*****PA* Seq: 0x12C146A&nbsp;&nbsp; Ack:
+0x66C248B&nbsp;&nbsp; Win: 0x20B2</font></tt>
+<br><tt><font color="#FF0000">00 00 00 5C FF 53 4D 42 2D 00 00 00 00 00
+01 00&nbsp; ...\.SMB-.......</font></tt>
+<br><tt><font color="#FF0000">00 00 00 00 00 00 00 00 00 00 00 00 00 C8
+57 1C&nbsp; ..............W.</font></tt>
+<br><tt><font color="#FF0000">00 00 02 F3 0F FF 00 00 00 07 00 91 00 16
+00 20&nbsp; ...............</font></tt>
+<br><tt><font color="#FF0000">00 C0 1E 00 3A 10 00 00 00 00 00 00 00 00
+00 00&nbsp; ....:...........</font></tt>
+<br><tt><font color="#FF0000">00 00 00 1B 00 5C 57 49 4E 44 4F 57 53 5C
+53 59&nbsp; .....</font><b><font color="#000000">\WINDOWS\SY</font></b></tt>
+<br><tt><font color="#FF0000">53 54 45 4D 5C 6D 73 69 32 31 36 2E 65 78
+65 00&nbsp; </font><b><font color="#000000">STEM\msi216.exe</font></b><font color="#FF0000">.</font></tt>
+<p><font color="#000000">Last, the worm first modifies then uploads
+a new <b><i>win.ini</i></b> file.&nbsp; The worm does this so the system
+will execute the worm upon reboot.&nbsp; Remember, it can be difficult
+to remotely execute a file on a Win98 system, so this is the worm's method
+of getting it executed&nbsp;&nbsp; It does this by adding itself to the
+boot up configuration file <b><i>c:\windows\win.ini</i></b> and has itself
+loaded during the boot process.&nbsp; The new <b><i>win.ini</i></b> file
+is then uploaded to our compromised system.</font>
+<p><tt><font color="#FF0000">11/01-15:38:55.352810 216.191.92.10:2900 ->
+172.16.1.105:139</font></tt>
+<br><tt><font color="#FF0000">TCP TTL:112 TOS:0x0 ID:1342&nbsp; DF</font></tt>
+<br><tt><font color="#FF0000">******A* Seq: 0x12C6F55&nbsp;&nbsp; Ack:
+0x66C95FC&nbsp;&nbsp; Win: 0x1FBF</font></tt>
+<br><tt><font color="#FF0000">00 00 0B 68 FF 53 4D 42 1D 00 00 00 00 00
+01 00&nbsp; ...h.SMB........</font></tt>
+<br><tt><font color="#FF0000">00 00 00 00 00 00 00 00 00 00 00 00 00 C8
+57 1C&nbsp; ..............W.</font></tt>
+<br><tt><font color="#FF0000">00 00 02 F9 0C 0D 00 61 19 00 00 00 00 00
+00 00&nbsp; .......a........</font></tt>
+<br><tt><font color="#FF0000">00 00 00 00 00 00 00 00 00 2C 0B 3C 00 2D
+0B 00&nbsp; .........,.&lt;.-..</font></tt>
+<br><tt><font color="#FF0000">5B 77 69 6E 64 6F 77 73 5D 0D 0A 6C 6F 61
+64 3D&nbsp; [windows]..</font><b><font color="#000000">load=</font></b></tt>
+<br><tt><font color="#FF0000">63 3A 5C 77 69 6E 64 6F 77 73 5C 73 79 73
+74 65&nbsp; </font><b><font color="#000000">c:\windows\syste</font></b></tt>
+<br><tt><font color="#FF0000">6D 5C 6D 73 69 32 31 36 2E 65 78 65 0D 0A
+72 75&nbsp; </font><b><font color="#000000">m\msi216.exe</font></b><font color="#FF0000">..ru</font></tt>
+<br><tt><font color="#FF0000">6E 3D 0D 0A 4E 75 6C 6C 50 6F 72 74 3D 4E
+6F 6E&nbsp; n=..NullPort=Non</font></tt>
+<br><tt><font color="#FF0000">65 0D 0A 0D 0A 5B 44 65 73 6B 74 6F 70 5D
+0D 0A&nbsp; e....[Desktop]..</font></tt>
+<br><tt><font color="#FF0000">57 61 6C 6C 70 61 70 65 72 3D 28 4E 6F 6E
+65 29&nbsp; Wallpaper=(None)</font></tt>
+<br><tt><font color="#FF0000">0D 0A 54 69 6C 65 57 61 6C 6C 70 61 70 65
+72 3D&nbsp; ..TileWallpaper=</font></tt>
+<br><tt><font color="#FF0000">31 0D 0A 57 61 6C 6C 70 61 70 65 72 53 74
+79 6C&nbsp; 1..WallpaperStyl</font></tt>
+<br><tt><font color="#FF0000">65 3D 30 0D 0A 0D 0A 5B 69 6E 74 6C 5D 0D
+0A 69&nbsp; e=0....[intl]..i</font></tt>
+<p><font color="#000000">That's it.&nbsp; The Worm is now complete and
+the honeypot has now been infected.&nbsp; All that needs to happen now
+is the system to reboot and the Worm will take effect.&nbsp; Once it takes
+effect, several things happen.</font>
+<ol>
+<li>
+<font color="#000000">The distributed.net client begins, using the CPU
+cycles in the contest.</font></li>
+
+<li>
+<font color="#000000">The Worm begins searching for other vulnerable systems
+to replicate itself to.&nbsp; This is what is causing all the UDP 137 and
+TCP 139 scans.</font></li>
+
+<li>
+<font color="#000000">The worm may add the following keys to the registry.</font></li>
+</ol>
+<tt><font color="#000000">HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Run\Bymer.scanner
+HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\RunServices\Bymer.scanner</font></tt>
+<p><font color="#000000">One may think that having to wait for a system
+to reboot is an unreliable way to execute.&nbsp; Keep in mind, the targets
+are Windows desktop systems.&nbsp; How often do you reboot your Windows
+desktop?</font>
+<p><b><font face="Palatino,Book Antiqua"><font size=+2>The Second Worm</font></font></b>
+<br>It is a busy week, and our second worm comes the next day.&nbsp; This worm
+is a similar variation to the first worm, its purpose is to gain control
+of your CPU cycles to help an individual in the distributed.net contest.&nbsp;
+The only difference with this worm is that all the files are combined in
+one single executable, <b><i>wininit.exe</i></b>.&nbsp; Default installations
+of Windows98 already have a binary <b><i>c:\windows\wininit.exe</i> </b>installed
+on their system.&nbsp; This worm calls itself the same in an attempt to obscure
+itself, but installs itself in <b><i>c:\windows\system\wininit.exe</i></b>.&nbsp;
+If anyone should happen to stumble across the binary, the author hopes
+they will assume it is part of the operating system and not a worm.&nbsp;
+This is a very common tactic amongst the blackhat community. Once executed,
+the worm acts just as the previous worm does.&nbsp;&nbsp; Below we see
+our honeypot being infected with the second worm, <b><i>wininit.exe</i>.&nbsp;
+</b>The remote systems has the NetBIOS name WINDOW, account WINDOW, domain
+LVCW.
+<p><tt><font color="#FF0000">11/02-21:41:17.287743 216.234.204.69:2021
+-> 172.16.1.105:139</font></tt>
+<br><tt><font color="#FF0000">TCP TTL:113 TOS:0x0 ID:38619&nbsp; DF</font></tt>
+<br><tt><font color="#FF0000">*****PA* Seq: 0x21CC0AC&nbsp;&nbsp; Ack:
+0xCE6736B&nbsp;&nbsp; Win: 0x2185</font></tt>
+<br><tt><font color="#FF0000">00 00 00 5D FF 53 4D 42 2D 00 00 00 00 00
+01 00&nbsp; ...].SMB-.......</font></tt>
+<br><tt><font color="#FF0000">00 00 00 00 00 00 00 00 00 00 00 00 00 D0
+4F 1F&nbsp; ..............O.</font></tt>
+<br><tt><font color="#FF0000">00 00 84 EE 0F FF 00 00 00 07 00 91 00 16
+00 20&nbsp; ...............</font></tt>
+<br><tt><font color="#FF0000">00 20 BB 01 3A 10 00 00 00 00 00 00 00 00
+00 00&nbsp; . ..:...........</font></tt>
+<br><tt><font color="#FF0000">00 00 00 1C 00 5C 57 49 4E 44 4F 57 53 5C
+53 59&nbsp; .....</font><b><font color="#000000">\WINDOWS\SY</font></b></tt>
+<br><tt><font color="#FF0000">53 54 45 4D 5C 77 69 6E 69 6E 69 74 2E 65
+78 65&nbsp; </font><b><font color="#000000">STEM\wininit.exe</font></b></tt>
+<br><tt><font color="#FF0000">00</font></tt>
+<p><font color="#000000">Once the worm has installed itself, the remote
+system then modifies the win.ini file to ensure it is executed on reboot.&nbsp;
+Notice how this executable adds to the already modified <b><i>c:\windows\win.ini</i></b>
+file, which has an entry from our previous worm.</font>
+<p><tt><font color="#FF0000">11/02-21:41:48.538643 216.234.204.69:2021
+-> 172.16.1.105:139</font></tt>
+<br><tt><font color="#FF0000">TCP TTL:113 TOS:0x0 ID:21212&nbsp; DF</font></tt>
+<br><tt><font color="#FF0000">******A* Seq: 0x22021C9&nbsp;&nbsp; Ack:
+0xCE68EC7&nbsp;&nbsp; Win: 0x1FA3</font></tt>
+<br><tt><font color="#FF0000">00 00 0B 68 FF 53 4D 42 1D 00 00 00 00 00
+01 00&nbsp; ...h.SMB........</font></tt>
+<br><tt><font color="#FF0000">00 00 00 00 00 00 00 00 00 00 00 00 00 D0
+4F 1F&nbsp; ..............O.</font></tt>
+<br><tt><font color="#FF0000">00 00 84 F4 0C 0F 00 7F 19 00 00 00 00 00
+00 00&nbsp; ................</font></tt>
+<br><tt><font color="#FF0000">00 00 00 00 00 00 00 00 00 2C 0B 3C 00 2D
+0B 00&nbsp; .........,.&lt;.-..</font></tt>
+<br><tt><font color="#FF0000">5B 77 69 6E 64 6F 77 73 5D 0D 0A 6C 6F 61
+64 3D&nbsp; [windows]..</font><b><font color="#000000">load=</font></b></tt>
+<br><tt><font color="#FF0000">63 3A 5C 77 69 6E 64 6F 77 73 5C 73 79 73
+74 65&nbsp; </font><b><font color="#000000">c:\windows\syste</font></b></tt>
+<br><tt><font color="#FF0000">6D 5C 77 69 6E 69 6E 69 74 2E 65 78 65 20
+63 3A&nbsp; </font><b><font color="#000000">m\wininit.exe</font></b><font color="#FF0000">
+c:</font></tt>
+<br><tt><font color="#FF0000">5C 77 69 6E 64 6F 77 73 5C 73 79 73 74 65
+6D 5C&nbsp; \windows\system\</font></tt>
+<br><tt><font color="#FF0000">6D 73 69 32 31 36 2E 65 78 65 0D 0A 72 75
+6E 3D&nbsp; msi216.exe..run=</font></tt>
+<br><tt><font color="#FF0000">0D 0A 4E 75 6C 6C 50 6F 72 74 3D 4E 6F 6E
+65 0D&nbsp; ..NullPort=None.</font></tt>
+<br><tt><font color="#FF0000">0A 0D 0A 5B 44 65 73 6B 74 6F 70 5D 0D 0A
+57 61&nbsp; ...[Desktop]..Wa</font></tt>
+<p><font color="#000000">Upon reboot, this worm, like the previous one,
+will start up and begin the same processes.&nbsp; The thing to keep in
+mind is that the remote systems attacking us are most likely not evil blackhats
+out to own the world.&nbsp; More likely the remote systems are innocent
+bystanders who were compromised.&nbsp; The owners have no idea there is
+a worm running on their system, nor any idea their computers are being
+used to scan for and exploit other vulnerable systems on the Internet.&nbsp;
+However, their systems have dedicated connections to the Internet, making
+them primary targets.&nbsp; Even systems that dial-up to the Internet are
+at risk for such attacks.&nbsp; There is a 'war' going on as automated
+worms seek out and compromise other systems.&nbsp; They then use these
+systems as launching points to gain control of other systems, such as our
+honeypot.</font>
+<p><b><font face="Palatino,Book Antiqua"><font size=+2>The Day After</font></font></b>
+<br>The next day, other variations of the same worm probed our honeypot.&nbsp;
+They first determine if sharing is enabled, and if so, they check if the
+same version of the worm is&nbsp; already installed.&nbsp; In both cases
+for this day, the worm was already installed, so the remote systems left
+us alone.&nbsp; The first remote system checked to see if the <b><i>wininit.exe</i></b>
+worm was installed.&nbsp; Later on that day, another system&nbsp; checked
+to see if the worm <b><i>msi216.exe</i></b> was installed.
+<p><tt><font color="#FF0000">11/03-04:42:11.596636 210.111.145.180:2341
+-> 172.16.1.105:139</font></tt>
+<br><tt><font color="#FF0000">TCP TTL:115 TOS:0x0 ID:12574&nbsp; DF</font></tt>
+<br><tt><font color="#FF0000">*****PA* Seq: 0x2345C04&nbsp;&nbsp; Ack:
+0xE65CC94&nbsp;&nbsp; Win: 0x2171</font></tt>
+<br><tt><font color="#FF0000">00 00 00 5D FF 53 4D 42 2D 00 00 00 00 00
+01 00&nbsp; ...].SMB-.......</font></tt>
+<br><tt><font color="#FF0000">00 00 00 00 00 00 00 00 00 00 00 00 00 D8
+B5 1D&nbsp; ................</font></tt>
+<br><tt><font color="#FF0000">00 00 81 3E 0F FF 00 00 00 07 00 91 00 16
+00 20&nbsp; ...>...........</font></tt>
+<br><tt><font color="#FF0000">00 3A 26 02 3A 10 00 00 00 00 00 00 00 00
+00 00&nbsp; .:&amp;.:...........</font></tt>
+<br><tt><font color="#FF0000">00 00 00 1C 00 5C 57 49 4E 44 4F 57 53 5C
+53 59&nbsp; .....</font><b><font color="#000000">\WINDOWS\SY</font></b></tt>
+<br><tt><font color="#FF0000">53 54 45 4D 5C 77 69 6E 69 6E 69 74 2E 65
+78 65&nbsp; </font><b><font color="#000000">STEM\wininit.exe</font></b></tt>
+<br><tt><font color="#FF0000">00&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+.</font></tt>
+<p>Remote system, NetBIOS name MATTHEW, account MPYLE, domain MPYLE
+<p><tt><font color="#FF0000">11/03-16:39:38.723572 216.23.6.24:3946 ->
+172.16.1.105:139</font></tt>
+<br><tt><font color="#FF0000">TCP TTL:113 TOS:0x0 ID:3309&nbsp; DF</font></tt>
+<br><tt><font color="#FF0000">*****PA* Seq: 0x1A7105F&nbsp;&nbsp; Ack:
+0x10F8C0F2&nbsp;&nbsp; Win: 0x2159</font></tt>
+<br><tt><font color="#FF0000">00 00 00 5B FF 53 4D 42 2D 00 00 00 00 00
+01 00&nbsp; ...[.SMB-.......</font></tt>
+<br><tt><font color="#FF0000">00 00 00 00 00 00 00 00 00 00 00 00 00 E0
+AD 20&nbsp; ...............</font></tt>
+<br><tt><font color="#FF0000">00 00 81 D9 0F FF 00 00 00 07 00 91 00 16
+00 20&nbsp; ...............</font></tt>
+<br><tt><font color="#FF0000">00 14 CE 02 3A 10 00 00 00 00 00 00 00 00
+00 00&nbsp; ....:...........</font></tt>
+<br><tt><font color="#FF0000">00 00 00 1A 00 5C 57 49 4E 44 4F 57 53 5C
+53 59&nbsp; .....</font><b><font color="#000000">\WINDOWS\SY</font></b></tt>
+<br><tt><font color="#FF0000">53 54 45 4D 5C 64 6E 65 74 63 2E 69 6E 69
+00&nbsp;&nbsp;&nbsp;&nbsp; </font><b><font color="#000000">STEM\dnetc.ini</font></b><font color="#FF0000">.</font></tt>
+<p><font color="#000000">The fun beings the following day, on November
+04th. First, it begins with the system 207.224.254.206 (dialupF206.sttl.uswest.net,
+NetBIOS name SOCCERDOG, account SCOTT, domain RONS) checking to see if
+<b><i>dnetc.ini</i></b> is installed on our honeynet. It determines that
+the binary is already installed and leaves the honeypot allone. That makes
+a total of 5 system probing our honeypot for this worm in 3 days.&nbsp;
+Later on that day our honeypot initiates a http connection to the system
+bymer.boom.ru.&nbsp; This connection was most likely initiated by the worm
+and is attempting to update the master server.&nbsp; The system bymer.boom.ru
+was most likely at one time the master controller for this worm.&nbsp;
+However, the system name bymer.boom.ru now resolves to an RFC 1918 IP address,
+192.168.0.1.&nbsp; Most likely an attempt by the domain owner to stop the
+worm.&nbsp; Also, for the worm to execute like this, the system would need
+to have been rebooted at some time.&nbsp; That is the one thing we have
+not figured out, if the system was rebooted, and if so, how.&nbsp; One
+of the drawbacks of a Windows based honeypot is the limited availability
+of information, due to nonexistent logs.&nbsp;&nbsp; Below we see the honeypot
+initiating a connection to bymer.boom.ru, most likely the master server
+for the worm.</font>
+<p><tt><font color="#FF0000">11/04-23:56:38.855453 172.16.1.105:1027 ->
+192.168.0.1:80</font></tt>
+<br><tt><font color="#FF0000">TCP TTL:127 TOS:0x0 ID:65300&nbsp; DF</font></tt>
+<br><tt><font color="#FF0000">**S***** Seq: 0x17AF8D9A&nbsp;&nbsp; Ack:
+0x0&nbsp;&nbsp; Win: 0x2000</font></tt>
+<br><tt><font color="#FF0000">TCP Options => MSS: 1460 NOP NOP SackOK</font></tt>
+<p><font color="#000000">Immediately following this the <b><i>dnetc.exe</i></b>
+client connects to the distributed.net server and begins a data transfer.&nbsp;
+This is part of the the distributed.net client and not part of the worm
+replication process.&nbsp; However, this is the end purpose of the worm,
+to burn CPU cycles and upload the results to distributed.net.</font>
+<p><tt><font color="#FF0000">11/04-23:56:40.286898 172.16.1.105:1029 ->
+204.152.186.139:2064</font></tt>
+<br><tt><font color="#FF0000">TCP TTL:127 TOS:0x0 ID:1301&nbsp; DF</font></tt>
+<br><tt><font color="#FF0000">*****PA* Seq: 0x17AF8F47&nbsp;&nbsp; Ack:
+0xBE445ED3&nbsp;&nbsp; Win: 0x2238</font></tt>
+<br><tt><font color="#FF0000">AE 23 E2 77 F6 42 91 51 3E 61 3F EE 86 7F
+EE 8B&nbsp; .#.w.B.Q>a?.....</font></tt>
+<br><tt><font color="#FF0000">CE 9E 9D 28 16 BD 4B C5 5E DB FA 62 A6 FA
+A8 FF&nbsp; ...(..K.^..b....</font></tt>
+<br><tt><font color="#FF0000">EF 19 57 9C 37 38 06 39 7F 56 B4 D6 C7 75
+63 73&nbsp; ..W.78.9.V...ucs</font></tt>
+<br><tt><font color="#FF0000">0F 94 12 10 57 B2 C0 AD 9F D1 6F 4A E7 F0
+1D E7&nbsp; ....W.....oJ....</font></tt>
+<br><tt><font color="#FF0000">30 0E CC 84 78 2D 7B 21 C0 4C 29 BE 08 6A
+D8 5B&nbsp; 0...x-{!.L)..j.[</font></tt>
+<br><tt><font color="#FF0000">50 89 86 F8 98 A8 35 95 E0 C6 E4 32 28 E5
+92 CF&nbsp; P.....5....2(...</font></tt>
+<br><tt><font color="#FF0000">71 04 41 6C B9 22 F0 09 01 41 9E A6 49 60
+4D 43&nbsp; q.Al."...A..I`MC</font></tt>
+<br><tt><font color="#FF0000">91 7E FB E0 D9 9D AA 7D 21 BC 59 1A 69 DB
+07 B7&nbsp; .~.....}!.Y.i...</font></tt>
+<br><tt><font color="#FF0000">B1 F9 B6 54 FA 18 64 F1 42 37 13 8E 8A 55
+C2 2B&nbsp; ...T..d.B7...U.+</font></tt>
+<br><tt><font color="#FF0000">CF 32 45 19 1A 93 1F 65 62 B1 CE 02 AA D0
+7C 9E&nbsp; .2E....eb.....|.</font></tt>
+<br><tt><font color="#FF0000">C5 46 78 29 F0 13 97 04&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+.Fx)....</font></tt>
+<p><font color="#000000">Once the upload is complete, the worm kicks into
+high gear and begins searching the Internet for other vulnerable system
+to replicate and spread itself. It randomly selects IP addresses and begins
+scanning those systems on ports 137 and 139.&nbsp; The worm identifies
+vulnerable systems (similar to our honeypot) and the replicates itself to
+the remote system. Compromised systems like these are one of the reasons
+for the high number of scans we have seen.&nbsp;&nbsp;&nbsp; Keep in mind,
+the Honeynet environment is designed to block any malicious traffic initiated
+by a compromised honeypot, so these scans never reach the Internet.&nbsp;
+The Honeynet is kind of like the 'roach motel'.&nbsp; It lets the bad guys
+in, but won't let them out.&nbsp; Below you see the worm attempting to
+find other vulnerable systems.</font>
+<p><tt><font color="#FF0000">11/04-23:58:05.946299 172.16.1.105:137 ->
+39.202.248.187:137</font></tt>
+<br><tt><font color="#FF0000">UDP TTL:127 TOS:0x0 ID:30485</font></tt>
+<br><tt><font color="#FF0000">Len: 58</font></tt>
+<br><tt><font color="#FF0000">0E 94 00 10 00 01 00 00 00 00 00 00 20 43
+4B 41&nbsp; ............ CKA</font></tt>
+<br><tt><font color="#FF0000">41 41 41 41 41 41 41 41 41 41 41 41 41 41
+41 41&nbsp; AAAAAAAAAAAAAAAA</font></tt>
+<br><tt><font color="#FF0000">41 41 41 41 41 41 41 41 41 41 41 41 41 00
+00 21&nbsp; AAAAAAAAAAAAA..!</font></tt>
+<br><tt><font color="#FF0000">00 01</font></tt>
+<p><font color="#000000">One thing I found interesting was that the configuration
+file<b> <i>c:\windows\win.ini</i></b> had been modified once again, most
+likely by the <b><i>wininit.exe</i></b> worm.&nbsp; The worm removed the
+entry of the
+<b><i>msi216.exe</i></b> worm from the startup configuration
+file, leaving itself in control.&nbsp;&nbsp;&nbsp; Also, the <b><i>dnetc.ini</i></b>
+file had been modified once again, changing the email address from <b><i><tt>bymer@inec.kiev.ua
+</tt></i></b>to the new email address <b><i><tt>bymer@ukrpost.net.&nbsp;
+</tt></i></b>This indicates that the second worm attempted to take over
+the first by eliminating it from the configuration files.&nbsp; This shows
+an extremely aggressive nature of worms, where one worm competes with another
+worm for real estate, or in this case CPU cycles..</font>
+<p><font color="#000000">If you would like to review this data yourself,
+you can download the file <a href="http://stan.ksni.net/~lance/win98.tar.gz">win98.tar.gz</a>.&nbsp;
+This gzipped file contains the four days of snort captures in binary format
+and all of the worms binaries on the honeypot, including <b><i>wininit.exe</i></b>
+and <b><i>msi216.exe</i></b>.&nbsp; Keep in mind, these are worms found
+in the wild, so you are working with malicious material.&nbsp; Be extremely
+careful working with it.&nbsp; For those of you who prefer not to mess
+with the worm binaries, you can download 
+<a href="http://stan.ksni.net/~lance/win98-wo.tar.gz">win98-wo.tar.gz</a>.&nbsp;
+This gzipped file contains everything win98.tar.gz contains, except for the two 
+worm binaries <b><i>wininit.exe</i></b> and <b><i>msi216.exe</i></b>.</font>
+<p>
+<b><font face="Palatino,Book Antiqua"><font size=+2>Conclusion</font></font></b>
+<br><font color="#000000">We have covered how in a 4 day period a Windows98
+system was compromised by several worms.&nbsp; These worms are automated
+probes that identify and exploit vulnerable systems, exponentially replicating
+themselves.&nbsp; Its systems like these that are most likely scanning
+the Internet for NetBIOS vulnerabilities.&nbsp; This does not imply that
+every NetBIOS scan you receive is an automated worm.&nbsp; Nor that all
+worms are based for distributed.net.&nbsp; Consider if this worm was modified
+to look for confidential information on your system.&nbsp; The worm could
+easily search for documents with the words finance, confidential, secret
+or SSN.&nbsp; Once it found these documents, the information could easily
+be forwarded to an anonymous email account, IRC channel, or compromised
+webserver.&nbsp; The attacks are limited only by the imagination of the
+black-hat community.</font>
+
+<p>
+<b><font face="Palatino,Book Antiqua"><font size=+2>Acknowledgements</font></font></b>
+<br>
+In addition to the Honeynet project, this paper is the result of hard
+work and great input from two key individuals.&nbsp; A big thank you goes
+out to <a href="mailto:keydet89@yahoo.com">H Carvey&nbsp;</a> and <a href="mailto:ryan@securityfocus.com">Ryan
+Russell.</a> They were the main contributers to the technical decoding
+of the events that happened here.  For additional information about these
+vulnerabilities, both <a href="http://www.distributed.net/trojans.html">
+distributed.net</a> and <a href="http://www.cert.org/incident_notes/IN-2000-02.html">
+CERT</a> have posted advisories.
+
+<br>
+<p>
+<br>
+<center>      
+<a href="http://project.honeynet.org">
+<img src="http://project.honeynet.org/small.gif" alt="The Honeynet Project" border=0>
+</a>
+</center>
+<br>
+<p>
+<br>
+</body>
+</html>

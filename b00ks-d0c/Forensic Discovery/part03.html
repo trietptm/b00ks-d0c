@@ -1,0 +1,57 @@
+<!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN"
+	"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+<title> Forensic discovery - Part III</title>
+<body>
+
+<h1>Part III: Beyond the Abstractions </h1>
+
+In the final part of the book we move beyond abstractions, leaving the
+notions of files and processes behind while delving into the longevity
+and decay of data in the file system and in memory.
+
+<p>
+
+Users certainly contribute to the decline of deleted data by running
+programs
+and by saving and creating files.  But computers also have the
+power
+to destroy.  In the background, processes are steadily eating away
+at the prior state of the computer.
+Despite this we found that deleted information can be surprisingly
+resilient against destruction: while everyone knows it's easy to
+lose data that you want to keep, less known is that data can be
+quite hard to destroy completely. Behind the scenes, systems produce
+multiple
+copies as they move information through a variety of locations.
+
+<p>
+
+In chapter 7, "Persistence of deleted file information", we show that
+large amounts of deleted file content and meta data can survive intact
+for extended periods of time, and provide a roughly estimated half-life
+for deleted data on file systems.
+
+<p>
+
+Chapter 8, "Beyond processes", shows examples of persistence of
+information in main memory.  Different classes of data survive in
+very different ways, including decrypted content of encrypted files.
+Hardware platforms and operating systems can create important differences
+in persistence, and we finish the book discussing the tenacity of memory and
+the difficulty of clearing it through software.
+
+<p>
+
+This is perhaps the most challenging and unusual part of the book.
+The experiments often took several months before we had enough data
+to draw any conclusions.  In particular the experiments with main
+memory might be the most impractical if not challenging to use in
+investigations.  The results, however, are of general importance,
+for they provide a deeper insight into the complexity that is
+inherent in what might seem like a simple investigative situation.
+
+</body>
+</html>

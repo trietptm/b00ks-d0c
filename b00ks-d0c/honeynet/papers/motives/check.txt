@@ -1,0 +1,32 @@
+	
+	####### Check List ########
+
+
+Review your system for the following symptoms, any one of which may 
+indicate your system has been compromised by the individuals covered
+in this paper.
+
+The directory /dev/.. /sun2 exists
+The directory /var/spool/.recent exists
+Solaris installation has /bin/pico
+You can login as root, with the password ABcDeFgHiJ
+Any logs or user files containing the user account 're' or 'r'.
+
+If your system is running the Solaris operating system,
+you can compare the MD5 signature of the following binaries to 
+Sun's online MD5 fingerprint database.
+http://sunsolve.Sun.COM/pub-cgi/show.pl?target=content/content7
+
+/bin/ls
+/bin/login
+/bin/find
+/bin/ps
+/sbin/netstat
+
+If possible, use a trusted copy of 'ls' 'find' or 'ps' to
+review your system, as the binaries may be trojaned.
+If you find any one of these signatures, you have most
+likely been compromised.  If you have been compromised,
+you may want to consider reinstalling the operating system
+and applying the latest patches.  For more information, see
+http://www.cert.org/nav/recovering.html.

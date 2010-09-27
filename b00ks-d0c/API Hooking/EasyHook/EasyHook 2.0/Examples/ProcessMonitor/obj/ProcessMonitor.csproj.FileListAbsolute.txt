@@ -1,0 +1,7 @@
+D:\Projects\EasyHook 2.0.0.0\Examples\Debug\ProcessMonitor.exe
+D:\Projects\EasyHook 2.0.0.0\Examples\Debug\ProcessMonitor.pdb
+D:\Projects\EasyHook 2.0.0.0\Examples\ProcessMonitor\obj\Debug\ResolveAssemblyReference.cache
+D:\Projects\EasyHook 2.0.0.0\Examples\ProcessMonitor\obj\Debug\ProcessMonitor.Properties.Resources.resources
+D:\Projects\EasyHook 2.0.0.0\Examples\ProcessMonitor\obj\Debug\ProcessMonitor.csproj.GenerateResource.Cache
+D:\Projects\EasyHook 2.0.0.0\Examples\ProcessMonitor\obj\Debug\ProcessMonitor.exe
+D:\Projects\EasyHook 2.0.0.0\Examples\ProcessMonitor\obj\Debug\ProcessMonitor.pdb

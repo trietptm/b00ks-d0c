@@ -1,0 +1,136 @@
+#
+# All the probes my network received in a sinlge month.
+# Starting 15 April, 2000
+#
+# You can lookup the IDS number signatures at
+# Max Vision's ArachNIDs database at 
+# http://www.whitehats.com
+#
+# Signatures captured using snort
+# http://www.snort.org
+#
+
+Apr 15 13:40:41 mozart snort[7002]: IDS212/dns-zone-transfer: 207.239.115.11:2307 -> 172.16.1.101:53
+Apr 16 02:45:37 mozart snort[7483]: IDS13/portmap-request-mountd: 200.190.13.181:1372 -> 172.16.1.107:111
+Apr 16 07:17:06 mozart snort[7483]: IDS128/web-cgi-phf: 200.190.8.220:55220 -> 172.16.1.107:80
+Apr 16 14:54:20 mozart snort[7483]: IDS171/Ping zeros: 24.201.15.148 -> 172.16.1.101
+Apr 16 14:54:20 mozart snort[7483]: IDS171/Ping zeros: 24.201.15.148 -> 172.16.1.105
+Apr 16 14:54:20 mozart snort[7483]: IDS171/Ping zeros: 24.201.15.148 -> 172.16.1.107
+Apr 17 06:02:32 mozart snort[8255]: IDS198/SYN FIN Scan: 195.116.152.104:0 -> 172.16.1.101:111
+Apr 17 06:02:32 mozart snort[8255]: IDS198/SYN FIN Scan: 195.116.152.104:0 -> 172.16.1.107:111
+Apr 17 09:45:28 mozart snort[8255]: IDS198/SYN FIN Scan: 195.116.152.104:0 -> 172.16.1.105:111
+Apr 19 08:00:19 mozart snort[3515]: IDS/DNS-version-query: 212.25.75.196:1723 -> 172.16.1.101:53
+Apr 20 01:26:00 mozart snort[3515]: IDS212/dns-zone-transfer: 24.234.45.60:4075 -> 172.16.1.107:53
+Apr 20 03:49:38 mozart snort[3515]: IDS/DNS-version-query: 216.123.23.5:4349 -> 172.16.1.101:53
+Apr 20 03:49:39 mozart snort[3515]: IDS/DNS-version-query: 216.123.23.5:4350 -> 172.16.1.107:53
+Apr 20 21:48:55 mozart snort[12353]: IDS246/large-icmp: 129.142.224.3 -> 172.16.1.107
+Apr 20 21:48:55 mozart snort[12353]: IDS246/large-icmp: 129.142.224.3 -> 172.16.1.107
+Apr 20 22:46:57 mozart snort[12632]: IDS/RPC-rpcinfo-query: 207.239.115.11:3619 -> 172.16.1.107:111
+Apr 20 22:48:13 mozart snort[12632]: IDS159/Ping Microsoft Windows: 216.228.4.204 -> 172.16.1.101
+Apr 20 22:46:57 mozart snort[12632]: IDS/RPC-rpcinfo-query: 207.239.115.11:3619 -> 172.16.1.107:111
+Apr 20 22:48:13 mozart snort[12632]: IDS159/Ping Microsoft Windows: 216.228.4.204 -> 172.16.1.101
+Apr 20 23:00:33 mozart snort[12657]: IDS171/Ping zeros: 216.228.4.133 -> 172.16.1.101
+Apr 21 11:01:27 mozart snort[12777]: IDS/DNS-version-query: 207.236.55.76:4039 -> 172.16.1.101:53
+Apr 21 11:01:28 mozart snort[12777]: IDS/DNS-version-query: 207.236.55.76:4044 -> 172.16.1.107:53
+Apr 22 08:36:29 mozart snort[743]: IDS/DNS-version-query: 212.244.222.100:1368 -> 172.16.1.101:53
+Apr 22 08:36:29 mozart snort[743]: IDS/DNS-version-query: 212.244.222.100:1328 -> 172.16.1.107:53
+Apr 22 10:00:23 mozart snort[743]: IDS/DNS-version-query: 212.244.222.100:4401 -> 172.16.1.101:53
+Apr 22 10:00:23 mozart snort[743]: IDS/DNS-version-query: 212.244.222.100:4369 -> 172.16.1.107:53
+Apr 22 11:31:58 mozart snort[743]: IDS/RPC-rpcinfo-query: 213.1.152.141:728 -> 172.16.1.101:111
+Apr 23 01:33:51 mozart snort[3919]: IDS128/web-cgi-phf: 12.68.183.51:4310 -> 172.16.1.107:80
+Apr 23 01:33:56 mozart snort[3919]: IDS218/web-cgi-test-cgi: 12.68.183.51:4312 -> 172.16.1.107:80
+Apr 23 01:34:01 mozart snort[3919]: IDS235/web-cgi-handler: 12.68.183.51:4314 -> 172.16.1.107:80
+Apr 23 01:34:20 mozart snort[3919]: IDS219/web-cgi-perl-exe: 12.68.183.51:4321 -> 172.16.1.107:80
+Apr 23 01:34:36 mozart snort[3919]: IDS224/web-cgi-nph-test-cgi: 12.68.183.51:4328 -> 172.16.1.107:80
+Apr 23 21:01:18 mozart snort[3919]: spp_portscan: PORTSCAN DETECTED from 210.178.9.125
+Apr 23 21:01:25 mozart snort[3919]: IDS/RPC-rpcinfo-query: 210.178.9.125:850 -> 172.16.1.101:111
+Apr 24 07:09:47 mozart snort[4663]: IDS212/dns-zone-transfer: 210.145.109.162:12540 -> 172.16.1.107:53
+Apr 24 09:23:01 mozart snort[4663]: IDS7/SourcePortTraffic-53-tcp: 202.42.233.186:53 -> 172.16.1.107:111
+Apr 24 09:23:01 mozart snort[4663]: IDS7/SourcePortTraffic-53-tcp: 202.42.233.186:53 -> 172.16.1.101:111
+Apr 24 09:23:05 mozart snort[4663]: IDS/RPC-rpcinfo-query: 202.42.233.186:637 -> 172.16.1.107:111
+Apr 24 09:23:10 mozart snort[4663]: IDS/RPC-rpcinfo-query: 202.42.233.186:638 -> 172.16.1.101:111
+Apr 24 14:36:55 mozart snort[4663]: IDS162/Ping Nmap 2.36BETA: 194.222.156.169 -> 172.16.1.105
+Apr 24 14:43:35 mozart snort[4663]: IDS162/Ping Nmap 2.36BETA: 194.222.156.169 -> 172.16.1.101
+Apr 24 14:46:46 mozart snort[4663]: spp_portscan: PORTSCAN DETECTED from 194.222.156.169
+Apr 24 14:46:46 mozart snort[4663]: IDS27/FIN Scan: 194.222.156.169:56693 -> 172.16.1.107:482
+Apr 24 17:59:51 mozart snort[4663]: IDS/DNS-version-query: 212.244.97.121:2891 -> 172.16.1.101:53
+Apr 24 18:01:05 mozart snort[4663]: IDS/DNS-version-query: 212.244.97.121:3485 -> 172.16.1.107:53
+Apr 24 19:04:01 mozart snort[4663]: IDS213/ftp-passwd-retrieval: 194.222.156.169:1425 -> 172.16.1.107:21
+Apr 25 02:08:07 mozart snort[5875]: IDS/DNS-version-query: 63.226.81.13:4499 -> 172.16.1.107:53
+Apr 25 02:08:07 mozart snort[5875]: IDS/DNS-version-query: 63.226.81.13:4630 -> 172.16.1.101:53
+Apr 25 02:38:17 mozart snort[5875]: IDS/RPC-rpcinfo-query: 212.251.1.94:642 -> 172.16.1.107:111
+Apr 25 08:02:41 mozart snort[5875]: spp_portscan: PORTSCAN DETECTED from 24.9.255.53
+Apr 25 08:02:41 mozart snort[5875]: IDS/DNS-version-query: 24.9.255.53:2991 -> 172.16.1.101:53
+Apr 25 19:37:32 mozart snort[5875]: IDS230/web-cgi-space-wildcard: 198.173.35.164:4221 -> 172.16.1.107:80
+Apr 26 05:45:12 mozart snort[6283]: IDS212/dns-zone-transfer: 38.31.107.87:2291 -> 172.16.1.101:53
+Apr 26 06:43:05 mozart snort[6283]: IDS181/nops-x86: 63.226.81.13:1351 -> 172.16.1.107:53
+Apr 26 06:45:34 mozart snort[6283]: IDS175/socks-probe: 24.112.167.35:20 -> 172.16.1.107:1080
+Apr 26 06:52:10 mozart snort[6283]: IDS127/telnet-login-incorrect: 172.16.1.107:23 -> 213.28.22.189:4558
+Apr 26 10:39:12 mozart snort[621]: spp_portscan: PORTSCAN DETECTED from 204.72.244.72
+Apr 26 10:39:12 mozart snort[621]: IDS198/SYN FIN Scan: 204.72.244.72:53 -> 172.16.1.101:53
+Apr 26 10:39:12 mozart snort[621]: IDS198/SYN FIN Scan: 204.72.244.72:53 -> 172.16.1.107:53
+Apr 26 17:11:07 mozart snort[621]: IDS128/web-cgi-phf: 207.239.115.11:3536 -> 172.16.1.105:80
+Apr 26 17:11:17 mozart snort[621]: IDS/DNS-version-query: 207.239.115.11:4727 -> 172.16.1.105:53
+Apr 29 21:05:06 mozart snort[5358]: spp_portscan: PORTSCAN DETECTED from 212.109.2.136
+Apr 29 21:05:06 mozart snort[5358]: IDS198/SYN FIN Scan: 212.109.2.136:1080 -> 172.16.1.105:1080
+Apr 30 02:06:37 mozart snort[5750]: spp_portscan: PORTSCAN DETECTED from 202.185.32.60
+Apr 30 02:06:37 mozart snort[5750]: IDS198/SYN FIN Scan: 202.185.32.60:0 -> 172.16.1.101:143
+May 1 04:03:40 mozart snort[6038]: spp_portscan: PORTSCAN DETECTED from 63.203.1.60
+May 1 04:03:47 mozart snort[6038]: IDS8/telnet-daemon-active: 172.16.1.101:23 -> 63.203.1.60:3083
+May 1 04:03:47 mozart snort[6038]: IDS8/telnet-daemon-active: 172.16.1.101:23 -> 63.203.1.60:3215
+May 1 06:36:53 mozart snort[6038]: IDS212/dns-zone-transfer: 63.203.1.60:1089 -> 172.16.1.101:53
+May 2 16:28:05 mozart snort[6443]: IDS/DNS-version-query: 207.229.143.40:1708 -> 172.16.1.101:53
+May 2 16:28:40 mozart snort[6443]: IDS/DNS-version-query: 207.229.143.40:1715 -> 172.16.1.101:53
+May 2 17:01:43 mozart snort[6443]: IDS/DNS-version-query: 24.114.97.247:3429 -> 172.16.1.101:53
+May 3 19:17:53 mozart snort[6862]: spp_portscan: PORTSCAN DETECTED from 205.242.148.1
+May 3 19:17:53 mozart snort[6862]: IDS198/SYN FIN Scan: 205.242.148.1:0 -> 172.16.1.101:109
+May 3 20:34:15 mozart snort[6862]: IDS/RPC-rpcinfo-query: 200.241.69.1:3697 -> 172.16.1.101:111
+May 3 23:33:55 mozart snort[6862]: spp_portscan: PORTSCAN DETECTED from 210.97.123.3
+May 3 23:33:55 mozart snort[6862]: IDS198/SYN FIN Scan: 210.97.123.3:0 -> 172.16.1.105:109
+May 4 04:59:35 mozart snort[7541]: spp_portscan: PORTSCAN DETECTED from 205.242.148.1
+May 4 04:59:35 mozart snort[7541]: IDS198/SYN FIN Scan: 205.242.148.1:0 -> 172.16.1.101:109
+May 4 15:32:17 mozart snort[7541]: IDS/DNS-version-query: 63.224.195.25:2293 -> 172.16.1.101:53
+May 4 19:14:34 mozart snort[7541]: IDS/DNS-version-query: 12.10.173.249:3434 -> 172.16.1.101:53
+May 5 06:06:52 mozart snort[8324]: IDS212/dns-zone-transfer: 211.38.95.197:2262 -> 172.16.1.101:53
+May 5 08:35:48 mozart snort[8324]: IDS17/portmap-request-cmsd: 216.32.113.137:953 -> 172.16.1.101:111
+May 5 08:35:49 mozart snort[8324]: IDS17/portmap-request-cmsd: 216.32.113.137:955 -> 172.16.1.101:111
+May 5 08:35:53 mozart snort[8324]: IDS20/portmap-request-sadmind: 139.130.213.4:901 -> 172.16.1.101:111
+May 5 08:35:54 mozart snort[8324]: IDS247/large-udp: 139.130.213.4:902 -> 172.16.1.101:32773
+May 5 08:36:53 mozart snort[8324]: IDS17/portmap-request-cmsd: 216.32.113.137:954 -> 172.16.1.101:111
+May 5 08:36:53 mozart snort[8324]: IDS17/portmap-request-cmsd: 216.32.113.137:956 -> 172.16.1.101:111
+May 5 16:04:21 mozart snort[8324]: IDS/RPC-rpcinfo-query: 195.117.3.58:970 -> 172.16.1.101:111
+May 5 17:04:28 mozart snort[8324]: spp_portscan: PORTSCAN DETECTED from 212.109.2.136
+May 5 17:04:28 mozart snort[8324]: IDS198/SYN FIN Scan: 212.109.2.136:109 -> 172.16.1.107:109
+May 5 17:04:28 mozart snort[8324]: IDS198/SYN FIN Scan: 212.109.2.136:109 -> 172.16.1.101:109
+May 5 17:42:24 mozart snort[8324]: IDS/DNS-version-query: 203.155.66.1:2277 -> 172.16.1.101:53
+May 5 17:46:28 mozart snort[8324]: IDS/DNS-version-query: 203.155.66.1:1831 -> 172.16.1.101:53
+May 5 17:52:58 mozart snort[8324]: IDS/DNS-version-query: 203.155.66.1:1482 -> 172.16.1.101:53
+May 5 17:58:16 mozart snort[8324]: IDS/DNS-version-query: 203.155.66.1:3310 -> 172.16.1.101:53
+May 5 20:29:05 mozart snort[8324]: IDS/DNS-version-query: 203.155.66.1:1723 -> 172.16.1.101:53
+May 5 20:32:01 mozart snort[8324]: IDS/DNS-version-query: 203.155.66.1:3132 -> 172.16.1.101:53
+May 6 08:54:09 victim1.honeynet.org named[4991]: unapproved AXFR from [212.72.63.240].4429 for UICMBA.edu (not master/slave)
+May 6 19:44:52 victim1.honeynet.org named[4991]: unapproved AXFR from [211.39.95.226].4958 for UICMBA.edu (not master/slave)
+May 7 19:22:22 victim1.honeynet.org named[4991]: unapproved AXFR from [216.190.204.3].1866 for UICMBA.edu (not master/slave)
+May 8 12:42:05 victim1.honeynet.org named[4991]: unapproved AXFR from [203.75.204.245].4542 for UICMBA.edu (not master/slave)
+May 8 21:53:03 lisa snort[387]: IDS118/Traceroute ICMP: 24.21.107.249 -> 172.16.1.104
+May 8 21:58:40 lisa snort[387]: IDS162/Ping Nmap 2.36BETA: 24.21.107.249 -> 172.16.1.104
+May 8 21:58:41 lisa snort[387]: spp_portscan: PORTSCAN DETECTED from 24.21.107.249
+May 8 21:59:06 lisa snort[387]: IDS162/Ping Nmap 2.36BETA: 24.21.107.249 -> 172.16.1.104
+May 8 22:16:06 lisa snort[387]: IDS115/Traceroute UDP: 206.117.161.81:34536 -> 172.16.1.104:33457
+May 8 22:16:45 lisa snort[387]: IDS115/Traceroute UDP: 206.117.161.80:34546 -> 172.16.1.104:33446
+May 8 22:17:35 lisa snort[387]: IDS115/Traceroute UDP: 206.117.161.81:34561 -> 172.16.1.104:33457
+May 9 08:02:54 lisa snort[2370]: spp_portscan: PORTSCAN DETECTED from 216.61.43.89
+May 9 08:21:02 lisa snort[2370]: spp_portscan: PORTSCAN DETECTED from 204.2.13.22
+May 9 09:39:28 lisa snort[2370]: IDS212/dns-zone-transfer: 206.133.123.19:2421 -> 172.16.1.101:53
+May 9 11:03:20 lisa snort[2370]: IDS197/trin00-master-to-daemon: 137.132.17.202:2984 -> 172.16.1.107:27444
+May 9 11:03:20 lisa snort[2370]: IDS187/trin00-daemon-to-master-pong: 172.16.1.107:1025 -> 137.132.17.202:31335
+May 9 11:26:04 lisa snort[2370]: IDS197/trin00-master-to-daemon: 137.132.17.202:2988 -> 172.16.1.107:27444
+May 9 11:26:04 lisa snort[2370]: IDS187/trin00-daemon-to-master-pong: 172.16.1.107:1027 -> 137.132.17.202:31335
+May 9 14:04:55 lisa snort[2370]: spp_portscan: PORTSCAN DETECTED from 206.133.123.19
+May 9 14:04:57 lisa snort[2370]: IDS8/telnet-daemon-active: 172.16.1.101:23 -> 206.133.123.19:1720
+May 9 14:04:58 lisa snort[2370]: IDS8/telnet-daemon-active: 172.16.1.101:23 -> 206.133.123.19:1741
+May 9 14:05:08 lisa snort[2370]: IDS128/web-cgi-phf: 206.133.123.19:1815 -> 172.16.1.107:80
+May 9 14:05:09 lisa snort[2370]: IDS218/web-cgi-test-cgi: 206.133.123.19:1820 -> 172.16.1.107:80
+May 9 14:05:09 lisa snort[2370]: IDS235/web-cgi-handler: 206.133.123.19:1824 -> 172.16.1.107:80
+May 9 20:48:14 lisa snort[2370]: IDS197/trin00-master-to-daemon: 137.132.17.202:3076 -> 172.16.1.107:27444
+May 9 20:48:14 lisa snort[2370]: IDS187/trin00-daemon-to-master-pong: 172.16.1.107:1028 -> 137.132.17.202:31335

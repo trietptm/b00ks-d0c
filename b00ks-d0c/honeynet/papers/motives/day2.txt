@@ -1,0 +1,463 @@
+:D1ck :miller
+:D1ck :;)
+:b0b :commerce?
+:b0b :lame nick ;-)
+:D1ck :?
+:b0b :d1ckey
+:D1ck :heh
+:D1ck :welp
+:D1ck :one bot from one box
+:D1ck :we dont have nicks
+:D1ck :so we name it from the ops
+:D1ck :hehe
+:D1ck :ips
+:D1ck : commerce (~werd@commerce.example.COM) (I
+:b0b :lol
+:b0b :ath0 my phriend 
+:D1ck :so what's up b0b 
+:D1ck ::/
+:D1ck :commerce nick ath0
+:D1ck :i coded ath0.c
+:b0b :kewl
+:D1ck :there was no need
+:D1ck :but
+:D1ck :i was boed
+:D1ck :accept my stuff
+:b0b :cut/paste?
+:D1ck :nope
+:D1ck :coded my self
+:D1ck :m4ry coded a elite port 80 httpd 0-day trojan
+:D1ck :he is mad elite in C
+:b0b :i know.. i was asking you to cut/paste the relevany code :-)
+:D1ck :heh
+:D1ck :bd.tar.gz is a backdoor for bindshell, i made that too
+:D1ck ::)
+:b0b :uff trunciated
+:b0b :kewl
+:D1ck :don't distro vortex3.c, its not mine :/
+:D1ck :hehe
+:D1ck :<b0b> uff trunciated
+:D1ck :i dint understand what that word means :/
+:D1ck :be EASY ON ENGALISH WITH ME #@#$@#$@#%$#@
+:D1ck ::)
+:b0b :what's vor-ticks-3?
+:b0b :hehe
+:b0b :chud gai thee
+:b0b :carriage returns
+:D1ck :A TROJAN
+:D1ck :on receiving a string
+:D1ck :on port 80
+:D1ck :it opens a bind shell
+:D1ck :like on a string'asad'
+:D1ck :it opens port 234323,
+:D1ck :or some thing
+:D1ck :hehehe
+:D1ck :LOL
+:b0b :bhai jaan..
+:b0b :if it is i c.. do some ereet shiats like subnet pining with ath0 etc.
+:D1ck :y0h f0h b4r
+:b0b :would be a whole lot faster than a bash scrwipt
+:b0b :me and angie already did the subnet ping shiats tc.
+:b0b :but C would rawk
+:b0b :0wn even
+:D1ck :yep
+:D1ck :i`ll do it
+:b0b :kewl
+:D1ck :but 
+:D1ck :shell script is a better idea.
+:D1ck :or i1ll have to write codes for gethostname()
+:b0b :and make it fork to background eggdrop ishtyle :-)
+:b0b :and loop
+:D1ck :abd work on errors
+:D1ck :hehe
+:D1ck :yep
+:b0b :so if we wanna fux0r one isp.. all we do is ./fuck
+:b0b :so if we wanna fux0r one isp.. all we do is ./fuck <subnet>
+:D1ck : DCC Auto-closing idle dcc SEND to b0b
+:D1ck :bind,sock.
+:D1ck :ah
+:D1ck :yep
+:b0b :do the gethostbyname() shiats foo
+:b0b :or what good are ur m4d C skillz?
+:b0b :send again
+:b0b :btw, i'm going to be learning C soon too inshallah
+:b0b :the we'll have C fights
+:b0b :yipeeee
+:b0b :i'll insult you in code
+:b0b :kekekeke
+:D1ck :i`ll do it ;)
+:D1ck :i made this ftp site i`ll upload it 
+:D1ck :just for k1dd13, all private stuff
+:D1ck :ls /root/ftp
+:D1ck :bd   botpack  dos      hack-irc-session  local  scan   spoof
+:D1ck :bnc  clone    exploit  kit               login  sniff
+:D1ck :oki
+:D1ck :i`ll do 
+:D1ck :hahahaha
+:b0b :and once we develop m4d C skillz.. we'll develop D
+:D1ck :kekekeke
+:b0b :the ultimate in URDU coding
+:b0b :eeeeeeeeeeeekekekekekekekekekeke
+:b0b :grep == dhoond
+:b0b :no no
+:b0b :find == dhoond
+:b0b :locate == madarcho-dhond
+:m4ry :MILLER@&*(#^*(@%^#*(&@
+:b0b :export == duramad
+:b0b :m4ry 
+:b0b :i was just doing some concept shiats for D
+:b0b :the ultimate in URDU coding
+:b0b :the base for urdunix
+:m4ry :HAHAHAHAHAHAHAHAHAHAHAH
+:b0b :export == duramad
+:b0b :find == dhoond
+:b0b :locate == madarchod-dhoond
+:b0b :exit == lun
+:b0b :BitchX == kutti
+:b0b :eehee
+:b0b :first.. lets develop BitchX in URDU
+:b0b :KuttiX
+:m4ry :l33t
+:m4ry :run == bhago
+:m4ry :LOL
+:m4ry :HAHAHAHA
+:m4ry :KuttiX.. LOL
+:b0b :eehee
+:b0b :./kick == /thudda
+:m4ry :D1ck
+:D1ck :miller
+:D1ck :u there?
+:D1ck :i got d/c
+:b0b :./op ==/ooperbitha
+:D1ck :some one is dosing me :)
+:b0b :no.. it's my friend bubloo
+:b0b :OF COURSE I'M HERE DAMMIT 
+:D1ck :m4ry 
+:D1ck :m4ry 
+:b0b :btw guys...
+:D1ck :y0h
+:b0b :guess how many hosts i have in my bclist?
+:D1ck :b0b  how many?
+:D1ck :udp flood > *
+:m4ry :.yo yo
+:m4ry :b0b: 28
+:m4ry :b0b: 5
+:D1ck :it literally rapes bandwith.
+:m4ry :how close ami?
+:m4ry :# telnet napster.com 80
+:m4ry :Trying 208.184.216.230...
+:m4ry :Connected to napster.com.
+:m4ry :Escape character is '^]'.
+:m4ry :HEAD / HTTP/1.1
+:m4ry :SYN FLOOD > *
+:b0b :phuck yew
+:D1ck :heh m4ry
+:b0b :2066 bloody 
+:m4ry :b0b: how many?
+:b0b :the scan is reaheaheaheahly slow
+:m4ry :HAHAHAHA
+:m4ry :aww
+:m4ry :ur not l33t :P~
+:m4ry :l33t hax0rs have 3 bcasts
+:m4ry :which return thouussannndsss of pings
+:m4ry :(in my dreams)
+:m4ry :hehe
+:b0b :ehehehehe
+:b0b :this is one BIG ass bc
+:b0b :who wants a taste?
+:b0b :just 100 pings?
+:D1ck :HAHAHAHAH
+:D1ck :syn  0wns y3w niggah
+:D1ck ::
+:D1ck :HAHAHAHAHAHA
+:D1ck :g|ngah
+:D1ck :b0b: take broadscan by pshysoid
+:D1ck :NOT ME
+:D1ck :
+:D1ck ::)
+:D1ck :me and J4n3 and m4ry have TONS TONS TONS bandwith :/
+:D1ck :we use it on h4r33 
+:D1ck :heh
+:D1ck :h4r33 is ultra lame
+:D1ck :
+:b0b :lol
+:D1ck :not worth a thought
+:D1ck ::)
+:D1ck :hehe
+:D1ck :cricket match is funny
+:b0b :damn
+:b0b :gotta jet
+:b0b :later all
+:b0b :fuck cricket
+:b0b :winuke their arses
+:b0b :laters
+:D1ck :heh
+:D1ck :<b0b> damn
+:__m4ry :someone traceroute 192.168.4.191 UDP port 53
+:__m4ry :aww
+:__m4ry :he ran away again
+:__m4ry :__m4ry is viper@192.168.252.32 * 3r33t hackers don't read mIRC.doc
+:__m4ry :HEHE
+:D1ck :<b0b> gotta jet
+:D1ck :<b0b> later all
+:D1ck :<b0b> fuck cricket
+:D1ck :<b0b> winuke their arses
+:D1ck : SignOff b0b: 
+:D1ck :          ])
+:D1ck :he's gone for another 4 months 
+:D1ck :HEHE
+:D1ck :hhahaha
+:D1ck :;)
+:D1ck :m4ry
+:D1ck :help me
+:D1ck :sysop:(
+:HeatAz :yeah
+:HeatAz : :
+:HeatAz ::/
+:D1ck :hehehe
+:m4ry :helping
+:m4ry :sup?
+:D1ck :hahaha
+:m4ry :LOL
+:D1ck :well
+:D1ck :cat world | grep -v sysop > hell
+:D1ck :PLEASE
+:D1ck :;)
+:D1ck ::(
+:m4ry :lol
+:m4ry :egrep sysop /dev/world > /dev/hell
+:D1ck :heh
+:D1ck :m4ry
+:D1ck :i`m making a mad elite
+:D1ck :ftp site
+:m4ry :D1ck..
+:m4ry :could u please traceroute 192.168.4.191 -p 53
+:m4ry :?
+:D1ck :just for amoung us
+:D1ck :its got every thing
+:D1ck :# ls
+:D1ck :bd   botpack  dos      hack-irc-session  local  scan   spoof
+:D1ck :bnc  clone    exploit  kit               login  sniff
+:D1ck :k
+:D1ck :traceroute to 192.168..4.191 (192.168.4.191), 30 hops max, 38 byte packets
+:D1ck : 1  192.168.232.254 (192.168.232.254)  148.127 ms  151.760 ms  160.238 ms
+:D1ck : 2  192.168.232.3 (192.168.232.3)  154.337 ms  138.676 ms  139.853 ms
+:D1ck : 3  192.168.244.30 (192.168.244.30)  226.507 ms  225.720 ms
+:D1ck : 3  192.168.244.30 (192.168.244.30)  226.507 ms  225.720 ms *
+:D1ck : 4  192.168.129.13 (192.168.129.13)  1170.320 ms  1041.645 ms  1221.868 ms
+:D1ck :m4ry
+:D1ck :u have any thing elite to contribute there?
+:D1ck :[Sysop_(~sys@example.com)] hey
+:D1ck :YOH HA NA
+:D1ck :ROXZ
+:D1ck :HE JUST HIT A SIX
+:D1ck :ACTION is away: (Auto-Away after 15 mins) [BX-MsgLog On]
+:b0b :brb, reading mail etc.
+:b0b :ACTION is idle, mail shail [bX(l/on p/on)]
+:D1ck :J4n3 
+:J4n3 :hmmm
+:J4n3 :oye miller was here ?
+:D1ck :0 J4n3 
+:D1ck :y0 J4n3 
+:D1ck :yep
+:D1ck :millah was here.
+:D1ck ::)
+:J4n3 :ohhh
+:J4n3 :missed him
+:J4n3 ::(
+:J4n3 :D1ck gime a elitee rootkit for linux
+:D1ck :hehe
+:J4n3 :same like sparc if u have
+:D1ck :h3h
+:D1ck :oki d0kies
+:D1ck :i will have to ftp, i`ll send u at night ok?
+:J4n3 :hmm okies, i'm gonna sploit linux boxes of edu
+:D1ck :oki dokies
+:D1ck :brb booting
+:D1ck :to win
+:D1ck :g0ne
+:J4n3 :kkz
+:m4ry :D1ck
+:m4ry :you there?
+:Sp07 :
+:D1ck :hi
+:D1ck :i`m gonna be posting k1dd13's site
+:D1ck :soon
+:D1ck ::)
+:D1ck :J4n3
+:D1ck :miller send me that web.tar.gz
+:D1ck :;)
+:Sp07 :oh
+:D1ck :i want some one with good writing skillz
+:D1ck ::/
+:D1ck :to write About, FAQ
+:D1ck :etc
+:D1ck ::)
+:D1ck :Sp07
+:D1ck :hmm
+:D1ck :PLAYING GAMEs?
+:Sp07 :nope
+:Sp07 :going to ergister a chanenl
+:Sp07 :sdgf
+:D1ck :hHAHAHAHAH
+:D1ck :ok
+:Sp07 :
+:Sp07 :I should make a game.tcl
+:Sp07 :thingy
+:Sp07 :majigger
+:D1ck :haha
+:Sp07 :somthinge
+:Sp07 :cool
+:Sp07 :how about portscan tcl
+:Sp07 :I want to make something new
+:D1ck :tell me
+:D1ck :is this para write for About
+:D1ck :?
+:D1ck :K1dd13 came into existance almost a year ago. It was born out of hate and contempt for violence, atrocities and human rights violations against Muslims, specially the affectees in Kashmir. It was precipitated to bring the attention of world leaders and
+:Sp07 :?
+:D1ck :organizations to the issue in cyberspace which is today the leading source of communication.
+:D1ck :is that fair enuff?
+:Sp07 :eyah I guess
+:Sp07 :I thought it was like a hacking group
+:Sp07 :hehe
+:Sp07 :not some terrorist group
+:D1ck :what should i add.
+:D1ck :?
+:D1ck :it is a hacking
+:D1ck :group
+:D1ck :but
+:D1ck :hahahahaa
+:D1ck :man u dont know kashmir
+:D1ck :if u see the pictures
+:D1ck :anyway
+:D1ck :what else should i add.
+:D1ck :?
+:Sp07 :add some pornh
+:D1ck :hha
+:Sp07 :what is lahore ?
+:D1ck :lahore==city
+:D1ck :Sp07 give me a good quote
+:Sp07 :I thought it was the whore in french
+:Sp07 :ill go get a quote fo you
+:D1ck :heh
+:D1ck :ok
+:Sp07 :I dont know any in my ehad
+:Sp07 :hea
+:Sp07 :d
+:Sp07 :Silence is gold, if nothing better you hold.
+:Sp07 :tahts gay
+:Sp07 :I heard a quote before
+:Sp07 :goes something like "If you want peace, you must prepare for war"
+:Sp07 :I herad it in a simpsons episode
+:Sp07 :name = Stone Cold
+:Sp07 :e-mail = **
+:Sp07 :homepage = **
+:Sp07 :town = ??
+:Sp07 :country = ??
+:Sp07 :Quote = Don't bring a knife to a gun fight 
+:Sp07 :hahahaa
+:Sp07 :"Never flush the toilet while taking a shower."
+:Sp07 :how about Famous Last Words
+:Sp07 :-- Abraham Lincoln 
+:Sp07 :          A house divided against itself cannot stand.
+:Sp07 :          The Bible is not my book, and Christianity is not my religion. I could never give assent to the long,
+:Sp07 :          complicated statements of Christian dogma. 
+:Sp07 :          You can fool all the people some of the time, and some of the people all the time, but you cannot fool all
+:Sp07 :          the people all the time. 
+:Sp07 :          My great concern is not whether you have failed, but whether you are content with your failure. 
+:Sp07 :    
+:Sp07 :Nearly all men can stand adversity, but if you want to test a man's character, give him power. 
+:Sp07 :          Better to remain silent and be thought a fool then to speak out and remove all doubt. 
+:Sp07 :          Things may come to those who wait, but only the things left by those who hustle. 
+:Sp07 :          Most people are about as happy as they make up their minds to be. 
+:Sp07 :          Tact is the ability to describe others as they see themselves. 
+:Sp07 :          He has the right to criticize who has the heart to help. 
+:Sp07 :  
+:Sp07 :I destroy my enemy when I make him my friend. 
+:Sp07 :While one person hesitates because he feels inferior, the other is busy making mistakes and becoming
+:Sp07 :          superior. 
+:Sp07 :New opinions are always suspected, and usually opposed, without any other reason but because they
+:Sp07 :          are not already common. 
+:D1ck :hehe
+:Sp07 :-- Jay Leno
+:Sp07 :          If God doesn't destroy Hollywood Boulevard, he owes Sodom and Gomorrah an apology.
+:Sp07 :If you want truly to understand something, try to change it. 
+:Sp07 :teghres lots of quotes
+:Sp07 :I ilke lincolns quotes
+:Sp07 :-- Julius Caesar 
+:Sp07 :          I came, I saw, I conquered. 
+:Sp07 :thats me
+:D1ck :hahah
+:D1ck :J4n3
+:D1ck :when u come bak, message me it's important.
+:D1ck :wtf
+:D1ck :?
+:D1ck :J4n3
+:D1ck :J4n3
+:D1ck :J4n3
+:D1ck :Sp07
+:D1ck :make me a gRaF|X
+:D1ck :http://www9.example.com/k1dd13/'
+:Sp07 :send me photoshop and I will do it
+:Sp07 :hehe
+:D1ck :h3h
+:Sp07 :let me go check out the website
+:D1ck :(Sp07): let me go check out the website
+:D1ck :*** Disconnected
+:D1ck :*** Rejoined channel 
+:D1ck :what did u say after that
+:Sp07 :?
+:Sp07 :nothing
+:D1ck :u like the site
+:D1ck :what wil u give it out of 10
+:D1ck :?
+:D1ck :1
+:D1ck :?
+:D1ck :2
+:D1ck :?
+:D1ck :3?
+:D1ck :0?
+:Sp07 :.654564
+:Sp07 :hheh
+:Sp07 :its ok
+:D1ck ::(
+:Sp07 :it would be better if it wasnt on a free web thingy
+:Sp07 :www.k1dd13.com
+:Sp07 :or something
+:D1ck :yep
+:D1ck :i`m getting it
+:D1ck :k1dd13-online.org
+:D1ck :www.k1dd13-online.org
+:D1ck :it's under construction dude
+:D1ck ::P
+:D1ck :tons of typos
+:D1ck :needs tons of graphic
+:D1ck :needs tons of graphics
+:D1ck ::)
+:Sp07 :oh
+:D1ck :have to pout perl scripts
+:D1ck :tools
+:D1ck :archieve
+:D1ck :tons of work
+:D1ck ::;
+:D1ck ::;/
+:Sp07 :want to make a website for me
+:Sp07 :?
+:Sp07 :DICKWAD
+:D1ck :heh
+:Sp07 :hehe
+:D1ck :nO
+:Sp07 :potheads.net
+:D1ck :it's hard
+:D1ck :plus i`m getting it made:)
+:Sp07 :=(
+:D1ck :=(
+:Sp07 :any new exploits for redhat 6.1?
+:Sp07 :in the last month or so?
+:Sp07 :I just want to root my friends server so I can make my vhost since hes not doing it
+:D1ck :lol
+:Sp07 :nb       
+:Sp07 :hey
+:Sp07 :Im making an internet search tcl
+:_-Ahsan-_ :LOL
+:_-Ahsan-_ :was were

@@ -1,0 +1,90 @@
+<html>
+<head>
+	<title>Untitled</title>
+</head>
+
+<body bgcolor="#ffffff" text="#000000">
+<font face="verdana" size=2><i>
+Identifikacija tujih raèualnikov, bred predhodnega poznavanja le-teh<br></i>
+<br>
+<br><font size=5><strong>
+Pasivno odvzemanje prstnih odtisov<br></strong>
+<br></font>
+<br>
+<a href="mailto:lance@spitzner.net">Lance Spitzner</A><br>
+Zadnjiè spremenjeno: 24.05.2000<br>
+<br><b>
+<br>
+Eden najveèjih izzivov pri ukvarjanju z raèunalniško varnostjo je spoznavanje nepridipravov. Da bi razumeli nevarnosti in pretnje ter da bi se bolje zašèitili proti njim, <a href="pss_1.html">Poznajte Svojega Sovražnika</A>. Pasivno odvzemanje prstnih odtisov je metoda, s katero se lahko veè nauèimo o sovražnikih, ne da bi jih poznali. Natanèneje - ugotovite lahko, kakšen operacijski sistem sovražnik uporablja ter še veliko drugih podrobnosti o njem z nièemer drugim kot "vohljanjem" sledi. Èeprav metoda ni 100% zanesljiva, lahko dobite presenetljivo dobre rezultate. Craig Smith je razvil <a href="passfing.tar.gz">Orodje za pojmovno dokazovanje</a>, ki temelji na konceptih opisanih v tem dokumentu. Prav tako je skupina Subterrain razvila <a href="http://www.subterrain.net/projects/siphon">siphon</A>, orodje za pasivno poizvedovanje po odprtih vratih ter operacijskem sistemu na raèunalnikih. <br>
+<br></b>
+<br><font size=4>
+Odvzemanje prstnih odtisov<br>
+<br></font>
+<br>
+Kot je že v navadi, se identifikacija operacijskega sistema vrši s programi kot so queso ali nmap. Ta orodja operirajo na principu, da ima IP stack vsakega operacijskega sistema edinstvene znaèilnosti. Natanèneje, vsak operacijski sistem se drugaèe odzove na vrsto spaèenih paketkov. Vse kar je potrebno narediti je, da zgradimo bazo podatkov, v kateri je zapisano, kako se vsak operacijski sistem odzove na razliène paketke. Nato pa èe hoèemo izvedeti vrsto operacijskega sistema na doloèenem raèunalniku, mu samo pošljemo vrsto teh spaèenih paketkov, ugotovimo kako se odzove nanje, ter primerjamo rezultate z že prej omenjeno bazo podatkov. Fyodorjev <a href="http://www.insecure.org/nmap">nmap</A> je dobra izbira, èe se odloèimo za to metodologijo. Prav tako je napisal <a href="http://www.insecure.org/nmap/nmap-fingerprinting-article.html">dokument</A>, ki natanèno opisuje delo s tem programom.<br>
+<br>
+Pasivno odvzemanje prstnih odtisov temelji na podobnem konceptu, vendar v malce drugaèni izvedbi. Temelji na "vohljaških sledeh" iz oddaljenega raèunalnika. Namesto da aktivno povprašamo oddaljeni sistem, samo "ujamemo" paketke, ki jih oddaljeni raèunalnik pošlje nam. Glede na te sledi lahko ugotovimo vrsto operacijskega sistema, ki teèe na oddaljenem raèunalniku. Prav tako kot aktivno odvzemanje prstnih odtisov, pasivno temelji na principu, da ima IP stack vsakega operacijskega sistema svojevrstne znaèilnosti. Z analizo teh sledi in identifikacijo razlik, lahko ugotovimo vrsto operacijskega sistema na oddaljenem raèunalniku.<br>
+<br>
+<br><font size=4>
+Podpis<br>
+<br></font>
+<br>
+Ogledali si bomo 4 podroèja, glede na katera bomo ugotavljali vrsto operacijskega sistema (lahko so uporabljeni tudi drugi podpisi). Ti podpisi so:<br>
+<br>
+<ul><li>TTL - Time To Live (življenjska doba) posameznega paketka, ki jo doloèi operacijski sistem.</li><br>
+<li>Window Size (velikost okna) za posamezen paketek, ki jo doloèi operacijski sistem.</li><br>
+<li>DF - Don't Fragment (ne fragmentiraj) bit, ki ga nastavi operacijski sistem.</li><br>
+<li>TOS - Type Of Service (tip servisa), katerega vrednost nastavi operacijski sistem.</li></ul><br>
+<br>
+Z analizo teh faktorjev, lahko ugotovite vrsto operacijskega sistema. Ta naèin ni 100% zanesljiv in deluje z nekaterimi operacijskimi sistemi bolje, z nekaterimi slabše. Z samo enim podpisom ne moremo zanesljivo doloèiti vrsto operacijskega sistema, z primerjanjem veèih podpisov in z združevanjem informacij o njih pa lahko poveèamo zanesljivost indentifikacije oddaljenega sistema. Za lažje razumevanje bom navedel primer. Spodaj je vohljaèeva sled, ki smo jo ujeli, ko je nek oddaljeni sistem poslal paketek. Ta sistem me je napadel z mountd exploitom, zato bi se rad kaj veè nauèil o njem. Noèem uporabiti orodja finger ali nmap na tem sistemu, saj bi se tako lahko izdal. Zato raje prouèujem informacije pasivno. Ta podpis je bil ujet z uporabo <a href="http://www.clark.net/~roesch/security.html">snort-a</a>, mojega najljubšega vohljaèa. <br>
+<br><FONT face="Courier New,Courier" size=-1>
+04/20-21:41:48.129662 129.142.224.3:659 -> 172.16.1.107:604 <br>
+TCP TTL:45 TOS:0x0 ID:56257 <br>
+***F**A* Seq: 0x9DD90553   Ack: 0xE3C65D7   Win: 0x7D78 <br>
+<br></font>
+Glede na naše 4 kriterije, lahko ugotovimo naslednje: <br>
+<br>
+<ul><li>TTL: 45</li><br>
+<li>Window Size: 0x7D78 (32120 v decimalnem zapisu)</li><br>
+<li>DF: Don't Fragment bit je nastavljen</li><br>
+<li>TOS: 0x0</li></ul><br>
+<br>
+Nato te informacije primerjamo s tistimi v <a href="traces.txt">bazi podpisov</a>. Najprej pogledamo TTL, ki ga je uporabil oddaljeni raèunalnik. Iz naše sledi lahko vidimo, da je ima TTL vrednost 45. To najverjetneje pomeni, da je paketek naredil 19 "skokov" (hops) da je prišel do nas, tako da je bil zaèetni TTL nastavljen na 64. Glede na ta TTL izgleda, da je bil paketek poslan iz Linux ali FreeBSD raèunalnika (vendar mora biti veè podpisov dodanih v bazo podpisov). Ta TTL je potrjen èe uporabimo traceroute servis do oddaljenega raèunalnika. Èe vas moti to, da bi potem oddaljeni raèunalnik opazil, da ste ga "traceroute-ali", lahko TTL roèno nastavite (privzeto je nastavljen na 30 skokov) tako, da bo vrednost za 1 ali 2 manjša od 19. V tej primeru bi torej uporabili paketke, ki bi imeli TTL 18 (ali 17) in bi tako naredili 18 (oz. 17) skokov (traceroute -m 18). To nam da nekaj informacij (vkljuèno s internetnim ponudnikom, na katerega je priklopljen oddaljeni raèunalnik), brez da bi se v resnici "dotikali" oddaljenega raèunalnika. Za veè informacij o TTL-ju si oglejte <a href="http://www.switch.ch/docs/ttl_default.html">raziskavo o privzetih TTL vrednostih</a>.<br>
+<br>
+Naslednji korak je primerjanje velikosti okna (Window Size). Ugotovil sem, da je Window Size eno izmed efektivnih orodij zato, ker lahko vidimo kaksna velikost okna je bila uporabljena in kako pogosto se je spreminjala. V zgornjem podpisu vidimo, da je vrednost 0x7D78 - privzeta Window Size vrednost za Linux sisteme. Linux, FreeBSD in Solaris navadno uporabljajo vedno enak Window Size skozi celo sejo (kot je bila naša). Cisco usmerjevalniki (vsaj moj 2514) in Microsoft Windows/NT velikosti oken pa se konstantno spreminjajo. Ugotovil sem, da je Window Size bolj toèen, èe ga merimo po zaèetnem tro-stranskem rokovanju (zaradi poèasnega zaèetka TCP). Za veè informacij o Window Size-ju si oglejte Stevens-ovo knjigo "TCP/IP Illustrated, Volume 1", poglavje 20. <br>
+<br>
+Veèina sistemov uporablja paketke z nastavljenim DF bitom. Vseeno pa lahko na ta naèin identificiramo nekaj sistemov, ki DF bita ne uporabljajo (kot sta SCO ali OpenBSD). Po nadaljnjem testiranju, sem spoznal, da je tudi TOS omejene vrednosti. Izgleda, da temelji bolj na posameznih sejah kot na operacijskem sistemu. Z drugimi besedami: TOS-a ne doloèa operacijski sistem, ampak protokol, ki je uporabljen. TOS gotovo potrebuje še nekaj testiranja. Glede na gornje informacije, lahko predvsem TTL in Window Size primerjate z bazo podpisov in ugotovite operacijski sistem (v našem primeru Linux z jedrom 2.2.x).<br>
+<br>
+Vedite, da prav tako kot aktivno odvzemanje prstnih odtisov ima tudi pasivno doloèene omejitve. Prvo, aplikacije, ki izgradijo svoje lastne paketke (kot nmap, hunt, teardrop ipd.) ne bodo uporabili enakih podpisov kot operacijski sistem. Drugiè, relativno preprosto lahko oddaljeni raèunalnik po svoje nastavi TTL, Window Size, DF ali TOS vrednost za paketke. Primer spreminjanja TTL vrednosti:<br>
+<br>
+<a href="http://www.rvs.uni-hannover.de/people/voeckler/tune/EN/tune.html">Solaris</A>: <FONT face="Courier New,Courier" size=-1>ndd -set /dev/ip ip_def_ttl 'number'<br></font>
+Linux: <FONT face="Courier New,Courier" size=-1>echo 'number' > /proc/sys/net/ipv4/ip_default_ttl<br></font>
+<a href="http://support.microsoft.com/support/kb/articles/Q120/6/42.asp?LN=EN-US&SD=gn&FR=0">NT</A>: <FONT face="Courier New,Courier" size=-2>HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\Tcpip\Parameters <br></font>
+<br>
+S kombiniranjem razliènih paketkov ter podpisov, v tem primeru TTL in Window Size, se lahko vsaj približate resnici o oddaljenem operacijskem sistemu.<br>
+<br>
+<br><font size=4>
+Drugi podpisi in uporabe<br>
+<br></font>
+<br>
+Kot sem že povedal, nismo omejeni samo na 4 podpise. Obstaja še veliko drugih podroèij, ki jih lahko izsledimo, kot zaèetne inicializacijske vrednosti, IP identifikacijske številke, TCP ali IP opcije. Na primer, Cisco usmerjevalniki navadno zaènejo z IP Identifikacijsko vrednostjo 0 namesto da jih nakjluèno doloèijo. Prav tako lahko uporabimo ICMP promet. <a href="http://dev.whitehats.com/papers/passive/index.html">Max Vision</A> opisuje uporabo tipa ICMP prometa ali TCP opcij za identifikacijo oddaljenega raèunalnika. Na primer, Microsoftov ICMP REQUEST vsebuje abecedo, Solaris-ov ali Linux-ov ICMP REQUEST pa vsebuje števila in simbole. Pri TCP opcijah, je opcija "Selective Acknowledgement" (<a href="rfc2018.txt">SackOK</A>) pogosto uporabljena na Windows in Linux sistemih, ampak ne na FreeBSD ali Solaris. Za "Maximum Segment Size" (MSS) veèina operacijskih sistemov uporablja vrednost 1460, Novell pa navadno uporablja 1368, nekatere FreeBSD variante pa lahko uporabljajo MSS vrednost 512. Naslednji vir podpisov je "packet state" (kakšen tip paketka je uporabljen). Èe citiram Fyodor-a: "Na primer, zaèetni SYN REQUEST je lahko zlati rudnik (kot tudi odgovor nanj). RST paketki imajo tudi nekaj zanimivih možnosti, ki jih lahko uporabimo za identifikacijo." Ti in drugi podpisi so lahko kombinirani s podpisi naštetimi zgoraj za pomoè pri identifikaciji oddaljenih operacijskih sistemov. <br>
+<br>
+Pasivno odvzemanje prstnih odtisov je lahko uporabljeno za številne druge namene. Lahko ga uporabijo nepridipravi kot "nevidno" odvzemanje prstnih odtisov. Na prmer, da bi ugotovili operacijski sistem "potencialne tarèe", kot recimo web strežnik, mora samo nekdo zahtevati web stran od strežnika in analizirati vohjlaèeve sledi. Tako obidemo potrebo po uporabi aktivnih orodij, ki so lahko zaznana z uporabi razliènih IDS (Intrusion Detection System) sistemov. Prav tako je lahko passivno vzemanje prstnih odtisov uporabljeno za identifikacijo oddaljenih proxy požarnih zidov. Ker proxy požarni zidovi ponovno vzpostavijo povezavo za kliente, lahko identificiramo proxy firewall z uporabo baze podpisov, ki smo jo opisali zgoraj. Organizacije lahko uporabljajo pasivno odvzemanje prstnih odtisov za identifikacijo "sleparskih" sistemov na svojih omrežjih. To so sistemi, ki niso pooblašèeni za uporabo tega omrežja. Na primer Microsoft ali Sun trgovina lahko hitro identificira "sleparske" Linux ali FreeBSD sisteme, ki se skrivnostno pojavijo na njihovem omrežju. Pasivno odvzemanje prstnih odtisov je lahko uporabljeno za hitro inventuro operacijskih sistemov v organizaciji brez dotikanja kateregakoli sistema ali omrežja. Za posameznike, ki ocenjujejo varnost posameznih sistemov, lahko na ta naèin hitro ugotovijo kritiène sisteme na omrežju (kot recimo Unisys Mainframe).<br>
+<br>
+<br><font size=4>
+Gradnja baze podatkov<br>
+<br></font>
+<br>
+<a href="traces.txt">Baza podatkov</A> je bila zgrajena s testiranjem vrste sistemov s telnet, FTP, HTTP in SSH protokolom. Veè testiranja je potrebnega z drugimi protokoli, sejami in sistemi. Èe imate kakršnekoli podpise, ki bi jih lahko dodali k bazi, jih prosim pošljite na <a href="mailto:lance@spitzner.net">Lance@spitzner.net</A>. Še posebno me zanimajo TCP in IP opcije ali sistemi, ki niso našteti v bazi podatkov. <br>
+<br>
+<br><font size=4>
+Povzetek<br>
+<br></font>
+<br>
+Pasivno odvzemanje prstnih odtisov omogoèa, da se nauèimo veè o našem sovražniku, ne da bi ga poznali. Èeprav nam nobena informacija ne more toèno identificirati operacijskega sistema, lahko s kombiniranjem razliènih podpisov naredimo približen opis oddaljenega raèunalnika. <br>
+<br>
+Najlepša hvala naslednjim ljudem, ki so mi pomagali: Fyodor, Max Vision, Marty Roesch, Edward Skoudis, Dragos Ruiu, Craig Smith, Peter Grundl, Subterrain Siphon Project<br>
+<br>
+
+</body>
+</html>

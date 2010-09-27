@@ -1,0 +1,1939 @@
+<!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+
+<title> Chapter 5: Systems and subversion </title>
+
+</head>
+
+<body bgcolor="#ffffff">
+
+<h1>Chapter 5: Systems and subversion </h1>
+
+<h2>5.1 Introduction</h2>
+
+<p> In the last two chapters we looked at information that can be
+found in file systems. Such information is static in nature, and
+is typically examined after the fact.  In this chapter we turn our
+attention from static data to the more dynamic world of running
+code, and look at system state in real time. </p>
+
+<p> After an overview of the basic elements of computer system
+architecture, we walk through the system life cycle from start-up
+to shutdown, and present some measurements of the complexity of
+today's operating systems. We cannot fail to observe how this
+complexity introduces opportunities for subversion.  </p>
+
+<p> Before we turn to system subversion, we recapitulate the essential
+kernel and process concepts that are often involved with subversion.
+There is a lot more to kernels and processes than we can describe
+in the context of this book, and the interested reader is referred
+to any good book on UNIX and UNIX system administration [Nemeth,
+2001]. </p>
+
+<p> Subversion is the subject of the second half of this chapter.
+We present the mechanisms behind several generations of so-called
+rootkit software, and show examples of their detection.  This is
+an ongoing cat and mouse game of making observations, subversion
+of observations, and detection of subversion.  And since none of
+the popular systems today can offer strong security guarantees,
+this cat and mouse game is likely to continue until a radical change
+is made to system architecture.  </p>
+
+<h2>5.2 The standard computer system architecture </h2>
+
+<p> Over the past 30 years the basic architecture of computer
+systems has not changed significantly, despite major advances in
+hardware and in operating systems. The main principle that underlies
+this architecture is separation of concerns. We distinguish two
+main levels: process and system. At the process level, software
+runs in an environment that is relatively independent of hardware
+and operating system details.  At the system level, hardware and
+software provide the environment in which processes execute.  Within
+each level we distinguish some additional structure as shown in
+figure 5.1.  </p>
+
+<blockquote>
+
+<table border="0">
+
+<tr><th rowspan="2" valign="middle">Process</th>
+
+<td align="center"><table border="1" width="100%"><tr><td
+align="center">Executable program</td></tr></table></td></tr>
+
+<tr><td align="center"><table border="1" width="100%"><tr><td
+align="center">System library</td></tr></table></td></tr>
+
+<tr><th rowspan="2" valign="middle">System</th>
+
+<td align="center"><table border="1" width="100%"><tr><td
+align="center">Operating system kernel</td></tr></table></td></tr>
+
+<tr><td align="center"><table border="1" width="100%"><tr><td
+align="center">Hardware</td></tr></table></td></tr>
+
+</table>
+
+<p> Figure 5.1. General relationship between hardware, operating
+system kernel, system libraries and executable program files. </p>
+
+</blockquote>
+
+<p> Going from top to bottom we encounter the following layers: </p>
+
+<ul>
+
+<li> <p> The executable program.  Each running instance of a program
+file runs in what appears to be its own virtual memory.  Once a
+process starts execution it is usually linked with one or more
+run-time libraries as described next.  </p>
+
+<li> <p> Libraries with standard utility routines. These routines
+run as part of the process that they are linked into.  Library code
+provides generic services to application programs such as computing
+a square root, looking up an IP address, etc. </p>
+
+<li> <p> Resident operating system kernel (we'll use the term kernel
+although the implementation may use multiple cooperating processes).
+The kernel manipulates the hardware and provides an interface to
+processes in terms of files, directories, network connections,
+other processes, etc. </p>
+
+<li> <p> The hardware.  This layer presents an interface in terms
+of memory pages, disk blocks, network packets, device registers,
+I/O ports, interrupts, etc. Beyond these low-level interfaces lies
+another universe of processors and operating systems that are
+embedded inside hardware. Regrettably, we won't be able to cover
+hardware-level forensics in this book. </p>
+
+</ul>
+
+<p> The benefits of this architecture are portability and simplicity.
+Portability means that the exact same application software can be
+used on multiple versions of similar operating systems, and on
+multiple configurations of similar hardware.  Simplicity means that
+processes do not have to be aware that they share one machine with
+other processes.  The operating system deals with all the complexities
+of resource management, and the hardware does the work.  </p>
+
+<h2>5.3 UNIX System life cycle from startup to shutdown</h2>
+
+<p> Having introduced the basic layers of the computer system
+architecture we now take a bottom-up approach from hardware to
+executable programs, and watch how different layers take control
+of the machine at different points in time. Figure 5.2 gives
+a simplified picture of the entire system start-up procedure.  </p>
+
+<p> When a computer system is powered up, resident firmware (often
+called BIOS, EEPROM, etc.) performs a hardware self test and some
+low-level configuration.  This includes finding out the type and
+capacity of installed random-access memory, locating additional
+resident firmware in, for example, disk or network interface
+controllers, configuring plug-and-play devices, and so on.  Meanwhile,
+intelligent peripherals may execute their own power-up self test
+and configuration sequences.  </p>
+
+<p> After completion of the power-up self test and low-level
+configuration, the resident firmware loads a boot program from disk
+or from the network, and gives it control over the machine.  The
+boot program loads either the operating system kernel or the next
+stage boot program. Boot programs and operating system kernels
+often have their own configuration parameters as discussed in a
+later section.  </p>
+
+<p> The kernel probes the hardware for devices such as disk or
+network interface controllers and may load kernel modules to access
+and initialize those devices.  Once the kernel completes its
+initialization, it creates the <tt>init</tt> process, and passes
+control to it.  From this point onwards the kernel becomes dormant.
+Kernel code executes only in response to hardware interrupt events
+and in response to system call requests from processes. </p>
+
+<blockquote>
+
+<img src="figure5.2.gif">
+
+<p> Figure 5.2: simplified process genealogy of a typical UNIX system. </p>
+
+</blockquote>
+
+<p> The <tt>init</tt> process executes the system startup and
+shutdown procedures. These procedures are implemented by a multitude
+of "rc" files (shell command files) that are usually located under
+the <tt>/etc</tt> or <tt>/sbin</tt> directory.  The startup shell
+command files mount file systems, configure kernel modules and
+kernel parameters (more about those in a later section), configure
+network interfaces, and start daemon processes, including the window
+system that presents the graphical console login window.  The
+<tt>init</tt> process also controls non-graphical logins via
+hard-wired and dial-up terminal ports.  The shutdown shell command
+files stop specific processes in a controlled manner, before all
+the left-over processes are forcibly terminated.  </p>
+
+<p> An important function of <tt>init</tt> is to implement the
+so-called run levels.  With BSD-like systems these are called
+single-user (administrative access only) and multi-user. Solaris
+and Linux run levels are called S (single user) and 0-6, where 0
+and 6 are for system shutdown and 1-5 are for increasing levels of
+service. For example, different run levels may enable multi-user
+logins, network logins, graphical console logins, or file sharing;
+the exact details of run level functionality differ per system.
+</p>
+
+<h2>5.4 Case study: system startup complexity </h2>
+
+In the previous section we talked about multitudes of files that
+are involved with startup and shutdown sequences. To find out how
+complex these sequences are, we measured the number of different
+files that systems attempt to accesses during boot procedures.
+The measurements were done with generic i386 Solaris and RedHat
+Linux systems, and include booting up system configurations with
+and without graphical user interface.  For system configurations
+with a graphical user interface, the file counts include one
+login/logout with the default user interface.  The results are
+shown in table 5.1.
+
+<p>
+
+In order to get these numbers we recorded all file access requests
+by all <tt>init</tt> child processes in real time, including file
+accesses that
+happened while file systems were still mounted read-only.  Tools
+that can monitor file access and other system call requests are
+discussed in chapter 6.  Playing with system startup sequences is
+fraught with peril, especially when playing games with a critical
+process such as <tt>init</tt>. It was very easy to make a mistake
+that rendered the entire system unusable. Our measurements were
+possible thanks to VMware's virtualization software (see chapter
+6). Whenever we made a mistake, we simply discarded all our changes
+to the file system and tried again.
+
+<blockquote>
+
+<table border="0" cellpadding="2">
+
+<tr><th align="left">System type and configuration</th><th colspan="2"
+align="left">Program files</th> <th colspan="2" align="left">Other
+files</th> <th colspan="2" align="left">Non-existent files</th></tr>
+
+<tr><td colspan="7"><hr></td></tr>
+
+<tr><td>RedHat 4.1 boot, no GUI</td><td align="right">81</td> <td>
+</td> <td align="right">290</td> <td></td> <td align="right">217</td>
+<td></td></tr>
+
+<tr><td>Redhat 5.2 boot, no GUI</td><td align="right">86</td>
+<td></td> <td align="right">494</td> <td></td> <td align="right">289</td>
+<td></td></tr>
+
+<tr><td>Redhat 6.1 boot, no GUI</td><td align="right">76</td>
+<td></td> <td align="right">639</td> <td></td> <td align="right">262</td>
+<td></td></tr>
+
+<tr><td>Redhat 6.1 boot and default GUI login/logout</td><td
+align="right">107</td> <td></td> <td align="right">1667</td>
+<td></td> <td align="right">1090</td> <td></td></tr>
+
+<tr><td colspan="7"><hr></td></tr>
+
+<tr><td>Solaris 2.5.1 boot, no GUI</td><td align="right">65</td>
+<td></td> <td align="right">250</td> <td></td> <td align="right">229</td>
+<td></td></tr>
+
+<tr><td>Solaris 7.0 boot, no GUI</td><td align="right">77</td>
+<td></td> <td align="right">344</td> <td></td> <td align="right">273</td>
+<td></td></tr>
+
+<tr><td>Solaris 7.0 boot and default GUI login/logout</td><td
+align="right">150</td> <td></td> <td align="right">1153</td>
+<td></td> <td align="right">1986</td> <td></td></tr>
+
+<tr><td colspan="7"><hr></td></tr> </table>
+
+<p> Table 5.1: Number of different file names accessed while booting
+generic Linux and Solaris systems, with and without a graphical
+user interface (GUI). The RedHat and Solaris counts include all
+accesses after <tt>init</tt> startup. Program files include executable
+files as well as run-time libraries and other files with executable
+machine code. </p>
+
+</blockquote>
+
+<p> Two things stand out in the table. First is that the graphical
+user interface surpasses in complexity the entire system that it
+runs on. The second thing that stands out is the large number of
+requests involving non-existent pathnames.  One source of non-existent
+pathnames is sloppiness in the form of default command PATH searches.
+A second source is a different form of sloppiness: many startup
+scripts probe the file system in order to find out what is installed.
+Finally, a major source of non-existent pathname lookups is the
+backwards compatibility support for legacy pathnames that are built
+into program and configuration files.  </p>
+
+<p> What the table does not show is the large numbers of attempts
+to access the same pathname repeatedly, regardless of whether the
+pathname exists.  This is a symptom of inefficiency, and all the
+little inefficiencies together ensure that system startup times do
+not improve despite continual improvements in hardware performance.
+
+<p>
+
+Our little study shows that there exist literally hundreds if not
+thousands of opportunities to subvert the integrity of a system
+<i>without changing any file</i>: it is sufficient to add one extra
+file in an innocuous place so that it is accessed during, for
+example, system start-up. This kind of subversion can be prevented
+to some extent by requiring that files have valid digital signatures.
+At the time of writing, such features are still in the form of
+experimental add-ons for UNIX systems [van Doorn, 2001; Williams,
+2002].  </p>
+
+<h2>5.5 Kernel configuration mechanisms</h2>
+
+<p> After the overview of architecture and system life cycle we
+now take a closer look at individual software layers of the system
+architecture. First we'll take a look at the kernel level.  The
+purpose of the operating system kernel is to make computer hardware
+more useful to application programs, just like the purpose of
+application programs is to make computer systems more useful to
+human beings. While the application program interfaces provided by
+UNIX kernels and system libraries are relatively standardized by
+organizations such as ISO, IEEE and XOPEN, there can be large
+differences between kernel internals.  We will focus on the common
+elements in the architecture of typical UNIX kernels as shown in
+figure 5.3. </p>
+
+<blockquote>
+
+<table border="0" cellpadding="2">
+
+<tr> <td align="center"> process layer </td> </tr>
+
+<tr> <td> <table border="1" cellpadding="10">
+
+<tr> <td colspan="4" align="center"> system calls </td> </tr>
+
+<tr> <td align="center"> process<br> management </td>
+
+<td align="center"> memory<br> management </td>
+
+<td align="center"> file<br> systems </td>
+
+<td align="center"> network<br> protocols </td> </tr>
+
+<tr> <td colspan="4" align="center"> low-level code and device
+drivers </td> </tr>
+
+</table> </td> </tr>
+
+<tr> <td align="center"> hardware layer </td> </tr>
+
+</table>
+
+<p> Figure 5.3: Major subsystems of a typical UNIX kernel. The adjacent
+hardware and process architecture layers are shown for context.
+</p>
+
+</blockquote>
+
+<p> When a machine is turned on, built-in firmware configures the
+hardware, and loads a boot program from disk, or from a network
+server.  Depending on how powerful this boot program is, one or
+more additional boot programs may be needed to get the kernel up
+and running.  The general sequence of events is described in the
+system manual pages:  Solaris <tt>boot(1M)</tt>, Linux <tt>boot(7)</tt>,
+or FreeBSD <tt>boot(8)</tt>.  Boot programs are controlled by
+configuration parameters,
+and sometimes they configure initial kernel configuration parameter
+values.  Although the bootstrapping stage represents only a minuscule
+portion of the system life cycle, its integrity is critical for
+the integrity of the entire system. For an implementation of secure
+booting in the IBM PC environment, see the work
+by Arbaugh and others
+[Arbaugh, 1997].  </p>
+
+<blockquote>
+<table border="0" cellpadding="3">
+
+<tr><th align="left">System</th>        <th align="left">Boot loader
+configuration </th>       <th align="left">Kernel file name</th>
+<th align="left">Kernel configuration </th></tr>
+
+<tr> <td colspan="4"> <hr> </td> </tr>
+
+<tr><td>Solaris</td>    <td>/etc/bootrc (x86 platform) <br> firmware
+(sparc platform) </td> <td>/kernel/genunix</td>
+<td>/etc/system</td></tr>
+
+<tr><td>Linux</td>      <td>/boot/grub/grub.conf<br>/boot/lilo.conf</td>
+<td>/boot/vmlinuz</td>  <td>/etc/sysctl.conf</td></tr>
+
+<tr><td>FreeBSD</td>    <td>/boot.config<br>/boot/loader.conf
+                        <br>/boot/loader.rc</td>
+<td>/kernel<br>/kernel/kernel</td>        <td>/boot/device.hints</td></tr>
+
+<tr> <td colspan="4"> <hr> </td> </tr>
+
+</table>
+
+<p> Table 5.2: Typical boot loader and initial
+kernel configuration information. </p>
+
+</blockquote>
+
+<p> As is to be expected, there is great variation in the way
+kernels are configured.  Linux and FreeBSD systems have a
+<tt>sysctl</tt> command that gives read/write access to kernel
+configuration parameters and other data; the Linux <tt>/proc</tt>
+pseudo file system also gives read/write access to a subset of
+those parameters and other data.  Solaris has the <tt>ndd</tt>
+command for reading or writing parameters and other data that lives
+in the drivers that implement the IP protocol family, while other
+Solaris kernel parameters may be set at run time with the <tt>mdb</tt>
+or <tt>adb</tt> commands. Listing 5.1 shows only a few of the more
+than 700 kernel configuration parameters of a FreeBSD kernel.  </p>
+
+<blockquote>
+<pre>
+freebsd50% <b>sysctl -a</b> 
+kern.ostype: FreeBSD
+kern.osrelease: 5.0-RELEASE
+kern.osrevision: 199506
+kern.version: FreeBSD 5.0-RELEASE #0: Thu Jan 16 22:16:53 GMT 2003
+    root@hollin.btc.adaptec.com:/usr/obj/usr/src/sys/GENERIC
+
+kern.maxvnodes: 4182
+kern.maxproc: 532
+kern.maxfiles: 1064
+kern.argmax: 65536
+kern.securelevel: 1
+<i>. . . 728 more lines omitted . . .</i>
+</pre>
+
+<p> Listing 5.1: Examples of FreeBSD kernel parameters. </p>
+
+</blockquote>
+
+<p> Loadable kernel modules are chunks of executable code and data
+that can be assimilated into a running kernel at any point during
+its life cycle.  Once a module is loaded, its code runs as part of
+the kernel. With monolithic kernels, this means the module's code
+has access to everything inside and outside the kernel.  Kernel
+modules are used to implement functionality within all of the major
+kernel subsystems shown in figure 5.3:  from device drivers, file
+systems, and network protocols, up to system calls that provide
+new features to processes.  Modules are loaded while the kernel
+initializes, and under the control of <tt>init</tt> startup
+procedures. Table 5.3 shows typical commands to manipulate
+the status of loadable kernel modules.  </p>
+
+<blockquote>
+
+<table border="1" cellpadding="2">
+
+<tr> <th align="left"> System </th> <th colspan="3" align="center">
+Commands </th> </tr>
+
+<tr> <td> Solaris </td> <td> modload </td> <td> modunload </td>
+<td> modinfo </td> </tr>
+
+<tr> <td> Linux </td> <td> insmod </td> <td> rmmod </td> <td> lsmod
+</td> </tr>
+
+<tr> <td> FreeBSD </td> <td> kldload </td> <td> kldunload </td>
+<td> kldstat </td> </tr>
+
+</table>
+
+<p> Table 5.3: Typical commands to load, unload and query the status
+of loadable kernel modules. </p>
+
+</blockquote>
+
+<p> Many UNIX systems have relatively monolithic kernels: most of
+the code is permanently linked into the kernel file, and only a
+handful modules are loaded dynamically.  Solaris takes the opposite
+approach:  more than a hundred modules are loaded dynamically.
+Even the process scheduler is loaded as a kernel module, as shown
+in listing 5.2.  </p>
+
+<blockquote>
+<pre>
+solaris9% <b>modinfo</b>
+ Id Loadaddr   Size Info Rev Module Name
+  5 fe925000   3e92   1   1  specfs (filesystem for specfs)
+  7 fe92a275   2fda   1   1  TS (time sharing sched class)
+  8 fe92cdcb    888   -   1  TS_DPTBL (Time sharing dispatch table)
+ 10 fe92ce43    208   -   1  pci_autoconfig (PCI BIOS interface 1.38)
+ 11 fe92cfc7  27d6e   2   1  ufs (filesystem for ufs)
+ <i>. . . 100 lines omitted . . .</i>
+131 deeae12e    ae4  23   1  ptm (Master streams driver 'ptm' 1.4)
+132 fe9610f1    be4  24   1  pts (Slave Stream Pseudo Terminal dr)
+133 feaa37b7   12ae  17   1  ptem (pty hardware emulator)
+</pre>
+
+<p> Listing 5.2: Examples of Solaris 9 kernel modules (ix86 platform). </p>
+
+</blockquote>
+
+<p> The convenience of loadable kernel modules also has a darker
+side.  Because their code has access to everything inside and
+outside a monolithic kernel, they are also powerful tools in the
+hands of intruders. As we will see later, kernel modules exist for
+hiding traces of intrusion (including the intruder's kernel modules),
+and for controlling nearly invisible back doors that give privileged
+access to intruders.  We will return to the issue of corruption
+and detection at the end of this chapter.  </p>
+
+<h2>5.6 Protecting forensic information with kernel security levels</h2>
+
+<p> Many kernel configuration parameter settings affect the security
+of a system.  One kernel configuration parameter of particular
+interest is the kernel security level. This is a standard feature
+on 4.4 BSD descendant systems, and is available as add-on feature
+for Linux. As the security level increases, functionality is reduced.
+The security level can be raised at any time with, for example,
+the <tt>sysctl</tt> command, but only the <tt>init</tt> process
+can lower the security level while the system is in single user
+mode.  Table 5.4 summarizes the semantics as defined with
+4.4BSD.  Some systems support additional security levels and/or
+additional restrictions. For precise details, see the
+<tt>securelevel(7)</tt>
+manual page, or its equivalent.  </p>
+
+<blockquote>
+
+<table width="80%" border="0" cellpadding="2">
+
+<tr> <th> Level </th> <th> Restrictions </th> </tr>
+
+<tr> <td colspan="2"> <hr> </td> </tr>
+
+<tr> <td align="center" valign="top"> -1 </td> <td> Permanently
+insecure mode.  Always run the system in level 0 mode, and do not
+raise the security level when changing from single-user mode to
+multi-user mode. </td> </tr>
+
+<tr> <td align="center" valign="top"> 0 </td> <td> Insecure mode,
+normally used while booting the system.  There are no additional
+restrictions beyond the usual file and system call access controls.
+</td> </tr>
+
+<tr> <td align="center" valign="top"> 1 </td> <td> Secure mode,
+normally used after the system switches to multi-user mode.
+Immutable and append-only file attributes may no longer be turned
+off, open for writing is no longer allowed with disk devices that
+contain mounted file systems, as well as memory devices, and kernel
+modules may no longer be loaded or unloaded.  </td> </tr>
+
+<tr> <td align="center" valign="top"> 2 </td> <td> Highly secure
+mode. Even unmounted disks may no longer be opened for writing.
+</td> </tr>
+
+<tr> <td colspan="2"> <hr> </td> </tr>
+
+</table>
+
+<p> Table 5.4: Typical 4.4BSD security level settings and restrictions.
+</p>
+
+</blockquote>
+
+<p> These security features can be valuable for the protection of
+forensic information. An append-only flag protects logfiles against
+change of already written content, and an immutable flag protects
+a file against any change including renaming (although such protection
+means little when a parent directory can still be renamed).
+Disallowing open-to-write of disk devices protects file systems
+against tampering that would otherwise be hard to detect.  And none
+of these measures would be effective unless write access is revoked
+to the kernel memory or main memory devices, because it would be
+trivial to turn off the protection offered by security levels. </p>
+
+<p> The security level mechanism should not be confused with the
+discretionary or mandatory access control mechanisms that are built
+into many operating systems. The purpose of access control is to
+enforce a policy. The problem with policies is that they may be
+changed at any point in time by a suitably authorized process.
+The purpose of security levels, on the other hand, is to revoke
+access unconditionally; once a system enters security level 1,
+there is no mechanism that grants permission to load kernel modules
+or to write to raw memory or to mounted disk devices, except for
+returning the system to single-user mode or rebooting the system
+into a less secure configuration. Thus, security levels are not
+impenetrable, but they add a barrier against compromise that cannot
+be implemented with access control alone. </p>
+
+<h2>5.7 Typical process and system status tools </h2>
+
+<p> Each UNIX system comes with its own assortment of process and
+system status monitoring tools. Most tools look at one or two
+particular aspects of the system: process status, network status,
+input/output, and so on. Because of the large variation between
+tools and between systems we will introduce only a few representative
+tools and refer the reader to the system documentation for information
+about individual platforms.
+
+Process and system status tools can reveal signs of intruder
+activity such as files, processes or network connections.  This
+makes them a prime target for subversion by intruders. We will
+discuss subversion of status tools later in the chapter. </p>
+
+<p> The <tt>ps</tt> command is the basic process status tool.  Many
+systems provide multiple implementations and/or user interfaces;
+the Linux version even has more than a dozen personalities.  In
+our examples we use the BSD user interface because it provides
+information that is not available via some of the other user
+interfaces.  Solaris has a BSD compatible <tt>ps</tt> command in
+<tt>/usr/ucb/ps</tt>.
+
+<p>
+
+By default, the <tt>ps</tt> command tries to produce nice output,
+but that means a lot of information is suppressed or truncated.
+For example, in order to see the entire command line of a process
+we need to specify one or more <tt>w</tt> options, and we need to
+specify the <tt>e</tt> option to display information in a process's
+environment.  This is a list of <i>name=value</i> pairs that is
+inherited from the parent process. Linux and FreeBSD require
+super-user privileges in order to view environment information from
+other user's processes.  Solaris currently does not impose this
+restriction.  </p>
+
+<p> A process environment may reveal whether the process was started
+in the regular manner or not. For example, system processes started
+at boot time tend to have few if any environment settings. If a
+system process such as <tt>inetd</tt> (the process that manages
+incoming connections for many common network services) was restarted
+by hand, then the environment could give away useful information
+such as the remote user's origin, working directory information,
+etc., as shown with the following command: </p>
+
+<blockquote>
+<pre>
+$ <b>ps -aewww</b>
+  PID  TT  STAT      TIME COMMAND
+. . .
+ 6597  ??  Ss     0:00.01 PATH=/sbin:/bin:/usr/sbin:/usr/bin:/usr/game
+s:/usr/local/sbin:/usr/local/bin:/usr/X11R6/bin:/root/bin MAIL=/var/ma
+il/wietse BLOCKSIZE=K USER=wietse LOGNAME=wietse HOME=/root SHELL=/bin
+/csh SSH_CLIENT=168.100.189.2 841 22 SSH_TTY=/dev/ttyp0 TERM=xterm PWD
+=/home/wietse XNLSPATH=/usr/X11R6/lib/X11/nls XKEYSYMDB=/usr/X11R6/lib
+/X11/XKeysymDB XAUTHORITY=/home/wietse/.Xauthority /usr/sbin/inetd -wW
+. . .
+</pre>
+</blockquote>
+
+<p> The <tt>lsof</tt> (list open files) tool lists processes with
+all their open files, network ports, current directories, and other
+file system related information [Abell, 2004].  This very useful
+program
+brings together information that is often scattered across several
+different tools. Because the output can reveal a lot about what a
+process is doing, many <tt>lsof</tt> implementations give little
+or no information about processes that are owned by other users.
+To examine processes owned by other users, <tt>lsof</tt> needs to
+be invoked by the super-user. </p>
+
+<p> Below is a typical sample of output for an OpenSSH server
+process that is waiting for connection requests.  OpenSSH is an
+implementation of the SSH protocols for encrypted remote logins
+[OpenSSH, 2004].
+</p>
+
+<blockquote>
+<pre>
+# <b>ps ax | grep sshd</b>
+  186  ??  Is     0:01.17 /usr/sbin/sshd
+39288  pb  R+     0:00.00 grep sshd
+# <b>lsof -p 186</b>
+COMMAND PID USER  FD TYPE     DEVICE SIZE/OFF  NODE NAME
+sshd    186 root cwd VDIR  13,131072      512     2 /
+sshd    186 root rtd VDIR  13,131072      512     2 /
+sshd    186 root txt VREG  13,131072   198112 15795 /usr/sbin/sshd
+. . .<i>10 run-time library object files omitted</i>. . .
+sshd    186 root  0u VCHR        2,2      0t0  7955 /dev/null
+sshd    186 root  1u VCHR        2,2      0t0  7955 /dev/null
+sshd    186 root  2u VCHR        2,2      0t0  7955 /dev/null
+sshd    186 root  3u IPv6 0xd988e720      0t0   TCP *:ssh (LISTEN)
+sshd    186 root  4u IPv4 0xd988e500      0t0   TCP *:ssh (LISTEN)
+</pre>
+</blockquote>
+
+<p> In the output, <tt>cwd</tt> is the current directory, <tt>rtd</tt>
+the root directory which in this case is the regular file system
+root, <tt>txt</tt> is the executable file, and <tt>0..4</tt> are
+open files and sockets. For each entry, <tt>lsof</tt> gives additional
+information such as the type (directory, regular file, character
+special device, socket for IP version 4 or 6), and other identifying
+information such as the device and inode number or the address of
+the socket control block.  </p>
+
+<p> Of particular interest is the <tt>lsof -i</tt> option which shows
+all processes with active network ports.  The output can reveal
+processes that aren't supposed to have open network connections,
+and that could be a sign of trouble.  The example below shows a
+shell (command interpreter) process that is attached to TCP port
+21.  Normally, this port is used by FTP server processes to receive
+commands and to report status results.  In the example, 10.1.2.3
+is the address of the local machine, and 192.168.3.2 is the address
+of an attacking machine. Note:  the <tt>-&gt;</tt> arrow does not
+imply that the connection was initiated by the local machine; the
+<tt>lsof</tt> command has no information about which end of a
+connection is the client or server.  </p>
+
+<blockquote>
+<pre>
+# <b>lsof -ni </b>
+COMMAND PID   USER FD TYPE     DEVICE NODE NAME
+. . .
+sh      39748 root 0u IPv4 0xd9892b60 TCP  10.1.2.3:21->192.168.3.2:1866
+sh      39748 root 1u IPv4 0xd9892b60 TCP  10.1.2.3:21->192.168.3.2:1866
+sh      39748 root 2u IPv4 0xd9892b60 TCP  10.1.2.3:21->192.168.3.2:1866
+. . .
+</pre>
+</blockquote>
+
+<p> Output like this is a sure sign that someone exploited an FTP
+server vulnerability in order to spawn a shell process.  These
+exploits are popular because the shell process inherits full system
+privileges from the FTP server process. </p>
+
+<p> The findings of <tt>lsof</tt> can be checked against the findings
+of other tools that also look at process and/or file/network
+information, such as the <tt>netstat</tt> command. The following
+command shows the status of all network ports and of all network
+connections. We omit all but the connection that corresponds with
+the FTP server exploit. </p>
+
+<blockquote>
+<pre>
+# <b>netstat -nf inet</b>
+Active Internet connections
+Proto Recv-Q Send-Q Local Address Foreign Address (state)
+. . .
+tcp4       0      0 10.1.2.3.21   192.168.3.2.18668  ESTABLISHED
+. . .
+</pre>
+</blockquote>
+
+<p> With Linux systems one would specify <tt>netstat -n --inet</tt>
+for an equivalent result. Talking of Linux, its <tt>netstat</tt>
+command has the very useful <tt>-p</tt> option to display process
+ID and process name information. </p>
+
+<p> As we see, there is significant overlap between tools.  When
+only an individual tool is compromised, the output from other tools
+may reveal the inconsistency. This is why intruders often replace
+multiple system utilities as part of their cover-up operation. 
+However, system status tools are not really independent.  Ultimately,
+all tools rely on a common source of information, the kernel. When
+the kernel is compromised, all tools may fail, and other techniques
+are needed to expose the compromise.  We will return to this at
+the end of the chapter. </p>
+
+<h2>5.8 How process and system status tools work </h2>
+
+<p> All process and system status tools get their information from
+the running kernel. Historical UNIX systems made only a limited
+amount of process and system status information available via
+well-documented system calls.  Most information was obtained by
+directly accessing poorly documented data structures in kernel
+memory via the <tt>/dev/kmem</tt> pseudo device.  </p>
+
+<p> Modern UNIX systems make some process and system information
+accessible via the <tt>/proc</tt> pseudo file system.  Each process
+has a subdirectory <tt>/proc/<i>pid</i></tt> that is named after
+the numerical process ID.  Each subdirectory contains an assortment
+of pseudo files for different process attributes; table 5.5
+gives a few examples.  Specific details of the <tt>proc</tt> file
+system are described in the system manual:  FreeBSD <tt>procfs(4)</tt>,
+Linux <tt>proc(5)</tt>, and Solaris <tt>proc(4)</tt>.  </p>
+
+<p> With the <tt>/proc</tt> pseudo file system, process attributes
+are accessed by opening the corresponding pseudo file. Process
+status reporting tools read status information, and programs such
+as debuggers manipulate processes by writing and reading control
+information (debuggers are discussed in chapter 6).  Linux and
+FreeBSD <tt>/proc</tt> files are mostly text based and can be
+accessed in meaningful ways with the <tt>cat</tt> or <tt>echo</tt>
+commands, while Solaris uses binary data structures that require
+specialized tools as described in the <tt>proc(1)</tt> manual page. </p>
+
+<blockquote>
+
+<table border="0" cellpadding="2">
+
+<tr><th> Process attribute</th> <th> Solaris</th> <th> FreeBSD</th>
+<th> Linux</th></tr>
+
+<tr><td colspan="4"><hr></td></tr>
+
+<tr><td> program file</td> <td> /proc/<i>pid</i>/object/a.out</td>
+<td> /proc/<i>pid</i>/file</td> <td> /proc/<i>pid</i>/exe</td></tr>
+
+<tr><td> process memory</td> <td> /proc/<i>pid</i>/as</td> <td>
+/proc/<i>pid</i>/mem</td> <td> /proc/<i>pid</i>/mem</td></tr>
+
+<tr><td> memory map</td> <td> /proc/<i>pid</i>/map</td> <td>
+/proc/<i>pid</i>/map</td> <td> /proc/<i>pid</i>/maps</td></tr>
+
+<tr><td> command line</td> <td> /proc/<i>pid</i>/psinfo</td> <td>
+/proc/<i>pid</i>/cmdline</td> <td> /proc/<i>pid</i>/cmdline</td></tr>
+
+<tr><td colspan="4"><hr></td></tr>
+
+</table>
+
+<p> Table 5.5: Examples of per-process entries in the <tt>/proc</tt>
+file system. The Solaris <tt>psinfo</tt> pseudo file contains most
+of the information that is needed by the <tt>ps</tt> (list processes)
+command. </p>
+
+</blockquote>
+
+<p> Besides processes, Linux and FreeBSD make a limited amount of
+kernel status information available under <tt>/proc</tt>, while
+Solaris uses additional pseudo devices such as <tt>/dev/ip</tt>
+for network status and <tt>/dev/kstat</tt> for kernel statistics.
+This apparent chaos of lookup mechanisms is not a problem as long
+as you can depend on tools such as <tt>ps</tt>, <tt>netstat</tt>
+or <tt>lsof</tt> whose output is relatively system independent. It
+complicates life, however, when you need to write tools that attempt
+to bypass potentially compromised utilities. </p>
+
+<h2>5.9 Limitations of process and system status tools </h2>
+
+<p> Unfortunately, the accuracy of information from system status
+tools is limited. Some limitations are unavoidable because the
+tools look at information that is changing, such as memory usage
+or open files. Other limitations are less obvious, often accidental,
+and can complicate the interpretation of results.  To illustrate
+this
+we will show some limitations in the way process status tools report
+process command line information.  </p>
+
+<p> As a first example, process status tools may produce incomplete
+command-line information. Although UNIX systems have generous limits
+on the length of command lines, how much of this can be recovered
+depends on the UNIX system implementation and on the tool being
+used.  Table 5.6 shows typical limits for Solaris, RedHat
+Linux and FreeBSD systems on i386 type hardware.  The <tt>NCARGS</tt>
+constant in the file <tt>&lt;sys/param.h&gt;</tt> defines the
+combined upper bound on the command line and process environment.
+</p>
+
+<blockquote>
+
+<table border="1" cellpadding="2">
+
+<tr><th>System</th>     <th>NCARGS</th> <th><tt>ps</tt> command
+line length limit</th></tr>
+
+<tr><td>FreeBSD 5.0</td>           <td align="right">64 kbyte</td>
+<td>length truncated to 0 if > 10000 bytes</td></tr>
+
+<tr><td>Redhat 8.0</td>    <td align="right">128 kbyte</td> <td>
+length truncated to 0 if > 4 kbytes</td></tr>
+
+<tr><td>Solaris 9</td>     <td align="right">1 Mbyte</td>
+<td><tt>/usr/ucb/ps</tt>: all information
+recoverable<br><tt>/usr/bin/ps</tt>:  length truncated to 80</td></tr>
+
+</table>
+
+<p> Table 5.6: Command line limitations in typical process
+status tools.  </p>
+
+</blockquote>
+
+<p> Another oddity is that a process may modify its own command
+line as displayed by <tt>ps</tt>. This is possible on systems such
+as FreeBSD, Linux, and Solaris, but with Solaris the changes are
+visible only if you invoke the BSD style <tt>/usr/ucb/ps</tt>
+command with the <tt>w</tt> option; this is probably more an artefact
+of implementation than the result of a deliberate decision.  As an
+example, the Sendmail mail transfer agent routinely changes the
+command line in order to display the process state.  Here is an
+example for RedHat 8.0 Linux that displays all sendmail related
+processes: </p>
+
+<blockquote>
+<pre>
+redhat80% <b>ps ax | egrep 'COMMAND|sendmail'</b>
+  PID TTY  STAT  TIME COMMAND
+  604 ?    S     0:00 sendmail: accepting connections
+  614 ?    S     0:00 sendmail: Queue runner@01:00:00 for /var/spool/client
+</pre>
+</blockquote>
+
+<p> Finally, the process name (the first component of the command
+line array) can be different from the executable file name.  Some
+<tt>ps</tt> implementations will display the executable file name
+in parentheses when it differs from the process name.  And even if
+the process name equals the file name, one UNIX file can have any
+number of names, as described in chapter 3.  A fine example of this
+is (again) the Sendmail program.  This command is installed such
+that different hard links or symbolic links to the same program
+file have a different names.  Each name serves a different purpose,
+even though all names ultimately refer to the same executable file.
+
+<p> Having discussed how process and system status tools work,
+where they get their information, and the origins of some of their
+limitations, we now turn to popular methods to subvert the findings
+of these tools. </p>
+
+<h2>5.10 Subversion  with rootkit software </h2>
+
+<p> As mentioned in the preceding sections, the results from process
+and system status tools are subject to subversion.  In the sections
+that follow we discuss how systems are subverted, how subversion
+is hidden, and how subversion may be detected.  We limit the
+discussion to the upper three layers of the system architecture:
+executable file, library and kernel.  Detection of subversion at
+the hardware level is beyond the scope of this book.  </p>
+
+<p> In our discussion of software subversion we will look at a
+category of malware that is known by the name of "rootkit", and
+that became popular first by the middle 1990s.  The name stands
+for a combination of malicious software (such as a network sniffer
+or an attack tool), back door software that gives access without
+having to break into the machine, together with a collection of
+modifications to system software that hide the rootkit and other
+traces of the intrusion.  </p>
+
+<p> What makes rootkits popular is that they automate the process
+of installation and hiding, making it quick and painless. Typically,
+a rootkit is installed after system security is breached with a
+procedure that is also highly automated.  When a rootkit is found
+on a compromised machine then it is very well possible that the
+whole incident didn't involve human control at all. While the
+intruder was doing something else, the rootkit installed itself
+and announced the compromised machine as another victim machine
+via some IRC channel.  </p>
+
+<h2>5.11 Command-level subversion</h2>
+
+<p> Command-level rootkits hide the presence of malware by making
+changes to system commands.  This approach is based on a very simple
+principle: in order to suppress bad news, they silence the messenger
+of that news.  Table 5.7 shows a list of typical command-level rootkit
+modifications.  Depending on the specific type of malware involved,
+many rootkits make modifications in addition to those listed in
+the table. </p>
+
+<blockquote>
+
+<table border="1" cellpadding="2">
+
+<tr> <th> Replaced commands </th> <th> Hidden information </th>
+</tr>
+
+<tr> <td> du, find, ls </td> <td> Malware configuration files and
+network sniffer logs </td> </tr>
+
+<tr> <td> pidof, ps, top </td> <td> Network sniffer and/or back
+door process </td> </tr>
+
+<tr> <td> netstat </td> <td> Network ports associated with malware
+</td> </tr>
+
+<tr> <td> ifconfig </td> <td> Network sniffing "enabled" status
+</td> </tr>
+
+</table>
+
+<p> Table 5.7: Typical system utilities that are replaced by
+command-level rootkits, and the information that the replacements
+attempt to hide.  </p>
+
+</blockquote>
+
+<p> As intrusion technology has evolved over time, so have rootkits.
+The first rootkits came with network sniffers to collect user names
+and passwords (such as the <tt>esniff</tt> program),
+while later versions came with remotely controlled agents for
+distributed denial of service attacks (such as the T0rn rootkit).
+</p>
+
+<p> Typical back door software is in the form of a modified
+<tt>login</tt> program, or a non-standard or modified network server
+for the <tt>finger</tt> or <tt>ssh</tt> service, or an <tt>inetd</tt>
+server that listens on a secret network port.  The back door is
+typically enabled by entering a specific password, or by connecting
+from a specific network source port or IP address.  These are,
+however, not the only types of back door in existence as we will
+see later.  </p>
+
+<h2>5.12 Command-level evasion and detection </h2>
+
+<p> In order to evade detection, early rootkits not only replaced
+system utility software but also erased records in system logfiles.
+Some rootkits even went to the effort of giving modified system
+utilities the same file time stamps and CRC (cyclic redundancy
+check) value as the original files.  Later command-level rootkits
+don't bother and simply install modified programs that hide the
+presence of malware. </p>
+
+<p>  Regardless of these details, none of the changes compromise
+integrity of the kernel.  Detection of command-level rootkit
+modifications is therefore relatively easy, as long as one uses a
+trusted copy of the system utilities.  Here is a number of ways in
+which command-level rootkits can be discovered:  </p>
+
+<ul>
+
+<li> <p> If a rootkit installs a back door server process that
+listens for connections, the network port will be visible to an
+external network port scanner. To avoid detection in this manner,
+some rootkits come with a non-listening back door server that is
+triggered by a sequence of packets with specific content or type.
+For example, a "raw" ICMP socket bypasses the TCP/IP protocol stack,
+and receives a copy of all ICMP datagrams, except those that the
+local kernel generates its own responses for [Stevens, 1997]. </p>
+
+<li> <p> On many operating systems (but not Linux) the <tt>strings</tt>
+command will reveal the names of all directory entries, including
+hidden and/or deleted files. The <tt>fls</tt> command can do the
+same, with more accuracy, when applied to the disk device (<tt>fls</tt>
+is introduced in chapter 3). In fact, any tool that bypasses the
+file system can reveal information that is hidden by file system
+utilities, including the <tt>ils</tt> tool (also introduced in
+chapter 3).  These techniques do not work with file systems that
+are mounted from a server.  </p>
+
+<li> <p> Commands such as <tt>strings</tt> may reveal the presence
+of non-standard file names that are embedded in modified system
+utility programs. These files control the hiding of processes,
+network connections or files, and often have unusual names. An
+example is given below.  </p>
+
+<li> <p> Although corrupted versions of <tt>ps</tt> and other
+utilities hide malware processes, those processes can still be
+found via, for example, the <tt>/proc</tt> file system, as we show
+in an example below.  </p>
+
+<li> <p> Deleted login/logout records in the <tt>wtmp</tt> file
+leave behind holes (actually:  sequences of null bytes) that can
+be detected with a program that understands the binary format of
+the file.  </p>
+
+<li> <p> Although the <tt>ifconfig</tt> command reports that a
+network interface is not in network sniffer mode, it takes only a
+small C program to query the kernel directly for the interface
+status. </p>
+
+<li> <p> Although the malware executable file CRC checksums, as
+reported by the <tt>sum</tt> or <tt>cksum</tt> command, match those
+of the original system utility executable files, the modifications
+still show up unmistakably when one compares the outputs of a strong
+cryptographic hash such as MD5.  </p>
+
+<li> <p> Last but not least, no files or modifications remain hidden
+when one examines (a low-level copy of) the file system on a trusted
+machine.  All the hidden files and modifications will be visible
+in plain sight. Chapter 4 describes disk imaging and analysis in
+detail. </p>
+
+</ul>
+
+As an example of exposing a command-level root kit, we examine two
+utilities that are part of the T0rn rootkit for Linux,
+which was in widespread use in 2001.  First we search the
+<tt>/bin/ls</tt> executable file with the <tt>strings</tt> and
+<tt>grep</tt> commands for strings that look like file names:
+
+<blockquote>
+<pre>
+$ <b>strings /bin/ls | grep /</b>
+/lib/ld-linux.so.1
+&gt;/t[j/
+/usr/local/share/locale
+/usr/src/.puta/.1file
+. . .<i>five more lines omitted</i>. . .
+</pre>
+</blockquote>
+
+<p> The file name <tt>/usr/src/.puta/.1file</tt> looks very
+suspicious.  If we try to list the <tt>/usr/src/.puta</tt> directory,
+the <tt>ls</tt> command hides the name as we would expect: </p>
+
+<blockquote>
+<pre>
+$ <b>cd /usr/src</b>
+$ <b>ls -a</b>
+.             ..            linux         linux-2.2.14  redhat
+</pre>
+</blockquote>
+
+<p> However, the directory name still shows up when we use the
+<tt>echo</tt> command, together with the <tt>.*</tt> wild-card
+expansion feature that is built into the command shell:  </p>
+
+<blockquote>
+<pre>
+$ <b>echo .* *</b>
+. .. .puta linux linux-2.2.14 redhat
+</pre>
+</blockquote>
+
+<p> In the <tt>.puta/.1file</tt> rootkit configuration file we find
+a lengthy list of file and directory names that must remain hidden,
+because these contain the malware program files, configuration
+files and data files:  </p>
+
+<blockquote>
+<pre>
+$ <b>cat .puta/.1file</b>
+.puta
+.t0rn
+.1proc
+.1addr
+xlogin
+. . .<i>29 more lines omitted</i>. . .
+</pre>
+</blockquote>
+
+<p> Just as we can detect modified file utilities by comparing
+their results against output from an unmodified tool, we can detect
+modified process status utilities by comparing their output against
+information from the <tt>/proc</tt> file system. Table 5.8 shows that
+the <tt>ps</tt> command is hiding a process with ID 153
+(it also shows that <tt>/proc</tt> and <tt>ps</tt> disagree on
+whether "2" corresponds to a process, but that is a different
+issue).
+
+<blockquote>
+
+<table border="1" cellpadding="2">
+
+<tr> <th> Entries in /proc </th> <th> Output from "ps ax" </th> </tr>
+
+<tr> 
+<td align="left"> 
+<pre>     1
+     2
+     3
+     4
+     5
+     6
+   <b>153</b>
+   271
+   341
+   356</pre> </td>
+<td align="left">
+<pre>    1  ?  S    0:06 init [3] 
+
+    3  ?  SW   0:00 (kupdate)
+    4  ?  SW   0:00 (kpiod)
+    5  ?  SW   0:00 (kswapd)
+    6  ?  SW<  0:00 (mdrecoveryd)
+
+  271  ?  S    0:00 /sbin/pump -i eth0 
+  341  ?  S    0:00 portmap 
+  356  ?  SW   0:00 (lockd)</pre>
+</tr>
+
+</table>
+
+<p> Table 5.8: Comparison of process information from the <tt>/proc</tt>
+file system and from the <tt>ps</tt> command. </p>
+
+</blockquote>
+
+<p> The system utilities that were replaced by the rootkit do a
+good job of hiding process 153. It is not only censored by process
+status tools such as <tt>ps</tt>, it also does not show up with
+network status tools such as <tt>netstat</tt>.  However, for reasons
+that we may never know, this rootkit does not replace the <tt>lsof</tt>
+command and therefore it can help to reveal the purpose of process
+153: </p>
+
+<blockquote>
+<pre>
+# <b>lsof -p 153</b>
+COMMAND PID USER   FD   TYPE DEVICE   SIZE  NODE NAME
+nscd    153 root  cwd    DIR    3,5   4096     2 /
+nscd    153 root  rtd    DIR    3,5   4096     2 /
+nscd    153 root  txt    REG    3,5 201552 35646 /usr/sbin/nscd
+. . .
+nscd    153 root    7u  IPv4    177          TCP *:47017 (LISTEN)
+. . .
+</pre>
+</blockquote>
+
+<p> The file name <tt>/usr/sbin/nscd</tt> suggests that this is a
+system program, but comparison with uncompromised systems shows
+that this program is present only in later Linux versions.  Connecting
+with <tt>telnet</tt> to TCP port 47017 on the local machine confirms
+that we are looking at a back door
+process.  In this case, we are welcomed by the opening banner of
+what appears to be an SSH server. SSH is popular with legitimate
+and illegitimate users because it encrypts and protects network,
+making it immune to inspection and manipulation. </p>
+
+<blockquote>
+<pre>
+# <b>telnet localhost 47017</b>
+Trying 127.0.0.1...
+Connected to rh62.
+Escape character is '^]'.
+SSH-1.5-1.2.27
+</pre>
+</blockquote>
+
+<p> Each rootkit differs slightly in its approach to hide the
+presence of malware, and therefore each rootkit needs a slightly
+different approach for detection. An example of software that
+automates the search for known rootkits is the chkrootkit toolkit
+[Murilo, 2003]. It runs on a dozen different UNIX platforms,
+and at
+the time of writing recognizes more than 50
+
+different rootkits.  Chkrootkit looks for deleted login/logout
+records, signatures of replaced system utilities, rootkit configuration
+files and directories, missing processes, and for signs of kernel
+level subversion. But that will be the topic of a later section.
+</p>
+
+<h2>5.13 Library-level subversion </h2>
+
+<p> Instead of replacing system utilities, rootkits can hide their
+existence by making changes at the next level down in the system
+architecture, the system run-time library.  A good example of this
+is redirecting the <tt>open()</tt> and <tt>stat()</tt> calls.  The
+purpose of these modifications is to fool file integrity checking
+software that examines executable file contents and attributes.
+By redirecting the <tt>open()</tt> and <tt>stat()</tt> calls to
+the original file, it will appear as if the file is still intact,
+while the <tt>execve()</tt> call executes the subverted file. For
+example, listing 5.3 shows how one could redirect the <tt>open()</tt>
+call
+in a typical Linux run-time library: </p>
+
+<blockquote>
+<pre>
+#include &lt;errno.h&gt;
+#include &lt;syscall.h&gt;
+#include &lt;real_syscall.h&gt;
+
+ /*
+  * Define a real_open() function to invoke the SYS_open system call.
+  */
+static  real_syscall3(int, open, const char *, path,
+		              int, flags, int, mode)
+
+ /*
+  * Intercept the open() library call and redirect attempts to open
+  * the file /bin/ls to the unmodified file /dev/.hide/ls.
+  */
+int open(const char *path, int flags, int mode)
+{
+    if (strcmp(path, "/bin/ls") == 0)
+        path = "/dev/.hide/ls";
+    return (real_open(path, flags, mode));
+}
+</pre>
+
+<p> Listing 5.3: Library-level backdoor to redirect specific
+<tt>open()</tt> system calls. The <tt>real_syscall3()</tt> macro,
+whose definition is too ugly to be shown here,
+is a slightly modified copy of the standard Linux <tt>_syscall3()</tt>
+macro. We use it to define our own <tt>real_open()</tt> function
+that invokes
+the SYS_open system call.</p>
+
+</blockquote>
+
+<p> Would an MD5 hash reveal the library modification? Not necessarily.
+While the run-time linker uses the low-level <tt>open()</tt> system
+call when it accesses the modified library file, the <tt>md5sum</tt>
+command uses the <tt>fopen()</tt> library routine and can be still
+redirected to the unmodified library file. </p>
+
+<p> To work around modifications at this level, rootkit detection
+tools need to carry their own trusted copy of the system library
+routines.  However, such measures and countermeasures have become
+less relevant with the arrival of rootkits that make changes to
+the running kernel, and that are therefore much harder to circumvent.
+or detect. </p>
+
+<h2>5.14 Kernel-level subversion </h2>
+
+<p> As we have seen in the previous section, rootkit modifications
+to system utilities are easy to circumvent.  As long as we have a
+copy of the unmodified utilities we can still find the malware
+files, processes, and network ports.  In a similar manner, rootkit
+modifications to system library routines are easy to circumvent.
+</p>
+
+<p> The game changes dramatically when modifications are moved from
+the process layer into the kernel layer. Compromised kernel code
+cannot be circumvented easily, because hardware memory protection
+prevents user processes from doing so.  All accesses to kernel
+memory must be mediated by the kernel, whether it is compromised
+or not.  And since the running kernel is the source of
+
+information for all file, process and network status tools, those
+tools may produce inaccurate results when the kernel is compromised.
+Despite all these handicaps, kernel-level modifications may still
+be detectable, as we will show at the end of the chapter.  </p>
+
+<h2>5.15 Kernel rootkit installation </h2>
+
+<p> Just like command-level rootkits, kernel-level rootkits are
+installed after the security of a system is compromised.  Over
+time, different methods have been developed to inject rootkit code
+into a kernel.  </p>
+
+<ul>
+
+<li> <p> Loading a kernel module into a running kernel. This
+technique uses officially documented interfaces, and is therefore
+easier to use than other techniques. For the same reason this
+technique is also easier to detect.  Some rootkit implementations
+attempt to remove their module names from the external kernel symbol
+table (Solaris <tt>/dev/ksyms</tt> or Linux <tt>/proc/ksyms</tt>)
+and from internal kernel tables, and/or intercept system calls that
+report kernel module status information [Plaguez, 1998; Plasmoid, 1999;
+Pragmatic, 1999]. We give an example at the end of this chapter.  </p>
+
+<li> <p> Injecting code into the memory of a running kernel that
+has no support for module loading.  This involves writing new code
+to a piece of unused kernel memory via the <tt>/dev/kmem</tt>
+device, and activating the new code by redirecting, for example,
+a system call [ASR, 1996; Cesare, 1999; Sd, 2001]. </p>
+
+<li> <p> Injecting code into the kernel file or into a kernel module
+file.  These changes are persistent across reboot, but require that
+the system is rebooted in order to activate the subverted code
+[Jbtzhm, 2002; Truff, 2003].  </p>
+
+</ul>
+
+<p> The exact details of these methods are highly system dependent.
+Even the methods that use officially documented interfaces are
+likely to break with different versions of the same operating
+system.  We refer the interested reader to the references.  </p>
+
+<h2>5.16 Kernel rootkit operation </h2>
+
+<p> The purpose of many kernel rootkits is to hide malware processes,
+files and network ports, and of course to hide itself.  There are
+two sides to information hiding: the output side and the input
+side. On the output side, the kernel must censor the output from
+system calls that produce a list of processes, files, network ports,
+etc.  On the input side, any attempt to manipulate a hidden process,
+file, network port, etc.,
+
+must fail as if the object does not exist. In addition, rootkits
+may redirect system calls such as <tt>open()</tt> in order to
+subvert the operation of software that verifies the integrity of
+executable file content and attributes. Figure 5.4 shows the typical
+architecture of early kernel rootkit implementations.  </p>
+
+<blockquote>
+
+<img src="figure5.4.gif">
+
+<p> Figure 5.4: Rootkits based on system call interposition. </p>
+
+</blockquote>
+
+<p> Early kernel rootkits subvert system calls close to the
+process-kernel boundary. In order to prevent access to a hidden
+file, process, etc., they redirect specific system calls to wrapper
+code that inspects the parameters and that decides whether the
+system call is allowed to happen.  For example, code to subvert
+the <tt>open()</tt> system call goes like this:  </p>
+
+<blockquote>
+
+<pre>
+evil_open(pathname, flags, mode)
+    if (some_magical test succeeds)
+        call real_open(pathname, flags, mode)
+    else
+        error: No such file or directory
+</pre>
+
+</blockquote>
+
+<p> To prevent rootkit disclosure, system calls that produce lists
+of files, processes, network ports or kernel modules are intercepted
+in order to suppress information that must remain hidden.  For
+example, the code that subverts the <tt>getdents()</tt> system call
+(list directory entries) goes like this: </p>
+
+<blockquote>
+
+<pre>
+evil_getdents(handle, result)
+    call real_getdents(handle, result)
+    if (some_magical test fails)
+        remove hidden objects from result
+</pre>
+
+</blockquote>
+
+<p> The advantage of system call interposition is that the code is
+relatively easy to understand: the change is made at a
+
+point that is close to the user of those system calls.  One drawback
+of this approach is that many system calls need to be intercepted.
+For example, in order to hide the existence of a file one would
+have to intercept all system calls that have a file name argument:
+<tt>open()</tt>, <tt>chdir()</tt>, <tt>unlink()</tt>and many others.
+That alone is some 40 system calls on Linux, FreeBSD and Solaris.
+</p>
+
+<p> This drawback is addressed by subverting UNIX kernels at a
+level that is closer to the information that is being hidden.  In
+the next example we will show how this can be used to hide files.
+Figure 5.5 shows the typical architecture of such subversion.  </p>
+
+<p> UNIX systems support a variety of file system types.  Besides
+file systems with a UNIX origin such as UFS, EXT2FS, and EXT3FS,
+many systems support non-UNIX file systems such as FAT16, FAT32,
+NTFS, and others. Typically, each file system implements a common
+virtual file system (VFS) interface with operations to look up,
+open, or close a file, to read directory entries, and a dozen or
+so other operations [Kleiman, 1986].  </p>
+
+<blockquote>
+
+<img src="figure5.5.gif">
+
+<p> Figure 5.5: Rootkits based on interposition at object interfaces,
+showing subversion of multiple UFS file system methods. </p>
+
+</blockquote>
+
+<p> Of all these virtual file system interface operations, the
+<tt>lookup</tt> operation is of particular interest.  System calls
+that access an existing file or directory, etc., by name use the
+<tt>lookup</tt> operation to translate the pathname into the underlying
+file system object.  By redirecting the <tt>lookup</tt> call at the
+virtual file system layer it is possible to hide a file from all
+system calls that access an existing file by name: </p>
+
+<!-- see, for example, Job de Haas, vnops.c in kernmod-0.2, published
+1999 -->
+
+<blockquote>
+
+<pre>
+evil_lookup(parent_directory, pathname, ...)
+    if (some_magical test succeeds)
+        call real_lookup(parent_directory, pathname, ...)
+    else
+        error: No such file or directory
+</pre>
+
+</blockquote>
+
+<p> This modification is sufficient to hide an existing file from
+system calls that attempt to access it, such as <tt>chdir()</tt>
+or <tt>open()</tt>.  However, it does not hide the file's existence
+from system calls that <i>create</i> a new directory entry, such as
+<tt>link()</tt>, <tt>mkdir()</tt>, <tt>socket()</tt>, <tt>mkfifo()</tt>
+and other system calls. Unless the malware is prepared to redirect
+names of new files that collide with names of hidden files, the system
+calls will fail
+with a "File exists" error. A rootkit detector that knows specific
+rootkit file names can exploit this property. </p>
+
+<p> The kernel changes that we discussed sofar are relatively easy
+to detect, because they change code addresses in kernel tables that
+normally never change. We can examine these tables from outside
+the kernel by accessing <tt>/dev/kmem</tt>, or from inside the
+kernel with a forensic kernel module.  An example follows in the
+next section.  </p>
+
+<p> Detection methods that look for changes in kernel tables can
+be defeated by leaving the tables alone, and by patching an existing
+kernel function so that it calls the malware.  For an example of
+patching live kernel code, see [Cesare, 1999].  Such modifications
+can
+be found by inspecting all the running kernel code and by verifying
+all instructions against all kernel and kernel module files. This
+a non-trivial task, as the contents of modules change while they
+are linked into the kernel, in order to update references to external
+functions and data. </p>
+
+<h2>5.17 Kernel rootkit detection and evasion </h2>
+
+<p> Kernel rootkits, like their non-kernel predecessors, may be
+exposed because they introduce little inconsistencies into a system.
+Some inconsistencies may show up externally, in the results from
+system calls that manipulate process, files, kernel modules, and
+other objects.  Other inconsistencies show up only internally, in
+the contents of kernel data structures.  Internal inconsistency is
+unavoidable, because every hidden process, file, or kernel module
+occupies some storage. That storage has to be claimed as "in use",
+and has to be referenced by something in the kernel's path of
+execution, even though the storage does not appear in kernel symbol
+tables.  We will present examples of both types of inconsistency
+below.  </p>
+
+<ul>
+
+<li> <p> As with command-level subversion, output from tools that
+bypass the file system can reveal information that is hidden by
+compromised file system code. Examples are <tt>ils</tt> and
+<tt>fls</tt> from the Coroner's Toolkit and Sleuth Kit, and even
+good the old <tt>strings</tt> command.  </p>
+
+<li> <p> Even perfectly invisible kernel rootkits may give themselves
+away due to an oversight. For example, the modification time of an
+important system directory has changed, but there is no obvious
+change to the contents of that directory. </p>
+
+<li> <p>  The results from process manipulating system calls and
+from the <tt>/proc</tt> file system should be consistent. If a
+process is being hidden then some system calls report "not found"
+while other system calls may not.  The Checkps rootkit
+detector [Simpson, 2001] relies, among others, on such discrepancies;
+Chkrootkit also has tests for invisible processes.  In an
+example below we will show a different approach to detect a hidden
+process. </p>
+
+<li> <p>  Some kernel-based rootkits are controlled by invoking a
+legitimate system call with a special parameter value. For example,
+when the Adore rootkit is installed, <tt>setuid()</tt>
+(change process privileges) will report success for some parameter
+values even though the user does not have sufficient privilege;
+and when the Knark toolkit is installed, <tt>settimeofday()</tt>
+(set the system clock) will report success for some parameter values
+even though it should always fail when invoked by an unprivileged
+user.  Magical numerical parameter values are easily detected by
+brute force: just try every possible value, and look at the system
+call result.  Evasion of this detection method is easy, too: switch
+from a single call with a special parameter value to a sequence of
+calls with special parameter values, or use system calls with
+non-numerical parameter values.  </p>
+
+<li> <p> The hard link count of a directory, as reported by the
+<tt>stat()</tt> system call, should equal the number of subdirectories,
+as reported by the <tt>getdents()</tt> system call.  If a directory
+is being hidden, then it may show up as a missing hard link. This
+test is implemented by the <tt>chkdirs</tt> utility, part of the
+Chkrootkit rootkit detector. </p>
+
+<li> <p> Modifications to kernel tables such as the system call
+table or the virtual file system table may be detected after the
+fact by reading
+
+kernel memory via <tt>/dev/kmem</tt>, or by examining kernel memory
+from inside with a forensic kernel module such as Carbonite [Mandia,
+2001].
+We will show results from a <tt>/dev/kmem</tt> based tool in an
+example below.  </p>
+
+<li> <p> Modifications to kernel tables etc. may also be detected
+as they happen, by a kernel intrusion detection module that samples
+critical data structures periodically and/or that looks for
+undesirable event sequences. An example of this category is StJude
+[STJUDE].  </p>
+
+<li> <p> Modifications that hide files can show up as inconsistencies
+between information from the raw disk device and information returned
+by the kernel file system code. Likewise, modifications that hide
+network ports, processes, or kernel modules may be exposed by
+reading kernel memory and comparing the content of kernel data
+structures with results from system calls.  </p>
+
+</ul>
+
+<p> As an example of externally visible inconsistency we present
+a simple hidden process detection technique. The idea is to create
+a long sequence of processes. On UNIX systems that allocate PID
+(process ID) values sequentially, the sequence will show a hole
+where a PID is in use, or where a PID falls within a reserved range.
+As examples of the former, UNIX systems consider a PID as "in use"
+when it belongs to a running process, or when it belongs to a group
+of processes (either as a process group ID, or as its politically
+correct version, a POSIX session ID).  As examples of reserved
+ranges, FreeBSD and Linux skip over the first 100 and 300 PID
+values, respectively, when the PID counter wraps around at its
+maximal value. </p>
+
+<p>  The hidden process search can be implemented with the somewhat
+slow Perl program shown in listing 5.4 that creates a sequence of
+child processes
+with the <tt>fork()</tt> system call.  Whenever a hole appears in
+the sequence of child PID numbers, the program attempts to fill
+the hole with information about existing processes in <tt>/proc</tt>.
+In order to avoid false alarms due to short-lived processes that
+terminate before <tt>/proc</tt> can be searched, the program cycles
+twice through the entire PID range, which makes the program even
+slower.  </p>
+
+<blockquote>
+<pre>
+#!/usr/bin/perl
+
+# checkpid - find hidden processes 
+
+$last_pid = $PROCESS_ID;
+$first_pid = $last_pid + 1;
+
+for (;;) {
+
+    # Fork a child processes and wait until the child terminates.
+    if (($pid = fork()) &lt; 0) { die "cannot fork: $!\n"; }
+    if ($pid == 0) { exit; }
+    wait;
+
+    # Update the visible process list. Fill gaps in the PID sequence
+    # with information from the /proc file system.
+    $proc_seen[$pid] = 1;
+    if ($last_pid + 1 &lt; $pid - 1) { check_existing_processes(); }
+
+    # Update the maximal process ID, and how many times we reached it.
+    if ($pid &gt; $max_pid) { $max_pid = $pid; } 
+    if ($last_pid &gt; $pid) { $wrapped_around++; }
+    $last_pid = $pid;
+
+    # Report findings when we complete two passes over the PID range.
+    if ($wrapped_around &gt; 1 && $pid &gt;= $first_pid) {
+	print "Maximal PID: $max_pid\n";
+	for $pid (0..$max_pid) { 
+	    report_missing($pid) if !$proc_seen[$pid]; }
+	exit 0;
+    }
+}
+</pre>
+
+<p> Listing 5.4: A program that cycles through the process ID space
+and that recognizes hidden processes by the holes they leave behind.
+</p>
+
+</blockquote>
+
+<p> The implementation of the <tt>check_existing_processes()</tt>
+function is system dependent and is omitted to save space; the
+complete script will be made available at the book website.  When
+this program is run on a rootkit-infested Solaris system, it produces
+as output:  </p>
+
+<blockquote>
+<pre>
+Maximal PID: 29999
+Missing PID: 10257
+</pre>
+</blockquote>
+
+<p> The first line reports the highest process ID observed, and
+the second line reports a PID that was never observed as a process
+ID or as the ID of a process group or of a POSIX session. Indeed,
+ID 10257 corresponds to a hidden process that was set up in a lab
+environment in order to test this tool. </p>
+
+<p> Due to the way the hidden process finding tool works, a positive
+signal should definitely be taken seriously. A negative result, on
+the other hand, would not mean that a system is clean. The rootkit
+might be too sophisticated for detection in this manner. Another
+limitation of the tool is that it cannot explore the reserved PID
+range (0-99 on BSD, 0-299 on Linux) and consequently will report
+those ranges as possibly hidden processes. </p>
+
+<p> The <tt>findrootkit</tt> tool works in a very different manner.
+It examines kernel memory and can therefore give specific answers
+[Dik, 2004].  <tt>findrootkit</tt> is written in Perl, and uses
+the
+<tt>mdb</tt> low-level debugger to examine the running Solaris
+kernel via the <tt>/dev/kmem</tt> interface.  The tool checks the
+consistency of information from multiple sources within and outside
+the kernel:  </p>
+
+<ul>
+
+<li> the <tt>/dev/ksyms</tt> symbol table with kernel function and
+data addresses and sizes,
+
+<li> the in-kernel module list with executable code and data segment
+addresses and sizes of loaded kernel modules,
+
+<li> the in-kernel "text arena" table with executable code segment
+addresses and sizes,
+
+<li> the function addresses in the system call jump tables and in
+file system operation jump tables, and
+
+<li> the executable code and data segment sizes, as specified in
+the symbol tables of kernel module files.
+
+</ul>
+
+<p> These consistency checks can reveal the presence of hidden
+kernel modules and other code that hides in the kernel. Additionally,
+the tool knows that specific kernel modules implement specific
+functions. For example, <tt>findrootkit</tt> knows the kernel
+modules that implement specific file systems or specific system
+calls.  Tables 5.9a and 5.9b show an example of a kernel modification
+report.  </p>
+
+<blockquote>
+
+<table border="0">
+
+<tr> <td valign="top">
+
+<table border="0">
+
+<tr> <th> Interposed vnode<br> operation </th> <th> Interposing<br>
+function </th> </tr>
+
+<tr> <td colspan="2"> <hr> </td> </tr>
+
+<tr> <td> specfs:ioctl </td> <td> <tt> 0xfe9f23c8 </tt> </td> </tr>
+
+<tr> <td> procfs:lookup </td> <td> <tt> 0xfe9f2080 </tt> </td>
+</tr>
+
+<tr> <td> procfs:readdir </td> <td> <tt> 0xfe9f22fc </tt> </td>
+</tr>
+
+<tr> <td> ufs:setattr </td> <td> <tt> 0xfe9f1420 </tt> </td> </tr>
+
+<tr> <td> ufs:getattr </td> <td> <tt> 0xfe9f174c </tt> </td> </tr>
+
+<tr> <td> ufs:lookup </td> <td> <tt> 0xfe9f1a08 </tt> </td> </tr>
+
+<tr> <td> ufs:readdir </td> <td> <tt> 0xfe9f1d50 </tt> </td> </tr>
+
+<tr> <td> ufs:remove </td> <td> <tt> 0xfe9f1e30 </tt> </td> </tr>
+
+<tr> <td> ufs:rename </td> <td> <tt> 0xfe9f1eec </tt> </td> </tr>
+
+<tr> <td colspan="2"> <hr> </td> </tr>
+
+</table>
+
+</td>
+
+<td width="20">
+
+</td>
+
+<td valign="top">
+
+<table border="0">
+
+<tr> <th> Interposed<br> system call </th> <th> Interposing<br>
+function </th> </tr>
+
+<tr> <td colspan="2"> <hr> </td> </tr>
+
+<tr> <td> fork </td> <td> <tt> 0xfe9f2fb4 </tt> </td> </tr>
+
+<tr> <td> fork1 </td>  <td> <tt> 0xfe9f3058 </tt>  </td> </tr>
+
+<tr> <td> kill </td>  <td> <tt> 0xfe9f30fc </tt>  </td> </tr>
+
+<tr> <td> sigqueue </td>  <td> <tt> 0xfe9f31a4 </tt>  </td> </tr>
+
+<tr> <td> exec </td>  <td> <tt> 0xfe9f324c </tt>  </td> </tr>
+
+<tr> <td> exece </td>  <td> <tt> 0xfe9f3264 </tt>  </td> </tr>
+
+<tr> <td colspan="2"> <hr> </td> </tr>
+
+</table>
+
+</td>
+
+</tr>
+
+</table>
+
+<p> Tables 5.9a, 5.9b: Solaris rootkit kernel modification report,
+showing changes to the file system operations table, and to the
+system call jump table. </p>
+
+</blockquote>
+
+<p> The report in tables 9a and 9b shows the <tt>findrootkit</tt>
+results for a Solaris kernel with a hidden kernel module. A number
+of file system operations and system calls is interposed, and is
+shown with the hexadecimal address of each
+
+interposing function.  The kernel module name and interposing
+function names are unavailable, because those names were
+
+removed by the kernel module.  The replacements in the <tt>proc</tt>
+file system are what one would expect for process hiding:  the
+<tt>procfs:lookup()</tt> operation reporting that a hidden process
+does not exist, and the <tt>procfs:readdir()</tt> operation removing
+hidden processes from process listings.  Numerous UFS (the default
+Solaris file system) operations have been modified for presumably
+nefarious purposes, as well as the <tt>specfs:ioctl()</tt> operation
+for the SPECFS file system, which provides access to device special
+files, to network sockets, and to other objects that exist outside
+the Solaris file system.  </p>
+
+<p> As with the previous tool, a sufficiently sophisticated rootkit
+can evade detection. In particular, tools like the last one that
+examine a kernel from outside can be fooled by subverting the
+<tt>/dev/ksyms</tt> and/or <tt>/dev/kmem</tt> drivers so that they
+lie about the contents of
+
+kernel memory.  Even running the consistency checker inside the
+kernel would not make it immune to such tampering.  </p>
+
+<h2>5.18 Conclusion </h2>
+
+<p> Writing this chapter has produced at least one good result: it
+has convinced its author to raise the BSD security level on critical
+machines. Although such protection can be subverted, it buys
+additional time, and forces an intruder to raise alarms.  </p>
+
+<p> The rootkits discussed in this chapter go through a lot of
+effort to hide processes or files, but there is no good reason why
+a rootkit should need to use processes or files in the first place.
+With some loss of convenience, backdoor software can be running
+entirely within the kernel, or at least the part of the backdoor
+that is memory resident. If storage space is needed there is plenty
+available in the mostly unused swap space, and the backdoor can be
+controlled via any number of local or networked covert channels.
+A rootkit that makes no persistent changes to the machine can be
+practically undetectable by software that runs within or above a
+compromised kernel. Finding it requires direct hardware access, or
+software that runs between the kernel and the hardware, such as a
+virtual machine monitor or hypervisor. At the time of writing,
+monitors and hypervisors
+are rarely used. And they are not the ultimate solution,
+either.  They will have bugs, and therefore will be prone to
+subversion.  </p>
+
+<p> Although this chapter did not cover the possibilities for
+subversion at the hardware level, that does not mean that the
+authors are ignorant of its potential. Any writable storage presents
+an opportunity for subversion, especially when that storage is
+associated with, or is even part of, a processor of some kind.
+Hoglund and McGraw discuss this topic in a PC hardware specific
+context [Hoglund, 2004]. </p>
+
+<hr>
+
+<h2> References </h2>
+
+<p> [Abell, 2004] The lsof (list open files) tool by Victor A.
+Abell, 2004.  <br>
+<a href="ftp://lsof.itap.purdue.edu/pub/tools/unix/lsof/">
+ftp://lsof.itap.purdue.edu/pub/tools/unix/lsof/</a>
+</p>
+
+<p> [Arbaugh, 1997] W. A. Arbaugh, D. J. Farber, J. M. Smith,
+"A Secure and Reliable Bootstrap Architecture", Proceedings of the
+1997 IEEE Symposium on Security and Privacy, pp. 6571, May 1997. <br>
+<a href="http://www.cs.umd.edu/~waa/pubs/oakland97.pdf">
+http://www.cs.umd.edu/~waa/pubs/oakland97.pdf</a>
+</p>
+
+<p> [ASR, 1996] Avalon Security Research, amodload kernel loader
+for SunOS 4, 1996. <br>
+<a href="http://ftp.cerias.purdue.edu/pub/lists/best-of-security/110">
+http://ftp.cerias.purdue.edu/pub/lists/best-of-security/110</a>
+</p>
+
+<p> [Cesare, 1999] Silvio Cesare, "Runtime kernel kmem patching",
+1999. <br>
+<a href="http://reactor-core.org/runtime-kernel-patching/">
+http://reactor-core.org/runtime-kernel-patching/</a> </p>
+
+<p> [Dik, 2004] Casper H.S. Dik, private communication. </p>
+
+<p> [van Doorn, 2001] L. van Doorn, G. Ballintijn, and W. A. Arbaugh,
+"Design and implementation of signed executables for linux,"
+University of Maryland, Tech. Rep. CS-TR-4259, June 2001. <br> <a
+href="http://www.cs.umd.edu/%7Ewaa/pubs/cs4259.ps">
+http://www.cs.umd.edu/%7Ewaa/pubs/cs4259.ps</a> </p>
+
+<p> [Hoglund, 2004] Greg Hoglund, Gary McGraw, chapter 8 in "Exploiting
+Software". Addison Wesley, 2004. </p>
+
+<p> [Jbtzhm, 2002] Jbtzhm, "Static Kernel Patching", Phrack 60,
+2002. <br>
+<a href="http://www.phrack.org/show.php?p=60&amp;a=8">
+http://www.phrack.org/show.php?p=60&amp;a=8</a> </p>
+
+<p> [Kleiman, 1986] S.R. Kleiman, Vnodes: An Architecture for Multiple
+File System Types in Sun UNIX", Summer 1986 Usenix Conference
+Proceedings. <br> <a
+href="http://www.solarisinternals.com/si/reading/vnode.pdf">
+http://www.solarisinternals.com/si/reading/vnode.pdf</a> </p>
+
+<p> [Mandia, 2001] The Carbonite forensic software by Kevin Mandia
+and Keith J. Jones, 2001.  <br>
+<a href="http://www.foundstone.com/"> http://www.foundstone.com/</a>
+</p>
+
+<p> [Murilo, 2003], The chkrootkit rootkit detection tool by Nelson
+Murilo and Klaus Steding-Jessen, 2003. <br>
+<a href="http://www.chkrootkit.org/"> http://www.chkrootkit.org/</a>
+</p>
+
+<p> [Nemeth, 2001] Evi Nemeth, Garth Snyder, Scott Seebass, Trent
+R. Hein, "UNIX System Adminstration Handbook", third edition.
+Prentice Hall PTR, 2001. </p>
+
+<p> [OpenSSH, 2004] The OpenSSH remote connectivity software. <br>
+<a href="http://www.openssh.org/"> http://www.openssh.org/</a> </p>
+
+<p> [Plaguez, 1998] Plaguez, "Weakening the Linux Kernel", Phrack 52,
+1998.  <br>
+<a href="http://www.phrack.org/show.php?p=52&amp;a=18">
+http://www.phrack.org/show.php?p=52&amp;a=18</a> </p>
+
+<p> [Plasmoid, 1999] Plasmoid, "Solaris Loadable Kernel Modules", 1999.
+<br>
+<a href="http://www.thc.org/papers/slkm-1.0.html">
+http://www.thc.org/papers/slkm-1.0.html</a> </p>
+
+<p> [Pragmatic, 1999] Pragmatic, "Attacking FreeBSD with Kernel Modules",
+1999.  <br>
+<a href="http://www.thc.org/papers/bsdkern.html">
+http://www.thc.org/papers/bsdkern.html</a> </p>
+
+<p> [Sd, 2001] Sd, Dev, "Linux on-the-fly kernel patching without
+LKM", Phrack 57, 2001.  <br>
+<a href="http://www.phrack.org/show.php?p=58&amp;a=7">
+http://www.phrack.org/show.php?p=58&amp;a=7</a> </p>
+
+<p> [Simpson, 2001] The checkps rootkit detector by Duncan Simpson. <br>
+<a href="http://sourceforge.net/projects/checkps/">
+http://sourceforge.net/projects/checkps/</a>
+</p>
+
+<p> [Stevens, 1997] W. Richard Stevens, as cited in 
+the Raw IP Networking FAQ. <br>
+<a href="http://www.faqs.org/faqs/internet/tcp-ip/raw-ip-faq/">
+http://www.faqs.org/faqs/internet/tcp-ip/raw-ip-faq/ </a>
+
+<p> [StJude, 2002] The Saint Jude Kernel-Level IDS project.
+
+<br> <a href="http://sourceforge.net/projects/stjude/">
+http://sourceforge.net/projects/stjude/</a> </p>
+
+<p> [Truff, 2003] Truff, "Infecting loadable kernel modules", Phrack
+61, 2003.  <br>
+<a href="http://www.phrack.org/show.php?p=61&amp;a=10">
+http://www.phrack.org/show.php?p=61&amp;a=10</a> </p>
+
+<p> [Williams, 2002] Michael A. Williams, "Anti-Trojan and Trojan Detection
+with In-Kernel Digital Signature testing of Executables". <br> 
+<a href="http://www.trojanproof.org/"> http://www.trojanproof.org/</a>
+</p>
+
+</body>
+
+</html>
+

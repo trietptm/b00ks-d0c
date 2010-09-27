@@ -1,0 +1,612 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <meta name="description" content="Tracking Botnets with help of Honeynets" />
+    <meta name="keywords" content="hacking,security,honeypots,honeynets,Honeynet Project,botnets,bots" />
+    <title>Know your Enemy: Tracking Botnets</title>
+    <link rel="stylesheet" type="text/css" href="botnets.css" />
+  </head>
+<body>
+
+<div id="header">
+	<h1>Know your Enemy:<br /> Tracking Botnets - Bot-Commands</h1>
+	<h3 id="subtitle">Which commands the bots understand</h3>
+<p id="metainfo">
+  <a href="mailto:project@honeynet.org?Subject=Know Your Enemy">Honeynet Project</a><br />
+  <a href="http://www.honeynet.org">http://www.honeynet.org</a><br />
+  Last Modified: 17 February, 2005
+</p>
+</div>
+
+
+<p>In the following, we cover the more popular commands implemented in the 
+common bots we have captured in the wild. Presenting all the commands is beyond
+the scope of this paper, as Agobot comes along with over 90 commands in the default 
+configuration. 
+
+<ol>
+<li>DDoS something
+	<ul>
+	<li>Agobot
+		<ul>
+		<li><b>ddos.stop</b><br />
+			stops all floods
+		</li>
+
+		<li><b>ddos.phatwonk 	[host] [time] [delay]</b><br />
+			starts leet flood
+			
+			<pre>
+      Starts a SYN-flood on ports 21,22,23,25,53,80,81,88,
+      110,113,119,135,137,139,143,443,445,1024,1025,1433,
+      1500,1720,3306,3389,5000,6667,8000,8080
+			</pre>
+		</li>
+
+		<li><b>ddos.phatsyn 	[host] [time] [delay] [port]</b><br />
+			starts syn flood
+		</li>
+
+		<li><b>ddos.phaticmp	[host] [time] [delay]</b><br />
+			starts icmp flood
+		</li>
+
+		<li><b>ddos.synflood	[host] [time] [delay] [port]</b><br />
+			starts an SYN flood
+		</li>
+
+		<li><b>ddos.updflood 	[host] [port] [time]  [delay]</b><br />
+			start a UDP flood
+		</li>
+
+			<li><b>ddos.targa3	[host] [time]</b><br />
+			start a targa3 flood
+
+<pre>
+      Implements the well known DDoS attack Mixter authored in 1999.
+
+      /*
+      * targa3 - 1999 (c) Mixter <mixter@newyorkoffice.com>
+      *
+      * IP stack penetration tool / 'exploit generator'
+      * Sends combinations of uncommon IP packets to hosts
+      * to generate attacks using invalid fragmentation, protocol,
+      * packet size, header values, options, offsets, tcp segments,
+      * routing flags, and other unknown/unexpected packet values.
+      * Useful for testing IP stacks, routers, firewalls, NIDS,
+      * etc. for stability and reactions to unexpected packets.
+      * Some of these packets might not pass through routers with
+      * filtering enabled - tests with source and destination host
+      * on the same ethernet segment gives best effects.
+      */
+      taken from 
+          http://packetstormsecurity.org/DoS/targa3.c
+
+</pre>
+		</li>
+
+		<li><b>ddos.httpflood	[url] [number] [referrer] [recursive = true||false]</b><br />
+			starts a HTTP flood
+
+<pre>
+      This is real nasty since it fetches websites from a webserver. 
+      If "recursive" is set, the bot parses the replies and follows 
+      links recursively.
+</pre>
+		</li>
+		</ul>
+	</li>
+
+	<li>SDBot
+		<ul>
+
+		<li><b>	syn [ip] [port] [seconds|amount] [sip] [sport] [rand]</b> (sdbot 05b pure version)<br />
+		</li>
+
+		<li><b>	udp [host] [num] [size] [delay] [[port]]size</b> (sdbot 05b ago version)<br />
+		</li>
+
+		<li><b>ping [host] [num] [size] [delay]num</b>
+		</li>
+		</ul>
+	</li>
+
+	<li>UrXbot
+		<ul>
+
+		<li><b>ddos.(syn|ack|random) [ip] [port] [length]</b>
+		</li>
+
+		<li><b>(syn|synflood) [ip] [port] [length]</b>
+		</li>
+
+		<li><b>(udp|udpflood|u) [host] [num][ [size] [delay] [[port]]</b>
+		</li>
+		<li><b>(tcp|tcpflood) (syn|ack|random) [ip] [port] [time]</b>
+		</li>
+		<li><b>(ping|pingflood|p) [host] [num][ [size] [delay]</b>
+		</li>
+		<li><b>(icmpflood|icmp) [ip] [time]</b>
+		</li>
+		<li><b>ddos.stop</b>
+		</li>
+		<li><b>synstop</b>
+		</li>
+		<li><b>pingstop</b>
+		</li>
+		<li><b>udpstop</b>
+		</li>
+
+		</ul>
+	</li>
+</ul>
+</li>
+
+<li>Spreading
+<ul>
+	<li>Agobot
+	<ul>
+		<li><b>scan.addnetrange [255.255.255.255/32] [priority]</b>
+		</li>
+
+		<li><b>scan.delnetrange [255.255.255.255/32]</b>
+		</li>
+
+		<li><b>scan.listnetranges</b><br />
+			list scanned netranges
+		</li>
+
+		<li><b>scan.clearnetranges</b><br />
+			clears netrange
+		</li>
+
+		<li><b>scan.resetnetranges</b><br />
+			removes all netranges from scanner and
+			adds local LAN as scanning range
+		</li>
+
+		<li><b>scan.enable [scanner]</b> <br />
+		[scanner] can be one of
+		<pre>
+      Anubis Bagle CPanel DCOM DCOM2 Doom DW Ethereal
+      HTTP Locator LSASS NetBios Optix SQL UPNP WKS
+		</pre>
+		</li>
+
+		<li><b>scan.disable [scanner]</b><br />
+			[scanner] can be the same as above
+		</li>
+
+		<li><b>scan.startall</b><br />
+			starts all scanners
+		</li>
+
+		<li><b>scan.stopall</b><br />
+			stops all scanners
+		</li>
+
+		<li><b>scan.start</b><br />
+			starts all enabled scanners
+		</li>
+
+		<li><b>scan.stop</b><br />
+			stops all scanners
+		</li>
+
+		<li><b>scan.stats</b><br />
+			replys stats about exploitings per scanner
+		</li>
+
+		<li><b>scan.host [255.255.255.255[:port]]</b>
+      If given with port, just tries to exploit
+      the host with the scanners fitting the 
+      ports, else all scanners are used.
+		</li>
+
+	</ul>
+	</li>
+
+
+	<li>SDBot &amp; UrXBot
+	<ul>
+
+		<li><b>(scanall|sa)</b>
+		</li>
+
+		<li><b>(scanstats|stats)</b>
+		</li>
+
+		<li><b>scandel	[port|method]</b><br />
+			[method] can be one of
+	<pre>
+	webdav 
+	ntpass netbios 
+	dcom135 dcom445 dcom1025
+	dcom2
+	iis5ssl
+	mssql
+	beagle1
+	beagle2
+	mydoom
+	lsass_445
+	lsass_139
+	optix
+	upnp
+	netdevil
+	DameWare
+	kuang2
+	sub7
+	</pre>
+		</li>
+
+		<li><b>scanstop</b>
+		</li>
+
+		<li><b>(advscan|asc) [port|method] [threads] [delay] [minutes]</b>
+		</li>
+					
+	</ul>
+	</li>
+</ul>
+</li>
+
+	<li>Downloading files from the internet
+	<ul>
+		<li>Agobot
+		<ul>
+
+			<li><b>http.download</b><br />
+			download a file via HTTP
+			</li>
+
+		<li><b>http.execute</b><br />
+			updates the bot via the given HTTP URL
+		</li>
+
+		<li><b>http.update</b><br />
+			executes a file from a given HTTP URL
+		</li>
+
+		<li>
+			The same commands are also available via FTP
+		</li>
+
+		</ul>
+		</li>
+		<li>SDBot &amp; UrXBot
+		<ul>
+			<li><b>(update|up) [url] [botid]</b>
+			</li>
+			<li><b>(download|dl) [url] [[runfile?]] [[crccheck]] [[length]]</b>
+			</li>
+		</ul>
+		</li>
+	</ul>
+	</li>
+	
+	<li>Local file IO
+	<ul>
+		<li>SDBot &amp; UrXBot
+		<ul>
+			<li><b>(execute|e) [path]</b></li>
+			<li><b>(findfile|ff) filename</b></li>
+			<li><b>(rename|mv) [from] [to]</b></li>
+			<li><b>findfilestopp</b></li>
+		</ul>
+		</li>
+	</ul>
+	</li>
+
+	<li>Sending Spam
+	<ul>
+		<li>Agobot
+		<ul>
+
+		<li><b>cvar.set spam_aol_channel [channel]</b><br />
+			AOL Spam - Channel name
+		</li>
+
+		<li><b>cvar.set spam_aol_enabled [1/0]</b><br />
+			AOL Spam - Enabled?
+		</li>
+
+		<li><b>cvar.set spam_maxthreads [8]cvar</b> <br />
+			Spam Logic - Number of threads
+		</li>
+
+		<li><b>cvar.set spam_htmlemail		[1/0]"true",</b><br />
+			Spam Logic - Send HTML emails
+		</li>
+
+		<li><b>cvar.set aolspam_maxthreads	[8]</b><br />
+			AOL Spam Logic - Number of threads
+		</li>
+
+		<li><b>spam.setlist</b><br />
+			downloads list with email-addresses to spam them
+		</li>
+
+		<li><b>spam.settemplate</b><br />
+			downloads an email template
+		</li>
+
+		<li><b>spam.start</b><br />
+			starts the spamming
+		</li>
+
+		<li><b>spam.stop</b><br />
+			stops the spamming
+		</li>
+
+		<li><b>aolspam.setlist</b><br />
+			AOL Spam - downloads an email list
+		</li>
+
+		<li><b>aolspam.settemplate</b><br />
+			AOL - downloads an email template
+		</li>
+
+		<li><b>aolspam.setuser</b><br />
+			AOL - sets an username
+		</li>
+
+		<li><b>aolspam.setpass</b><br />
+			AOL - sets a password
+		</li>
+
+		<li><b>aolspam.start</b><br />
+			AOL - starts the spamming
+		</li>
+
+		<li><b>aolspam.stop</b><br />
+			AOL - stops the spamming
+		</li>
+	</ul>
+	</li>
+
+	<li>SDBot
+	<pre>
+	So far, SDBot does not implement dedicated spamming
+	methods. But other options to send spam are possible:
+	The spammer uses the "download" command to download
+	and execute a SOCKSv4/v5 server. The server publishes
+	his IP-address and SOCKS-port at a file on a
+	webserver. Via this backdoor, spam can be sent.
+	</pre>
+	</li>
+			
+	<li>UrXBot
+	<ul>
+
+		<li><b>email [server] [port] [srcmail] [dstmail] [mailsubj]</b>
+		</li>
+
+	</ul>
+	</li>
+</ul>
+</li>
+<li>Sniffing
+<ul>
+	<li>Agobot
+	<pre>
+	Agobots sniffing is really "advanced": If you compile
+	the bot with sniffing enabled, it drops a stripped
+	down lipcpap dll on startup and registers it as system
+	driver. The sniffing thread then uses libpcre to
+	lookout for bot commands
+	</pre>
+	<ul>
+
+		<li><b>HTTP</b><br />
+		<i>Commented: Like paypals? ;-D How about cookies? YUMMEH! -rain</i><br />
+				Checks for "PAYPAL" "SET-COOKIE"
+		</li>
+
+		<li><b>SSH</b><br />
+		<i>Commented: I dont get the idea, but the famous lsass author Nils contributed this and comments it<br />
+			// SSH - works - after the RSA key is sent, the login and pass is sent raw. Believe me. -Nils</i><br />
+				Checks for "login as:" "password:" "putty" "SECURECRT"
+		</li>
+
+		<li><b>CPANEL</b><br />
+		<i>Commented: Like configuring Domains ? Here you go ! -Nils</i><br />
+		Checks for "cPanel" "Set-Cookie:"
+		</li>
+
+		<li><b>IRC</b><br />
+		Checks for: 
+		<pre>
+	"^:(.*)!(.*)@(.*) ((?i)PRIVMSG|NOTICE) (.*) :(.)((?i)login|auth|id|ident|hashin|secure|l) (.*)$"
+	"^((?i)oper )(.*)"
+	"^:(.*) 381 (.*) :(.*)"
+	"^((?i)nickserv identify) (.*)$"
+	"^:.* ((?i)notice|privmsg) (.*) :Password accepted.*"
+		Botnet DDoS:
+	"^:(.*)!(.*)@(.*) ((?i)PRIVMSG|NOTICE) (.*) :(.)((?i)ddos|packet|flood|udp|syn|pfast|coldrage|syn3|syn2|targa|icmp|fuck|random) (.*)$"
+		</pre>
+		</li>
+
+		<li><b>FTP</b><br />
+		Checks for: 
+		<pre>
+	"^((?i)USER )(.*)"
+	"^((?i)PASS )(.*)"
+	"^(230 )(.*)"
+		</pre>
+		</li>
+
+		<li><b>cvar.set sniffer_enabled 1/0</b>
+		</li>
+
+		<li><b>cvar.set sniffer_channel [destinationchannel]</b>
+			sets the destinations channel to which the results should be logged
+		</li>
+
+		<li><b>sniffer.addstring [pcre]</b>
+				adds a user-defined string to the sniffer
+		</li>
+
+		<li><b>sniffer.delstring [pcre]</b>
+			deletes a user-defined string from the sniffer
+		</li>
+
+	</ul>
+	</li>
+
+	<li>SDBot
+	<pre>
+	SDBots sniffing is based on Windows raw socket
+	listening.  Compared to the way Agobots sniffing is
+	implemented, this way is ineffective and poorly: The
+	bot even sniffs his own traffic and recognizes it as
+	sniffed traffic. In addition, SDBot lacks PCRE support
+	and uses strstr() for comparison.
+	</pre>
+
+	<ul>
+		<li><b>HTTP</b><br />
+	Checks for: paypal PAYPAL paypal.com PAYPAL.COM Set-Cookie: 
+        </li>
+
+				<li><b>IRC</b><br />
+				Checks for the following strings: <br />
+        :.login
+        :,login
+        :!login
+        :@login
+        :$login
+        :%login
+        :^login
+        :&login
+        :*login
+        :-login
+        :+login
+        :/login
+        :\\login
+        :=login
+        :?login
+        :'login
+        :`login
+        :~login
+        : login
+        :.auth
+        :,auth
+        :!auth
+        :@auth
+        :$auth
+        :%auth
+        :^auth
+        :&auth
+        :*auth
+        :-auth
+        :+auth
+        :/auth
+        :\\auth
+        :=auth
+        :?auth
+        :'auth
+        :`auth
+        :~auth
+        : auth
+        :.id
+        :,id
+        :!id
+        :@id
+        :$id
+        :%id
+        :^id
+        :&id
+        :*id
+        :-id
+        :+id
+        :/id
+        :\\id
+        :=id
+        :?id
+        :'id
+        :`id
+        :~id
+        : id
+        :.hashin
+        :!hashin
+        :$hashin
+        :%hashin
+        :.secure
+        :!secure
+        :.l
+        :!l
+        :$l
+        :%l
+        :.x
+        :!x
+        :$x
+        :%x
+        :.syn
+        :!syn
+        :$syn
+        :%syn
+         CDKey
+        JOIN #
+        NICK
+        OPER
+        oper
+        now an IRC Operator
+
+		</li>
+
+		<li><b>carnivore [on/off]</b>
+		</li>
+	</ul>
+	</li>
+</ul>
+</li>
+<li>Cloning
+<ul>
+	<li>Agobot
+	<ul>
+		<li>For some reasons our agobot lacks cloning capabilities 
+		</li>
+	</ul>
+	</li>
+
+	<li>SDBot &amp; UrXBot
+	<ul>
+<li>
+<b>(clone|c) [host] [port] [channel] [[chanpass]] </b>
+</li>
+<li>
+<b>clonestop [clonenumber]</b>
+</li>
+<li>
+<b>(c_raw|c_r) [clonenumber] [raw irc command]</b>
+</li>
+<li>
+<b>(c_mode|c_m) [clonenumber][some irc mode]</b>
+</li>
+<li>
+<b>(c_nick|c_n) [clonenumber] [newnick|$randnick]</b>
+</li>
+<li>
+<b>(c_join|c_j) [clonenumber] [channel]</b>
+</li>
+<li>
+<b>(c_part|c_p) [clonenumber] [channel]</b>
+</li>
+<li>
+<b>(c_privmsg|c_pm) [clonenumber] [dest nick or channel] [msg]</b>
+</li>
+<li>
+<b>(c_action|c_a) [clonenumber] [dest nick or channel] [msg]</b>
+</li>
+	</ul>
+	</li>
+</ul>
+</li>
+</ol>
+
+<div id="footer">
+  <a href="http://www.honeynet.org"><img src="http://www.honeynet.org/images/small.gif" alt="The Honeynet Project" /></a>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,716 @@
+<HTML>
+<HEAD>
+    <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+    <meta name="description" content="Honeynets 2 &egrave;me G&eacute;n&eacute;ration">
+    <meta name="keywords" content="Honeynets, GenII, 2nd generations, security, honeypots, s&eacute;curit&eacute;">
+    <TITLE>Know Your Enemy: GenII Honeynets</TITLE>
+<STYLE type=text/css>
+<!--
+a:active {  text-decoration: none}
+a:hover {  text-decoration: none}
+a:link {  text-decoration: none}
+a:visited {  text-decoration: none}
+-->
+</STYLE>
+</HEAD>
+<BODY LINK="#0000ff" VLINK="#800080">
+
+<center>
+<font FACE="Palatino,Book Antiqua"><font SIZE=+4>Know Your Enemy:<BR>
+GenII Honeynets</font><BR>
+<I><font SIZE=+1>D&eacute;ploiement facilit&eacute;, furtivit&eacute; accrue, maintenance plus s&ucirc;re.</font></I>
+<p>
+<font face="Arial, Helvetica, sans-serif" size=-1>
+<A HREF="mailto:project@honeynet.org?Subject=GenII Honeynets">Honeynet Project</A><BR>
+<A HREF="http://www.honeynet.org/">http://www.honeynet.org/</A><BR>
+Last Modified: 27 June, 2003<br>
+(Traduis par <A HREF="mailto:jcmeynard@freesurf.fr">Jean-Christophe Meynard</A> derni&egrave;re modification le 30 octobre 2003)</font></P></center>
+
+<p>
+<font FACE="Arial, Helvetica, sans-serif" SIZE=-1>
+Honeynet GenII (2<SUP>&eacute;me</SUP> g&eacute;n&eacute;ration) est
+l'&eacute;tape suivante de l'&eacute;volution des technologies honeynet.
+Par l'utilisation de nouvelles techniques d&eacute;velopp&eacute;es par les
+membres du projet Honeynet et la communaut&eacute; S&eacute;curit&eacute;,
+Honeynet GenII augmente consid&eacute;rablement la souplesse de
+d&eacute;ploiement, de supervision et la s&eacute;curit&eacute; d'un honeynet.
+Cet article pr&eacute;sente cette technologie. Il peut &ecirc;tre utilis&eacute;
+comme un guide pour construire pas &agrave; pas un honeynet GenII similaire
+&agrave; celui utilis&eacute; par les membres du Projet. La connaissance des
+concepts pr&eacute;sent&eacute;s dans l'article
+<A HREF="http://www.honeynet.org/papers/honeynets/">Know Your Enemy: Honeynets</A>
+est un pr&eacute; requis.</P>
+
+<P>
+Cet article est un aper&ccedil;u de l'ensemble des composants d'un honeynet
+GenII. Le premier paragraphe pr&eacute;sente le concept d'un honeywall, c'est
+le point d'entr&eacute;e qui nous donne le moyen de superviser notre
+r&eacute;seau. Dans le paragraphe traitant du contr&ocirc;le des donn&eacute;es,
+nous expliquons comment limiter les actions que les pirates peuvent entreprendre
+sur notre r&eacute;seau. Le troisi&egrave;me paragraphe, "Capture de
+donn&eacute;e", d&eacute;taille les m&eacute;thodes pour enregistrer de
+mani&egrave;re exhaustive l'activit&eacute; de l'attaquant tant au niveau de
+l'h&ocirc;te que du r&eacute;seau. Le paragraphe "Alerter" couvre les
+proc&eacute;d&eacute;s pour notifier en temps r&eacute;el l'administrateur des
+attaques r&eacute;ussies. Enfin le paragraphe "Tester" pr&eacute;sente un
+ensemble de moyen de v&eacute;rification de la configuration mise en &oelig;uvre
+dans les &eacute;tapes pr&eacute;c&eacute;dentes. L'installation du honeywall
+d&eacute;crite se base sur un noyau Linux 2.4 tournant sur du mat&eacute;riel
+x86 standard. Les outils et les m&eacute;thodes d&eacute;crite dans cet article,
+sont ceux actuellement utilis&eacute;s par les membres du Projet. L'utilisation
+de ces outils et de ces m&eacute;thodes n'est pas une obligation. Vous pouvez
+utiliser librement les technologies que vous ma&icirc;trisez le mieux.</P>
+
+<p>
+<B><font FACE="Palatino,Book Antiqua" SIZE=+2>L'architecture</font></B><BR>
+Un honeynet n'est pas un produit fini, il ne suffit pas d'installer un logiciel
+depuis un CD et d'y aller (quoique nous y travaillions :-). Un honeynet est une
+architecture, un r&eacute;seau tr&egrave;s s&eacute;curis&eacute; utilis&eacute;
+pour contenir et analyser le comportement des attaquants l&acirc;ch&eacute;s
+dans la nature. La mani&egrave;re de le d&eacute;ployer d&eacute;pend de vous.
+Pour vous aider dans votre d&eacute;ploiement, nous avons &eacute;cris le
+document <A HREF="http://www.honeynet.org/alliance/requirements.html">Honeynet Definitions, Requirements, and Standards</A>.
+Ce document n'est pas une notice technique, c'est plut&ocirc;t une description
+de l'&eacute;tat de l'art d&eacute;finissant les pr&eacute;-requis et la
+mani&egrave;re de construire un honeynet que les membres de la <A HREF="http://www.honeynet.org/alliance">Honeynet Research Alliance</A> sont suppos&eacute;s
+suivre. Cet article d&eacute;taille une m&eacute;thode de d&eacute;ploiement
+respectant ces contraintes.</P>
+
+<P>
+Le composant crucial d'un honeynet est la passerelle, c'est elle qui s&eacute;pare
+les syst&egrave;mes composant le honeynet du reste du monde. La passerelle agit
+comme un sas, en fait nous l'appelons un Honeywall. Tout trafic entrant ou sortant
+du honeynet transite obligatoirement par ce honeywall. Cette passerelle est le
+quartier g&eacute;n&eacute;ral de votre honeynet, tout se fait ici. Pour un
+honeynet GenII, notre passerelle est un pont (couche 2). Pour vous rendre compte
+&agrave; quoi l'architecture propos&eacute;e ressemble, consultez la
+<A HREF="http://www.honeynet.org/papers/gen2/figureA.jpg">Figure A</A>. Dans
+cet exemple notre honeynet est d&eacute;ploy&eacute; sur le r&eacute;seau
+192.168.1.0/24. Par le pass&eacute;, la plupart des honeynets &eacute;tait
+habituellement d&eacute;ploy&eacute; sur des r&eacute;seaux externes ou
+p&eacute;riph&eacute;riques. L'utilisation d'une passerelle de couche 2, telle
+que la notre, permet d'int&eacute;grer les honeynets dans le r&eacute;seau
+interne. Cela nous permet de pister et de comprendre non seulement les menaces
+externes, mais aussi les menaces internes. </P>
+
+<P>
+Dans ce sch&eacute;ma, vous pouvez remarquer comment notre honeywall (la
+passerelle couche 2) s&eacute;pare les syst&egrave;mes en production, de notre
+r&eacute;seau honeynet peupl&eacute; par nos cibles victimes. L'interface externe
+de notre passerelle (eth0) est connect&eacute;e sur le r&eacute;seau de production,
+tandis que l'interface interne (eth1) est connect&eacute;e sur le r&eacute;seau
+honeynet. Comme c'est un pont les syst&egrave;mes internes et externes sont dans le
+m&ecirc;me r&eacute;seau IP. Nous disposons aussi d'une troisi&egrave;me interface
+(eth2). Elle est utilis&eacute;e pour l'administration distante de la passerelle
+(ceci inclus le transfert de tous fichiers de log, ou de donn&eacute;es
+captur&eacute;es vers un point central. Les interfaces interne et externe
+&eacute;tant en mode pont, on ne leur affecte pas d'adresse IP. A contrario, on
+affecte l'adresse 10.1.1.1 &agrave; la troisi&egrave;me interface eth2. Ce
+r&eacute;seau s&eacute;par&eacute; et s&eacute;curis&eacute; est notre r&eacute;seau
+d'administration. L'avantage de cette architecture est l'extr&ecirc;me
+difficult&eacute; de d&eacute;tection de la passerelle, car il n'y a ni saut de
+routage, ni modification du TTL, ni adresse MAC associ&eacute;e &agrave; la
+passerelle. De plus nous pouvons simplifier le d&eacute;ploiement du honeynet en
+associant le contr&ocirc;le et la capture des donn&eacute;es uniquement sur la
+passerelle.</P>
+
+<P>
+L'&eacute;tape suivante est de construire une passerelle permettant cette
+architecture. Pour notre passerelle nous utilisons une installation minimale et
+s&eacute;curis&eacute;e de Linux. Il est primordial que se soit un syst&egrave;me
+de confiance, qu'aucun attaquant ne puisse acc&eacute;der. Ensuite, nous devons
+faire en sorte que notre passerelle supporte le pontage (Ndt: bridging). La plupart
+des distributions Linux le supportent par d&eacute;faut. Si le support du pontage
+est absent de notre syst&egrave;me, il peut &ecirc;tre r&eacute;cup&eacute;r&eacute;
+sous forme de rpm ou en source depuis <A HREF="http://bridge.sf.net/">http://bridge.sf.net/</A>. </P>
+<p>
+<font FACE="Courier New" SIZE=-1>
+gateway #rpm -q bridge-utils<BR>
+bridge-utils-0.9.3-4 </font></P>
+
+<P>
+Malheureusement, alors que la plupart des distributions supportent le pontage, le
+support d'IPTables en mode pont est rarement pr&eacute;sent. La pr&eacute;sence
+d'IPTables est imp&eacute;rative, car non seulement il permet la s&eacute;curisation
+de notre passerelle, mais il est aussi utilis&eacute; pour le contr&ocirc;le des
+donn&eacute;es (voire le paragraphe appropri&eacute;) Pour que vous puissiez utiliser
+IPTables dans le mode pont, vous devez d'abord patcher et recompiler le noyau pour
+activer cette fonctionnalit&eacute;. De nouveau, ce correctif est disponible sur
+<A HREF="http://bridge.sf.net/">http://bridge.sf.net/</A>. Une fois ceci fait, vous
+pouvez commencer la configuration de la passerelle. Cela est beaucoup plus simple
+que &ccedil;a en &agrave; l'air. Le projet Honeynet a d&eacute;velopp&eacute; le
+script <A HREF="http://www.honeynet.org/papers/honeynet/tools/rc.firewall">rc.firewall</A>,
+qui impl&eacute;mente l'ensemble des &eacute;l&eacute;ments critiques de la
+passerelle. Nous y ferons r&eacute;f&eacute;rence tout au long de cet article. Pour
+notre passerelle, ce script d&eacute;fini le pontage, le pare feu, configure
+l'interface d'administration, contr&ocirc;le qui peut administrer celle-ci, comment
+et o&ugrave; est enregistr&eacute; l'activit&eacute; r&eacute;seau, et met en
+&oelig;uvre le contr&ocirc;le de donn&eacute;es. Vous remarquerez que ce script est
+critique, car il impl&eacute;mente la plupart des pr&eacute;-requis du honeynet sur
+votre passerelle. Pour mettre en &oelig;uvre ce script (et par cons&eacute;quent
+configurer votre honeywall) il vous suffit de renseigner les variables de celui-ci
+et de l'ex&eacute;cuter (NB: Veuillez lire l'article enti&egrave;rement avant de
+lancer ce script) Plut&ocirc;t que de vous d&eacute;crire en d&eacute;tail chaque
+variable et ce qu'elle fait (C'est le travail du script), voici un lien vers le
+<A HREF="http://www.honeynet.org/papers/gen2/rc.firewall">script</A> utilis&eacute;
+dans l'architecture d&eacute;crite ci-dessus. Une fois d&eacute;finit le script
+adapt&eacute; &agrave; l'architecture de votre organisation, vous pouvez
+encha&icirc;ner avec le contr&ocirc;le des donn&eacute;es.</P>
+
+<p>
+<B><font FACE="Palatino,Book Antiqua" SIZE=+2>Contr&ocirc;le des donn&eacute;es</font></B><BR>
+La finalit&eacute; du contr&ocirc;le des donn&eacute;es est de s'assurer qu'un 
+pirate ne puisse pas utiliser un syst&egrave;me du honeynet pour attaquer ou casser
+un syst&egrave;me ext&eacute;rieur &agrave; celui-ci. Le contr&ocirc;le des
+donn&eacute;es limite les risques. Cependant le d&eacute;fi est le suivant :
+&agrave; quel point faut-il contr&ocirc;ler l'activit&eacute; sortante (NdT: du
+honeynet) ? Plus vous laissez de libert&eacute; aux pirates, plus vous pouvez en
+apprendre sur leurs modes op&eacute;ratoires, mais plus ils peuvent faire de
+d&eacute;g&acirc;ts &agrave; d'autres syst&egrave;mes. Donc vous devez contenir
+leurs activit&eacute;s suffisamment pour qu'ils ne soient pas nuisibles &agrave;
+autrui, mais pas trop au risque de ne rien apprendre. La marge de man&oelig;uvre
+vers l'ext&eacute;rieur que vous laissez aux pirates d&eacute;pend du risque que
+vous &ecirc;tes en mesure d'assumer. Pour rendre ceci encore plus difficile, nous
+devons contenir l'attaquant sans qu'il ne s'en rende compte. Pour parvenir &agrave;
+nos fins, nous utilisons deux technologies : le d&eacute;nombrement des connexions
+(Ndt Connection counting) et NIPS. Le d&eacute;nombrement des connexions est la
+limitation du nombre de connexions sortantes issues du honeynet. NIPS
+(Syst&egrave;me de pr&eacute;vention d'intrusion r&eacute;seaux, Ndt Network
+Intrusion Prevention System) est l&agrave; pour bloquer (ou d&eacute;jouer) les
+attaques connues. La combinaison de ces technologies nous donne un m&eacute;canisme
+de contr&ocirc;le des donn&eacute;es puissant et flexible. Nous d&eacute;ployons ces
+technologies sur notre passerelle, car c'est le point par lequel tout trafic entrant
+ou sortant doit passer, c'est un point de contention de l'activit&eacute; des
+pirates.</P>
+
+<P>
+Une fois votre passerelle configur&eacute;e de la mani&egrave;re d&eacute;crite dans
+la premi&egrave;re partie, l'&eacute;tape suivante est de mettre en &oelig;uvre le
+bornage des connexions, pour limiter le nombre de connexions sortantes qu'un
+attaquant peut initier depuis un honeypot. Le but est de compter le nombre de
+connexions sortantes, et quand la limite d&eacute;finie est atteinte, de bloquer
+toutes connexions ult&eacute;rieures. Pour cela nous utilisons IPTables, dont la
+configuration est d&eacute;finie dans le script rc.firewall mentionn&eacute;
+pr&eacute;c&eacute;demment. Dans le script nous d&eacute;finissons combien de
+connexions TCP, UDP, ICMP ou autre (OTHER) peuvent &ecirc;tre &eacute;tablies par un
+pirate. Le nombre de connexions allou&eacute;es d&eacute;pend du risque que vous
+&ecirc;tes pr&ecirc;t &agrave; prendre. En moyenne, le projet Honeynet en autorise
+15 &agrave; 30 par jour. La limitation de nombre de connexions sortante
+emp&ecirc;che les attaquant de se servir du honeynet pour scanner, attaquer un grand
+nombre de syst&egrave;mes, ou lancer des attaques de d&eacute;ni de service. Il est
+difficile de faire beaucoup de dommage dans ces conditions. Voici les valeurs par
+d&eacute;faut utilis&eacute; dans le script rc.firewall. NB : la variable OTHER
+repr&eacute;sente l'ensemble des protocoles non couvert par TCP, UDP et ICMP (par
+exemple : IPsec, IPv6 tunneling, Voix sur IP, etc). </P>
+
+<p>
+</font>
+<PRE>
+### Set the connection outbound limits for different protocols.
+SCALE="day"
+TCPRATE="15"
+UDPRATE="20"
+ICMPRATE="50"
+OTHERRATE="15"
+</PRE>
+
+<font face="Arial, Helvetica, sans-serif" size=-1>
+<P>
+C'est ainsi que le bornage des connexions est d&eacute;fini dans rc.firewall. Quand
+un attaquant a fait son trou dans le honeypot, il peut &eacute;tablir des connexions
+vers l'ext&eacute;rieur pour diff&eacute;rentes raisons (t&eacute;l&eacute;chargement
+de boite &agrave; outil, configuration de robot, causerie IRC, envoie de mail, etc).
+Chaque connexion &eacute;tablie vers l'ext&eacute;rieur, est compt&eacute;e par le
+pare-feu. Quand la limite est atteinte, IPTables bloque les connexions suivantes
+issues de cet honeypot. Puis IPTables se r&eacute;initialise une fois la
+p&eacute;riode d&eacute;finie dans la variable SCALE &eacute;coul&eacute;e,
+permettant alors les connexions externes dans les limites d&eacute;finies. Par
+exemple, admettons que nous avons d&eacute;fini la limite du nombre de connexions
+TCP sortantes &agrave; 25, quand un attaquant p&eacute;n&egrave;tre notre honeypot,
+il peut initier 25 connexions TCP sortantes, une fois cette limite atteinte il est
+coinc&eacute;. Apr&egrave;s r&eacute;initialisation d'IPTables, 25 connexions sont
+possibles durant la p&eacute;riode d&eacute;finie, dans notre cas 24h, soit 1
+connexion par heure en moyenne. Si notre p&eacute;riode &eacute;tait d'une heure,
+nous autoriserions 25 connexions par heure ou une connexion toutes les 2,4 min en
+moyenne. Voici un exemple concret, dans
+<A HREF="http://www.honeynet.org/papers/gen2/win2000.txt">ces journaux d'IPTables</A>
+, de ce comportement pour un honeypot Win2000 infect&eacute; par le ver Code Red II
+qui tente un scan sortant. Une fonctionnalit&eacute; int&eacute;ressante d'IPTables
+est l'ind&eacute;pendance de traitement entre les divers protocoles, une fois les
+limites atteintes pour TCP, les autres types de trafic (UDP, ICMP, OTHER) ne sont
+pas impact&eacute;s tant qu'ils n'ont pas atteint leur propre limite.</P>
+
+<P>
+Une fois le bornage des connexions mis en place dans le script rc.firewall, passons
+&agrave; la mise en place du NIPS. Pour m&eacute;moire, le but de NIPS est
+d'identifier et de bloquer les attaques connues. Ceci est fait en analysant chaque
+paquet traversant notre passerelle. Si un paquet correspond &agrave; une
+r&egrave;gle de notre IDS (Intrusion Detection System, NdT: syst&egrave;me de
+d&eacute;tection d'intrusion), une alerte est d&eacute;clench&eacute;e (comme dans
+un IDS traditionnel), de plus le paquet peut &ecirc;tre supprim&eacute; (bloquant
+alors l'attaque), ou modifi&eacute; (la rendant inefficace). L'avantage est que cela
+r&eacute;duit consid&eacute;rablement les chances de succ&egrave;s d'une attaque
+vers l'ext&eacute;rieur. Avec le d&eacute;nombrement de connexions, nous autorisons
+par d&eacute;faut 15 connexions TCP sortantes par jour, que se passe-t-il si nous
+sommes infect&eacute;s par un ver, et que ces 15 connexions soit des essais de
+contamination d'autre syst&egrave;mes ? Alors que la limitation impos&eacute;e
+r&eacute;duit le nombre de syst&egrave;mes pouvant &ecirc;tre contamin&eacute;s,
+le risque est toujours pr&eacute;sent. L'id&eacute;e du NIPS est qu'il bloque, ou
+d&eacute;sactive, toutes attaques identifi&eacute;es dans ces 15 connexions. Pour
+cela le projet Honeynet utilise
+<A HREF="http://www.honeynet.org/papers/honeynet/tools/">Snort_inline</A>, une
+version modifi&eacute;e de Snort qui peut supprimer ou modifier les paquets.</P>
+
+<P>
+Pour que snort_inline fonctionne comme un NIPS (en mode pont), il faut qu'il dispose
+d'un m&eacute;canisme lui routant les paquets, en effet snort_inline ne sait pas
+prendre de d&eacute;cision de routage (ip_forward). Donc nous utilisons un
+m&eacute;canisme, qui pendant le processus de routage transf&egrave;re le paquet
+&agrave; snort_inline pour analyse. Une fois l'analyse effectu&eacute;e,
+snort_inline rend le paquet au processus de routage. Ce processus est IPTables. Nous
+configurons IPTables pour envoyer les paquets qu'il traite vers snort_inline pour
+analyse, puis IPTables continue le routage des paquets. Cette fonction d'IPTables
+est appel&eacute;e "user-space queuing", car elle n&eacute;cessite le chargement du
+module ip_queue dans le noyau. Pour mettre en place cette fonctionnalit&eacute;,
+nous autorisons QUEUE dans notre script rc.firewall (Cela permet aussi le chargement
+du module ip_queue). En combinant snort_inline et les possibilit&eacute;s de comptage
+d'IPTables, il faut garder &agrave; l'esprit qu'IPTables compte les connexions
+sortantes ind&eacute;pendamment des d&eacute;cisions de snort_inline concernant les
+paquets. Cela est du au fait que les paquets transitent d'abord par l'interface
+interne avant d'&ecirc;tre analys&eacute;s par snort_inline. La connexion est
+compt&eacute;e avant que snort_inline aie eu le temps de l'analyser.</P>
+</font>
+<PRE>
+### IPTables script can be used with the Snort-Inline filter
+#QUEUE="no"              # Do not use experimental QUEUE support
+QUEUE="yes"              # Use experimental QUEUE support
+</PRE>
+<P>
+<font face="Arial, Helvetica, sans-serif" size=-1>
+Pour information, si vous activez snort_inline, alors celui-ci doit OBLIGATOIREMENT
+&ecirc;tre actif. Si snort_inline ne fonctionne pas ou si pour une raison quelconque
+il s'arr&ecirc;te, plus aucun paquet ne sera rout&eacute; par IPTables (Ceci n'est
+pas un bug, mais le comportement par d&eacute;faut en mode d&eacute;grad&eacute; :-).
+Ainsi notre t&acirc;che suivante est de param&eacute;trer snort_inline. Cela est
+tr&egrave;s semblable &agrave; snort, &agrave; l'exception de la base de
+r&egrave;gle. Gardez &agrave; l'esprit que notre but n'est pas de supprimer tout le
+trafic sortant, mais seulement les attaques. Donc nous utilisons une base de
+r&egrave;gles ne contenant que les attaques av&eacute;r&eacute;es. Vous ne souhaitez
+pas bloquer les demandes d'informations vers l'ext&eacute;rieur, tel que les pings
+ICMP, les requ&ecirc;tes finger ou un simple GET HTTP. Si nous utilisons TOUTES les
+r&egrave;gles de snort, l'attaquant sera alors compl&egrave;tement bloqu&eacute;
+vers l'ext&eacute;rieur. Par cons&eacute;quent, nous n'utilisons que les
+r&egrave;gles de snort d&eacute;finissant des attaques av&eacute;r&eacute;es.
+Chaque organisation a une interpr&eacute;tation diff&eacute;rente de ce qu'est une
+attaque, donc nous vous conseillons de v&eacute;rifier et d'adapter les
+r&egrave;gles de snort_inline avant de les utiliser. De plus, notre base de
+r&egrave;gle doit &ecirc;tre invers&eacute;e par rapport &agrave; une base de
+r&egrave;gle snort, car celle-ci se focalise sur les attaques entrantes. Avec
+snort_inline nous nous concentrons sur les attaques sortantes. Le but est de
+prot&eacute;ger le monde ext&eacute;rieur des attaques en provenance du honeynet.
+Enfin, les r&egrave;gles sont diff&eacute;rentes car notre but n'est pas d'alerter
+d'une activit&eacute;, mais de supprimer ou modifier une attaque. Pour simplifier ce
+processus, le Projet a cr&eacute;&eacute; deux bases de r&egrave;gles, pouvant
+&ecirc;tre utilis&eacute;es &agrave; cet effet. La premi&egrave;re que nous appelons
+base de r&egrave;gles
+<A HREF="http://www.honeynet.org/papers/gen2/figureB.gif">drop-rules</A>, a pour but
+de bloquer ou supprimer les paquets contenant une signature d'attaque. Un exemple
+d'application de cette base est visible dans l'exemple
+<A HREF="http://www.honeynet.org/papers/gen2/cr2.txt">Code Red II</A>
+mentionn&eacute; pr&eacute;c&eacute;demment. Nous appelons la seconde base de
+r&egrave;gles <A HREF="http://www.honeynet.org/papers/gen2/figureC.gif">replace-rules</A>.
+Cette base de r&egrave;gles ne bloque pas les attaques, elle modifie le contenu de
+celles-ci, rendant inop&eacute;rant l'exploitation du trou de s&eacute;curit&eacute;
+vis&eacute;. Cela rend la d&eacute;tection de cette m&eacute;thode de contr&ocirc;le,
+potentiellement plus difficile pour l'attaquant. Il voie ses attaques atteindrent
+les cibles vis&eacute;es, mais ignore la raison de l'&eacute;chec de celles-ci. Un
+script convertissant la base de r&egrave;gles courante de snort en une base
+drop-rules de snort_inline est disponible dans
+<A HREF="http://www.honeynet.org/papers/honeynet/tools/">la section Outils de Honeynet</A>.
+A l'heure actuelle, le Projet travaille au d&eacute;veloppement d'un script de
+construction d'une base replace-rules. </P>
+
+<P>
+Pour notre d&eacute;ploiement, nous utiliserons la base de r&egrave;gles drop-rules
+et notre fichier de configuration
+<A HREF="http://www.honeynet.org/papers/honeynet/tools/snort_inline.conf">snort_inline.conf</A>
+dans /etc/snort_inline. Nous utilisons un r&eacute;pertoire diff&eacute;rent de
+/etc/snort pour &eacute;viter les confusions. Pour d&eacute;marrer snort_inline,
+nous utilisons le script suivant :
+<A HREF="http://www.honeynet.org/papers/honeynet/tools/snort_inline.sh">snort_inline.sh</A>.
+Ce script est pr&eacute; configur&eacute; pour un d&eacute;marrage facile de
+snort_inline. Pour vous simplifier la vie, l'ensemble des fichiers de configuration,
+des scripts et des binaires sont disponibles dans
+<A HREF="http://www.honeynet.org/papers/honeynet/tools/snort_inline.tgz">la boite &agrave; outils Snort_Inline de Honeynet</A>.
+L'utilisation de cette boite &agrave; outils doit GRANDEMENT vous faciliter la mise
+en place de snort_inline. Gardez &agrave; l'esprit que la combinaison de ces
+technologies r&eacute;duit drastiquement les risques, mais qu'elle ne les
+&eacute;limine pas. Chaque fois que vous laissez la porte ouverte aux pirates, cela
+peut mal tourner. C'est pourquoi dans la derni&egrave;re partie nous expliquons
+comment tester ces technologies. Malgr&eacute; cela, l'&eacute;volution des outils
+et des techniques des pirates, fait que l'on n'est jamais compl&egrave;tement en
+s&eacute;curit&eacute;.</P>
+<p>
+<B><font FACE="Palatino,Book Antiqua" SIZE=+2>Capture de donn&eacute;es</font></B><BR>
+Une fois le contr&ocirc;le de donn&eacute;es mis en place, nous pouvons
+d&eacute;ployer la capture de donn&eacute;es. Le but de la capture de donn&eacute;es
+est de tracer l'activit&eacute; des pirates. La collecte d'information est la raison
+d'&ecirc;tre du Honeynet. Sans la capture de donn&eacute;es, notre Honeynet n'a
+aucune valeur ajout&eacute;e. La cl&eacute; de la capture de donn&eacute;es est de
+collecter l'information dans autant de couches que possible. Chaque niveau nous
+apporte son lot d'informations. Par exemple, beaucoup de monde pense qu'il suffit
+d'avoir le journal des saisies clavier de l'attaquant, h&eacute;las ce n'est pas
+vrai. Que se passe-t-il si le pirate lance un programme, comment saurez vous ce
+qu'il fait, si vous ne capturez pas le programme ou le trafic r&eacute;seau qu'il
+g&eacute;n&egrave;re ? Le projet honeynet a identifi&eacute; trois couches critiques
+de capture de donn&eacute;es : les journaux des pares-feux, le trafic r&eacute;seau,
+et l'activit&eacute; sur le syst&egrave;me. Nous d&eacute;taillons comment mettre en
+place les trois dans la suite de ce chapitre.</P>
+
+<P>
+Pour les journaux de pare feux, le travail a d&eacute;j&agrave; &eacute;t&eacute;
+fait. De part la mise en place du script rc.firewall, nous journalisons l'ensemble
+du trafic entrant et sortant dans /var/log/messages. Cette information est vitale,
+car c'est la premi&egrave;re piste dont nous disposons pour savoir ce que fait un
+attaquant. C'est aussi de l&agrave; que viennent les premiers signes d'une tentative
+d'attaque sortante. L'exp&eacute;rience acquise lors du Projet nous enseigne que les
+journaux des pare feux sont pr&eacute;cieux pour identifier rapidement les attaques
+nouvelles ou les comportements inhabituels. Le script d&eacute;fini quatre types de
+trafic : TCP, UDP, ICMP, et OTHER. De la m&ecirc;me mani&egrave;re que dans le
+contr&ocirc;le des donn&eacute;es, OTHER rassemble les trafics IP de type 1, 6 ou 17
+non couvert par les protocoles pr&eacute;c&eacute;dents. C'est aussi le type le plus
+int&eacute;ressant, car si ce type de trafic IP non standard est utilis&eacute;, il
+est fortement probable que ce soit pour essayer de nouvelles techniques d'attaque
+(comme dans le cas de la porte d&eacute;rob&eacute;e (NdT : backdoor) NVP
+employ&eacute;e dans
+<A HREF="http://www.honeynet.org/scans/scan22/">Scan of the Month 22</A>). </P>
+
+<P>
+La deuxi&egrave;me &eacute;tape est la capture compl&egrave;te de chaque paquet
+entrant ou sortant du honeynet. Il est concevable d'utiliser snort_inline pour cette
+t&acirc;che, cependant pour ne pas mettre tout nos &oelig;ufs dans le m&ecirc;me
+panier, nous utiliserons snort &agrave; la place. Nous mettons en place la
+configuration standard du Projet d&eacute;crite dans
+<A HREF="http://www.honeynet.org/papers/honeynet/tools/snort.conf">le fichier de configuration snort.conf</A>.
+Avec ce fichier de configuration, tout le trafic IP est captur&eacute; vers un
+fichier de log au format tcpdump pour analyse ult&eacute;rieure. Nous voulons aussi
+assurer la rotation de ces fichiers de log, pour cela nous utilisons le
+<A HREF="http://www.honeynet.org/papers/honeynet/tools/snort.sh">script de d&eacute;marrage snort.sh</A>.
+Ce script est lanc&eacute; chaque jour par l'interm&eacute;diaire de la crontab.
+Notez que nous activons la capture sur l'interface interne eth1. Ce point est
+important, car si par erreur la capture est activ&eacute;e sur l'interface externe
+(eth0) vous enregistrez non seulement les donn&eacute;es relatives au honeynet, mais
+aussi tous les trafics vers le r&eacute;seau externe, ce qui pollue la capture. En
+se positionnant sur l'interface interne, vous ne capturez que le trafic concernant
+le honeynet, ce qui est exactement ce que vous voulez. L'utilisation de ce script a
+un autre avantage, il standardise la mani&egrave;re avec laquelle les donn&eacute;es
+captur&eacute;es sont logu&eacute;es, ce qui est extr&ecirc;mement important si vous
+avez plusieurs honeynets capturant les donn&eacute;es vers un d&eacute;p&ocirc;t
+central. (voir la suite de l'article). </P>
+
+<P>
+La troisi&egrave;me phase, qui est aussi la plus difficile, est de capturer
+l'activit&eacute; du pirate directement sur le syst&egrave;me. Il y a quelques
+ann&eacute;es cela &eacute;tait simple, la plupart des interactions se faisant alors
+par l'interm&eacute;diaire de protocoles en clair tel que FTP, HTTP ou telnet. Il
+suffisait de tracer la connexion pour identifier les saisies clavier. Cependant les
+pirates ont adopt&eacute; l'utilisation de protocole crypt&eacute; tout comme vous.
+Aujourd'hui il est probable qu'il utilise des canaux SSH ou 3DES pour communiquer
+avec les ordinateurs compromis. Nous ne pouvons donc plus d&eacute;duire les
+commandes utilis&eacute;es des traces r&eacute;seaux, nous devons donc les capturer
+directement depuis le syst&egrave;me. Pour r&eacute;soudre ce probl&egrave;me le
+Projet a d&eacute;velopp&eacute; Sebek2. C'est un module noyau qui peut tracer les
+saisies clavier d'un attaquant et capturer les fichiers
+t&eacute;l&eacute;charg&eacute;s via scp. Une fois install&eacute; sur un honeypot,
+ce module se cache, le rendant presque impossible &agrave; d&eacute;tecter et
+&agrave; d&eacute;sactiver. Les informations rassembl&eacute;es par Sebek2 ne sont
+pas stock&eacute;es sur le honeypot, o&ugrave; elles pourraient &ecirc;tre
+d&eacute;couvertes par l'attaquant. Sebek2 transmet ces informations via UDP vers
+une machine &agrave; l'&eacute;coute (tel que notre passerelle ou un syst&egrave;me
+distant de centralisation des logs) Les pirates ne peuvent ni voir, ni capturer ces
+paquets, car le module noyau install&eacute; sur le honeypot se charge de les
+cacher. M&ecirc;me si un attaquant t&eacute;l&eacute;charge ses propres outils de
+capture, l'activit&eacute; de Sebek2 lui est cach&eacute;e. Cela est fait en
+modifiant le honeypot de telle mani&egrave;re qu'il ne puisse ni voir ni capturer
+les paquets avec une adresse MAC source pr&eacute; configur&eacute;e. Sebek2 envoie
+alors les donn&eacute;es captur&eacute;es vers la passerelle avec l'adresse MAC
+source sp&eacute;cifi&eacute;e. Comme l'ensemble des honeypots est
+contr&ocirc;l&eacute; avec Sebek2, aucun d'entre eux ne peut &ecirc;tre
+utilis&eacute; pour capturer les saisies clavier envoy&eacute;es sur le
+r&eacute;seau. Attention, si l'un de vos honeypots n'utilise pas Sebek2, un
+attaquant peut alors l'utiliser pour capturer les paquets
+g&eacute;n&eacute;r&eacute;s par Sebek2 en provenance des autres syst&egrave;mes.</P>
+
+<P>
+Sebek2 &eacute;tant un module noyau, il faut le compiler pour prendre en compte les
+sp&eacute;cificit&eacute;s de versions de noyau et d'OS de votre honeypot.
+L'installation de Sebek2 est relativement simple, il suffit de configurer cinq
+options dans le script d'installation. Voici ci-dessous les param&egrave;tres que
+nous utilisons. Leur signification est la suivante : les saisies clavier
+captur&eacute;es sont envoy&eacute;es dans des paquets UDP &agrave; destination de
+l'IP 192.168.1.254 (notre routeur) et du port 34557. Cependant, un attaquant ne les
+verra pas, car le noyau cache les paquets en provenance des adresses MAC
+commen&ccedil;ant par 0A:0B:0C: (Sebek2 n'analyse que les trois premiers octets de
+l'adresse MAC) Cette configuration doit &ecirc;tre identique pour l'ensemble des
+honeypots, afin qu'ils ne puissent pas voir le trafic de leurs voisins. Le Projet
+travaille actuellement au portage de Sebek2 vers Solaris, OpenBSD et Win32. Ces
+paquets n'arriveront jamais jusqu'au routeur, car notre passerelle les intercepte.
+Vous pouvez adapter ces options de telle sorte qu'elles correspondent &agrave; votre
+Honeynet. Par exemple, si vous voulez loguer les paquets vers un syst&egrave;me
+distant sur un autre r&eacute;seau, vous indiquerez l'adresse IP du syst&egrave;me
+distant et l'adresse MAC du routeur local. Veillez &agrave; utiliser le script
+d'installation <I>sebek.sh</I>, car apr&egrave;s l'installation du module sebek, il
+d&eacute;ploie un module de nettoyage dont le r&ocirc;le est de cacher la
+pr&eacute;sence de sebek. </P>
+</font>
+<PRE>
+#----- sets destination IP for sebek packets
+DESTINATION_IP="192.168.1.254"
+
+#----- sets destination MAC addr for sebek packets
+DESTINATION_MAC="00:01:C9:F6:D3:59"
+
+#----- defines the destination udp port sebek sends to
+DESTINATION_PORT=34557
+
+#----- controls what SRC MAC OUIs to hide from users
+#----- Only the first 3 octets are evaluated.
+FILTER_OUI="0A:0B:0C"
+
+#----- controls the output interface
+INTERFACE="eth0"</PRE>
+<font face="Arial, Helvetica, sans-serif" size=-1>
+<P>
+Une fois configur&eacute;, Sebek2 envoie toute activit&eacute; syst&egrave;me
+vers le r&eacute;seau. Ces paquets, qui ne peuvent &ecirc;tre vus par les honeypots,
+sont collect&eacute;s par la passerelle sur l'interface interne eth1. Ils sont alors
+utilis&eacute;s pour reconstruire les saisies clavier de l'attaquant ou les fichiers
+que celui-ci peut avoir transf&eacute;r&eacute;s. Notre honeynet dispose d'un
+avantage suppl&eacute;mentaire, gr&acirc;ce &agrave; son interface sur le
+r&eacute;seau d'administration, il peut directement envoyer les donn&eacute;es vers
+un serveur d&eacute;di&eacute;. Cela est extr&ecirc;mement avantageux si vous avez
+plusieurs honeynets. La combinaison des donn&eacute;es provenant de syst&egrave;mes
+multiples peut &ecirc;tre utilis&eacute;e &agrave; des fins d'alertes
+pr&eacute;coces, de pr&eacute;dictions, d'analyses statistiques, d'identification de
+nouveaux outils ou de nouvelles tendances. Le Projet Honeynet utilise ce
+<A HREF="http://www.honeynet.org/papers/honeynet/tools/linux-upload.sh">script</A>
+pour envoyer automatiquement les donn&eacute;es quotidiennes.</P>
+
+<p>
+<B><font FACE="Palatino,Book Antiqua" SIZE=+2>Alerter</font></B><BR>
+Le dernier &eacute;l&eacute;ment &agrave; prendre en compte avant d'achever votre
+Honeynet est l'envoi automatique d'alertes. Voir quelqu'un &agrave; l'&oelig;uvre
+dans votre Honeynet est une exp&eacute;rience pleine d'enseignements, sauf si vous
+n'avez pas conscience de l'&eacute;v&eacute;nement. S'assurer d'&ecirc;tre
+pr&eacute;venu d'une intrusion r&eacute;ussie (et y r&eacute;pondre) est
+indispensable pour le succ&egrave;s d'un Honeynet. Id&eacute;alement, vous
+disposeriez d'une supervision 24/24 par un administrateur confirm&eacute;. Avec les
+outils ad&eacute;quats correctement configur&eacute;s, cela ne sera pas
+n&eacute;cessaire. Nous avons eu de grande satisfaction en utilisant
+<A HREF="http://swatch.sourceforge.net/">Swatch, the Simple Watcher</A>, pour
+superviser nos Honeynets. Swatch est un outil de supervision automatique complet
+capable de notifier les administrateurs lors d'une attaque potentiellement
+r&eacute;ussie. Swatch surveille les fichiers de log &agrave; la recherche de motif
+d&eacute;crit dans un fichier de configuration. Quand un motif est identifi&eacute;,
+Swatch propage nativement l'alerte par mail, bip syst&egrave;me, appel
+t&eacute;l&eacute;phonique et peut &ecirc;tre &eacute;tendu pour lancer d'autres
+commandes ou programmes. Un fichier de configuration simple de Swatch contient, le
+motif &agrave; rechercher, suivi d'une liste d'actions &agrave; entreprendre.
+L'exemple de configuration suivant est bas&eacute; sur Swatch 3.0. </P>
+</font>
+<PRE>
+watchfor /Firewall:  OUTBOUND CONNECTION/
+     echo normal
+     mail=admin@honeynet.org,subject=------ ALERT! OUTBOUND CONN --------
+     throttle 10:0:0
+</PRE>
+
+<font face="Arial, Helvetica, sans-serif" size=-1>
+<P>
+L'action "mail=" contient la liste des adresses de messagerie, auxquelles envoyer
+l'alerte. La commande throttle limite le nombre de fois o&ugrave; l'action de la
+r&egrave;gle est effectu&eacute;e par Heure:Minute:Seconde. Cela est utile pour
+&eacute;viter la saturation de votre bo&icirc;te aux lettres lors du
+d&eacute;clenchement d'une r&egrave;gle. La configuration ci-dessus supervise le
+fichier /var/log/messages, o&ugrave; IPTables enregistre l'ensemble des connexions
+entrantes et sortantes. Notre fichier de configuration recherche les connexions
+sortantes, ce qui est un indicateur performant de la compromission d'un Honeynet.
+Quand cette signature est rep&eacute;r&eacute;e, un mail est envoy&eacute; &agrave;
+l'administrateur du honeynet. Dans ce cas, les messages d'alerte sont limit&eacute;s
+&agrave; 10 par heure. Les motifs recherch&eacute;s et les actions entreprises
+peuvent varier d'un honeynet &agrave; l'autre. L'important n'est pas de
+ma&icirc;triser les rouages des fichiers de configuration de Swatch, mais de
+comprendre les &eacute;v&eacute;nements qu'un administrateur de honeynet ne doit pas
+rater et l'information qu'il faut associer &agrave; chaque alerte. Les sources
+d'information les plus utiles pour rechercher les activit&eacute;s hostiles sont les
+journaux du pare feu et ceux de snort_inline.</P>
+
+<P>
+Depuis le pare feu :<BR>
+Les connexions sortantes d'un honeypot sont un bon indicateur d'une intrusion sur
+une machine. Comme il n'y a pas d'utilisateur autoris&eacute; dans le honeynet, un
+trafic sortant de ce r&eacute;seau vient probablement d'un intrus. Il peut y avoir
+parfois de faux positifs (tel qu'une connexion Ident issue de votre serveur FTP).
+Cependant, en g&eacute;n&eacute;ral, c'est l'un des meilleurs indices de la
+compromission d'un honeynet et qu'une activit&eacute; malicieuse potentielle y prend
+place. Vous ne voudrez peut &ecirc;tre pas limiter le nombre d'alertes sur
+connexions sortantes. Le nombre d'alertes que vous pouvez recevoir est en
+lui-m&ecirc;me un indice du type d'activit&eacute; tent&eacute;e par un pirate. Une
+autre option est de surveiller aussi l'activit&eacute; g&eacute;n&eacute;r&eacute;e
+par Sebek2 dans les journaux de votre pare feu. Les paquets Sebek2, logu&eacute;s
+sur le Honeywall, indiquent clairement que quelqu'un est dans votre honeypot.</P>
+
+<P>
+Depuis le NIPS :<BR>
+Ainsi que d&eacute;crit pr&eacute;c&eacute;demment, l'objectif du NIPS (nous
+utilisons snort_inline) est de d&eacute;tecter et de bloquer les attaques sortantes.
+Il peut &ecirc;tre tr&egrave;s important de remonter cette information. Vous pouvez
+configurer votre m&eacute;canisme d'alerte (tel que Swatch) pour surveiller les
+journaux de snort_inline en plus des journaux de votre pare feu. Si une attaque
+sortante est d&eacute;tect&eacute;e (et bloqu&eacute;e), vous serez pr&eacute;venu
+imm&eacute;diatement.</P>
+
+<P>
+Le but de l'automatisation des alertes est de fournir autant d'informations que
+possible &agrave; l'administrateur pour que celui-ci puisse intervenir dans le cas
+d'une attaque fructueuse. Toute alerte envoy&eacute;e depuis Swatch doit au minimum
+contenir les adresses source, destination et le port du paquet reconnu, la date et
+l'heure de l'&eacute;v&egrave;nement, et suffisamment d'informations pour que
+l'administrateur puisse intervenir imm&eacute;diatement. Par d&eacute;faut, Swatch
+inclus la ligne du journal ayant d&eacute;clench&eacute;e la r&egrave;gle dans le
+message. Voici un exemple de mail g&eacute;n&eacute;r&eacute; par la r&egrave;gle
+ci-dessus: </P>
+</font>
+<PRE>
+To:  admin@honeynet.org
+From:  yourdatacontrol@yourdomain.org                                                                                               
+Subject:  ------ ALERT!: OUTBOUND CONN --------                                                                                          
+                                                                                                                                    
+Apr  6 17:19:05 honeywall FIREWALL:OUTBOUND CONN UDP:IN=br0                                                                        
+PHYSIN=eth1 OUT=br0 PHYSOUT=eth2 SRC=192.168.1.101
+DST=63.107.222.112 LEN=123 TOS=0x00 PREC=0x00 TTL=255 ID=43147
+PROTO=UDP SPT=5353 DPT=79 LEN=103
+</PRE>
+<font face="Arial, Helvetica, sans-serif" size=-1>
+<P>M&ecirc;me avec les outils automatiques d&eacute;cris dans le paragraphe
+"Contr&ocirc;le des donn&eacute;es", un honeynet doit &ecirc;tre constamment
+supervis&eacute; pour &ecirc;tre efficace. Correctement configur&eacute;, Swatch
+peut &ecirc;tre utilis&eacute; pour avertir rapidement les administrateurs des
+&eacute;v&eacute;nements affectant sur leur r&eacute;seau. </P>
+<p>
+<B><font FACE="Palatino,Book Antiqua" SIZE=+2>Tester</font></B><BR>
+Maintenant que nous avons configur&eacute; le contr&ocirc;le et la capture des
+donn&eacute;es, il nous reste &agrave; tester la passerelle. Pour la tester, nous
+utilisons un syst&egrave;me ext&eacute;rieur, appel&eacute; syst&egrave;me de test.
+En se basant sur la <A HREF="http://www.honeynet.org/papers/gen2/figureA.jpg">Figure A</A>,
+nous utilisons le syst&egrave;me 192.168.1.20 comme syst&egrave;me de test. Pour
+commencer, nous testons le contr&ocirc;le des donn&eacute;es : notre honeynet
+r&eacute;ussit-il &agrave; contenir l'activit&eacute; entrante et sortante?
+Premi&egrave;rement, initions une connexion vers un des honeypots du honeynet. Au vu
+de notre base de r&egrave;gles, cette connexion devrait &ecirc;tre autoris&eacute;e.
+Dans ce cas, vous observez une ligne similaire &agrave; la suivante dans
+/var/log/messages. </P>
+<font FACE="Courier New" SIZE=2><P>Mar 23 20:55:09 honeywall kernel: INBOUND TCP: IN=br0 PHYSIN=eth0 OUT=br0 PHYSOUT=eth1 SRC=192.168.1.20 DST=192.168.1.101 LEN=60 TOS=0x00 PREC=0x00 TTL=63 ID=48699 DF PROTO=TCP SPT=36797 DPT=21 WINDOW=5840 RES=0x00 SYN URGP=0 </P>
+</font>
+<P>Une fois la connectivit&eacute; entrante v&eacute;rifi&eacute;e, testons les flux
+sortants. Connectez vous a l'un des honeypots prot&eacute;g&eacute;s par la
+passerelle (nous recommandons une connexion depuis la console, car le honeypot trace
+l'ensemble des connexions distantes, telle que SSH). De l&agrave;, initiez plusieurs
+connexions sortantes vers le syst&egrave;me de test. Cela simule le fait qu'un des
+honeypots soit compromi, et qu'un pirate essaye de se connecter vers
+l'ext&eacute;rieur et tente potentiellement une attaque. Ces connexions doivent
+&ecirc;tre logu&eacute;es dans /var/log/messages sur le Honeywall. Dans notre cas,
+nous essayons des connexions FTP sortantes vers le syst&egrave;me de test sur le
+r&eacute;seau de production. Quand la limite de 15 connexions TCP est atteinte, une
+entr&eacute;e "Drop TCP" est logu&eacute;e. Vous observez probablement des lignes
+similaires &agrave; celles-ci : </P>
+<font FACE="Courier New" SIZE=2><P>Mar 23 17:45:36 laptop kernel: OUTBOUND CONN TCP: IN=br0 PHYSIN=eth1 OUT=br0 PHYSOUT=eth0 SRC=192.168.1.101 DST=192.168.1.20 LEN=60 TOS=0x00 PREC=0x00 TTL=64 ID=36399 DF PROTO=TCP SPT=1026 DPT=80 WINDOW=5840 RES=0x00 SYN URGP=0 <BR>
+Mar 23 21:14:07 laptop kernel: Drop TCP after 15 attempts IN=br0 PHYSIN=eth1 OUT=br0 PHYSOUT=eth0 SRC=192.168.1.101 DST=192.168.1.20 LEN=60 TOS=0x00 PREC=0x00 TTL=64 ID=63391 DF PROTO=TCP SPT=1030 DPT=21 WINDOW=5840 RES=0x00 SYN URGP=0 </P>
+</font>
+<P>Ensuite, v&eacute;rifions le fonctionnement de notre NIPS snort_inline.
+Heureusement, notre base de r&egrave;gles drop-rules contient une r&egrave;gle de
+test sp&eacute;cialement pr&eacute;vue &agrave; cet effet. V&eacute;rifiez que ces
+r&egrave;gles sont actives avant de tester snort_inline. La base de r&egrave;gles
+utilis&eacute;e d&eacute;termine les tests &agrave; passer. Si vous utilisez la base
+de r&egrave;gles drop-rules, activez simplement la r&egrave;gle de test "drop" et
+red&eacute;marrez snort_inline avec le script
+<A HREF="http://www.honeynet.org/papers/honeynet/tools/snort_inline.sh">snort_inline.sh</A>,
+puis essayez une connexion telnet sortante. Snort_inline doit d&eacute;tecter,
+supprimer et loguer la tentative. Votre connexion telnet ne fonctionne pas et se
+termine en timeout. Si vous utilisez la base de r&egrave;gles replace-rules, activez
+la r&egrave;gle de test "replace" et red&eacute;marrez snort_inline, puis essayez
+une commande HTTP GET. Snort_inline doit d&eacute;tecter, modifier et loguer la
+tentative. Pour v&eacute;rifier que la modification est effective, analysez le
+trafic de l'interface EXTERNE eth0, en effet la modification du paquet intervient
+apr&egrave;s le passage par l'interface interne et avant le passage par l'interface
+externe. Une fois les tests termin&eacute;s, remettez en place la base de
+r&egrave;gles pr&eacute;vue et d&eacute;sactivez les r&egrave;gles de test. (sans
+quoi les pirates pourraient eux aussi utiliser ces r&egrave;gles de test). </P>
+<font FACE="Courier New" SIZE=2><P>03/23-21:21:05.915340 [**] [1:0:0] Dropping Telnet connection [**] [Priority: 0] {TCP} 192.168.1.101:39528 -&gt; 192.168.1.20:23<BR>
+03/23-21:21:24.054533 [**] [1:0:0] Modifying HTTP GET command [**] [Priority: 0] {TCP} 192.168.1.101:38533 -&gt; 192.168.1.20:80 </P>
+</font>
+<P>Une fois le contr&ocirc;le des donn&eacute;es v&eacute;rifi&eacute;, passons
+&agrave; la capture de donn&eacute;es. Rappelez vous que si notre honeynet ne logue
+pas toutes activit&eacute;s alors il ne sert &agrave; rien. Nous v&eacute;rifions la
+capture de donn&eacute;es en inspectant les journaux :  le honeynet a-t-il
+captur&eacute; les tests que nous venons de faire sur le contr&ocirc;le des
+donn&eacute;es ? Commen&ccedil;ons par les journaux du pare feu. Ce test est simple,
+toutes nos connexions doivent &ecirc;tre logu&eacute;es dans /var/log/messages.
+Premi&egrave;rement, nous devrions voir la connexion entrante depuis le
+syst&egrave;me de test vers le honeypot. Deuxi&egrave;mement, nous devrions voir les
+connexions sortantes du honeypot vers le syst&egrave;me de test. Finalement, nous
+devrions voir un message d'alerte indiquant que la limite de connexions sortantes
+est atteinte, et les connexions suivantes sont supprim&eacute;es. Ceci a
+d&eacute;j&agrave; &eacute;t&eacute; test&eacute; lors de la v&eacute;rification du
+contr&ocirc;le des donn&eacute;es. </P>
+<P>Ensuite passons en revue les journaux r&eacute;seau. Nous voulons v&eacute;rifier
+que nous avons bien captur&eacute; compl&egrave;tement chaque paquet de chaque
+connexion entrante et sortante. Ces journaux doivent &ecirc;tre dans
+/var/log/snort/$DAY comme indiqu&eacute; dans notre script de d&eacute;marrage, la
+variable $DAY d&eacute;signant le jour en cours. En se basant sur notre
+exp&eacute;rience, le jour est la p&eacute;riode la plus pratique pour la rotation
+des fichiers de log. En ce qui nous concerne, les logs se trouvent dans
+/var/log/snort/Mar_23. Le fichier qui nous int&eacute;resse ici, est la capture
+binaire stock&eacute;e dans le fichier "snort.log.*". Vous pouvez trouver
+accessoirement divers r&eacute;pertoires nomm&eacute;s d'apr&egrave;s les adresses
+IP. Ils contiennent les textes ASCII, tels que commandes FTP, pages html, se
+trouvant dans les paquets captur&eacute;s. Pour confirmer que snort a correctement
+captur&eacute; tous les paquets, proc&eacute;dez &agrave; l'analyse du log binaire
+comme suit : </P>
+<font FACE="Courier New" SIZE=2><P>honeywall #snort -vdr snort.log.*</P>
+</font>
+<P>Enfin, contr&ocirc;lons les journaux de Sebek2. Ils contiennent les saisies
+clavier captur&eacute;es par le module noyau Sebek2 et envoy&eacute;es sur le
+r&eacute;seau. Ces paquets doivent aussi &ecirc;tre captur&eacute;s par notre
+analyseur r&eacute;seau (Snort) et se trouvent par cons&eacute;quent dans le fichier
+de log que nous venons d'analyser. Voir ci-dessous les commandes pour
+r&eacute;cup&eacute;rer et analyser les donn&eacute;es. Nous utilisons en premier
+sebeksniff pour la r&eacute;cup&eacute;ration des donn&eacute;es. Sebeksniff
+cr&eacute;e un fichier s&eacute;par&eacute; pour chaque honeypot (en se basant sur
+l'adresse IP) dans /var/log/sebek. Ensuite, nous pouvons analyser chaque honeypot
+pour identifier les saisies ou les transferts scp. </P>
+<font FACE="Courier New" SIZE=2>
+<P>honeywall #sebeksniff -p 34557 -f snort.log.*<BR>
+honeywall #<A HREF="http://www.honeynet.org/papers/gen2/sbdump.txt">sbdump.pl -c /var/log/sebek/192.168.1.101</A> </P>
+</font>
+<P>Et voil&agrave; ! Si vous avez pu analyser les donn&eacute;es collect&eacute;es,
+votre capture de donn&eacute;es fonctionne correctement ! V&eacute;rifiez aussi
+votre bo&icirc;te aux lettres, vous devriez avoir re&ccedil;u les alertes
+(envoy&eacute;es par Swatch) correspondant aux tests effectu&eacute;s. Maintenant et
+comme vous &ecirc;tes un vrai professionnel de la s&eacute;curit&eacute;, nous
+savons que vous allez rebooter votre passerelle honeynet et v&eacute;rifier le
+contr&ocirc;le et la capture des donn&eacute;es une fois de plus, ceinture et bretelle :-)</P>
+<P>
+<B><font FACE="Palatino,Book Antiqua" SIZE=+2>Conclusion</font></B><BR>
+Nous avons termin&eacute; la construction et le d&eacute;ploiement pas &agrave; pas
+d'un honeynet GenII, bas&eacute; sur une passerelle filtrante sous Linux. Ce
+d&eacute;ploiement est l'une des fonctions les plus en pointe de la technologie des
+honeynets. Dans le futur, nous souhaitons d&eacute;velopper et fournir des
+interfaces graphiques pour l'administration du honeynet et l'analyse des
+donn&eacute;es qu'il collecte. Nous envisageons aussi de fournir une distribution
+Honeywall sur CD bootable contenant l'ensemble des fonctionnalit&eacute;s que nous
+venons de pr&eacute;senter. </P>
+</font>
+<P ALIGN="CENTER"><A HREF="http://www.honeynet.org/"><IMG SRC="Know Your Enemy GenII Honeynets_fichiers/small.gif" BORDER=0 WIDTH=143 HEIGHT=34 ALT="The Honeynet Project"></A></P>
+</BODY>
+</HTML>
